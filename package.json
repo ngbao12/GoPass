@@ -1,0 +1,6 @@
+{
+    "devDependencies": {
+        "nodemon": "^3.1.10",
+        "vite": "^7.0.4"
+    }
+}
