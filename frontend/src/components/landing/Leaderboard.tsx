@@ -8,7 +8,7 @@ const leaderboardData = [
 
 export default function Leaderboard() {
     return (
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section id="leaderboard" className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
             <div className="container mx-auto px-6 text-center">
                 <h2 className="text-4xl font-bold text-gray-800 mb-4">Bảng xếp hạng hàng tuần</h2>
                 <p className="text-gray-600 mb-12 text-lg">Cạnh tranh lành mạnh và theo dõi tiến độ của bạn</p>

@@ -1,6 +1,17 @@
+'use client';
 import Link from 'next/link';
 
 export default function Header() {
+    const scrollToSection = (sectionId: string) => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
     return (
         <header className="bg-teal-600 shadow-sm">
             <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
@@ -12,18 +23,30 @@ export default function Header() {
                 </Link>
 
                 <div className="hidden md:flex items-center space-x-8">
-                    <Link href="/subjects" className="text-white hover:text-gray-100 font-medium transition-colors">
+                    <button
+                        onClick={() => scrollToSection('features')}
+                        className="text-white hover:text-gray-100 font-medium transition-colors cursor-pointer"
+                    >
                         Các môn thi
-                    </Link>
-                    <Link href="/features" className="text-white hover:text-gray-100 font-medium transition-colors">
+                    </button>
+                    <button
+                        onClick={() => scrollToSection('main-features')}
+                        className="text-white hover:text-gray-100 font-medium transition-colors cursor-pointer"
+                    >
                         Tính năng
-                    </Link>
-                    <Link href="/leaderboard" className="text-white hover:text-gray-100 font-medium transition-colors">
+                    </button>
+                    <button
+                        onClick={() => scrollToSection('leaderboard')}
+                        className="text-white hover:text-gray-100 font-medium transition-colors cursor-pointer"
+                    >
                         Bảng xếp hạng
-                    </Link>
-                    <Link href="/ai-grading" className="text-white hover:text-gray-100 font-medium transition-colors">
+                    </button>
+                    <button
+                        onClick={() => scrollToSection('ai-features')}
+                        className="text-white hover:text-gray-100 font-medium transition-colors cursor-pointer"
+                    >
                         AI Chấm thi
-                    </Link>
+                    </button>
                 </div>
 
                 <div className="flex items-center space-x-4">

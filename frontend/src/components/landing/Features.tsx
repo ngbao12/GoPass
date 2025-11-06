@@ -11,7 +11,7 @@ const subjects = [
 
 export default function Features() {
     return (
-        <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+        <section id="features" className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
             <div className="container mx-auto px-6 text-center">
                 <div className="mb-12">
                     <span className="inline-block px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-semibold mb-4">

@@ -1,6 +1,6 @@
 export default function AIFeatures() {
     return (
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
+        <section id="ai-features" className="py-20 bg-gradient-to-br from-blue-50 to-teal-50">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-gray-800 mb-4">Chấm thi Ngữ Văn bằng AI</h2>
