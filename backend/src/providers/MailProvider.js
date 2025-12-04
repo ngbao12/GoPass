@@ -3,20 +3,28 @@ const config = require('../config');
 
 class MailProvider {
   constructor() {
-    this.transporter = nodemailer.createTransporter({
-      host: config.mail.host,
-      port: config.mail.port,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: config.mail.user,
-        pass: config.mail.pass,
-      },
-    });
+    this.transporter = null;
+  }
+
+  getTransporter() {
+    if (!this.transporter) {
+      this.transporter = nodemailer.createTransport({
+        host: config.mail.host,
+        port: config.mail.port,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: config.mail.user,
+          pass: config.mail.pass,
+        },
+      });
+    }
+    return this.transporter;
   }
 
   async sendMail(to, subject, html) {
     try {
-      const info = await this.transporter.sendMail({
+      const transporter = this.getTransporter();
+      const info = await transporter.sendMail({
         from: config.mail.from,
         to,
         subject,
