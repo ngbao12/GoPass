@@ -1,8 +1,9 @@
 // src/features/exam/types/answer.ts
 export interface AnswerData {
   questionId: string;
-  answerText?: string;
-  selectedOptions: string[];
+  answer?: string | string[]; // Unified answer field
+  answerText?: string; // Legacy support
+  selectedOptions?: string[]; // Legacy support
   isAnswered: boolean;
   lastModified: Date;
 }

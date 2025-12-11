@@ -36,8 +36,15 @@ export interface ExamAssignment {
   createdAt: string;
 }
 
+export interface ReadingPassage {
+  title: string;
+  content: string;
+  audioUrl?: string;
+}
+
 export interface ExamWithDetails extends Exam {
   questions: import("./question").ExamQuestion[];
   assignment?: ExamAssignment;
   userSubmission?: import("./submission").ExamSubmission;
+  readingPassage?: ReadingPassage; // For English exams
 }

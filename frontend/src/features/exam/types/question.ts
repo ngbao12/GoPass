@@ -33,6 +33,8 @@ export interface ExamQuestion {
   questionId: string;
   order: number;
   maxScore: number;
+  section?: string; // Section name (Phần I, Part I, etc.)
+  points?: number; // Points for this question
   question?: Question;
   createdAt: string;
 }
