@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import DashboardHeader from "@/components/layout/DashboardHeader";
-import DashboardNavigation from "@/components/layout/DashboardNavigation";
+import DashboardHeader from "@/components/layout/dashboard/DashboardHeader";
+import DashboardNavigation from "@/components/layout/dashboard/DashboardNavigation";
 import {
   DashboardProvider,
   useDashboard,
