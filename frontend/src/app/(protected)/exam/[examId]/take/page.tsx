@@ -1,9 +1,10 @@
 // src/app/(protected)/exam/[examId]/take/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, use } from "react";
+import { useRouter, notFound } from "next/navigation";
 import { ExamProvider, useExam } from "@/features/exam/context/ExamContext";
-import { mockExam } from "@/features/exam/data/mock-exam";
+import { getMockExamById } from "@/features/exam/data/mock-exam";
 import {
   ExamHeader,
   QuestionSidebar,
@@ -17,6 +18,7 @@ import {
 import { getExamLayout } from "@/features/exam/config/exam-layouts.config";
 
 function TakeExamContent() {
+  const router = useRouter(); // Sử dụng Router Next.js
   const {
     exam,
     currentQuestion,
@@ -36,18 +38,21 @@ function TakeExamContent() {
 
   if (!exam || !currentQuestion) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Đang tải bài thi...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-[#00747F] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-500 font-medium">Đang tải đề thi...</p>
+        </div>
       </div>
     );
   }
 
-  // Get layout config based on exam type (TODO: get from backend)
+  // Layout config
   const layoutType =
-    exam.subject === "english" ? "reading-passage" : "standard";
+    exam.subject === "Tiếng Anh" ? "reading-passage" : "standard";
   const layout = getExamLayout(layoutType);
 
-  // Group questions by section
+  // Group questions logic
   const questionsBySections = exam.questions.reduce((acc, q, idx) => {
     const section = q.section || "Phần I";
     if (!acc[section]) {
@@ -65,37 +70,25 @@ function TakeExamContent() {
     return acc;
   }, {} as Record<string, any[]>);
 
-  const handleSubmitClick = () => {
-    setShowSubmitDialog(true);
-  };
+  // --- HANDLERS ---
+  const handleSubmitClick = () => setShowSubmitDialog(true);
 
   const handleConfirmSubmit = () => {
     setShowSubmitDialog(false);
     submitExam();
-    // Show success dialog after short delay
-    setTimeout(() => {
-      setShowSuccessDialog(true);
-    }, 300);
+    setTimeout(() => setShowSuccessDialog(true), 300);
   };
 
-  const handleExitClick = () => {
-    setShowExitDialog(true);
-  };
+  const handleExitClick = () => setShowExitDialog(true);
 
-  const handleConfirmExit = () => {
-    // TODO: navigate to exam list
-    window.location.href = "/exam";
-  };
+  // FIX: Dùng router.push thay vì window.location để không reload trang
+  const handleConfirmExit = () => router.push(`/exam/${exam._id}`); // Quay về trang chi tiết đề thi
+  const handleGoToDashboard = () => router.push("/dashboard");
 
-  const handleGoToDashboard = () => {
-    window.location.href = "/dashboard";
-  };
-
-  // Calculate statistics for submit dialog
+  // Statistics
   const answeredCount = Array.from(examState.answers.values()).filter(
     (a) => a.isAnswered
   ).length;
-
   const unansweredQuestions = exam.questions
     .map((q, idx) => ({
       number: idx + 1,
@@ -107,7 +100,6 @@ function TakeExamContent() {
         !examState.answers.has(q.questionId) ||
         !examState.answers.get(q.questionId)!.isAnswered
     );
-
   const flaggedQuestions = exam.questions
     .map((q, idx) => ({
       number: idx + 1,
@@ -116,7 +108,7 @@ function TakeExamContent() {
     }))
     .filter((q) => examState.flaggedQuestions.has(q.questionId));
 
-  // Format time remaining
+  // Formatter
   const formatTimeRemaining = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -125,22 +117,19 @@ function TakeExamContent() {
       .toString()
       .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
-
-  // Format submission time
   const formatSubmissionTime = (): string => {
     const now = new Date();
     return `${now.getHours().toString().padStart(2, "0")}:${now
       .getMinutes()
       .toString()
-      .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")} ${now
-      .getDate()
-      .toString()
-      .padStart(2, "0")}/${(now.getMonth() + 1)
+      .padStart(2, "0")} ${now.getDate().toString().padStart(2, "0")}/${(
+      now.getMonth() + 1
+    )
       .toString()
       .padStart(2, "0")}/${now.getFullYear()}`;
   };
 
-  // Check if last in section
+  // Nav Logic
   const currentSectionQuestions = Object.values(questionsBySections)
     .flat()
     .filter((q) => {
@@ -159,179 +148,137 @@ function TakeExamContent() {
     examState.currentQuestionIndex === exam.questions.length - 1;
 
   return (
-    <div className="h-screen flex flex-col bg-white">
-      {/* Fixed Header */}
+    <div className="h-screen flex flex-col bg-[#F8F9FA]">
       <ExamHeader
         examTitle={exam.title}
         examSubject={exam.subject || "Thi thử"}
         timeRemaining={timeRemaining}
         onExit={handleExitClick}
         onSubmit={handleSubmitClick}
+        isSubmitting={examState.isSubmitting}
       />
 
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar - Question Navigation */}
-        <QuestionSidebar
-          sections={questionsBySections}
-          onQuestionClick={(questionId) => {
-            const index = exam.questions.findIndex(
-              (q) => q.questionId === questionId
-            );
-            goToQuestion(index);
-          }}
-        />
+      <div className="flex-1 flex pt-16 overflow-hidden">
+        {/* Sidebar */}
+        <div className="flex-shrink-0 h-full bg-white border-r border-gray-200 z-10 shadow-sm hidden lg:block">
+          <QuestionSidebar
+            sections={questionsBySections}
+            onQuestionClick={(questionId) => {
+              const index = exam.questions.findIndex(
+                (q) => q.questionId === questionId
+              );
+              goToQuestion(index);
+            }}
+          />
+        </div>
 
-        {/* Center Content - varies by layout */}
-        {layout.type === "reading-passage" ? (
-          // Two-column layout for English
-          <div className="flex-1 flex overflow-hidden">
-            {/* Left: Reading Passage */}
-            <div className="w-1/2">
-              <ReadingPassagePanel
-                title={exam.readingPassage?.title || "Reading Passage"}
-                content={exam.readingPassage?.content || ""}
-                audioUrl={exam.readingPassage?.audioUrl}
-              />
-            </div>
-
-            {/* Right: Question */}
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <div className="flex-1 overflow-y-auto p-4">
-                <QuestionCard
-                  question={currentQuestion.question!}
-                  questionNumber={examState.currentQuestionIndex + 1}
-                  sectionName={currentQuestion.section || "Phần I"}
-                  sectionBadgeColor="bg-blue-100 text-blue-700"
-                  points={
-                    currentQuestion.points || currentQuestion.maxScore || 1
-                  }
-                  selectedAnswer={
-                    examState.answers.get(currentQuestion.questionId)?.answer
-                  }
-                  onAnswerChange={(answer) =>
-                    updateAnswer(currentQuestion.questionId, {
-                      questionId: currentQuestion.questionId,
-                      answer,
-                      isAnswered: true,
-                      lastModified: new Date(),
-                    })
-                  }
-                  isFlagged={examState.flaggedQuestions.has(
-                    currentQuestion.questionId
-                  )}
-                  onToggleFlag={() => toggleFlag(currentQuestion.questionId)}
+        {/* Content */}
+        <main className="flex-1 flex flex-col min-w-0 bg-[#F8F9FA] relative">
+          {layoutType === "reading-passage" ? (
+            // Reading Layout
+            <div className="flex-1 flex overflow-hidden">
+              <div className="w-1/2 border-r border-gray-200 bg-white overflow-y-auto p-6 hidden md:block">
+                <ReadingPassagePanel
+                  title={exam.readingPassage?.title || "Reading Passage"}
+                  content={exam.readingPassage?.content || ""}
+                  audioUrl={exam.readingPassage?.audioUrl}
                 />
               </div>
-
-              {/* Navigation Buttons */}
-              <div className="flex-shrink-0 p-4 border-t border-gray-200">
-                <QuestionNavigationButtons
-                  currentQuestionIndex={examState.currentQuestionIndex}
-                  totalQuestions={exam.questions.length}
-                  isLastInSection={isLastInSection}
-                  isLastQuestion={isLastQuestion}
-                  onPrevious={goToPreviousQuestion}
-                  onNext={goToNextQuestion}
-                  onNextSection={goToNextQuestion}
-                />
+              <div className="w-full md:w-1/2 flex flex-col overflow-hidden bg-[#F8F9FA]">
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
+                  <div className="max-w-3xl mx-auto pb-8">
+                    <QuestionCard
+                      question={currentQuestion.question!}
+                      questionNumber={examState.currentQuestionIndex + 1}
+                      sectionName={currentQuestion.section || "Phần I"}
+                      sectionBadgeColor="bg-blue-500"
+                      points={currentQuestion.points || 1}
+                      selectedAnswer={
+                        examState.answers.get(currentQuestion.questionId)
+                          ?.answer
+                      }
+                      onAnswerChange={(answer) =>
+                        updateAnswer(currentQuestion.questionId, {
+                          questionId: currentQuestion.questionId,
+                          answer,
+                          isAnswered: true,
+                          lastModified: new Date(),
+                        })
+                      }
+                      isFlagged={examState.flaggedQuestions.has(
+                        currentQuestion.questionId
+                      )}
+                      onToggleFlag={() =>
+                        toggleFlag(currentQuestion.questionId)
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="flex-shrink-0 p-4 bg-white border-t border-gray-200">
+                  <QuestionNavigationButtons
+                    currentQuestionIndex={examState.currentQuestionIndex}
+                    totalQuestions={exam.questions.length}
+                    isLastInSection={isLastInSection}
+                    isLastQuestion={isLastQuestion}
+                    onPrevious={goToPreviousQuestion}
+                    onNext={goToNextQuestion}
+                    onNextSection={goToNextQuestion}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          // Standard layout for Math/Vietnamese
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="flex-1 overflow-y-auto p-4">
-              <QuestionCard
-                question={currentQuestion.question!}
-                questionNumber={examState.currentQuestionIndex + 1}
-                sectionName={currentQuestion.section || "Phần I"}
-                sectionBadgeColor="bg-blue-100 text-blue-700"
-                points={currentQuestion.points || currentQuestion.maxScore || 1}
-                selectedAnswer={
-                  examState.answers.get(currentQuestion.questionId)?.answer
-                }
-                onAnswerChange={(answer) =>
-                  updateAnswer(currentQuestion.questionId, {
-                    questionId: currentQuestion.questionId,
-                    answer,
-                    isAnswered: true,
-                    lastModified: new Date(),
-                  })
-                }
-                isFlagged={examState.flaggedQuestions.has(
-                  currentQuestion.questionId
-                )}
-                onToggleFlag={() => toggleFlag(currentQuestion.questionId)}
-              />
+          ) : (
+            // Standard Layout
+            <div className="flex-1 flex flex-col h-full relative">
+              <div className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+                <div className="max-w-5xl mx-auto w-full pb-20">
+                  <QuestionCard
+                    question={currentQuestion.question!}
+                    questionNumber={examState.currentQuestionIndex + 1}
+                    sectionName={currentQuestion.section || "Phần I"}
+                    sectionBadgeColor="bg-orange-500"
+                    points={currentQuestion.points || 0.25}
+                    selectedAnswer={
+                      examState.answers.get(currentQuestion.questionId)?.answer
+                    }
+                    onAnswerChange={(answer) =>
+                      updateAnswer(currentQuestion.questionId, {
+                        questionId: currentQuestion.questionId,
+                        answer,
+                        isAnswered: true,
+                        lastModified: new Date(),
+                      })
+                    }
+                    isFlagged={examState.flaggedQuestions.has(
+                      currentQuestion.questionId
+                    )}
+                    onToggleFlag={() => toggleFlag(currentQuestion.questionId)}
+                  />
+                </div>
+              </div>
+              <div className="flex-shrink-0 p-4 bg-white border-t border-gray-200 z-20">
+                <div className="max-w-5xl mx-auto w-full">
+                  <QuestionNavigationButtons
+                    currentQuestionIndex={examState.currentQuestionIndex}
+                    totalQuestions={exam.questions.length}
+                    isLastInSection={isLastInSection}
+                    isLastQuestion={isLastQuestion}
+                    onPrevious={goToPreviousQuestion}
+                    onNext={goToNextQuestion}
+                    onNextSection={goToNextQuestion}
+                  />
+                </div>
+              </div>
             </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex-shrink-0 p-4 border-t border-gray-200">
-              <QuestionNavigationButtons
-                currentQuestionIndex={examState.currentQuestionIndex}
-                totalQuestions={exam.questions.length}
-                isLastInSection={isLastInSection}
-                isLastQuestion={isLastQuestion}
-                onPrevious={goToPreviousQuestion}
-                onNext={goToNextQuestion}
-                onNextSection={goToNextQuestion}
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </main>
       </div>
 
-      {/* Auto-save Indicator */}
-      {examState.autoSaveStatus === "saving" && (
-        <div className="fixed bottom-6 right-6 bg-white px-4 py-2.5 rounded-lg shadow-lg border border-gray-300">
-          <span className="text-sm text-gray-600 flex items-center gap-2">
-            <svg
-              className="w-4 h-4 animate-spin"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            Đang lưu...
-          </span>
-        </div>
-      )}
-      {examState.autoSaveStatus === "saved" && (
-        <div className="fixed bottom-6 right-6 bg-green-50 px-4 py-2.5 rounded-lg shadow-lg border border-green-200">
-          <span className="text-sm text-green-600 flex items-center gap-2">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Đã lưu
-          </span>
-        </div>
-      )}
-
-      {/* Exit Dialog */}
       <ExitExamDialog
         isOpen={showExitDialog}
         onClose={() => setShowExitDialog(false)}
         onConfirm={handleConfirmExit}
       />
-
-      {/* Submit Confirmation Dialog */}
       <SubmitConfirmationDialog
         isOpen={showSubmitDialog}
         onClose={() => setShowSubmitDialog(false)}
@@ -342,8 +289,6 @@ function TakeExamContent() {
         unansweredQuestions={unansweredQuestions}
         flaggedQuestions={flaggedQuestions}
       />
-
-      {/* Submit Success Dialog */}
       <SubmitSuccessDialog
         isOpen={showSuccessDialog}
         examTitle={exam.title}
@@ -359,11 +304,21 @@ function TakeExamContent() {
   );
 }
 
+// === MAIN PAGE COMPONENT ===
 export default function TakeExamPage({
   params,
 }: {
-  params: { examId: string };
+  params: Promise<{ examId: string }>;
 }) {
+  const { examId } = use(params);
+
+  // FIX: Lấy mock data, nếu trả về null thì báo lỗi 404
+  const mockExam = getMockExamById(examId);
+
+  if (!mockExam) {
+    notFound();
+  }
+
   return (
     <ExamProvider initialExam={mockExam}>
       <TakeExamContent />

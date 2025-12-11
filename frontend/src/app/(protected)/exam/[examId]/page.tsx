@@ -1,28 +1,29 @@
 // src/app/(protected)/exam/[examId]/page.tsx
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { mockExam } from "@/features/exam/data/mock-exam";
+import React, { use } from "react";
+import { useRouter, notFound } from "next/navigation";
+import { getMockExamById } from "@/features/exam/data/mock-exam";
 import StartExamPanel from "@/features/exam/components/exam-instructions/StartExamPanel";
 
-/**
- * Page hiển thị thông tin và hướng dẫn trước khi bắt đầu làm bài
- * Pure routing component - logic được đẩy vào service và component
- */
 export default function ExamDetailPage({
   params,
 }: {
-  params: { examId: string };
+  params: Promise<{ examId: string }>;
 }) {
+  const { examId } = use(params);
   const router = useRouter();
 
-  // TODO: Fetch exam data from API using examId
-  // const exam = await examService.getExamById(params.examId);
-  const exam = mockExam;
+  // 2. Lấy dữ liệu với chế độ Strict
+  const exam = getMockExamById(examId);
+
+  // 3. Nếu không tìm thấy (null) -> Chặn luôn, ném ra trang 404
+  if (!exam) {
+    notFound();
+  }
 
   const handleStartExam = () => {
-    router.push(`/exam/${params.examId}/take`);
+    router.push(`/exam/${examId}/take`);
   };
 
   const handleCancel = () => {

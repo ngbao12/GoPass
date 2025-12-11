@@ -340,38 +340,18 @@ export const mockExam: ExamWithDetails = {
   ],
 };
 
-export const mockExamList: Exam[] = [
-  mockExam,
-  {
-    _id: "exam-002",
-    title: "Bài Thi Ngữ Văn",
-    description: "Kỳ thi Tốt nghiệp THPT 2025",
-    subject: "Ngữ Văn",
-    durationMinutes: 120,
-    mode: "test",
-    shuffleQuestions: false,
-    showResultsImmediately: false,
-    createdBy: "teacher-002",
-    isPublished: true,
-    totalQuestions: 3,
-    totalPoints: 10,
-    createdAt: "2025-12-05T00:00:00Z",
-    updatedAt: "2025-12-05T00:00:00Z",
-  },
-  {
-    _id: "exam-003",
-    title: "English Exam",
-    description: "THPT National High School Graduation Examination 2025",
-    subject: "Tiếng Anh",
-    durationMinutes: 60,
-    mode: "test",
-    shuffleQuestions: false,
-    showResultsImmediately: false,
-    createdBy: "teacher-003",
-    isPublished: true,
-    totalQuestions: 31,
-    totalPoints: 31,
-    createdAt: "2025-12-05T00:00:00Z",
-    updatedAt: "2025-12-05T00:00:00Z",
-  },
-];
+// Danh sách các đề thi hợp lệ
+const validExams = [mockExam];
+
+export const getMockExamById = (examId: string): ExamWithDetails | null => {
+  // Tìm kiếm chính xác trong danh sách
+  const foundExam = validExams.find((e) => e._id === examId);
+
+  // Nếu tìm thấy, trả về exam đó
+  if (foundExam) {
+    return foundExam;
+  }
+
+  // Nếu không tìm thấy (ví dụ: exam-exam-001), trả về null
+  return null;
+};

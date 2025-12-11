@@ -8,7 +8,7 @@ interface SubmitSuccessDialogProps {
   isOpen: boolean;
   examTitle: string;
   examSubject: string;
-  submittedAt: string; // ISO string or formatted time
+  submittedAt: string;
   completionStatus: {
     answered: number;
     total: number;
@@ -16,10 +16,6 @@ interface SubmitSuccessDialogProps {
   onGoToDashboard: () => void;
 }
 
-/**
- * Success dialog shown after exam submission
- * Displays confirmation and exam summary
- */
 const SubmitSuccessDialog: React.FC<SubmitSuccessDialogProps> = ({
   isOpen,
   examTitle,
@@ -31,150 +27,148 @@ const SubmitSuccessDialog: React.FC<SubmitSuccessDialogProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-teal-500/20 to-blue-500/20 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl m-4 overflow-hidden">
-        {/* Success Header */}
-        <div className="bg-gradient-to-r from-teal-500 to-teal-600 p-8 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-lg rounded-full mb-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"></div>
+
+      <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
+        {/* === HEADER: SUCCESS ICON === */}
+        <div className="pt-8 pb-4 text-center">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-emerald-50 rounded-full mb-6 ring-8 ring-emerald-50/50 shadow-sm animate-bounce-slow">
             <svg
-              className="w-12 h-12 text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-2">
-            Nộp bài thành công!
-          </h2>
-          <p className="text-teal-100 text-base">
-            Bài thi của bạn đã được ghi nhận
-          </p>
-        </div>
-
-        {/* Content */}
-        <div className="p-8 space-y-6">
-          {/* Exam Info Card */}
-          <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-7 h-7 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-teal-700 mb-1">
-                  Môn thi
-                </p>
-                <p className="text-lg font-bold text-teal-900">{examSubject}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Submission Time */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-5">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-7 h-7 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-blue-700 mb-1">
-                  Thời gian nộp
-                </p>
-                <p className="text-lg font-bold text-blue-900">{submittedAt}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Completion Status */}
-          <div className="bg-green-50 border-2 border-green-200 rounded-xl p-5">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-7 h-7 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-green-700 mb-1">
-                  Trạng thái
-                </p>
-                <p className="text-lg font-bold text-green-900">
-                  Hoàn thành ({completionStatus.answered}/
-                  {completionStatus.total} câu)
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Important Info */}
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-            <p className="text-sm font-semibold text-blue-900 mb-2">
-              Thông tin quan trọng:
-            </p>
-            <ul className="space-y-1.5 text-sm text-blue-800">
-              <li className="flex items-start gap-2">
-                <span className="text-blue-600 mt-0.5">•</span>
-                <span>Bài thi đang được hệ thống lưu trữ và chấm điểm</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-blue-600 mt-0.5">•</span>
-                <span>Kết quả sẽ được công bố sau 14 ngày làm việc</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-blue-600 mt-0.5">•</span>
-                <span>Kiểm tra kết quả tại mục "Kết quả thi"</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t border-gray-200 bg-gray-50">
-          <Button
-            variant="primary"
-            onClick={onGoToDashboard}
-            className="w-full py-3 text-base font-semibold"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
+              className="w-12 h-12 text-emerald-500"
               fill="none"
-              stroke="currentColor"
               viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                d="M5 13l4 4L19 7"
               />
             </svg>
-            Quay về Dashboard
+          </div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+            Nộp bài thành công!
+          </h2>
+          <p className="text-slate-500 px-6">
+            Hệ thống đã ghi nhận bài làm của bạn cho đề thi <br />
+            <span className="font-semibold text-[#00747F]">{examTitle}</span>
+          </p>
+        </div>
+
+        {/* === CONTENT: STATS GRID === */}
+        <div className="px-8 py-6">
+          <div className="grid grid-cols-2 gap-4">
+            {/* Box 1: Môn thi */}
+            <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 shadow-sm mb-2">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+              </div>
+              <p className="text-xs text-slate-400 font-bold uppercase">
+                Môn thi
+              </p>
+              <p className="text-sm font-bold text-slate-700 mt-1 truncate w-full">
+                {examSubject}
+              </p>
+            </div>
+
+            {/* Box 2: Thời gian */}
+            <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-400 shadow-sm mb-2">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-xs text-slate-400 font-bold uppercase">
+                Thời gian nộp
+              </p>
+              <p className="text-sm font-bold text-slate-700 mt-1">
+                {submittedAt.split(" ")[0]}
+              </p>
+            </div>
+          </div>
+
+          {/* Completion Bar */}
+          <div className="mt-4 bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-emerald-600 uppercase">
+                  Trạng thái
+                </p>
+                <p className="text-sm font-bold text-emerald-800">
+                  Hoàn thành bài thi
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold text-emerald-700">
+                {completionStatus.answered}
+                <span className="text-sm text-emerald-500 font-medium">
+                  /{completionStatus.total}
+                </span>
+              </p>
+              <p className="text-[10px] text-emerald-600 font-medium">
+                Câu đã làm
+              </p>
+            </div>
+          </div>
+
+          {/* Info Text */}
+          <div className="mt-6 text-center">
+            <p className="text-xs text-slate-400">
+              Kết quả chi tiết và đáp án sẽ được công bố sau khi kết thúc đợt
+              thi.
+            </p>
+          </div>
+        </div>
+
+        {/* === FOOTER === */}
+        <div className="p-6 border-t border-slate-100 bg-white">
+          <Button
+            variant="primary" // Style Teal
+            onClick={onGoToDashboard}
+            className="w-full py-4 text-base font-bold shadow-lg shadow-teal-200/50"
+          >
+            Về trang chủ Dashboard
           </Button>
         </div>
       </div>

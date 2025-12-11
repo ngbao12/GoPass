@@ -1,10 +1,9 @@
-// src/features/exam/components/question-types/ShortAnswerInput.tsx
 "use client";
 
 import React, { useRef, useEffect } from "react";
 
 interface ShortAnswerInputProps {
-  value: string; // Giá trị chuỗi (ví dụ: "12.3")
+  value: string;
   onChange: (value: string) => void;
   hint?: string;
 }
@@ -14,31 +13,24 @@ const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
   onChange,
 }) => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
-  // Tách chuỗi value thành mảng 4 ký tự để hiển thị
   const chars = value.split("").concat(Array(4).fill("")).slice(0, 4);
 
-  // Auto-focus vào ô trống đầu tiên khi mount (UX tốt cho thi cử)
   useEffect(() => {
+    // Auto-focus logic (nếu cần)
     const firstEmptyIndex = chars.findIndex((c) => c === "");
     if (firstEmptyIndex !== -1 && inputRefs.current[firstEmptyIndex]) {
-      // inputRefs.current[firstEmptyIndex]?.focus(); // Bỏ comment nếu muốn auto-focus
+      // inputRefs.current[firstEmptyIndex]?.focus();
     }
   }, []);
 
   const handleCharChange = (index: number, val: string) => {
-    const char = val.slice(-1); // Chỉ lấy ký tự cuối
-
-    // Regex: Chỉ cho phép số, dấu chấm, dấu trừ, chữ cái
+    const char = val.slice(-1);
     if (char && !/^[0-9.\-a-zA-Z]$/.test(char)) return;
 
     const newChars = [...chars];
     newChars[index] = char;
-
-    // Cập nhật giá trị chuỗi lên cha
     onChange(newChars.join(""));
 
-    // Tự động nhảy sang ô tiếp theo
     if (char && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -48,14 +40,11 @@ const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (e.key === "Backspace") {
-      if (!chars[index] && index > 0) {
-        // Nếu ô hiện tại rỗng, quay lại xóa ô trước
-        const newChars = [...chars];
-        newChars[index - 1] = "";
-        onChange(newChars.join(""));
-        inputRefs.current[index - 1]?.focus();
-      }
+    if (e.key === "Backspace" && !chars[index] && index > 0) {
+      const newChars = [...chars];
+      newChars[index - 1] = "";
+      onChange(newChars.join(""));
+      inputRefs.current[index - 1]?.focus();
     } else if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
     } else if (e.key === "ArrowRight" && index < 3) {
@@ -64,14 +53,16 @@ const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      {/* Container chính input */}
-      <div className="bg-white rounded-[2rem] border border-orange-200 p-8 md:p-10 shadow-[0_8px_30px_rgb(255,237,213,0.4)]">
-        {/* Header Label */}
-        <div className="text-center mb-8">
-          <h3 className="text-lg md:text-xl text-gray-900 font-bold mb-2 flex items-center justify-center gap-2">
+    <div className="w-full max-w-xl mx-auto">
+      {" "}
+      {/* Giảm max-width container */}
+      {/* Container gọn gàng hơn với padding nhỏ hơn (p-6) */}
+      <div className="bg-white rounded-[1.5rem] border border-slate-200 p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)]">
+        {/* Header nhỏ hơn */}
+        <div className="text-center mb-6">
+          <h3 className="text-base text-slate-800 font-bold mb-1 flex items-center justify-center gap-2">
             <svg
-              className="h-5 w-5 text-orange-600"
+              className="h-4 w-4 text-[#00747F]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -80,16 +71,16 @@ const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               />
             </svg>
-            <span>Nhập đáp án của bạn</span>
+            <span>Nhập đáp án</span>
           </h3>
-          <p className="text-sm text-gray-500">Tối đa 4 ký tự</p>
+          <p className="text-xs text-slate-400">Tối đa 4 ký tự</p>
         </div>
 
-        {/* 4 Input Boxes */}
-        <div className="flex justify-center gap-3 md:gap-5 mb-8">
+        {/* 4 Input Boxes - Size nhỏ lại (w-12/14) */}
+        <div className="flex justify-center gap-3 mb-6">
           {chars.map((char, index) => (
             <div key={index} className="relative group">
               <input
@@ -103,24 +94,24 @@ const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
                 onChange={(e) => handleCharChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 className={`
-                  w-16 h-16 md:w-20 md:h-20 text-center text-3xl font-mono
-                  border-[3px] rounded-2xl transition-all shadow-sm outline-none
+                  w-12 h-12 md:w-14 md:h-14 text-center text-xl font-mono font-bold
+                  border-2 rounded-xl transition-all shadow-sm outline-none
                   ${
                     char
-                      ? "border-orange-500 text-orange-700 bg-white"
-                      : "border-orange-200 text-gray-700 bg-orange-50/20 hover:border-orange-300 focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+                      ? "border-[#00747F] text-[#00747F] bg-white"
+                      : "border-slate-200 text-slate-600 bg-slate-50 hover:border-slate-300 focus:border-[#00747F] focus:ring-2 focus:ring-[#00747F]/10"
                   }
                 `}
               />
-              {/* Checkmark Icon - Hiện khi có giá trị */}
+              {/* Checkmark nhỏ hơn */}
               {char && (
-                <div className="absolute -top-3 -right-3 w-6 h-6 bg-[#00C985] text-white rounded-full flex items-center justify-center shadow-md animate-[zoomIn_0.2s_ease-out]">
+                <div className="absolute -top-2 -right-2 w-5 h-5 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-sm animate-[zoomIn_0.2s_ease-out] z-10">
                   <svg
-                    className="w-3.5 h-3.5"
+                    className="w-3 h-3"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    strokeWidth={4}
+                    strokeWidth={3}
                   >
                     <path
                       strokeLinecap="round"
@@ -134,21 +125,21 @@ const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
           ))}
         </div>
 
-        {/* Dots Indicator */}
-        <div className="flex justify-center gap-3 mb-6">
+        {/* Dots nhỏ hơn */}
+        <div className="flex justify-center gap-2 mb-5">
           {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
-              className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
-                chars[i] ? "bg-orange-500" : "bg-orange-200"
+              className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                chars[i] ? "bg-[#00747F]" : "bg-slate-200"
               }`}
             />
           ))}
         </div>
 
-        {/* Example Footer */}
+        {/* Example Box nhỏ gọn */}
         <div className="flex justify-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FFF5E6] text-[#9A5B13] rounded-xl text-sm font-medium border border-orange-100">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-slate-50 text-slate-500 rounded-lg text-xs font-medium border border-slate-100">
             <span>Ví dụ: 12.3 → [1][2][.][3]</span>
           </div>
         </div>
