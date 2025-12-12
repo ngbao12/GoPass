@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Badge } from "@/components/ui";
-import { TeacherClass } from "../../types/teacher";
+import { TeacherClass } from "../../../types/teacher";
 
 interface TeacherClassListProps {
     classes: TeacherClass[];

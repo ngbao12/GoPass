@@ -1,4 +1,9 @@
-export { default as TeacherOverviewView } from './TeacherOverviewView';
-export { default as TeacherStatsGrid } from './TeacherStatsGrid';
-export { default as TeacherClassList } from './TeacherClassList';
-export { default as RecentActivityFeed } from './RecentActivityFeed';
+export { default as TeacherOverviewView } from "./overview/TeacherOverviewView";
+export { default as TeacherClassesView } from "./classes/TeacherClassesView";
+export { default as TeacherExamsView } from "./exams/TeacherExamsView";
+export { default as ClassCard } from "./classes/ClassCard";
+export { default as CreateClassModal } from "./classes/CreateClassModal";
+export { default as ExamCard } from "./exams/ExamCard";
+export { default as AssignExamModal } from "./exams/AssignExamModal";
+export { default as DeleteExamModal } from "./exams/DeleteExamModal";
+export { default as QuestionPreviewModal } from "./exams/QuestionPreviewModal";

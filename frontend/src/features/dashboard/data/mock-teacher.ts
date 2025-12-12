@@ -11,27 +11,87 @@ export const mockTeacherData: TeacherDashboardData = {
     classes: [
         {
             id: "class-1",
-            name: "Lớp 12A1",
+            name: "Lớp 12A1 - Trường THPT Nguyễn Huệ",
             subject: "Toán",
+            grade: "12",
             studentCount: 45,
             examCount: 5,
+            description: "Lớp chuyên Toán - Ôn thi THPT Quốc gia 2025",
             createdAt: "2025-09-01T00:00:00Z"
         },
         {
             id: "class-2",
-            name: "Lớp 12A2",
+            name: "Khóa Luyện Thi Đại Học 2025",
             subject: "Toán",
-            studentCount: 42,
-            examCount: 4,
+            grade: "12",
+            studentCount: 120,
+            examCount: 8,
+            description: "Khóa luyện thi đại học các môn thi THPT QG",
             createdAt: "2025-09-01T00:00:00Z"
         },
         {
             id: "class-3",
-            name: "Lớp 12A3",
+            name: "Lớp Bồi Dưỡng HSG Toán",
             subject: "Toán",
-            studentCount: 38,
+            grade: "11",
+            studentCount: 30,
             examCount: 6,
-            createdAt: "2025-09-01T00:00:00Z"
+            description: "Lớp bồi dưỡng học sinh giỏi Toán cấp tỉnh",
+            createdAt: "2025-09-15T00:00:00Z"
+        }
+    ],
+
+    exams: [
+        {
+            id: "1",
+            title: "Đề thi thử THPT QG lần 1 - Toán",
+            subject: "Toán",
+            classId: "class-1",
+            className: "Lớp 12A1 - Trường THPT Nguyễn Huệ",
+            totalQuestions: 50,
+            duration: 90,
+            status: "active",
+            totalStudents: 45,
+            totalSubmissions: 38,
+            averageScore: 7.8,
+            createdAt: "2025-12-01T00:00:00Z",
+            startTime: "2025-12-11T07:00:00Z",
+            endTime: "2025-12-15T23:59:00Z",
+            description: "Đề thi thử THPT Quốc gia môn Toán lần 1"
+        },
+        {
+            id: "2",
+            title: "Kiểm tra Văn - Nghị luận xã hội",
+            subject: "Văn",
+            classId: "class-2",
+            className: "Khóa Luyện Thi Đại Học 2025",
+            totalQuestions: 1,
+            duration: 120,
+            status: "completed",
+            totalStudents: 120,
+            totalSubmissions: 115,
+            averageScore: 6.8,
+            createdAt: "2025-11-20T00:00:00Z",
+            startTime: "2025-11-25T08:00:00Z",
+            endTime: "2025-11-25T23:59:00Z",
+            description: "Bài kiểm tra viết văn nghị luận xã hội"
+        },
+        {
+            id: "3",
+            title: "Đề thi thử Tiếng Anh THPT QG",
+            subject: "Tiếng Anh",
+            classId: "class-1",
+            className: "Lớp 12A1 - Trường THPT Nguyễn Huệ",
+            totalQuestions: 50,
+            duration: 60,
+            status: "upcoming",
+            totalStudents: 45,
+            totalSubmissions: 0,
+            averageScore: 0,
+            createdAt: "2025-12-10T00:00:00Z",
+            startTime: "2025-12-20T09:00:00Z",
+            endTime: "2025-12-20T23:59:00Z",
+            description: "Đề thi thử THPT Quốc gia môn Tiếng Anh"
         }
     ],
 

@@ -1,13 +1,3 @@
-export interface TeacherClass {
-    id: string;
-    name: string;
-    subject: string;
-    studentCount: number;
-    examCount: number;
-    createdAt: string;
-    teacherName?: string;
-}
-
 export interface TeacherStats {
     totalClasses: number;
     totalStudents: number;
@@ -15,9 +5,38 @@ export interface TeacherStats {
     totalContests: number;
 }
 
+export interface TeacherClass {
+    id: string;
+    name: string;
+    subject: string;
+    grade?: string;
+    studentCount: number;
+    examCount: number;
+    description?: string;
+    createdAt: string;
+}
+
+export interface TeacherExam {
+    id: string;
+    title: string;
+    subject: string;
+    classId: string;
+    className: string;
+    totalQuestions: number;
+    duration: number; // in minutes
+    status: "upcoming" | "active" | "completed";
+    totalStudents: number;
+    totalSubmissions: number;
+    averageScore: number;
+    createdAt: string;
+    startTime: string;
+    endTime: string;
+    description?: string;
+}
+
 export interface RecentActivity {
     id: string;
-    type: 'exam_completion' | 'student_joined' | 'exam_created' | 'reminder';
+    type: "exam_completion" | "student_joined" | "exam_created" | "reminder";
     message: string;
     timestamp: string;
     studentName?: string;
@@ -30,10 +49,10 @@ export interface TopStudent {
     className: string;
     averageScore: number;
     totalExams: number;
-    trend: 'up' | 'down' | 'stable';
+    trend: "up" | "down" | "stable";
 }
 
-export interface TeacherExam {
+export interface RecentExam {
     id: string;
     title: string;
     classId: string;
@@ -48,7 +67,8 @@ export interface TeacherExam {
 export interface TeacherDashboardData {
     stats: TeacherStats;
     classes: TeacherClass[];
+    exams: TeacherExam[];
     recentActivity: RecentActivity[];
     topStudents: TopStudent[];
-    recentExams: TeacherExam[];
+    recentExams: RecentExam[];
 }

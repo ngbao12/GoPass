@@ -1,9 +1,8 @@
-// defalt tab
 "use client";
 
 import React from "react";
 import { SectionHeader, Button } from "@/components/ui";
-import { mockTeacherData } from "../../data/mock-teacher";
+import { mockTeacherData } from "../../../data/mock-teacher";
 import TeacherStatsGrid from "./TeacherStatsGrid";
 import TeacherClassList from "./TeacherClassList";
 import RecentActivityFeed from "./RecentActivityFeed";
