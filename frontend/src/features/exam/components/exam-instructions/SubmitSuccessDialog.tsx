@@ -164,7 +164,7 @@ const SubmitSuccessDialog: React.FC<SubmitSuccessDialogProps> = ({
         {/* === FOOTER === */}
         <div className="p-6 border-t border-slate-100 bg-white">
           <Button
-            variant="primary" // Style Teal
+            variant="primary"
             onClick={onGoToDashboard}
             className="w-full py-4 text-base font-bold shadow-lg shadow-teal-200/50"
           >

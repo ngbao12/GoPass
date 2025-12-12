@@ -1,13 +1,6 @@
 // src/features/exam/config/exam-layouts.config.ts
 
-/**
- * Configuration for different exam layout types
- * Based on subject and question structure
- */
-
-export type ExamLayoutType =
-  | "standard" // Single column: Sidebar + Questions (Toán, Đúng/Sai)
-  | "reading-passage"; // Two columns: Passage + Questions (English Reading)
+export type ExamLayoutType = "standard" | "reading-passage";
 
 export interface ExamLayoutConfig {
   type: ExamLayoutType;
@@ -17,7 +10,7 @@ export interface ExamLayoutConfig {
   };
   content: {
     columns: 1 | 2;
-    split?: [number, number]; // percentage split for 2 columns
+    split?: [number, number];
   };
   navigation: {
     type: "question" | "section";
@@ -25,60 +18,54 @@ export interface ExamLayoutConfig {
   };
 }
 
-/**
- * Layout configurations per subject/exam type
- */
-export const EXAM_LAYOUTS: Record<string, ExamLayoutConfig> = {
-  // Toán Học - Standard layout
-  "Toán Học": {
-    type: "standard",
-    sidebar: {
-      width: "200px",
-      position: "left",
-    },
-    content: {
-      columns: 1,
-    },
-    navigation: {
-      type: "question",
-      buttonText: "Câu tiếp theo",
-    },
-  },
-
-  // Tiếng Anh - Reading passage layout
-  "Tiếng Anh": {
-    type: "reading-passage",
-    sidebar: {
-      width: "240px",
-      position: "left",
-    },
-    content: {
-      columns: 2,
-      split: [40, 60], // 40% passage, 60% questions
-    },
-    navigation: {
-      type: "section",
-      buttonText: "Next Section",
-    },
-  },
-
-  // Default fallback
-  default: {
-    type: "standard",
-    sidebar: {
-      width: "200px",
-      position: "left",
-    },
-    content: {
-      columns: 1,
-    },
-    navigation: {
-      type: "question",
-      buttonText: "Câu tiếp theo",
-    },
-  },
+// 1. Layout Chuẩn (1 cột): Dùng cho Toán, Lý, Hóa, Independent Questions
+const STANDARD_LAYOUT: ExamLayoutConfig = {
+  type: "standard",
+  sidebar: { width: "240px", position: "left" },
+  content: { columns: 1 },
+  navigation: { type: "question", buttonText: "Câu tiếp theo" },
 };
 
-export function getExamLayout(subject: string): ExamLayoutConfig {
-  return EXAM_LAYOUTS[subject] || EXAM_LAYOUTS["default"];
+// 2. Layout Đọc hiểu (2 cột): Dùng cho phần Đọc hiểu, Cloze Test
+const SPLIT_LAYOUT: ExamLayoutConfig = {
+  type: "reading-passage",
+  sidebar: { width: "240px", position: "left" },
+  content: {
+    columns: 2,
+    split: [45, 55],
+  },
+  navigation: { type: "question", buttonText: "Câu tiếp theo" },
+};
+
+export function getLayoutForQuestion(
+  subject: string,
+  section?: string
+): ExamLayoutConfig {
+  const subj = subject?.toLowerCase() || "";
+  const sec = section?.toLowerCase() || "";
+
+  // Logic nhận diện môn Ngữ Văn hoặc Tiếng Anh
+  if (
+    subj.includes("ngữ văn") ||
+    subj.includes("tiếng anh") ||
+    subj.includes("english")
+  ) {
+    // Các từ khóa kích hoạt chế độ 2 cột (Split View)
+    const splitKeywords = [
+      "đọc hiểu", // Văn/Anh
+      "reading", // Anh
+      "read", // Anh
+      "cloze", // Anh (Bài đục lỗ)
+      "fill", // Anh (Fill in blanks)
+      "điền từ", // Văn/Anh
+    ];
+
+    if (splitKeywords.some((keyword) => sec.includes(keyword))) {
+      return SPLIT_LAYOUT;
+    }
+
+    return STANDARD_LAYOUT;
+  }
+
+  return STANDARD_LAYOUT;
 }

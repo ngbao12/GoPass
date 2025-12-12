@@ -4,7 +4,7 @@
 import React, { use } from "react";
 import { useRouter, notFound } from "next/navigation";
 import { getMockExamById } from "@/features/exam/data/mock-exam";
-import StartExamPanel from "@/features/exam/components/exam-instructions/StartExamPanel";
+import { StartExamPanel } from "@/features/exam/components/exam-instructions";
 
 export default function ExamDetailPage({
   params,

@@ -2,101 +2,86 @@
 "use client";
 
 import React from "react";
-
-interface Option {
-  text: string;
-  isCorrect?: boolean;
-}
+import { QuestionOption } from "@/features/exam/types/question";
+import MathText from "@/components/ui/MathText";
 
 interface MultipleChoiceInputProps {
-  options: Option[];
+  options: QuestionOption[];
   selectedOptions: string[];
   onChange: (selected: string[]) => void;
 }
 
-/**
- * Multiple choice radio button input
- * Matches UI design from images (blue selected state)
- */
 const MultipleChoiceInput: React.FC<MultipleChoiceInputProps> = ({
   options,
   selectedOptions,
   onChange,
 }) => {
-  const handleSelect = (optionText: string) => {
-    onChange([optionText]);
+  const handleSelect = (optionId: string) => {
+    onChange([optionId]);
   };
 
-  const isSelected = (optionText: string) =>
-    selectedOptions.includes(optionText);
+  const isSelected = (optionId: string) => selectedOptions.includes(optionId);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {options.map((option, index) => {
-          const selected = isSelected(option.text);
-          const optionLabel = String.fromCharCode(65 + index); // A, B, C, D
+          const selected = isSelected(option.id);
+          const label = option.id || String.fromCharCode(65 + index);
 
           return (
             <button
-              key={index}
-              onClick={() => handleSelect(option.text)}
+              key={option.id}
+              onClick={() => handleSelect(option.id)}
               className={`
-                w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left text-base
-                transition-all duration-200
+                relative w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all duration-200 group
                 ${
                   selected
-                    ? "bg-blue-50 border-blue-500 shadow-md ring-1 ring-blue-200"
-                    : "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 hover:shadow-sm"
+                    ? "bg-teal-50 border-[#00747F] shadow-md z-10"
+                    : "bg-white border-slate-200 hover:border-[#00747F]/60 hover:bg-slate-50"
                 }
               `}
             >
-              {/* Option Label Badge */}
+              {/* Badge (A, B, C...) */}
               <div
                 className={`
-                  w-10 h-10 rounded-lg flex items-center justify-center text-base font-bold flex-shrink-0 shadow-sm
+                  w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold flex-shrink-0 transition-colors
                   ${
                     selected
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100 text-gray-700 group-hover:bg-white"
+                      ? "bg-[#00747F] text-white"
+                      : "bg-slate-100 text-slate-500 group-hover:bg-white group-hover:text-[#00747F] border border-slate-200"
                   }
                 `}
               >
-                {optionLabel}
+                {label}
               </div>
 
-              {/* Option Text */}
+              {/* Text Content */}
               <span
-                className={`flex-1 ${
-                  selected ? "text-blue-900 font-medium" : "text-gray-700"
+                className={`flex-1 text-base ${
+                  selected
+                    ? "text-[#00747F] font-semibold"
+                    : "text-slate-700 font-medium"
                 }`}
               >
-                {option.text}
+                <MathText
+                  content={option.content || (option as any).text || ""}
+                />
               </span>
 
-              {/* Radio Indicator */}
+              {/* Radio Circle */}
               <div
                 className={`
-                  w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0
+                  w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
                   ${
                     selected
-                      ? "border-blue-500 bg-blue-500"
-                      : "border-gray-300 bg-white"
+                      ? "border-[#00747F] bg-[#00747F]"
+                      : "border-slate-300 bg-white group-hover:border-[#00747F]"
                   }
                 `}
               >
                 {selected && (
-                  <svg
-                    className="w-3.5 h-3.5 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <div className="w-2.5 h-2.5 bg-white rounded-full animate-in zoom-in" />
                 )}
               </div>
             </button>
@@ -104,16 +89,8 @@ const MultipleChoiceInput: React.FC<MultipleChoiceInputProps> = ({
         })}
       </div>
 
-      {/* Helper Text */}
-      <p className="text-sm text-blue-600 mt-4 flex items-center gap-2">
-        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fillRule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-            clipRule="evenodd"
-          />
-        </svg>
-        Chọn một đáp án đúng nhất
+      <p className="text-xs text-slate-400 mt-2 italic px-1">
+        * Chọn 1 phương án đúng nhất
       </p>
     </div>
   );

@@ -2,173 +2,129 @@
 "use client";
 
 import React from "react";
-
-interface Option {
-  text: string;
-  isCorrect?: boolean;
-}
+import { QuestionOption } from "@/features/exam/types/question";
 
 interface TrueFalseInputProps {
-  options: Option[];
-  selectedOption?: string;
-  onChange: (value: string) => void;
-  subQuestions?: Array<{
-    id: string;
-    text: string;
-    selectedValue?: "Đúng" | "Sai";
-  }>;
-  onSubQuestionChange?: (id: string, value: "Đúng" | "Sai") => void;
+  options: QuestionOption[];
+  selectedAnswer?: Record<string, string>;
+  onChange: (value: Record<string, string>) => void;
 }
 
-/**
- * True/False toggle input
- * For single true/false or multi-part true/false questions
- */
 const TrueFalseInput: React.FC<TrueFalseInputProps> = ({
-  options,
-  selectedOption,
+  options = [],
+  selectedAnswer = {},
   onChange,
-  subQuestions,
-  onSubQuestionChange,
 }) => {
-  // Multi-part true/false (like in Math exam image)
-  if (subQuestions && onSubQuestionChange) {
-    return (
-      <div className="space-y-4">
-        {subQuestions.map((sq) => {
-          const value = sq.selectedValue;
+  // Hàm xử lý khi người dùng click chọn Đúng/Sai cho một ý
+  const handleSubChange = (optionId: string, value: "Đúng" | "Sai") => {
+    const newAnswers = { ...selectedAnswer, [optionId]: value };
+    onChange(newAnswers);
+  };
 
-          return (
-            <div
-              key={sq.id}
-              className={`bg-white rounded-2xl border-2 p-6 shadow-sm transition-all ${
-                value
-                  ? value === "Đúng"
-                    ? "border-green-400 ring-2 ring-green-200/50"
-                    : "border-red-400 ring-2 ring-red-200/50"
-                  : "border-gray-200 hover:border-purple-300"
-              }`}
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-200 text-purple-700 rounded-xl flex items-center justify-center text-base shadow-sm border-2 border-purple-300">
-                  <span className="font-bold">{sq.id})</span>
-                </div>
-                <p className="flex-1 text-base text-gray-800 leading-relaxed pt-1.5">
-                  {sq.text}
-                </p>
-              </div>
-
-              <div className="ml-14 flex items-center gap-3 flex-wrap">
-                {/* True Button */}
-                <button
-                  onClick={() => onSubQuestionChange(sq.id, "Đúng")}
-                  className={`group flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm transition-all ${
-                    value === "Đúng"
-                      ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg ring-2 ring-green-400/50 scale-105"
-                      : "bg-white border-2 border-gray-300 text-gray-700 hover:border-green-400 hover:bg-green-50 shadow-sm"
-                  }`}
-                >
-                  <svg
-                    className={`h-4 w-4 ${
-                      value === "Đúng"
-                        ? "fill-current"
-                        : "group-hover:text-green-500"
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                  <span className="font-medium">Đúng</span>
-                </button>
-
-                {/* False Button */}
-                <button
-                  onClick={() => onSubQuestionChange(sq.id, "Sai")}
-                  className={`group flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm transition-all ${
-                    value === "Sai"
-                      ? "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg ring-2 ring-red-400/50 scale-105"
-                      : "bg-white border-2 border-gray-300 text-gray-700 hover:border-red-400 hover:bg-red-50 shadow-sm"
-                  }`}
-                >
-                  <svg
-                    className={`h-4 w-4 ${
-                      value === "Sai"
-                        ? "fill-current"
-                        : "group-hover:text-red-500"
-                    }`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                  </svg>
-                  <span className="font-medium">Sai</span>
-                </button>
-
-                {value && (
-                  <span
-                    className={`text-xs ml-2 font-medium ${
-                      value === "Đúng" ? "text-green-600" : "text-red-600"
-                    }`}
-                  >
-                    ✓ Đã chọn
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        })}
-
-        {/* Hint */}
-        <div className="bg-purple-50 border-l-4 border-purple-500 rounded-r p-4 flex items-start gap-3">
-          <div className="w-2 h-2 bg-purple-600 rounded-full mt-1.5"></div>
-          <div className="text-sm text-gray-700">
-            <p>
-              <strong>Hướng dẫn:</strong> Trong mỗi ý a), b), c), d), thí sinh
-              chọn <strong>Đúng</strong> hoặc <strong>Sai</strong>.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Simple true/false (single question)
   return (
-    <div className="flex gap-3">
-      {options.map((option) => {
-        const isSelected = selectedOption === option.text;
+    <div className="space-y-4 w-full">
+      {options.map((opt) => {
+        // Lấy giá trị hiện tại của ý này (Đúng, Sai hoặc undefined)
+        const value = selectedAnswer[opt.id];
 
         return (
-          <button
-            key={option.text}
-            onClick={() => onChange(option.text)}
-            className={`
-              flex-1 py-3 rounded-lg text-sm font-semibold transition-all border-2
-              ${
-                isSelected
-                  ? option.text === "Đúng"
-                    ? "bg-green-500 border-green-600 text-white shadow-md"
-                    : "bg-red-500 border-red-600 text-white shadow-md"
-                  : "bg-white border-gray-300 text-gray-700 hover:border-gray-400"
-              }
-            `}
+          <div
+            key={opt.id}
+            className={`bg-white rounded-2xl border-2 p-5 shadow-sm transition-all duration-200 ${
+              value
+                ? value === "Đúng"
+                  ? "border-green-400 ring-2 ring-green-100" // Style khi chọn Đúng
+                  : "border-rose-400 ring-2 ring-rose-100" // Style khi chọn Sai
+                : "border-slate-200 hover:border-slate-300" // Style mặc định
+            }`}
           >
-            {option.text}
-          </button>
+            {/* Header: Label (a, b...) + Nội dung mệnh đề */}
+            <div className="flex items-start gap-4 mb-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center font-bold text-sm border border-slate-200">
+                {opt.id})
+              </div>
+              <p className="flex-1 text-base text-slate-700 leading-relaxed pt-1 font-medium">
+                {opt.content}
+              </p>
+            </div>
+
+            {/* Buttons: Group nút chọn */}
+            <div className="ml-12 flex items-center gap-3">
+              {/* Nút ĐÚNG */}
+              <button
+                onClick={() => handleSubChange(opt.id, "Đúng")}
+                className={`group flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
+                  value === "Đúng"
+                    ? "bg-green-600 text-white shadow-md transform scale-105"
+                    : "bg-white border border-slate-300 text-slate-500 hover:border-green-500 hover:text-green-600 hover:bg-green-50"
+                }`}
+              >
+                <span>Đúng</span>
+                {value === "Đúng" && (
+                  <svg
+                    className="w-4 h-4 animate-in zoom-in"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
+              </button>
+
+              {/* Nút SAI */}
+              <button
+                onClick={() => handleSubChange(opt.id, "Sai")}
+                className={`group flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
+                  value === "Sai"
+                    ? "bg-rose-500 text-white shadow-md transform scale-105"
+                    : "bg-white border border-slate-300 text-slate-500 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50"
+                }`}
+              >
+                <span>Sai</span>
+                {value === "Sai" && (
+                  <svg
+                    className="w-4 h-4 animate-in zoom-in"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
         );
       })}
+
+      {/* Footer Hint */}
+      <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center gap-2 text-sm text-slate-500 italic">
+        <svg
+          className="w-4 h-4 text-slate-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>Trong mỗi ý a), b), c), d), thí sinh chọn đúng hoặc sai.</span>
+      </div>
     </div>
   );
 };

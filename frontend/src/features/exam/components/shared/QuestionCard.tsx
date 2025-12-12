@@ -3,6 +3,7 @@
 
 import React from "react";
 import { Question } from "../../types";
+import MathText from "@/components/ui/MathText";
 import {
   MultipleChoiceInput,
   TrueFalseInput,
@@ -10,25 +11,91 @@ import {
   EssayInput,
 } from "../question-types";
 
+// --- SUB-COMPONENTS ---
+
+const QuestionImage = ({
+  data,
+}: {
+  data: { url: string; caption?: string };
+}) => (
+  <div className="my-5 flex flex-col items-center">
+    <div className="relative rounded-xl overflow-hidden border border-slate-200 shadow-sm max-w-full">
+      <img
+        src={data.url}
+        alt="Question illustration"
+        className="max-h-[400px] w-auto object-contain bg-slate-50"
+      />
+    </div>
+    {data.caption && (
+      <p className="mt-2 text-sm text-slate-500 italic text-center">
+        {data.caption}
+      </p>
+    )}
+  </div>
+);
+
+// --- COMPONENT BẢNG SỐ LIỆU ĐÃ CHỈNH SỬA ---
+const QuestionTable = ({
+  data,
+}: {
+  data: { headers: string[]; rows: string[][] };
+}) => (
+  <div className="my-6 flex justify-center">
+    {" "}
+    {/* Căn giữa bảng trong container */}
+    <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm inline-block max-w-full">
+      <table className="min-w-full text-sm text-slate-700">
+        <thead className="bg-slate-50 border-b border-slate-200">
+          <tr>
+            {data.headers.map((head, i) => (
+              <th
+                key={i}
+                className="px-6 py-3 font-bold text-center whitespace-nowrap text-slate-800 uppercase text-xs tracking-wider"
+              >
+                <MathText content={head} />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100 bg-white">
+          {data.rows.map((row, rowIndex) => (
+            <tr key={rowIndex} className="hover:bg-slate-50 transition-colors">
+              {row.map((cell, cellIndex) => (
+                <td
+                  key={cellIndex}
+                  className="px-6 py-3 text-center whitespace-nowrap" // Thêm text-center
+                >
+                  <MathText content={cell} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
+// --- MAIN COMPONENT ---
+
 interface QuestionCardProps {
   question: Question;
   questionNumber: number;
   sectionName: string;
   sectionBadgeColor: string;
   points: number;
-  selectedAnswer?: string[] | string;
-  onAnswerChange: (answer: string[] | string) => void;
+  selectedAnswer?: string[] | string | Record<string, string>;
+  onAnswerChange: (answer: string[] | string | Record<string, string>) => void;
   isFlagged: boolean;
   onToggleFlag: () => void;
   hint?: string;
-  passage?: string; // Dành cho bài đọc hiểu
+  passage?: string;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   questionNumber,
   sectionName,
-  sectionBadgeColor,
   points,
   selectedAnswer,
   onAnswerChange,
@@ -37,7 +104,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   hint,
   passage,
 }) => {
-  // Helper để render loại input tương ứng
   const renderQuestionInput = () => {
     switch (question.type) {
       case "multiple_choice":
@@ -48,85 +114,64 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               selectedOptions={
                 Array.isArray(selectedAnswer) ? selectedAnswer : []
               }
-              onChange={onAnswerChange}
+              onChange={(val) => onAnswerChange(val)}
             />
           </div>
         );
 
       case "true_false":
-        // Logic xử lý câu hỏi Đúng/Sai nhiều ý (Sub-questions)
-        if (question.subQuestions) {
-          let currentAnswers: Record<string, "Đúng" | "Sai"> = {};
+        let parsedTrueFalse: Record<string, string> = {};
+        if (
+          typeof selectedAnswer === "object" &&
+          selectedAnswer !== null &&
+          !Array.isArray(selectedAnswer)
+        ) {
+          parsedTrueFalse = selectedAnswer as Record<string, string>;
+        } else if (typeof selectedAnswer === "string") {
           try {
-            if (typeof selectedAnswer === "string") {
-              currentAnswers = JSON.parse(selectedAnswer);
+            if (selectedAnswer.startsWith("{")) {
+              parsedTrueFalse = JSON.parse(selectedAnswer);
             }
-          } catch (e) {
-            // Ignore parse error
-          }
-
-          const subQuestionsWithState = question.subQuestions.map((sq) => ({
-            ...sq,
-            selectedValue: currentAnswers[sq.id],
-          }));
-
-          return (
-            <div className="mt-6 w-full">
-              <TrueFalseInput
-                options={question.options || []}
-                onChange={() => {}} // Không dùng onChange cấp cao nhất ở đây
-                subQuestions={subQuestionsWithState}
-                onSubQuestionChange={(id, value) => {
-                  const newAnswers = { ...currentAnswers, [id]: value };
-                  onAnswerChange(JSON.stringify(newAnswers));
-                }}
-              />
-            </div>
-          );
+          } catch (e) {}
         }
 
-        // Logic xử lý câu hỏi Đúng/Sai đơn (1 ý)
         return (
-          <div className="mt-5">
+          <div className="mt-6 w-full">
             <TrueFalseInput
               options={question.options || []}
-              selectedOption={
-                Array.isArray(selectedAnswer)
-                  ? selectedAnswer[0]
-                  : selectedAnswer
-              }
-              onChange={(value: string) => onAnswerChange([value])}
+              selectedAnswer={parsedTrueFalse}
+              onChange={(newVal) => onAnswerChange(JSON.stringify(newVal))}
             />
           </div>
         );
 
       case "short_answer":
-        // Logic xử lý câu trả lời ngắn (4 ô vuông)
-        let displayValue = "";
-        // Đảm bảo lấy ra string để truyền vào component 4 ô
+        let shortAnsValue = "";
         if (typeof selectedAnswer === "string") {
-          displayValue = selectedAnswer;
+          shortAnsValue = selectedAnswer;
         } else if (Array.isArray(selectedAnswer) && selectedAnswer.length > 0) {
-          displayValue = selectedAnswer[0];
+          shortAnsValue = selectedAnswer[0] || "";
         }
 
         return (
-          // Căn giữa component nhập liệu
           <div className="mt-8 mb-4 w-full flex justify-center">
             <ShortAnswerInput
-              value={displayValue}
+              value={shortAnsValue}
               onChange={(val) => onAnswerChange(val)}
-              hint={question.hint || hint}
             />
           </div>
         );
 
       case "essay":
+        let essayValue = "";
+        if (typeof selectedAnswer === "string") {
+          essayValue = selectedAnswer;
+        }
         return (
           <div className="mt-5">
             <EssayInput
-              value={typeof selectedAnswer === "string" ? selectedAnswer : ""}
-              onChange={onAnswerChange}
+              value={essayValue}
+              onChange={(val) => onAnswerChange(val)}
             />
           </div>
         );
@@ -134,7 +179,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       default:
         return (
           <div className="p-4 text-red-500 italic">
-            Loại câu hỏi chưa được hỗ trợ hiển thị.
+            Loại câu hỏi chưa hỗ trợ.
           </div>
         );
     }
@@ -142,18 +187,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <div className="w-full max-w-5xl mx-auto mb-6">
-      {/* CARD CONTAINER:
-        - Bo góc lớn (rounded-[2rem])
-        - Border màu Slate nhẹ
-        - Shadow mềm
-      */}
       <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
-        {/* === HEADER SECTION === */}
+        {/* HEADER */}
         <div className="px-6 py-5 border-b border-slate-100 bg-gradient-to-b from-slate-50/50 to-white">
           <div className="flex items-start justify-between gap-4">
-            {/* Left: Thông tin câu hỏi */}
+            {/* Info */}
             <div className="flex items-center gap-4 flex-1">
-              {/* Badge Số câu: Nhỏ gọn (w-12), màu Teal (#00747F) */}
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 rounded-xl bg-[#00747F] text-white flex items-center justify-center shadow-md shadow-teal-900/10">
                   <span className="text-xl font-bold font-mono">
@@ -162,23 +201,15 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                 </div>
               </div>
 
-              {/* Meta Data */}
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
                   Câu hỏi {questionNumber}
                 </h3>
-
                 <div className="flex items-center gap-2 text-xs font-medium">
-                  {/* Badge Phần thi: Teal nhạt */}
-                  <span
-                    className={`px-2.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-100`}
-                  >
+                  <span className="px-2.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-100">
                     {sectionName}
                   </span>
-
                   <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-
-                  {/* Badge Điểm: Slate nhạt */}
                   <span className="text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">
                     {points} điểm
                   </span>
@@ -186,7 +217,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
               </div>
             </div>
 
-            {/* Right: Nút đánh dấu (Flag) - Màu Amber */}
+            {/* Flag */}
             <button
               onClick={onToggleFlag}
               className={`p-2 rounded-xl transition-all duration-200 ${
@@ -194,7 +225,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                   ? "bg-amber-50 text-amber-500 ring-1 ring-amber-200"
                   : "text-slate-300 hover:bg-slate-50 hover:text-slate-500"
               }`}
-              title={isFlagged ? "Bỏ đánh dấu" : "Đánh dấu xem lại"}
             >
               <svg
                 className={`w-5 h-5 ${
@@ -213,28 +243,34 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             </button>
           </div>
 
-          {/* === NỘI DUNG CÂU HỎI === */}
-          <div className="mt-5">
-            {/* Chữ vừa phải (text-base), màu đậm dễ đọc */}
+          {/* CONTENT AREA */}
+          <div className="mt-5 space-y-5">
+            {/* 1. Text Content */}
             <div className="text-base text-slate-800 font-medium leading-7">
-              {question.content}
+              <MathText content={question.content} />
             </div>
 
-            {/* Bài đọc hiểu (nếu có) */}
+            {/* 2. Image (If any) */}
+            {question.image && <QuestionImage data={question.image} />}
+
+            {/* 3. Table (If any) */}
+            {question.tableData && <QuestionTable data={question.tableData} />}
+
+            {/* 4. Reading Passage (If any) */}
             {passage && (
-              <div className="mt-4 p-4 bg-slate-50 rounded-xl border-l-4 border-slate-300 text-sm text-slate-600 italic">
-                {passage}
+              <div className="p-4 bg-slate-50 rounded-xl border-l-4 border-slate-300 text-sm text-slate-600 italic">
+                <MathText content={passage} />
               </div>
             )}
           </div>
         </div>
 
-        {/* === INPUT AREA === */}
+        {/* INPUT AREA */}
         <div className="px-6 pb-8 pt-2 bg-white min-h-[120px]">
           {renderQuestionInput()}
         </div>
 
-        {/* === FOOTER: HINT / HƯỚNG DẪN === */}
+        {/* FOOTER HINT */}
         {hint && (
           <div className="px-6 py-4 bg-sky-50/50 border-t border-sky-100 flex gap-3">
             <div className="flex-shrink-0 mt-0.5 text-sky-500">
@@ -252,13 +288,13 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                 />
               </svg>
             </div>
-            <div>
+            <div className="w-full">
               <p className="font-bold text-sky-900 text-xs mb-0.5 uppercase tracking-wider">
                 Hướng dẫn giải
               </p>
-              <p className="text-sky-800 text-sm leading-relaxed opacity-90">
-                {hint}
-              </p>
+              <div className="text-sky-800 text-sm leading-relaxed opacity-90">
+                <MathText content={hint} />
+              </div>
             </div>
           </div>
         )}
