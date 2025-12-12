@@ -5,13 +5,13 @@ import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { Button, Badge, Input } from "@/components/ui";
 import { mockTeacherData } from "@/features/dashboard/data/mock-teacher";
-import AssignExamModal from "./AssignExamModal";
+import CreateExamModal from "./CreateExamModal";
 import DeleteExamModal from "./DeleteExamModal";
 import QuestionPreviewModal from "./QuestionPreviewModal";
 
 const TeacherExamsView: React.FC = () => {
     const { userRole } = useDashboard();
-    const [showAssignModal, setShowAssignModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showPreviewModal, setShowPreviewModal] = useState(false);
     const [selectedExam, setSelectedExam] = useState<any>(null);
@@ -27,9 +27,10 @@ const TeacherExamsView: React.FC = () => {
         return matchesSearch && matchesStatus;
     });
 
-    const handleAssignExam = (examData: any) => {
-        console.log("Assigning exam:", examData);
-        setShowAssignModal(false);
+    const handleCreateExam = (examData: any) => {
+        console.log("Creating exam:", examData);
+        // TODO: API call to create exam
+        setShowCreateModal(false);
     };
 
     const handleDeleteExam = (examId: string) => {
@@ -70,7 +71,7 @@ const TeacherExamsView: React.FC = () => {
                 action={
                     <Button
                         variant="primary"
-                        onClick={() => setShowAssignModal(true)}
+                        onClick={() => setShowCreateModal(true)}
                         className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600"
                     >
                         <span>+</span>
@@ -87,9 +88,6 @@ const TeacherExamsView: React.FC = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full text-gray-900 placeholder-gray-500"
-                    style={{
-                        color: '#111827'
-                    }}
                 />
             </div>
 
@@ -158,11 +156,10 @@ const TeacherExamsView: React.FC = () => {
                                                 </svg>
                                             </button>
 
-                                            {/* Assign Button */}
+                                            {/* Share Button */}
                                             <button
-                                                onClick={() => setShowAssignModal(true)}
                                                 className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
-                                                title="Gán đề thi"
+                                                title="Chia sẻ"
                                             >
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
@@ -187,7 +184,7 @@ const TeacherExamsView: React.FC = () => {
                     ) : (
                         <div className="px-6 py-12 text-center">
                             <div className="text-gray-500 mb-4">Không tìm thấy đề thi nào</div>
-                            <Button variant="primary" onClick={() => setShowAssignModal(true)}>
+                            <Button variant="primary" onClick={() => setShowCreateModal(true)}>
                                 Tạo đề thi đầu tiên
                             </Button>
                         </div>
@@ -196,11 +193,11 @@ const TeacherExamsView: React.FC = () => {
             </div>
 
             {/* Modals */}
-            {showAssignModal && (
-                <AssignExamModal
-                    isOpen={showAssignModal}
-                    onClose={() => setShowAssignModal(false)}
-                    onSubmit={handleAssignExam}
+            {showCreateModal && (
+                <CreateExamModal
+                    isOpen={showCreateModal}
+                    onClose={() => setShowCreateModal(false)}
+                    onSubmit={handleCreateExam}
                 />
             )}
 
