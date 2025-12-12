@@ -11,7 +11,7 @@ export type DifficultyLevel = "easy" | "medium" | "hard";
 export interface QuestionOption {
   id: string;
   content: string;
-  isCorrect?: boolean; //Optional field to indicate correct MPC answer
+  isCorrect?: boolean;
 }
 
 export interface Question {
@@ -19,8 +19,10 @@ export interface Question {
   type: QuestionType;
   content: string;
   options?: QuestionOption[];
-  // Flexible field
+
+  // Flexible field: String cho trắc nghiệm, Record cho True/False
   correctAnswer?: string | Record<string, any>;
+
   difficulty: DifficultyLevel;
   subject: string;
   tags: string[];
@@ -30,14 +32,17 @@ export interface Question {
   createdAt: string;
   updatedAt: string;
 
-  // 1. Hình ảnh minh họa (Đồ thị, Hình học...)
+  // ID của bài đọc mà câu hỏi này thuộc về (Dùng cho môn Anh/Văn)
+  linkedPassageId?: string;
+
+  // Hình ảnh minh họa (Đồ thị, Hình học...)
   image?: {
     url: string;
     caption?: string;
-    position?: "top" | "bottom"; // Vị trí hiển thị hình ảnh
+    position?: "top" | "bottom";
   };
 
-  // 2. Bảng dữ liệu (Thống kê, Địa lý...)
+  // Bảng dữ liệu (Thống kê, Địa lý...)
   tableData?: {
     headers: string[];
     rows: string[][];

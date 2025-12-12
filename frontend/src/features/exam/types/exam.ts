@@ -37,6 +37,7 @@ export interface ExamAssignment {
 }
 
 export interface ReadingPassage {
+  id: string;
   title: string;
   content: string;
   audioUrl?: string;

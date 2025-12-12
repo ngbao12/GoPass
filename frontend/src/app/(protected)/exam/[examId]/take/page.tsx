@@ -50,10 +50,21 @@ function TakeExamContent() {
   }
 
   // --- LOGIC LAYOUT ĐỘNG ---
+  // Sử dụng config để quyết định layout mặc định (1 hay 2 cột)
   const layoutConfig = getLayoutForQuestion(
     exam.subject,
     currentQuestion.section
   );
+
+  // --- LOGIC TÌM BÀI ĐỌC (FIX LỖI) ---
+  const currentPassageId = currentQuestion.question?.linkedPassageId;
+  const currentPassage = currentPassageId
+    ? exam.readingPassages?.find((p) => p.id === currentPassageId)
+    : null;
+
+  // Quyết định layout 2 cột: Hoặc config yêu cầu, hoặc câu hỏi có liên kết bài đọc
+  const isSplitLayoutNeeded =
+    layoutConfig.type === "reading-passage" && !!currentPassage;
 
   // --- GROUP QUESTIONS LOGIC ---
   const questionsBySections = exam.questions.reduce((acc, q, idx) => {
@@ -153,7 +164,6 @@ function TakeExamContent() {
     examState.currentQuestionIndex === exam.questions.length - 1;
 
   // --- MAIN CONTENT (VARIABLE JSX - FIX SCROLL ISSUE) ---
-  // Sử dụng biến thay vì Component con để tránh re-mount gây mất focus/scroll
   const mainQuestionContent =
     currentQuestion && currentQuestion.question ? (
       <div className="flex flex-col h-full bg-[#F8F9FA]">
@@ -169,13 +179,11 @@ function TakeExamContent() {
                 examState.answers.get(currentQuestion.questionId)?.answer
               }
               onAnswerChange={(answer) => {
-                // FIX TYPE MISMATCH: Đảm bảo answer luôn là string | string[]
                 let finalAnswer: string | string[];
 
                 if (typeof answer === "string" || Array.isArray(answer)) {
                   finalAnswer = answer;
                 } else {
-                  // Nếu QuestionCard trả về object (VD: TrueFalse), stringify nó
                   finalAnswer = JSON.stringify(answer);
                 }
 
@@ -238,14 +246,14 @@ function TakeExamContent() {
 
         {/* Content Area */}
         <main className="flex-1 flex flex-col min-w-0 bg-[#F8F9FA] relative">
-          {layoutConfig.type === "reading-passage" ? (
+          {isSplitLayoutNeeded ? ( // Dùng biến đã tính toán
             // --- LAYOUT 2 CỘT (SPLIT VIEW) ---
             <div className="flex-1 flex overflow-hidden">
               <div className="w-1/2 border-r border-gray-200 bg-white overflow-y-auto p-0 hidden md:block custom-scrollbar">
                 <ReadingPassagePanel
-                  title={exam.readingPassage?.title || "Văn bản đọc hiểu"}
-                  content={exam.readingPassage?.content || ""}
-                  audioUrl={exam.readingPassage?.audioUrl}
+                  title={currentPassage?.title || "Văn bản đọc hiểu"}
+                  content={currentPassage?.content || ""}
+                  audioUrl={currentPassage?.audioUrl}
                 />
               </div>
               <div className="w-full md:w-1/2 overflow-hidden">
