@@ -1,13 +1,13 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import Hero from '@/components/landing/Hero';
-import Features from '@/components/landing/Features';
-import MainFeatures from '@/components/landing/MainFeatures';
-import AIFeatures from '@/components/landing/AIFeatures';
-import TeacherTools from '@/components/landing/TeacherTools';
-import Leaderboard from '@/components/landing/Leaderboard';
-import Testimonials from '@/components/landing/Testimonials';
-import CTA from '@/components/landing/CTA';
+import Header from "@/components/layout/landingpage/Header";
+import Footer from "@/components/layout/landingpage/Footer";
+import Hero from "@/features/landingpage/components/Hero";
+import Features from "@/features/landingpage/components/Features";
+import MainFeatures from "@/features/landingpage/components/MainFeatures";
+import AIFeatures from "@/features/landingpage/components/AIFeatures";
+import TeacherTools from "@/features/landingpage/components/TeacherTools";
+import Leaderboard from "@/features/landingpage/components/Leaderboard";
+import Testimonials from "@/features/landingpage/components/Testimonials";
+import CTA from "@/features/landingpage/components/CTA";
 
 export default function HomePage() {
   return (

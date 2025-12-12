@@ -2,8 +2,8 @@
 
 import React from "react";
 import AdminDashboardView from "@/features/dashboard/components/admin/AdminDashboardView";
-import QuestionBankView from "@/features/dashboard/components/questionbank/QuestionBankView";
-import CreateContestView from "@/features/dashboard/components/contest/CreateContestView";
+import QuestionBankView from "@/features/dashboard/components/admin/questionbank/QuestionBankView";
+import CreateContestView from "@/features/dashboard/components/admin/contest/CreateContestView";
 import StudentDashboardView from "@/features/dashboard/components/student/overview/StudentDashboardView";
 import StudentPracticeView from "@/features/dashboard/components/student/practice/StudentPracticeView";
 import StudentContestsView from "@/features/dashboard/components/student/contest/StudentContestsView";
@@ -47,7 +47,7 @@ const DashboardPage: React.FC = () => {
       default:
         return <StudentDashboardView />;
     }
-  }
+  };
 
   const renderTeacherContent = () => {
     switch (activeTab) {
@@ -133,7 +133,6 @@ const DashboardPage: React.FC = () => {
         return <TeacherOverviewView />;
     }
   };
-
 
   const renderDashboardByRole = () => {
     switch (userRole) {
