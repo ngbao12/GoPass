@@ -3,6 +3,7 @@ export * from "./exam";
 export * from "./question";
 export * from "./submission";
 export * from "./answer";
+export * from "./exam-config";
 
 // UI State Types
 export interface ExamState {

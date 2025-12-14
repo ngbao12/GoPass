@@ -576,33 +576,100 @@ const mockExamEnglish: ExamWithDetails = {
   readingPassages: [
     {
       id: "passage-eng-01",
-      title: "Project Farming (Q1–Q8)",
-      content:
-        "When several farmers merge plots into a single “project farm”, they use digital tools to make that teamwork far more effective. GPS mapping, drones, and in-field sensors build a live, shared picture of soil types, weather shifts, and plant growth. Because everyone works on the same data, the team can settle seeding dates, determine when to spray, and track machinery in real time. What once depended on guesswork is now driven by verifiable information. With GPS technology, farmers can accurately map out their fields and create customised planting plans. Seeding machines change their rate on the fly, drones spray pests on targeted zones, and smart spreaders apply fertiliser only where data shows a need. Because inputs go exactly where they help, fields yield more while chemical runoff falls. Trials report considerable savings on seed, fuel, and sprays – benefits the partners split at the season’s end. Water management is just as precise. Specialised equipment tracks moisture every hour, and forecast apps predict rain, wind, or heatwaves. Automated pumps deliver measured water amounts to thirsty zones and stop when a storm is coming, slashing waste and energy bills. The result is steadier yields in dry years, fewer nutrients washed away, and a smaller water footprint for the whole partnership. Smart irrigation also helps limit weed growth, reducing herbicide use. The journey from field to market is equally digital. Cloud platforms record harvest weights, storage temperatures, and shipment times the moment they change, while blockchain records freeze each entry so customers can rely on it. Analytic tools browse the records to indicate weak points in the procedure, forecast prices, and suggest better planting plans for the next season to project partners. This makes project farming both profitable and sustainable. (Adapted from https://www.consumersearch.com)",
+      title: "Passage 1 (Q1–Q8): Project Farming",
+      content: `
+        <p class="mb-4 text-justify">When several farmers merge plots into a single “project farm”, they use digital tools to make that teamwork far more effective. GPS mapping, drones, and in-field sensors build a live, shared picture of soil types, weather shifts, and plant growth. Because everyone works on the same data, the team can <b>settle</b> seeding dates, determine when to spray, and track machinery in real time. What once depended on guesswork is now driven by verifiable information.</p>
+        
+        <p class="mb-4 text-justify">With GPS technology, farmers can accurately map out their fields and create customised planting plans. Seeding machines change <b>their</b> rate on the fly, drones spray pests on targeted zones, and smart spreaders apply fertiliser only where data shows a need. <b>Because inputs go exactly where they help, fields yield more while chemical runoff falls.</b> Trials report considerable savings on seed, fuel, and sprays – benefits the partners split at the season’s end.</p>
+        
+        <p class="mb-4 text-justify">Water management is just as precise. Specialised equipment tracks moisture every hour, and forecast apps predict rain, wind, or heatwaves. Automated pumps deliver measured water amounts to thirsty zones and stop when a storm is coming, <b>slashing</b> waste and energy bills. The result is steadier yields in dry years, fewer nutrients washed away, and a smaller water footprint for the whole partnership. Smart irrigation also helps limit weed growth, reducing herbicide use.</p>
+        
+        <p class="mb-4 text-justify">The journey from field to market is equally digital. Cloud platforms record harvest weights, storage temperatures, and shipment times the moment they change, while blockchain records freeze each entry so customers can rely on it. Analytic tools browse the records to indicate weak points in the procedure, forecast prices, and suggest better planting plans for the next season to project partners. This makes project farming both profitable and sustainable.</p>
+        
+        <p class="text-right italic text-sm text-gray-500">(Adapted from https://www.consumersearch.com)</p>
+      `,
     },
     {
       id: "passage-eng-02",
-      title: "Da Nang International Fireworks Festival (DIFF) 2025 (Q9–Q14)",
-      content:
-        "Da Nang International Fireworks Festival (DIFF) 2025 With ten teams worldwide, DIFF 2025 features the largest (9) _______ of participating teams in its history, and is predicted to be the most thrilling (10) _______ so far. Z121 Vina Pyrotech, a company (11) _______ by Vietnam Ministry of National Defence, is a newcomer this year. With thirty years of experience in fireworks, Z121 Vina Pyrotech is expected to deliver a breathtaking performance. It is among the (12) _______ candidates to win the championship. From May 31st to July 12th, DIFF 2025 promises a series of spectacular fireworks displays, (13) _______ is hoped to bring spectators a world-class entertainment experience. Over the past twelve years, the Da Nang International Fireworks Festival has helped the city (14) _______ the reputation as “The City of Fireworks” and become an attractive tourist destination. (Adapted from https://www.vietnamnews.vn) Mark the letter A, B, C or D on your answer sheet to indicate the best arrangement of utterances or sentences to make a cohesive and coherent exchange or text in each of the following questions from 15 to 19. Read the passage and mark the letter A, B, C or D on your answer sheet to indicate the best answer to each of the following questions from 20 to 29. We seem to be entering a boom era for greenwashing – the tactic of covering routine pollution in eco-friendly language. [I] Picture running a high-emitting corporation: meaningful decarbonisation would demand painful negotiations, huge capital outlays, and a full redesign of the business model. Hiring an expert agency to splash “carbon-neutral” or “net-zero” across products is far easier, buying time while emissions remain untouched. Consumers meet this sleight of hand everywhere. Airlines sell “carbon-neutral” flights, filling stations boast about “net-zero” fuel, and breakfast bacon is re-labelled as planet-safe. Advertising spin is old, yet today it is manipulated to conceal ongoing environmental damage. Social media influencers and glossy sustainability reports amplify these claims, broadcasting the narrative far beyond traditional marketing channels. The term greenwashing emerged in the 1980s, an era of oil spills and growing climate science, but the practice has exploded only recently. [II] Intensifying public anxiety over global heating and ecosystem collapse has placed companies under sharp scrutiny; many boards therefore choose eye-catching PR over the tougher route of restructuring supply chains, energy sources, and product lines. Regulators on both sides of the Atlantic are struggling to police false eco-claims, yet enforcement still lags behind corporate ingenuity. Investors, eager to protect short-term returns, frequently applaud these surface-level initiatives, reinforcing the cycle. [III] No sector illustrates the issue better than oil and gas. Having realised that denying climate science now backfires, the industry has swapped denial for “green” paint. Press releases trumpet potential renewable ventures while drilling plans expand unabated. Why does this matter? Greenwashing and climate denial share a core objective: to postpone the deep emission cuts claimed by scientists as urgent this decade. [IV] Whereas denial disputes the crisis, greenwashing misleads the public into believing problems are solved, thereby eroding consumer advocacy of genuine environmental actions and stalling regulatory reforms. In effect, it acts as a soothing lullaby, guiding society ever closer to ecological breakdown while fostering a false sense of progress. Exposing the facade – and insisting on verifiable, measurable carbon reductions – is essential if rhetoric is to give way to real action. (Adapted from https://www.greenpeace.org.uk) Question 20. According to paragraph 1, having products claimed as eco-friendly rather than conducting meaningful decarbonisation will _______. Question 21. The word manipulated in paragraph 2 mostly means _______. Question 22. Which of the following best summarises paragraph 2? Question 23. What causes corporate boards to adopt greenwashing? Question 24. What challenge do regulators face in monitoring greenwashing claims? Question 25. The phrase the practice in paragraph 3 refers to _______. Question 26. Which of the following best paraphrases the underlined sentence in paragraph 4? Question 27. Which of the following can be inferred from the passage? Question 28. Where in the passage does the following sentence best fit? Yet greenwashing is arguably more insidious. Question 29. Which of the following best summarises the passage? Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 30 to 35. Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 36 to 40. The process of sorting through the various holidays on offer and determining which is the best for you is inevitably complex and individual personality traits will determine the eventual decision. Some people undertake a process of extensive problem solving, in which information is sought about a series of products, (36) _______. Other consumers with no patience to explore a variety of choices (37) _______, for the sake of their convenience rather than trying to guarantee that they buy the best possible product. This is known as limited problem solving. Many consumers engage in routinised response behaviour, in which choices change relatively little over time. (38) _______. Also, some holidaymakers who have been content with a particular company or destination in the past may opt for the same experience again. Finally, some consumers will buy on impulse. (39) _______. It is, in fact, a pattern of behaviour that is becoming increasingly prevalent – to the dismay of the operators, who then have less scope for forward planning and reduced opportunities to gain from investing deposits in the short term. (40) _______, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly. (Adapted from The business of tourism) ------------------------ THE END ------------------------ - Thí sinh không được sử dụng tài liệu; - Giám thị không giải thích gì thêm. - Biên tập: Tài liệu diệu kỳ.",
+      title: "News (Q9–Q14): DIFF 2025",
+      content: `
+        <h3 class="font-bold text-center mb-4">Da Nang International Fireworks Festival (DIFF) 2025</h3>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          With ten teams worldwide, DIFF 2025 features the largest <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(9) _______</span> of participating teams in its history, and is predicted to be the most thrilling <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(10) _______</span> so far.
+        </p>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          Z121 Vina Pyrotech, a company <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(11) _______</span> by Vietnam Ministry of National Defence, is a newcomer this year. With thirty years of experience in fireworks, Z121 Vina Pyrotech is expected to deliver a breathtaking performance. It is among the <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(12) _______</span> candidates to win the championship.
+        </p>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          From May 31st to July 12th, DIFF 2025 promises a series of spectacular fireworks displays, <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(13) _______</span> is hoped to bring spectators a world-class entertainment experience.
+        </p>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          Over the past twelve years, the Da Nang International Fireworks Festival has helped the city <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(14) _______</span> the reputation as “The City of Fireworks” and become an attractive tourist destination.
+        </p>
+        
+        <p class="text-right italic text-sm text-gray-500">(Adapted from https://www.vietnamnews.vn)</p>
+      `,
     },
     {
       id: "passage-eng-03",
-      title: "Greenwashing (Q20–Q29)",
-      content:
-        "We seem to be entering a boom era for greenwashing – the tactic of covering routine pollution in eco-friendly language. [I] Picture running a high-emitting corporation: meaningful decarbonisation would demand painful negotiations, huge capital outlays, and a full redesign of the business model. Hiring an expert agency to splash “carbon-neutral” or “net-zero” across products is far easier, buying time while emissions remain untouched. Consumers meet this sleight of hand everywhere. Airlines sell “carbon-neutral” flights, filling stations boast about “net-zero” fuel, and breakfast bacon is re-labelled as planet-safe. Advertising spin is old, yet today it is manipulated to conceal ongoing environmental damage. Social media influencers and glossy sustainability reports amplify these claims, broadcasting the narrative far beyond traditional marketing channels. The term greenwashing emerged in the 1980s, an era of oil spills and growing climate science, but the practice has exploded only recently. [II] Intensifying public anxiety over global heating and ecosystem collapse has placed companies under sharp scrutiny; many boards therefore choose eye-catching PR over the tougher route of restructuring supply chains, energy sources, and product lines. Regulators on both sides of the Atlantic are struggling to police false eco-claims, yet enforcement still lags behind corporate ingenuity. Investors, eager to protect short-term returns, frequently applaud these surface-level initiatives, reinforcing the cycle. [III] No sector illustrates the issue better than oil and gas. Having realised that denying climate science now backfires, the industry has swapped denial for “green” paint. Press releases trumpet potential renewable ventures while drilling plans expand unabated. Why does this matter? Greenwashing and climate denial share a core objective: to postpone the deep emission cuts claimed by scientists as urgent this decade. [IV] Whereas denial disputes the crisis, greenwashing misleads the public into believing problems are solved, thereby eroding consumer advocacy of genuine environmental actions and stalling regulatory reforms. In effect, it acts as a soothing lullaby, guiding society ever closer to ecological breakdown while fostering a false sense of progress. Exposing the facade – and insisting on verifiable, measurable carbon reductions – is essential if rhetoric is to give way to real action. (Adapted from https://www.greenpeace.org.uk)",
+      title: "Passage 2 (Q20–Q29): Greenwashing",
+      content: `
+        <p class="mb-4 text-justify">We seem to be entering a boom era for greenwashing – the tactic of covering routine pollution in eco-friendly language.</p> 
+        
+        <p class="mb-4 text-justify"><b>[I]</b> Picture running a high-emitting corporation: meaningful decarbonisation would demand painful negotiations, huge capital outlays, and a full redesign of the business model. Hiring an expert agency to splash “carbon-neutral” or “net-zero” across products is far easier, buying time while emissions remain untouched.</p>
+        
+        <p class="mb-4 text-justify">Consumers meet this sleight of hand everywhere. Airlines sell “carbon-neutral” flights, filling stations boast about “net-zero” fuel, and breakfast bacon is re-labelled as planet-safe. Advertising spin is old, yet today it is <b>manipulated</b> to conceal ongoing environmental damage. Social media influencers and glossy sustainability reports amplify these claims, broadcasting the narrative far beyond traditional marketing channels.</p>
+        
+        <p class="mb-4 text-justify">The term greenwashing emerged in the 1980s, an era of oil spills and growing climate science, but <b>the practice</b> has exploded only recently. <b>[II]</b> Intensifying public anxiety over global heating and ecosystem collapse has placed companies under sharp scrutiny; many boards therefore choose eye-catching PR over the tougher route of restructuring supply chains, energy sources, and product lines. Regulators on both sides of the Atlantic are struggling to police false eco-claims, yet enforcement still lags behind corporate ingenuity. Investors, eager to protect short-term returns, frequently applaud these surface-level initiatives, reinforcing the cycle. <b>[III]</b> No sector illustrates the issue better than oil and gas. Having realised that denying climate science now backfires, the industry has swapped denial for “green” paint. Press releases trumpet potential renewable ventures while drilling plans expand unabated.</p>
+        
+        <p class="mb-4 text-justify">Why does this matter? Greenwashing and climate denial share a core objective: to postpone the deep emission cuts claimed by scientists as urgent this decade. <b>[IV]</b> <u>Whereas denial disputes the crisis, greenwashing misleads the public into believing problems are solved, thereby eroding consumer advocacy of genuine environmental actions and stalling regulatory reforms.</u> In effect, it acts as a soothing lullaby, guiding society ever closer to ecological breakdown while fostering a false sense of progress. Exposing the facade – and insisting on verifiable, measurable carbon reductions – is essential if rhetoric is to give way to real action.</p>
+        
+        <p class="text-right italic text-sm text-gray-500">(Adapted from https://www.greenpeace.org.uk)</p>
+      `,
     },
     {
       id: "passage-eng-04",
-      title: "How to Manage Your Money Wisely? (Q30–Q35)",
-      content:
-        "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 36 to 40. The process of sorting through the various holidays on offer and determining which is the best for you is inevitably complex and individual personality traits will determine the eventual decision. Some people undertake a process of extensive problem solving, in which information is sought about a series of products, (36) _______. Other consumers with no patience to explore a variety of choices (37) _______, for the sake of their convenience rather than trying to guarantee that they buy the best possible product. This is known as limited problem solving. Many consumers engage in routinised response behaviour, in which choices change relatively little over time. (38) _______. Also, some holidaymakers who have been content with a particular company or destination in the past may opt for the same experience again. Finally, some consumers will buy on impulse. (39) _______. It is, in fact, a pattern of behaviour that is becoming increasingly prevalent – to the dismay of the operators, who then have less scope for forward planning and reduced opportunities to gain from investing deposits in the short term. (40) _______, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly. (Adapted from The business of tourism) ------------------------ THE END ------------------------ - Thí sinh không được sử dụng tài liệu; - Giám thị không giải thích gì thêm. - Biên tập: Tài liệu diệu kỳ.",
+      title: "Leaflet (Q30–Q35): Money Management",
+      content: `
+        <h3 class="font-bold text-lg mb-3 text-teal-700">How to Manage Your Money Wisely?</h3>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          Managing your finances properly is essential for a stable and secure life. <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(30) _______</span>, many people struggle with budgeting and saving and give up their financial plans sooner or later, eventually leading <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(31) _______</span> overspending and financial stress. Here are some tips to well manage your pocket:
+        </p>
+        
+        <ul class="list-disc pl-5 space-y-2 mb-4">
+          <li>Invest some of your money if possible.</li>
+          <li>Have a bank account with an increasing amount of savings <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(32) _______</span> month by setting realistic financial goals.</li>
+          <li>Buy <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(33) _______</span> within your price range.</li>
+          <li>Track your spending carefully to avoid <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(34) _______</span> expenditure on unnecessary purchases.</li>
+          <li>Prioritise things that bring you lasting happiness and financial security to get your money’s <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(35) _______</span>!</li>
+        </ul>
+        
+        <p class="text-right italic text-sm text-gray-500">(Adapted from https://www.thebalancemoney.com)</p>
+      `,
     },
     {
       id: "passage-eng-05",
-      title: "Holiday Buying Behaviour (Q36–Q40)",
-      content:
-        "The process of sorting through the various holidays on offer and determining which is the best for you is inevitably complex and individual personality traits will determine the eventual decision. Some people undertake a process of extensive problem solving, in which information is sought about a series of products, (36) _______. Other consumers with no patience to explore a variety of choices (37) _______, for the sake of their convenience rather than trying to guarantee that they buy the best possible product. This is known as limited problem solving. Many consumers engage in routinised response behaviour, in which choices change relatively little over time. (38) _______. Also, some holidaymakers who have been content with a particular company or destination in the past may opt for the same experience again. Finally, some consumers will buy on impulse. (39) _______. It is, in fact, a pattern of behaviour that is becoming increasingly prevalent – to the dismay of the operators, who then have less scope for forward planning and reduced opportunities to gain from investing deposits in the short term. (40) _______, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly. (Adapted from The business of tourism) ------------------------ THE END ------------------------ - Thí sinh không được sử dụng tài liệu; - Giám thị không giải thích gì thêm. - Biên tập: Tài liệu diệu kỳ.",
+      title: "Passage 3 (Q36–Q40): Holiday Buying Behaviour",
+      content: `
+        <p class="mb-4 text-justify leading-relaxed">
+          The process of sorting through the various holidays on offer and determining which is the best for you is inevitably complex and individual personality traits will determine the eventual decision. Some people undertake a process of extensive problem solving, in which information is sought about a series of products, <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(36) _______</span>. Other consumers with no patience to explore a variety of choices <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(37) _______</span>, for the sake of their convenience rather than trying to guarantee that they buy the best possible product. This is known as limited problem solving.
+        </p>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          Many consumers engage in routinised response behaviour, in which choices change relatively little over time. <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(38) _______</span>. Also, some holidaymakers who have been content with a particular company or destination in the past may opt for the same experience again.
+        </p>
+        
+        <p class="mb-4 text-justify leading-relaxed">
+          Finally, some consumers will buy on impulse. <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(39) _______</span>. It is, in fact, a pattern of behaviour that is becoming increasingly prevalent – to the dismay of the operators, who then have less scope for forward planning and reduced opportunities to gain from investing deposits in the short term. <span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded border border-amber-200">(40) _______</span>, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly.
+        </p>
+        
+        <p class="text-right italic text-sm text-gray-500">(Adapted from The business of tourism)</p>
+      `,
     },
   ],
   questions: [
@@ -894,29 +961,20 @@ const mockExamEnglish: ExamWithDetails = {
         _id: "q-09",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-02",
-        content: "Blank (9)",
+        // Trích dẫn ngữ cảnh câu hỏi
+        content:
+          "With ten teams worldwide, DIFF 2025 features the largest <b>(9) _______</b> of participating teams in its history...",
         options: [
-          {
-            id: "A",
-            content: "volume",
-          },
-          {
-            id: "B",
-            content: "amount",
-          },
-          {
-            id: "C",
-            content: "number",
-          },
-          {
-            id: "D",
-            content: "level",
-          },
+          { id: "A", content: "volume" },
+          { id: "B", content: "amount" },
+          { id: "C", content: "number" },
+          { id: "D", content: "level" },
         ],
-        correctAnswer: "",
+        correctAnswer: "C", // 9. C (the largest number of + countable noun)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        // Bổ sung tag về lượng từ
+        tags: ["cloze", "vocabulary", "quantifiers"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -936,29 +994,19 @@ const mockExamEnglish: ExamWithDetails = {
         _id: "q-10",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-02",
-        content: "Blank (10)",
+        content:
+          "...and is predicted to be the most thrilling <b>(10) _______</b> so far.",
         options: [
-          {
-            id: "A",
-            content: "competition",
-          },
-          {
-            id: "B",
-            content: "competitive",
-          },
-          {
-            id: "C",
-            content: "compete",
-          },
-          {
-            id: "D",
-            content: "competitively",
-          },
+          { id: "A", content: "competition" },
+          { id: "B", content: "competitive" },
+          { id: "C", content: "compete" },
+          { id: "D", content: "competitively" },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 10. A (Noun phrase: thrilling competition)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        // Bổ sung tag về từ loại
+        tags: ["cloze", "grammar", "word-form"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -978,29 +1026,19 @@ const mockExamEnglish: ExamWithDetails = {
         _id: "q-11",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-02",
-        content: "Blank (11)",
+        content:
+          "Z121 Vina Pyrotech, a company <b>(11) _______</b> by Vietnam Ministry of National Defence, is a newcomer this year.",
         options: [
-          {
-            id: "A",
-            content: "managed",
-          },
-          {
-            id: "B",
-            content: "managing",
-          },
-          {
-            id: "C",
-            content: "has managed",
-          },
-          {
-            id: "D",
-            content: "is managing",
-          },
+          { id: "A", content: "managed" },
+          { id: "B", content: "managing" },
+          { id: "C", content: "has managed" },
+          { id: "D", content: "is managing" },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 11. A (Reduced relative clause - passive)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        // Bổ sung tag về mệnh đề quan hệ rút gọn
+        tags: ["cloze", "grammar", "reduced-relative-clause"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1020,29 +1058,19 @@ const mockExamEnglish: ExamWithDetails = {
         _id: "q-12",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-02",
-        content: "Blank (12)",
+        content:
+          "It is among the <b>(12) _______</b> candidates to win the championship.",
         options: [
-          {
-            id: "A",
-            content: "top",
-          },
-          {
-            id: "B",
-            content: "quick",
-          },
-          {
-            id: "C",
-            content: "high",
-          },
-          {
-            id: "D",
-            content: "smart",
-          },
+          { id: "A", content: "top" },
+          { id: "B", content: "quick" },
+          { id: "C", content: "high" },
+          { id: "D", content: "smart" },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 12. A (Collocation: top candidates)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        // Bổ sung tag về kết hợp từ
+        tags: ["cloze", "vocabulary", "collocations"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1062,29 +1090,19 @@ const mockExamEnglish: ExamWithDetails = {
         _id: "q-13",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-02",
-        content: "Blank (13)",
+        content:
+          "From May 31st to July 12th, DIFF 2025 promises a series of spectacular fireworks displays, <b>(13) _______</b> is hoped to bring spectators a world-class entertainment experience.",
         options: [
-          {
-            id: "A",
-            content: "who",
-          },
-          {
-            id: "B",
-            content: "which",
-          },
-          {
-            id: "C",
-            content: "when",
-          },
-          {
-            id: "D",
-            content: "why",
-          },
+          { id: "A", content: "who" },
+          { id: "B", content: "which" },
+          { id: "C", content: "when" },
+          { id: "D", content: "why" },
         ],
-        correctAnswer: "",
+        correctAnswer: "B", // 13. B (Relative pronoun substituting clause)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        // Bổ sung tag về đại từ quan hệ
+        tags: ["cloze", "grammar", "relative-clause"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1104,29 +1122,19 @@ const mockExamEnglish: ExamWithDetails = {
         _id: "q-14",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-02",
-        content: "Blank (14)",
+        content:
+          "Over the past twelve years, the Da Nang International Fireworks Festival has helped the city <b>(14) _______</b> the reputation as “The City of Fireworks”...",
         options: [
-          {
-            id: "A",
-            content: "build up",
-          },
-          {
-            id: "B",
-            content: "go up",
-          },
-          {
-            id: "C",
-            content: "come up",
-          },
-          {
-            id: "D",
-            content: "look up",
-          },
+          { id: "A", content: "build up" },
+          { id: "B", content: "go up" },
+          { id: "C", content: "come up" },
+          { id: "D", content: "look up" },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 14. A (Phrasal verb: build up reputation)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        // Bổ sung tag về cụm động từ
+        tags: ["cloze", "vocabulary", "phrasal-verbs"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1145,48 +1153,26 @@ const mockExamEnglish: ExamWithDetails = {
       question: {
         _id: "q-15",
         type: "multiple_choice",
-        content: `a. I had to burn the midnight oil to make engaging lesson plans, expecting to capture my students’ attention.
-b. The reality, however, was not what I had expected when I completely failed to keep the class under control despite shouting loudly.
-c. This valuable experience was indeed memorable and made me more confident in my career of choice.
-d. Working as an intern at a local high school encouraged me to pursue a teaching career, a demanding yet rewarding one.
-e. Instead of giving up, I reflected on what I had done and made improvements in the following lessons.
-a. I had to burn the midnight oil to make engaging lesson plans, expecting to capture my students’ attention.
-b. The reality, however, was not what I had expected when I completely failed to keep the class under control despite shouting loudly.
-c. This valuable experience was indeed memorable and made me more confident in my career of choice.
-d. Working as an intern at a local high school encouraged me to pursue a teaching career, a demanding yet rewarding one.
-e. Instead of giving up, I reflected on what I had done and made improvements in the following lessons.
-a. I had to burn the midnight oil to make engaging lesson plans, expecting to capture my students’ attention.
-b. The reality, however, was not what I had expected when I completely failed to keep the class under control despite shouting loudly.
-c. This valuable experience was indeed memorable and made me more confident in my career of choice.
-d. Working as an intern at a local high school encouraged me to pursue a teaching career, a demanding yet rewarding one.
-e. Instead of giving up, I reflected on what I had done and made improvements in the following lessons.
-a. I had to burn the midnight oil to make engaging lesson plans, expecting to capture my students’ attention.
-b. The reality, however, was not what I had expected when I completely failed to keep the class under control despite shouting loudly.
-c. This valuable experience was indeed memorable and made me more confident in my career of choice.
-d. Working as an intern at a local high school encouraged me to pursue a teaching career, a demanding yet rewarding one.
-e. Instead of giving up, I reflected on what I had done and made improvements in the following lessons.`,
+        // Format nội dung thành các dòng riêng biệt
+        content: `
+          <div class="space-y-2 text-justify">
+            <p><strong>a.</strong> I had to burn the midnight oil to make engaging lesson plans, expecting to capture my students’ attention.</p>
+            <p><strong>b.</strong> The reality, however, was not what I had expected when I completely failed to keep the class under control despite shouting loudly.</p>
+            <p><strong>c.</strong> This valuable experience was indeed memorable and made me more confident in my career of choice.</p>
+            <p><strong>d.</strong> Working as an intern at a local high school encouraged me to pursue a teaching career, a demanding yet rewarding one.</p>
+            <p><strong>e.</strong> Instead of giving up, I reflected on what I had done and made improvements in the following lessons.</p>
+          </div>
+        `,
         options: [
-          {
-            id: "A",
-            content: "c – b – e – a – d",
-          },
-          {
-            id: "B",
-            content: "c – a – e – d – b",
-          },
-          {
-            id: "C",
-            content: "d – a – b – e – c",
-          },
-          {
-            id: "D",
-            content: "d – b – e – c – a",
-          },
+          { id: "A", content: "c – b – e – a – d" },
+          { id: "B", content: "c – a – e – d – b" },
+          { id: "C", content: "d – a – b – e – c" },
+          { id: "D", content: "d – b – e – c – a" },
         ],
-        correctAnswer: "",
+        correctAnswer: "C", // Theo đáp án câu 15 là C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["writing", "paragraph-structure", "sentence-arrangement"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1205,48 +1191,25 @@ e. Instead of giving up, I reflected on what I had done and made improvements in
       question: {
         _id: "q-16",
         type: "multiple_choice",
-        content: `a. David: I used to, but now I use social media and news apps.
-b. Lisa: Same here! It’s more convenient, but I think traditional newspapers have their own charm.
-c. Lisa: Do you still read newspapers?
-d. Lisa: I believe each type has its own value that we can make full use of.
-e. David: You’re right. They fill us with nostalgia that’s hard to replace.
-a. David: I used to, but now I use social media and news apps.
-b. Lisa: Same here! It’s more convenient, but I think traditional newspapers have their own charm.
-c. Lisa: Do you still read newspapers?
-d. Lisa: I believe each type has its own value that we can make full use of.
-e. David: You’re right. They fill us with nostalgia that’s hard to replace.
-a. David: I used to, but now I use social media and news apps.
-b. Lisa: Same here! It’s more convenient, but I think traditional newspapers have their own charm.
-c. Lisa: Do you still read newspapers?
-d. Lisa: I believe each type has its own value that we can make full use of.
-e. David: You’re right. They fill us with nostalgia that’s hard to replace.
-a. David: I used to, but now I use social media and news apps.
-b. Lisa: Same here! It’s more convenient, but I think traditional newspapers have their own charm.
-c. Lisa: Do you still read newspapers?
-d. Lisa: I believe each type has its own value that we can make full use of.
-e. David: You’re right. They fill us with nostalgia that’s hard to replace.`,
+        content: `
+          <div class="space-y-2 text-justify">
+            <p><strong>a. David:</strong> I used to, but now I use social media and news apps.</p>
+            <p><strong>b. Lisa:</strong> Same here! It’s more convenient, but I think traditional newspapers have their own charm.</p>
+            <p><strong>c. Lisa:</strong> Do you still read newspapers?</p>
+            <p><strong>d. Lisa:</strong> I believe each type has its own value that we can make full use of.</p>
+            <p><strong>e. David:</strong> You’re right. They fill us with nostalgia that’s hard to replace.</p>
+          </div>
+        `,
         options: [
-          {
-            id: "A",
-            content: "d – a – c – e – b",
-          },
-          {
-            id: "B",
-            content: "c – a – b – e – d",
-          },
-          {
-            id: "C",
-            content: "d – e – b – a – c",
-          },
-          {
-            id: "D",
-            content: "c – e – d – a – b",
-          },
+          { id: "A", content: "d – a – c – e – b" },
+          { id: "B", content: "c – a – b – e – d" },
+          { id: "C", content: "d – e – b – a – c" },
+          { id: "D", content: "c – e – d – a – b" },
         ],
-        correctAnswer: "",
+        correctAnswer: "B", // Theo đáp án câu 16 là B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["communication", "speaking", "sentence-arrangement"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1265,40 +1228,23 @@ e. David: You’re right. They fill us with nostalgia that’s hard to replace.`
       question: {
         _id: "q-17",
         type: "multiple_choice",
-        content: `a. Tom: Then, text me when you’re home.
-b. Tom: It’s getting late. Would you like me to give you a lift home?
-c. Mary: Thanks, but I’m going to walk to the supermarket and then take a bus home.
-a. Tom: Then, text me when you’re home.
-b. Tom: It’s getting late. Would you like me to give you a lift home?
-c. Mary: Thanks, but I’m going to walk to the supermarket and then take a bus home.
-a. Tom: Then, text me when you’re home.
-b. Tom: It’s getting late. Would you like me to give you a lift home?
-c. Mary: Thanks, but I’m going to walk to the supermarket and then take a bus home.
-a. Tom: Then, text me when you’re home.
-b. Tom: It’s getting late. Would you like me to give you a lift home?
-c. Mary: Thanks, but I’m going to walk to the supermarket and then take a bus home.`,
+        content: `
+          <div class="space-y-2 text-justify">
+            <p><strong>a. Tom:</strong> Then, text me when you’re home.</p>
+            <p><strong>b. Tom:</strong> It’s getting late. Would you like me to give you a lift home?</p>
+            <p><strong>c. Mary:</strong> Thanks, but I’m going to walk to the supermarket and then take a bus home.</p>
+          </div>
+        `,
         options: [
-          {
-            id: "A",
-            content: "a – b – c",
-          },
-          {
-            id: "B",
-            content: "b – a – c",
-          },
-          {
-            id: "C",
-            content: "b – c – a",
-          },
-          {
-            id: "D",
-            content: "a – c – b",
-          },
+          { id: "A", content: "a – b – c" },
+          { id: "B", content: "b – a – c" },
+          { id: "C", content: "b – c – a" },
+          { id: "D", content: "a – c – b" },
         ],
-        correctAnswer: "",
+        correctAnswer: "C", // Theo đáp án câu 17 là C
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["communication", "speaking", "sentence-arrangement"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1317,60 +1263,27 @@ c. Mary: Thanks, but I’m going to walk to the supermarket and then take a bus 
       question: {
         _id: "q-18",
         type: "multiple_choice",
-        content: `Dear Ms Smith,
-a. This has been pre-approved, but you need to have this letter and your identification card produced at the nearest branch to apply.
-b. The offer is exclusive and expires on December 31st.
-c. Your application will be processed, and your card will be issued within 48 hours for immediate use.
-d. It is our honour to offer you credit facilities of $6000, affordable with the monthly instalment of $99.
-e. Should you require further details, please call 0123888888, or visit any of our branches.
-Yours sincerely,
-ABC Bank
-Dear Ms Smith,
-a. This has been pre-approved, but you need to have this letter and your identification card produced at the nearest branch to apply.
-b. The offer is exclusive and expires on December 31st.
-c. Your application will be processed, and your card will be issued within 48 hours for immediate use.
-d. It is our honour to offer you credit facilities of $6000, affordable with the monthly instalment of $99.
-e. Should you require further details, please call 0123888888, or visit any of our branches.
-Yours sincerely,
-ABC Bank
-Dear Ms Smith,
-a. This has been pre-approved, but you need to have this letter and your identification card produced at the nearest branch to apply.
-b. The offer is exclusive and expires on December 31st.
-c. Your application will be processed, and your card will be issued within 48 hours for immediate use.
-d. It is our honour to offer you credit facilities of $6000, affordable with the monthly instalment of $99.
-e. Should you require further details, please call 0123888888, or visit any of our branches.
-Yours sincerely,
-ABC Bank
-Dear Ms Smith,
-a. This has been pre-approved, but you need to have this letter and your identification card produced at the nearest branch to apply.
-b. The offer is exclusive and expires on December 31st.
-c. Your application will be processed, and your card will be issued within 48 hours for immediate use.
-d. It is our honour to offer you credit facilities of $6000, affordable with the monthly instalment of $99.
-e. Should you require further details, please call 0123888888, or visit any of our branches.
-Yours sincerely,
-ABC Bank`,
+        content: `
+          <div class="space-y-2 text-justify">
+            <p class="font-semibold italic mb-2">Dear Ms Smith,</p>
+            <p><strong>a.</strong> This has been pre-approved, but you need to have this letter and your identification card produced at the nearest branch to apply.</p>
+            <p><strong>b.</strong> The offer is exclusive and expires on December 31st.</p>
+            <p><strong>c.</strong> Your application will be processed, and your card will be issued within 48 hours for immediate use.</p>
+            <p><strong>d.</strong> It is our honour to offer you credit facilities of 6000, affordable with the monthly instalment of \$99.</p>
+            <p><strong>e.</strong> Should you require further details, please call 0123888888, or visit any of our branches.</p>
+            <p class="font-semibold italic mt-2">Yours sincerely,<br>ABC Bank</p>
+          </div>
+        `,
         options: [
-          {
-            id: "A",
-            content: "b – d – a – c – e",
-          },
-          {
-            id: "B",
-            content: "a – c – d – b – e",
-          },
-          {
-            id: "C",
-            content: "d – a – c – b – e",
-          },
-          {
-            id: "D",
-            content: "c – a – d – b – e",
-          },
+          { id: "A", content: "b – d – a – c – e" },
+          { id: "B", content: "a – c – d – b – e" },
+          { id: "C", content: "d – a – c – b – e" },
+          { id: "D", content: "c – a – d – b – e" },
         ],
-        correctAnswer: "",
+        correctAnswer: "C", // Theo đáp án câu 18 là C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["writing", "letter", "sentence-arrangement"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1389,48 +1302,25 @@ ABC Bank`,
       question: {
         _id: "q-19",
         type: "multiple_choice",
-        content: `a. The developments demonstrate a clear modernisation of the city of Paragon, transforming it from a primarily residential locality into a more diverse and economically vibrant area.
-b. This shift was further evidenced by the industrialisation of the surrounding agricultural land, with the appearance of some plants and factories.
-c. Residential areas were noticeably transformed, with the replacement of established terraced housing with new dwellings and the relocation of the original park.
-d. Simultaneously, a significant expansion of commercial infrastructure took place, most prominently with the construction of a large supermarket and an accompanying car park where housing once stood.
-e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic reshaping, indicating a move towards urban regeneration and increased commercial activity.
-a. The developments demonstrate a clear modernisation of the city of Paragon, transforming it from a primarily residential locality into a more diverse and economically vibrant area.
-b. This shift was further evidenced by the industrialisation of the surrounding agricultural land, with the appearance of some plants and factories.
-c. Residential areas were noticeably transformed, with the replacement of established terraced housing with new dwellings and the relocation of the original park.
-d. Simultaneously, a significant expansion of commercial infrastructure took place, most prominently with the construction of a large supermarket and an accompanying car park where housing once stood.
-e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic reshaping, indicating a move towards urban regeneration and increased commercial activity.
-a. The developments demonstrate a clear modernisation of the city of Paragon, transforming it from a primarily residential locality into a more diverse and economically vibrant area.
-b. This shift was further evidenced by the industrialisation of the surrounding agricultural land, with the appearance of some plants and factories.
-c. Residential areas were noticeably transformed, with the replacement of established terraced housing with new dwellings and the relocation of the original park.
-d. Simultaneously, a significant expansion of commercial infrastructure took place, most prominently with the construction of a large supermarket and an accompanying car park where housing once stood.
-e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic reshaping, indicating a move towards urban regeneration and increased commercial activity.
-a. The developments demonstrate a clear modernisation of the city of Paragon, transforming it from a primarily residential locality into a more diverse and economically vibrant area.
-b. This shift was further evidenced by the industrialisation of the surrounding agricultural land, with the appearance of some plants and factories.
-c. Residential areas were noticeably transformed, with the replacement of established terraced housing with new dwellings and the relocation of the original park.
-d. Simultaneously, a significant expansion of commercial infrastructure took place, most prominently with the construction of a large supermarket and an accompanying car park where housing once stood.
-e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic reshaping, indicating a move towards urban regeneration and increased commercial activity.`,
+        content: `
+          <div class="space-y-2 text-justify">
+            <p><strong>a.</strong> The developments demonstrate a clear modernisation of the city of Paragon, transforming it from a primarily residential locality into a more diverse and economically vibrant area.</p>
+            <p><strong>b.</strong> This shift was further evidenced by the industrialisation of the surrounding agricultural land, with the appearance of some plants and factories.</p>
+            <p><strong>c.</strong> Residential areas were noticeably transformed, with the replacement of established terraced housing with new dwellings and the relocation of the original park.</p>
+            <p><strong>d.</strong> Simultaneously, a significant expansion of commercial infrastructure took place, most prominently with the construction of a large supermarket and an accompanying car park where housing once stood.</p>
+            <p><strong>e.</strong> Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic reshaping, indicating a move towards urban regeneration and increased commercial activity.</p>
+          </div>
+        `,
         options: [
-          {
-            id: "A",
-            content: "e – d – b – a – c",
-          },
-          {
-            id: "B",
-            content: "e – b – a – c – d",
-          },
-          {
-            id: "C",
-            content: "e – c – a – d – b",
-          },
-          {
-            id: "D",
-            content: "e – c – d – b – a",
-          },
+          { id: "A", content: "e – d – b – a – c" },
+          { id: "B", content: "e – b – a – c – d" },
+          { id: "C", content: "e – c – a – d – b" },
+          { id: "D", content: "e – c – d – b – a" },
         ],
-        correctAnswer: "",
+        correctAnswer: "D", // Theo đáp án câu 19 là D
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["writing", "paragraph-structure", "sentence-arrangement"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1452,11 +1342,32 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         linkedPassageId: "passage-eng-03",
         content:
           "According to paragraph 1, having products claimed as eco-friendly rather than conducting meaningful decarbonisation will _______.",
-        options: [],
-        correctAnswer: "",
+        options: [
+          {
+            id: "A",
+            content:
+              "bring about a full redesign of the business model of a company",
+          },
+          {
+            id: "B",
+            content:
+              "lead to delays without solving the current emission problem",
+          },
+          {
+            id: "C",
+            content:
+              "cause physical injuries to those involved in the negotiation",
+          },
+          {
+            id: "D",
+            content:
+              "involve spending a huge amount of money paying the agency",
+          },
+        ],
+        correctAnswer: "B", // 20. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "detail", "inference"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1476,12 +1387,18 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         _id: "q-21",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
-        content: "The word manipulated in paragraph 2 mostly means _______.",
-        options: [],
-        correctAnswer: "",
+        content:
+          "The word <b>manipulated</b> in paragraph 2 mostly means _______.",
+        options: [
+          { id: "A", content: "randomly deployed" },
+          { id: "B", content: "legally regulated" },
+          { id: "C", content: "purposely adjusted" },
+          { id: "D", content: "hastily produced" },
+        ],
+        correctAnswer: "C", // 21. C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "vocabulary"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1502,11 +1419,32 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
         content: "Which of the following best summarises paragraph 2?",
-        options: [],
-        correctAnswer: "",
+        options: [
+          {
+            id: "A",
+            content:
+              "The stories about greenwashing reach a much wider audience due to the joint effort of social media and traditional marketing channels.",
+          },
+          {
+            id: "B",
+            content:
+              "Commercials for everyday products and services, ranging from holiday bookings to petrol pumps and bacon packs, are prevalent on unconventional marketing channels.",
+          },
+          {
+            id: "C",
+            content:
+              "Social media influencers and impressive reports have a role to play in the dissemination of deceptive environmental claims.",
+          },
+          {
+            id: "D",
+            content:
+              "Sustainability buzzwords now fill every sector, with their reach being amplified by influencers and polished reports.",
+          },
+        ],
+        correctAnswer: "D", // 22. D
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "main-idea", "summary"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1527,11 +1465,29 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
         content: "What causes corporate boards to adopt greenwashing?",
-        options: [],
-        correctAnswer: "",
+        options: [
+          {
+            id: "A",
+            content: "Increasing public concern about environmental issues",
+          },
+          {
+            id: "B",
+            content: "Public pressure on corporations to opt for PR campaigns",
+          },
+          {
+            id: "C",
+            content:
+              "Growing public interest in the development of climate science",
+          },
+          {
+            id: "D",
+            content: "Public belief that carbon reductions are unnecessary",
+          },
+        ],
+        correctAnswer: "A", // 23. A
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "cause-effect", "detail"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1553,11 +1509,22 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         linkedPassageId: "passage-eng-03",
         content:
           "What challenge do regulators face in monitoring greenwashing claims?",
-        options: [],
-        correctAnswer: "",
+        options: [
+          {
+            id: "A",
+            content: "Enforcement that falls behind corporate creativity",
+          },
+          { id: "B", content: "Insufficient public support" },
+          { id: "C", content: "A lack of clear terminology" },
+          {
+            id: "D",
+            content: "Conflicting laws on both sides of the Atlantic",
+          },
+        ],
+        correctAnswer: "A", // 24. A
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "detail"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1577,12 +1544,18 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         _id: "q-25",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
-        content: "The phrase the practice in paragraph 3 refers to _______.",
-        options: [],
-        correctAnswer: "",
+        content:
+          "The phrase <b>the practice</b> in paragraph 3 refers to _______.",
+        options: [
+          { id: "A", content: "global heating" },
+          { id: "B", content: "scrutiny" },
+          { id: "C", content: "climate science" },
+          { id: "D", content: "greenwashing" },
+        ],
+        correctAnswer: "D", // 25. D
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "reference"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1604,11 +1577,32 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         linkedPassageId: "passage-eng-03",
         content:
           "Which of the following best paraphrases the underlined sentence in paragraph 4?",
-        options: [],
-        correctAnswer: "",
+        options: [
+          {
+            id: "A",
+            content:
+              "For empty slogans to be realised into moves, revelations about greenwashing and practical measures to reduce carbon are required.",
+          },
+          {
+            id: "B",
+            content:
+              "Greenwashing is, in fact, a fallacy and therefore should be replaced by feasible actions which are encouraged through public movements.",
+          },
+          {
+            id: "C",
+            content:
+              "To make way for meaningful activities in reality, it is vital to expose the public to proper and specific measures to reduce emissions.",
+          },
+          {
+            id: "D",
+            content:
+              "The real solution to the issue of carbon is to verify and measure carbon reductions rather than just raise public awareness through campaigns.",
+          },
+        ],
+        correctAnswer: "A", // 26. A
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "paraphrase"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1629,11 +1623,32 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
         content: "Which of the following can be inferred from the passage?",
-        options: [],
-        correctAnswer: "",
+        options: [
+          {
+            id: "A",
+            content:
+              "Regulators are effectively utilising the tools and resources to verify most environmental claims, tackling the wide spread of eco-labels.",
+          },
+          {
+            id: "B",
+            content:
+              "Greenwashing brings corporations benefits in terms of finance and reputation without having to reform their core operations.",
+          },
+          {
+            id: "C",
+            content:
+              "The shift from denying climate science to applying “green” paint reflects high-emitting industries’ genuine commitment to renewables.",
+          },
+          {
+            id: "D",
+            content:
+              "Investors who value long-term environmental impact put pressure on companies to implement substantial structural reforms.",
+          },
+        ],
+        correctAnswer: "B", // 27. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "inference"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1654,12 +1669,18 @@ e. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic res
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
         content: `Where in the passage does the following sentence best fit?
-Yet greenwashing is arguably more insidious.`,
-        options: [],
-        correctAnswer: "",
+        <br/><br/>
+        <i>"Yet greenwashing is arguably more insidious."</i>`,
+        options: [
+          { id: "A", content: "[IV]" },
+          { id: "B", content: "[III]" },
+          { id: "C", content: "[II]" },
+          { id: "D", content: "[I]" },
+        ],
+        correctAnswer: "A", // 28. A
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "sentence-insertion"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1679,47 +1700,33 @@ Yet greenwashing is arguably more insidious.`,
         _id: "q-29",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-03",
-        content: `Which of the following best summarises the passage?
-Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 30 to 35.
-Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 36 to 40.
-The process of sorting through the various holidays on offer and determining which is the best for you is inevitably complex and individual personality traits will determine the eventual decision. Some people undertake a process of extensive problem solving, in which information is sought about a series of products, (36) _______. Other consumers with no patience to explore a variety of choices (37) _______, for the sake of their convenience rather than trying to guarantee that they buy the best possible product. This is known as limited problem solving.
-Many consumers engage in routinised response behaviour, in which choices change relatively little over time. (38) _______. Also, some holidaymakers who have been content with a particular company or destination in the past may opt for the same experience again.
-Finally, some consumers will buy on impulse. (39) _______. It is, in fact, a pattern of behaviour that is becoming increasingly prevalent – to the dismay of the operators, who then have less scope for forward planning and reduced opportunities to gain from investing deposits in the short term. (40) _______, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly.
-(Adapted from The business of tourism)
------------------------- THE END ------------------------
-- Thí sinh không được sử dụng tài liệu;
-- Giám thị không giải thích gì thêm.
-- Biên tập: Tài liệu diệu kỳ.
-BỘ GIÁO DỤC VÀ ĐÀO TẠO
-ĐỀ THI CHÍNH THỨC
-(Đề thi có 04 trang)
-KỲ THI TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG NĂM 2025
-Môn thi: TIẾNG ANH
-Thời gian làm bài: 50 phút, không kể thời gian phát đề
-Họ, tên thí sinh: ..........................................................................
-Số báo danh: ...............................................................................`,
+        content: "Which of the following best summarises the passage?",
         options: [
           {
             id: "A",
-            content: "exchange",
+            content:
+              "Greenwashing is surging as firms cover ongoing pollution in eco-friendly rhetoric, distracting the public and postponing the deep emission cuts scientists deem urgent.",
           },
           {
             id: "B",
-            content: "announce",
+            content:
+              "High-emitting sectors follow the trend of greenwashing, boasting about promising renewable ventures in press releases while quietly going on damaging the environment.",
           },
           {
             id: "C",
-            content: "expect",
+            content:
+              "Instead of investing in meaningful decarbonisation, major emitters have a tendency to opt for denying the claim of “carbon-neutral” or “net-zero” on their product lines.",
           },
           {
             id: "D",
-            content: "decide",
+            content:
+              "Once a prevalent strategy of corporations in response to public scrutiny, climate denial is losing its effectiveness and has to be replaced by greenwashing.",
           },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 29. A
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["reading-comprehension", "summary", "main-idea"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1739,29 +1746,18 @@ Số báo danh: ................................................................
         _id: "q-30",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-04",
-        content: "Blank (30)",
+        content:
+          "Managing your finances properly is essential for a stable and secure life. <b>(30) _______</b>, many people struggle with budgeting and saving...",
         options: [
-          {
-            id: "A",
-            content: "However",
-          },
-          {
-            id: "B",
-            content: "Otherwise",
-          },
-          {
-            id: "C",
-            content: "Though",
-          },
-          {
-            id: "D",
-            content: "While",
-          },
+          { id: "A", content: "However" },
+          { id: "B", content: "Otherwise" },
+          { id: "C", content: "Though" },
+          { id: "D", content: "While" },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 30. A
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "connector"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1781,29 +1777,18 @@ Số báo danh: ................................................................
         _id: "q-31",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-04",
-        content: "Blank (31)",
+        content:
+          "...give up their financial plans sooner or later, eventually leading <b>(31) _______</b> overspending and financial stress.",
         options: [
-          {
-            id: "A",
-            content: "on",
-          },
-          {
-            id: "B",
-            content: "at",
-          },
-          {
-            id: "C",
-            content: "in",
-          },
-          {
-            id: "D",
-            content: "to",
-          },
+          { id: "A", content: "on" },
+          { id: "B", content: "at" },
+          { id: "C", content: "in" },
+          { id: "D", content: "to" },
         ],
-        correctAnswer: "",
+        correctAnswer: "D", // 31. D (leading to)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "preposition"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1823,29 +1808,18 @@ Số báo danh: ................................................................
         _id: "q-32",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-04",
-        content: "Blank (32)",
+        content:
+          "Have a bank account with an increasing amount of savings <b>(32) _______</b> month by setting realistic financial goals.",
         options: [
-          {
-            id: "A",
-            content: "many",
-          },
-          {
-            id: "B",
-            content: "some",
-          },
-          {
-            id: "C",
-            content: "much",
-          },
-          {
-            id: "D",
-            content: "each",
-          },
+          { id: "A", content: "many" },
+          { id: "B", content: "some" },
+          { id: "C", content: "much" },
+          { id: "D", content: "each" },
         ],
-        correctAnswer: "",
+        correctAnswer: "D", // 32. D
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "quantifier"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1865,29 +1839,17 @@ Số báo danh: ................................................................
         _id: "q-33",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-04",
-        content: "Blank (33)",
+        content: "Buy <b>(33) _______</b> within your price range.",
         options: [
-          {
-            id: "A",
-            content: "affordable products quality",
-          },
-          {
-            id: "B",
-            content: "products affordable quality",
-          },
-          {
-            id: "C",
-            content: "affordable quality products",
-          },
-          {
-            id: "D",
-            content: "products quality affordable",
-          },
+          { id: "A", content: "affordable products quality" },
+          { id: "B", content: "products affordable quality" },
+          { id: "C", content: "affordable quality products" },
+          { id: "D", content: "products quality affordable" },
         ],
-        correctAnswer: "",
+        correctAnswer: "C", // 33. C
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "word-order"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1907,29 +1869,18 @@ Số báo danh: ................................................................
         _id: "q-34",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-04",
-        content: "Blank (34)",
+        content:
+          "Track your spending carefully to avoid <b>(34) _______</b> expenditure on unnecessary purchases.",
         options: [
-          {
-            id: "A",
-            content: "possessive",
-          },
-          {
-            id: "B",
-            content: "restrictive",
-          },
-          {
-            id: "C",
-            content: "objective",
-          },
-          {
-            id: "D",
-            content: "excessive",
-          },
+          { id: "A", content: "possessive" },
+          { id: "B", content: "restrictive" },
+          { id: "C", content: "objective" },
+          { id: "D", content: "excessive" },
         ],
-        correctAnswer: "",
+        correctAnswer: "D", // 34. D
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "vocabulary"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1949,29 +1900,18 @@ Số báo danh: ................................................................
         _id: "q-35",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-04",
-        content: "Blank (35)",
+        content:
+          "Prioritise things that bring you lasting happiness and financial security to get your money’s <b>(35) _______</b>!",
         options: [
-          {
-            id: "A",
-            content: "worth",
-          },
-          {
-            id: "B",
-            content: "price",
-          },
-          {
-            id: "C",
-            content: "rate",
-          },
-          {
-            id: "D",
-            content: "cost",
-          },
+          { id: "A", content: "worth" },
+          { id: "B", content: "price" },
+          { id: "C", content: "rate" },
+          { id: "D", content: "cost" },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 35. A (money's worth)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "idioms", "vocabulary"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1991,7 +1931,8 @@ Số báo danh: ................................................................
         _id: "q-36",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-05",
-        content: "Blank (36)",
+        content:
+          "Some people undertake a process of extensive problem solving, in which information is sought about a series of products, <b>(36) _______</b>.",
         options: [
           {
             id: "A",
@@ -2014,10 +1955,10 @@ Số báo danh: ................................................................
               "those with similarities to other products will be evaluated and compared carefully",
           },
         ],
-        correctAnswer: "",
+        correctAnswer: "A", // 36. A
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "relative-clause"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2037,7 +1978,8 @@ Số báo danh: ................................................................
         _id: "q-37",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-05",
-        content: "Blank (37)",
+        content:
+          "Other consumers with no patience to explore a variety of choices <b>(37) _______</b>, for the sake of their convenience rather than trying to guarantee that they buy the best possible product.",
         options: [
           {
             id: "A",
@@ -2058,10 +2000,10 @@ Số báo danh: ................................................................
             content: "fewer choices are deliberately confined to themselves",
           },
         ],
-        correctAnswer: "",
+        correctAnswer: "C", // 37. C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "tenses"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2081,7 +2023,8 @@ Số báo danh: ................................................................
         _id: "q-38",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-05",
-        content: "Blank (38)",
+        content:
+          "Many consumers engage in routinised response behaviour, in which choices change relatively little over time. <b>(38) _______</b>.",
         options: [
           {
             id: "A",
@@ -2104,10 +2047,10 @@ Số báo danh: ................................................................
               "This is a common example of brands with loyalty to a consumer pattern",
           },
         ],
-        correctAnswer: "",
+        correctAnswer: "B", // 38. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "reading", "cohesion"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2127,7 +2070,8 @@ Số báo danh: ................................................................
         _id: "q-39",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-05",
-        content: "Blank (39)",
+        content:
+          "Finally, some consumers will buy on impulse. <b>(39) _______</b>.",
         options: [
           {
             id: "A",
@@ -2150,10 +2094,10 @@ Số báo danh: ................................................................
               "In the meantime, holidays costing little are known to be products typically favoured by many purchasers",
           },
         ],
-        correctAnswer: "",
+        correctAnswer: "B", // 39. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "reading", "cohesion"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2173,7 +2117,8 @@ Số báo danh: ................................................................
         _id: "q-40",
         type: "multiple_choice",
         linkedPassageId: "passage-eng-05",
-        content: "Blank (40)",
+        content:
+          "<b>(40) _______</b>, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly.",
         options: [
           {
             id: "A",
@@ -2196,10 +2141,10 @@ Số báo danh: ................................................................
               "Such impulse purchasing proves to be a valuable trait, though",
           },
         ],
-        correctAnswer: "",
+        correctAnswer: "D", // 40. D
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: [],
+        tags: ["cloze", "grammar", "sentence-structure"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,

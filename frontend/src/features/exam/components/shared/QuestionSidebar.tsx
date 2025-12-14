@@ -2,8 +2,8 @@
 "use client";
 
 import React, { useState } from "react";
-// Đảm bảo đường dẫn import đúng với dự án của bạn
-import { getSectionBadgeStyle } from "@/features/exam/config/question-sections.config";
+// FIX: Correct import path to global utils
+import { getSectionBadgeStyle } from "@/utils/exam.utils";
 
 export interface QuestionStatus {
   questionId: string;
@@ -22,7 +22,7 @@ const QuestionSidebar: React.FC<QuestionSidebarProps> = ({
   sections,
   onQuestionClick,
 }) => {
-  const [isOpen, setIsOpen] = useState(true); // State quản lý đóng/mở
+  const [isOpen, setIsOpen] = useState(true);
 
   const getQuestionButtonClass = (q: QuestionStatus): string => {
     if (q.isActive)
@@ -32,6 +32,16 @@ const QuestionSidebar: React.FC<QuestionSidebarProps> = ({
     if (q.isAnswered)
       return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
     return "bg-white text-gray-600 border-gray-200 hover:border-[#00747F] hover:text-[#00747F]";
+  };
+
+  // Helper to extract color class from the utility result
+  // The utility returns { className: "bg-xxx border-xxx text-xxx" }
+  const getBadgeColorClass = (sectionName: string) => {
+    const style = getSectionBadgeStyle(sectionName);
+    // Since we just need the text color for the badge logic in the original code,
+    // we can simplify or use the returned className directly if we refactor the badge UI.
+    // For now, let's keep your UI logic but use the utility to get the base color theme.
+    return style.className;
   };
 
   return (
@@ -93,15 +103,15 @@ const QuestionSidebar: React.FC<QuestionSidebarProps> = ({
 
           <div className="space-y-6">
             {Object.entries(sections).map(([sectionName, sectionQuestions]) => {
+              // Use new utility to get badge styles
               const badgeStyle = getSectionBadgeStyle(sectionName);
+
               return (
                 <div key={sectionName} className="space-y-3">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${badgeStyle.bg.replace(
-                        "bg-",
-                        "text-"
-                      )} border-current bg-opacity-10`}
+                      // Apply the utility class + some overrides for badge look
+                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${badgeStyle.className} bg-opacity-10 border-opacity-20`}
                     >
                       {sectionName}
                     </span>

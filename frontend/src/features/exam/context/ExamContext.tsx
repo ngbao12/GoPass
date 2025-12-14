@@ -7,6 +7,7 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  useCallback,
 } from "react";
 import {
   ExamWithDetails,
@@ -15,23 +16,32 @@ import {
   ExamState,
   AnswerData,
 } from "../types";
+import { submissionService } from "@/services/exam/submission.service";
 
+// --- Types ---
 interface ExamContextType {
+  // Data
   exam: ExamWithDetails | null;
   submission: ExamSubmission | null;
-  examState: ExamState;
-  setExamState: (state: Partial<ExamState>) => void;
   currentQuestion: ExamQuestion | null;
+
+  // State
+  examState: ExamState;
+  timeRemaining: number;
+  isTimeUp: boolean;
+
+  // Actions
+  setExamState: (state: Partial<ExamState>) => void;
   goToQuestion: (index: number) => void;
   goToNextQuestion: () => void;
   goToPreviousQuestion: () => void;
   updateAnswer: (questionId: string, answer: AnswerData) => void;
   getAnswer: (questionId: string) => AnswerData | undefined;
   toggleFlag: (questionId: string) => void;
+
+  // Async Actions
   submitExam: () => Promise<void>;
   autoSave: () => Promise<void>;
-  timeRemaining: number;
-  isTimeUp: boolean;
 }
 
 const ExamContext = createContext<ExamContextType | undefined>(undefined);
@@ -53,8 +63,11 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
   children,
   initialExam,
 }) => {
+  // --- 1. STATE INITIALIZATION ---
   const [exam] = useState<ExamWithDetails>(initialExam);
   const [submission, setSubmission] = useState<ExamSubmission | null>(null);
+  const [isTimeUp, setIsTimeUp] = useState(false);
+
   const [examState, setExamStateRaw] = useState<ExamState>({
     currentQuestionIndex: 0,
     answers: new Map(),
@@ -63,43 +76,53 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     isSubmitting: false,
     autoSaveStatus: "idle",
   });
-  const [isTimeUp, setIsTimeUp] = useState(false);
 
-  // Timer countdown
+  const setExamState = useCallback((partial: Partial<ExamState>) => {
+    setExamStateRaw((prev) => ({ ...prev, ...partial }));
+  }, []);
+
+  const currentQuestion =
+    exam.questions[examState.currentQuestionIndex] || null;
+
+  // --- 2. EFFECTS (Timer & Auto-save Trigger) ---
+
+  // Timer Logic
   useEffect(() => {
-    if (examState.timeRemaining <= 0) {
-      setIsTimeUp(true);
-      submitExam();
-      return;
-    }
+    if (isTimeUp || examState.isSubmitting) return;
 
     const interval = setInterval(() => {
-      setExamStateRaw((prev) => ({
-        ...prev,
-        timeRemaining: Math.max(0, prev.timeRemaining - 1),
-      }));
+      setExamStateRaw((prev) => {
+        if (prev.timeRemaining <= 0) {
+          clearInterval(interval);
+          setIsTimeUp(true);
+          return { ...prev, timeRemaining: 0 };
+        }
+        return { ...prev, timeRemaining: prev.timeRemaining - 1 };
+      });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [examState.timeRemaining]);
+  }, [isTimeUp, examState.isSubmitting]);
 
-  // Auto-save every 30 seconds
+  // Handle Time Up
+  useEffect(() => {
+    if (isTimeUp) {
+      submitExam();
+    }
+  }, [isTimeUp]);
+
+  // Auto-save Interval
   useEffect(() => {
     if (examState.answers.size === 0) return;
 
     const interval = setInterval(() => {
       autoSave();
-    }, 30000);
+    }, 30000); // 30s
 
     return () => clearInterval(interval);
   }, [examState.answers]);
 
-  const setExamState = (partial: Partial<ExamState>) => {
-    setExamStateRaw((prev) => ({ ...prev, ...partial }));
-  };
-
-  const currentQuestion =
-    exam.questions[examState.currentQuestionIndex] || null;
+  // --- 3. LOGIC & HANDLERS ---
 
   const goToQuestion = (index: number) => {
     if (index >= 0 && index < exam.questions.length) {
@@ -125,81 +148,71 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
 
   const updateAnswer = (questionId: string, answer: AnswerData) => {
     const newAnswers = new Map(examState.answers);
-    newAnswers.set(questionId, {
-      ...answer,
-      lastModified: new Date(),
-    });
+    newAnswers.set(questionId, { ...answer, lastModified: new Date() });
     setExamState({ answers: newAnswers });
   };
 
-  const getAnswer = (questionId: string): AnswerData | undefined => {
-    return examState.answers.get(questionId);
-  };
+  const getAnswer = (questionId: string) => examState.answers.get(questionId);
 
   const toggleFlag = (questionId: string) => {
     const newFlags = new Set(examState.flaggedQuestions);
-    if (newFlags.has(questionId)) {
-      newFlags.delete(questionId);
-    } else {
-      newFlags.add(questionId);
-    }
+    newFlags.has(questionId)
+      ? newFlags.delete(questionId)
+      : newFlags.add(questionId);
     setExamState({ flaggedQuestions: newFlags });
   };
 
+  // --- 4. API INTERACTION (Delegated to Service) ---
+
   const autoSave = async () => {
     if (examState.answers.size === 0) return;
-
     setExamState({ autoSaveStatus: "saving" });
 
     try {
-      // TODO: Call API to save answers
-      // await submissionService.saveAnswers(submission!._id, Array.from(examState.answers.values()));
+      const answersArray = Array.from(examState.answers.values());
 
-      console.log(
-        "Auto-saving answers:",
-        Array.from(examState.answers.values())
-      );
+      // Gọi Service thay vì xử lý trực tiếp
+      await submissionService.saveAnswers(exam._id, answersArray);
 
+      console.log("[AutoSave] Synced", answersArray.length, "answers");
       setExamState({ autoSaveStatus: "saved" });
-
-      setTimeout(() => {
-        setExamState({ autoSaveStatus: "idle" });
-      }, 2000);
+      setTimeout(() => setExamState({ autoSaveStatus: "idle" }), 2000);
     } catch (error) {
-      console.error("Auto-save error:", error);
+      console.error("[AutoSave] Failed:", error);
       setExamState({ autoSaveStatus: "error" });
     }
   };
 
   const submitExam = async () => {
+    if (examState.isSubmitting) return;
     setExamState({ isSubmitting: true });
 
     try {
       const answersArray = Array.from(examState.answers.values());
 
-      // TODO: Call API to submit exam
-      // await submissionService.submitExam(submission!._id, answersArray);
+      // Gọi Service
+      await submissionService.submitExam(exam._id, answersArray);
 
-      console.log("Submitting exam with answers:", answersArray);
-
-      alert("Exam submitted successfully!");
-
-      // TODO: Navigate to results page
-      // router.push(`/exam/${exam._id}/results`);
+      console.log("[Submit] Exam submitted successfully");
+      // Sau này có thể thêm router.push('/result') ở đây hoặc ở UI component
     } catch (error) {
-      console.error("Submit error:", error);
-      alert("Failed to submit exam. Please try again.");
+      console.error("[Submit] Failed:", error);
+      // Xử lý lỗi (toast notification...)
     } finally {
-      setExamState({ isSubmitting: false });
+      // Logic xử lý loading state (có thể giữ true nếu chuyển trang ngay lập tức)
+      // setExamState({ isSubmitting: false });
     }
   };
 
-  const value: ExamContextType = {
+  // --- 5. PROVIDER VALUE ---
+  const value = {
     exam,
     submission,
     examState,
-    setExamState,
+    timeRemaining: examState.timeRemaining,
+    isTimeUp,
     currentQuestion,
+    setExamState,
     goToQuestion,
     goToNextQuestion,
     goToPreviousQuestion,
@@ -208,8 +221,6 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     toggleFlag,
     submitExam,
     autoSave,
-    timeRemaining: examState.timeRemaining,
-    isTimeUp,
   };
 
   return <ExamContext.Provider value={value}>{children}</ExamContext.Provider>;

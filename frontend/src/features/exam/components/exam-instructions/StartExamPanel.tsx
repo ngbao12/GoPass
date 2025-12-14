@@ -1,13 +1,10 @@
 // src/features/exam/components/exam-instructions/StartExamPanel.tsx
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Button from "@/components/ui/Button";
-import {
-  ExamConfigService,
-  type ExamConfig,
-  type ExamSection,
-} from "../../services/examConfig.service";
+import { ExamSectionConfig, ExamSubjectConfig } from "../../types";
+import { getExamConfigBySubject, formatExamDuration } from "@/utils/exam.utils";
 
 interface StartExamPanelProps {
   examTitle: string;
@@ -19,10 +16,17 @@ interface StartExamPanelProps {
   onCancel: () => void;
 }
 
-/**
- * Component hiển thị panel hướng dẫn trước khi bắt đầu làm bài
- * Pure UI component - không chứa business logic
- */
+// Helper: Map màu sắc cho Section (Logic UI thuần túy)
+const getSectionStyles = (color: string) => {
+  const map: Record<string, { badge: string; card: string }> = {
+    teal: { badge: "bg-teal-500", card: "border-teal-100 bg-teal-50" },
+    blue: { badge: "bg-blue-500", card: "border-blue-100 bg-blue-50" },
+    purple: { badge: "bg-purple-500", card: "border-purple-100 bg-purple-50" },
+    orange: { badge: "bg-orange-500", card: "border-orange-100 bg-orange-50" },
+  };
+  return map[color] || map.teal;
+};
+
 const StartExamPanel: React.FC<StartExamPanelProps> = ({
   examTitle,
   examSubject,
@@ -32,16 +36,33 @@ const StartExamPanel: React.FC<StartExamPanelProps> = ({
   onStartExam,
   onCancel,
 }) => {
-  // Lấy config từ service (business logic)
-  const config: ExamConfig =
-    ExamConfigService.getConfigBySubject(examSubject) ||
-    ExamConfigService.getDefaultConfig(examSubject);
+  // 1. Lấy cấu hình tĩnh dựa trên môn học
+  const config = useMemo(() => {
+    const foundConfig = getExamConfigBySubject(examSubject);
+
+    // Default fallback nếu không tìm thấy config cho môn học
+    if (!foundConfig) {
+      const defaultConfig: ExamSubjectConfig = {
+        subject: examSubject,
+        examType: "Kỳ thi Tốt nghiệp THPT",
+        sections: [],
+        instructions: [
+          { text: "Không được sử dụng tài liệu." },
+          { text: "Không thể sửa bài sau khi nộp.", highlight: true },
+        ],
+        timeWarning: 'Thời gian bắt đầu tính khi nhấn "Bắt đầu làm bài"',
+        headerGradient: "bg-gradient-to-r from-gray-500 to-gray-600",
+      };
+      return defaultConfig;
+    }
+    return foundConfig;
+  }, [examSubject]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
-      <div className="max-w-xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 py-6 flex items-center justify-center">
+      <div className="max-w-xl w-full px-4">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          {/* Header - Teal Gradient */}
+          {/* Header */}
           <div
             className={`${config.headerGradient} text-white py-8 px-5 text-center`}
           >
@@ -61,61 +82,66 @@ const StartExamPanel: React.FC<StartExamPanelProps> = ({
               </div>
             </div>
             <h1 className="text-xl font-bold mb-2">{examTitle}</h1>
-            <p className="text-teal-100 text-xs">{config.examType}</p>
+            <p className="text-white/80 text-xs font-medium uppercase tracking-wider">
+              {config.examType}
+            </p>
           </div>
 
-          <div className="p-5 space-y-4">
+          <div className="p-6 space-y-6">
             {/* Cấu trúc đề thi */}
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <svg
-                  className="w-4 h-4 text-teal-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  className="w-5 h-5 text-teal-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
-                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                   <path
-                    fillRule="evenodd"
-                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                    clipRule="evenodd"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
                   />
                 </svg>
-                <h2 className="text-base font-semibold text-gray-900">
+                <h2 className="text-base font-bold text-gray-800">
                   Cấu trúc đề thi
                 </h2>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {config.sections.length > 0 ? (
-                  config.sections.map((section: ExamSection) => (
-                    <div
-                      key={section.id}
-                      className={`flex items-start gap-3 p-3 rounded-lg border ${ExamConfigService.getSectionBorderColor(
-                        section.color
-                      )}`}
-                    >
+                  config.sections.map((section: ExamSectionConfig) => {
+                    const styles = getSectionStyles(section.color);
+                    return (
                       <div
-                        className={`w-8 h-8 rounded-lg ${ExamConfigService.getSectionBadgeColor(
-                          section.color
-                        )} flex items-center justify-center font-bold text-base flex-shrink-0`}
+                        key={section.id}
+                        className={`flex items-start gap-3 p-3 rounded-lg border ${styles.card}`}
                       >
-                        {section.id}
+                        <div
+                          className={`w-8 h-8 rounded-lg ${styles.badge} text-white flex items-center justify-center font-bold text-sm flex-shrink-0 shadow-sm`}
+                        >
+                          {section.id}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-bold text-gray-800">
+                            {section.title}
+                          </h3>
+                          <p className="text-xs text-gray-600 mt-0.5">
+                            {section.description}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
-                          {section.title}
-                        </h3>
-                        <p className="text-xs text-gray-600">
-                          {section.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
-                  // Fallback nếu không có sections config
-                  <div className="p-3 rounded-lg border border-gray-200 bg-gray-50">
-                    <p className="text-xs text-gray-600">
-                      {totalQuestions} câu hỏi - {totalPoints} điểm
+                  // Fallback View
+                  <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 text-center">
+                    <p className="text-sm font-medium text-gray-700">
+                      Tổng quan
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {totalQuestions} câu hỏi • {totalPoints} điểm
                     </p>
                   </div>
                 )}
@@ -123,31 +149,33 @@ const StartExamPanel: React.FC<StartExamPanelProps> = ({
             </div>
 
             {/* Thời gian làm bài */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-              <div className="flex items-start gap-2">
-                <div className="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 text-amber-600">
                   <svg
-                    className="w-3.5 h-3.5 text-yellow-600"
+                    className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    strokeWidth={2}
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-900 mb-0.5">
+                  <p className="text-sm font-bold text-gray-900">
                     Thời gian làm bài:{" "}
-                    <span className="text-yellow-700">
-                      {ExamConfigService.formatDuration(durationMinutes)}
+                    <span className="text-amber-700">
+                      {formatExamDuration(durationMinutes)}
                     </span>
                   </p>
-                  <p className="text-xs text-gray-600">{config.timeWarning}</p>
+                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                    {config.timeWarning}
+                  </p>
                 </div>
               </div>
             </div>
@@ -156,45 +184,37 @@ const StartExamPanel: React.FC<StartExamPanelProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <svg
-                  className="w-4 h-4 text-blue-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  className="w-5 h-5 text-blue-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
                   <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <h2 className="text-base font-semibold text-gray-900">
+                <h2 className="text-base font-bold text-gray-800">
                   Lưu ý quan trọng
                 </h2>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <ul className="space-y-1.5">
+              <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4">
+                <ul className="space-y-2">
                   {config.instructions.map((instruction, index) => (
-                    <li key={index} className="flex items-start gap-1.5">
-                      <svg
-                        className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                          instruction.highlight
-                            ? "text-red-500"
-                            : "text-blue-600"
+                    <li key={index} className="flex items-start gap-2">
+                      <div
+                        className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                          instruction.highlight ? "bg-red-500" : "bg-blue-400"
                         }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      />
                       <span
-                        className={`text-xs ${
+                        className={`text-sm leading-snug ${
                           instruction.highlight
-                            ? "text-red-700 font-semibold"
-                            : "text-blue-800"
+                            ? "text-red-600 font-medium"
+                            : "text-slate-600"
                         }`}
                       >
                         {instruction.text}
@@ -206,20 +226,20 @@ const StartExamPanel: React.FC<StartExamPanelProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-4 pt-2">
               <Button
                 variant="secondary"
                 onClick={onCancel}
-                className="flex-1 py-2.5 text-sm"
+                className="flex-1 py-3 text-sm font-medium"
               >
-                Hủy
+                Hủy bỏ
               </Button>
               <Button
                 variant="primary"
                 onClick={onStartExam}
-                className="flex-1 py-2.5 text-sm bg-teal-600 hover:bg-teal-700"
+                className="flex-1 py-3 text-sm font-bold bg-teal-600 hover:bg-teal-700 shadow-lg shadow-teal-700/20"
               >
-                Bắt đầu làm bài →
+                Bắt đầu làm bài
               </Button>
             </div>
           </div>
