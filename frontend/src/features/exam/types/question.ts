@@ -22,10 +22,11 @@ export interface Question {
 
   // Flexible field: String cho trắc nghiệm, Record cho True/False
   correctAnswer?: string | Record<string, any>;
+  explanation?: string; // Lời giải chi tiết
 
   difficulty: DifficultyLevel;
   subject: string;
-  tags: string[];
+  tags: string[]; // Từ khóa giúp cofig layout
   points: number;
   createdBy: string;
   isPublic: boolean;

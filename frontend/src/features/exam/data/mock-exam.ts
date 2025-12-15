@@ -44,12 +44,15 @@ export const mockExamMath: ExamWithDetails = {
         ],
         difficulty: "easy",
         subject: "Toán Học",
-        tags: ["giải tích"],
+        tags: [],
         points: 0.25,
         createdBy: "teacher-001",
         isPublic: true,
         createdAt: "2025-11-01T00:00:00Z",
         updatedAt: "2025-11-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT
+        explanation:
+          "Áp dụng công thức nguyên hàm cơ bản. Ta có $\\int e^x dx = e^x + C$.",
       },
       createdAt: "2025-12-01T00:00:00Z",
     },
@@ -74,12 +77,15 @@ export const mockExamMath: ExamWithDetails = {
         ],
         difficulty: "medium",
         subject: "Toán Học",
-        tags: ["tích phân"],
+        tags: [],
         points: 0.25,
         createdBy: "teacher-001",
         isPublic: true,
         createdAt: "2025-11-01T00:00:00Z",
         updatedAt: "2025-11-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT
+        explanation:
+          "Công thức tính thể tích vật thể tròn xoay khi quay quanh trục $Ox$ là $V = \\pi \\int_{a}^{b} [f(x)]^2 dx$.",
       },
       createdAt: "2025-12-01T00:00:00Z",
     },
@@ -108,12 +114,15 @@ export const mockExamMath: ExamWithDetails = {
         ],
         difficulty: "easy",
         subject: "Toán Học",
-        tags: ["đồ thị", "khảo sát hàm số"],
+        tags: [],
         points: 0.25,
         createdBy: "system",
         isPublic: true,
         createdAt: "2025-12-01T00:00:00Z",
         updatedAt: "2025-12-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT
+        explanation:
+          "Dựa vào đồ thị, hàm số đồng biến khi đồ thị đi lên (hướng từ trái sang phải). Quan sát thấy đồ thị đi lên khi $x \\in (0; +\\infty)$.",
       },
       createdAt: "2025-12-01T00:00:00Z",
     },
@@ -148,12 +157,15 @@ export const mockExamMath: ExamWithDetails = {
         ],
         difficulty: "medium",
         subject: "Toán Học",
-        tags: ["thống kê"],
+        tags: [],
         points: 0.25,
         createdBy: "system",
         isPublic: true,
         createdAt: "2025-12-01T00:00:00Z",
         updatedAt: "2025-12-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT
+        explanation:
+          "Tổng số học sinh là $N = 2+5+10+15+8 = 40$. Trung vị là giá trị thứ $\\frac{N}{2} = 20$ và $\\frac{N}{2} + 1 = 21$. Cả hai giá trị này đều rơi vào nhóm có điểm số là $8$. Vậy Trung vị là $8.0$.",
       },
       createdAt: "2025-12-01T00:00:00Z",
     },
@@ -168,22 +180,28 @@ export const mockExamMath: ExamWithDetails = {
       question: {
         _id: `q-math-${idx + 3}`,
         type: "multiple_choice" as const,
-        content: `Câu hỏi trắc nghiệm số ${idx + 3} (Mô phỏng nội dung)`,
+        content: `Câu hỏi trắc nghiệm số ${
+          idx + 3
+        } (Mô phỏng nội dung). Tính tích phân $I = \\int_0^1 (2x + 1) dx$.`,
         correctAnswer: "A",
         options: [
-          { id: "A", content: "Đáp án A (Đúng)" },
-          { id: "B", content: "Đáp án B" },
-          { id: "C", content: "Đáp án C" },
-          { id: "D", content: "Đáp án D" },
+          { id: "A", content: "Đáp án A (Đúng): 2" },
+          { id: "B", content: "Đáp án B: 1" },
+          { id: "C", content: "Đáp án C: 3" },
+          { id: "D", content: "Đáp án D: 0" },
         ],
         difficulty: "medium" as const,
         subject: "Toán Học",
-        tags: ["mô phỏng"],
+        tags: [],
         points: 0.25,
         createdBy: "system",
         isPublic: true,
         createdAt: "2025-12-01T00:00:00Z",
         updatedAt: "2025-12-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT (cho các câu tự động sinh)
+        explanation: `Lời giải cho câu ${
+          idx + 3
+        }: Ta có $I = \\left. (x^2 + x) \\right|_0^1 = (1^2 + 1) - (0^2 + 0) = 2$.`,
       },
       createdAt: "2025-12-01T00:00:00Z",
     })),
@@ -212,12 +230,15 @@ export const mockExamMath: ExamWithDetails = {
         ],
         difficulty: "hard",
         subject: "Toán Học",
-        tags: ["ứng dụng tích phân"],
+        tags: [],
         points: 1.0,
         createdBy: "teacher-001",
         isPublic: true,
         createdAt: "2025-11-01T00:00:00Z",
         updatedAt: "2025-11-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT
+        explanation:
+          "Phân tích chuyển động: Quãng đường $S$ là tích phân của vận tốc $v(t)$. Phân tích từng mệnh đề dựa trên các điều kiện cho trước của bài toán vận dụng thực tế.",
       },
       createdAt: "2025-12-01T00:00:00Z",
     },
@@ -232,7 +253,9 @@ export const mockExamMath: ExamWithDetails = {
       question: {
         _id: `q-math-${idx + 14}`,
         type: "true_false" as const,
-        content: `Câu hỏi đúng sai số ${idx + 14} (Mô phỏng)`,
+        content: `Câu hỏi đúng sai số ${
+          idx + 14
+        } (Mô phỏng). Cho số phức $z = 1 + i$. Tính $|z|$.`,
         correctAnswer: { a: true, b: false, c: true, d: false },
         options: [
           { id: "a", content: "Mệnh đề A" },
@@ -242,12 +265,16 @@ export const mockExamMath: ExamWithDetails = {
         ],
         difficulty: "medium" as const,
         subject: "Toán Học",
-        tags: ["mô phỏng"],
+        tags: [],
         points: 1.0,
         createdBy: "system",
         isPublic: true,
         createdAt: "2025-12-01T00:00:00Z",
         updatedAt: "2025-12-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT (cho các câu tự động sinh)
+        explanation: `Lời giải cho câu ${
+          idx + 14
+        }: Ta có $|z| = |1+i| = \\sqrt{1^2 + 1^2} = \\sqrt{2}$. Phân tích từng mệnh đề để kết luận Đúng/Sai.`,
       },
       createdAt: "2025-12-01T00:00:00Z",
     })),
@@ -271,12 +298,15 @@ export const mockExamMath: ExamWithDetails = {
         options: [],
         difficulty: "medium",
         subject: "Toán Học",
-        tags: ["hình học"],
+        tags: [],
         points: 0.5,
         createdBy: "teacher-001",
         isPublic: true,
         createdAt: "2025-11-01T00:00:00Z",
         updatedAt: "2025-11-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT
+        explanation:
+          "Gọi $H$ là hình chiếu vuông góc của $A$ lên $BC$. Do $AA' \\perp (ABC)$, khoảng cách giữa $AA'$ và $BC$ chính là khoảng cách từ $A$ đến $BC$, tức là độ dài đoạn $AH$. Tính $AH$ bằng công thức hình học.",
       },
       createdAt: "2025-12-01T00:00:00Z",
     },
@@ -291,17 +321,23 @@ export const mockExamMath: ExamWithDetails = {
       question: {
         _id: `q-math-${idx + 18}`,
         type: "short_answer" as const,
-        content: `Câu trả lời ngắn số ${idx + 18} (Mô phỏng): Hãy điền đáp án.`,
+        content: `Câu trả lời ngắn số ${
+          idx + 18
+        } (Mô phỏng): Tính diện tích mặt cầu $(S)$ có bán kính $R=3$.`,
         correctAnswer: "1234",
         options: [],
         difficulty: "hard" as const,
         subject: "Toán Học",
-        tags: ["mô phỏng"],
+        tags: [],
         points: 0.5,
         createdBy: "system",
         isPublic: true,
         createdAt: "2025-12-01T00:00:00Z",
         updatedAt: "2025-12-01T00:00:00Z",
+        // ✅ LỜI GIẢI CHI TIẾT (cho các câu tự động sinh)
+        explanation: `Lời giải cho câu ${
+          idx + 18
+        }: Công thức tính diện tích mặt cầu là $S = 4\\pi R^2$. Với $R=3$, ta có $S = 4\\pi (3)^2 = 36\\pi$.`,
       },
       createdAt: "2025-12-01T00:00:00Z",
     })),
@@ -520,7 +556,7 @@ Lần ấy, người ta đã xòe suốt một tuần trăng để mừng đám 
         options: [],
         difficulty: "hard",
         subject: "Ngữ Văn",
-        tags: ["nghị luận văn học"],
+        tags: [],
         points: 2.0,
         createdBy: "system",
         isPublic: true,
@@ -546,7 +582,7 @@ Lần ấy, người ta đã xòe suốt một tuần trăng để mừng đám 
         options: [],
         difficulty: "hard",
         subject: "Ngữ Văn",
-        tags: ["nghị luận xã hội"],
+        tags: [],
         points: 4.0,
         createdBy: "system",
         isPublic: true,
@@ -694,7 +730,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "vocabulary", "context-clue"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -725,7 +761,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "detail", "information-scan"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -755,7 +791,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "reference", "pronoun-reference"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -802,7 +838,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A",
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: ["reading", "paraphrase", "sentence-meaning"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -833,7 +869,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "vocabulary", "antonym"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -879,7 +915,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "true-false", "detail"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -910,7 +946,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "B",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "paragraph-identification", "scanning"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -941,7 +977,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C",
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading", "paragraph-identification", "specific-detail"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -974,7 +1010,7 @@ const mockExamEnglish: ExamWithDetails = {
         difficulty: "easy",
         subject: "Tiếng Anh",
         // Bổ sung tag về lượng từ
-        tags: ["cloze", "vocabulary", "quantifiers"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1006,7 +1042,7 @@ const mockExamEnglish: ExamWithDetails = {
         difficulty: "easy",
         subject: "Tiếng Anh",
         // Bổ sung tag về từ loại
-        tags: ["cloze", "grammar", "word-form"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1038,7 +1074,7 @@ const mockExamEnglish: ExamWithDetails = {
         difficulty: "easy",
         subject: "Tiếng Anh",
         // Bổ sung tag về mệnh đề quan hệ rút gọn
-        tags: ["cloze", "grammar", "reduced-relative-clause"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1070,7 +1106,7 @@ const mockExamEnglish: ExamWithDetails = {
         difficulty: "easy",
         subject: "Tiếng Anh",
         // Bổ sung tag về kết hợp từ
-        tags: ["cloze", "vocabulary", "collocations"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1102,7 +1138,7 @@ const mockExamEnglish: ExamWithDetails = {
         difficulty: "easy",
         subject: "Tiếng Anh",
         // Bổ sung tag về đại từ quan hệ
-        tags: ["cloze", "grammar", "relative-clause"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1134,7 +1170,7 @@ const mockExamEnglish: ExamWithDetails = {
         difficulty: "easy",
         subject: "Tiếng Anh",
         // Bổ sung tag về cụm động từ
-        tags: ["cloze", "vocabulary", "phrasal-verbs"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1172,7 +1208,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C", // Theo đáp án câu 15 là C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["writing", "paragraph-structure", "sentence-arrangement"],
+        tags: [],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1209,7 +1245,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "B", // Theo đáp án câu 16 là B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["communication", "speaking", "sentence-arrangement"],
+        tags: [],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1244,7 +1280,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C", // Theo đáp án câu 17 là C
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["communication", "speaking", "sentence-arrangement"],
+        tags: [],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1283,7 +1319,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C", // Theo đáp án câu 18 là C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["writing", "letter", "sentence-arrangement"],
+        tags: [],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1320,7 +1356,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // Theo đáp án câu 19 là D
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: ["writing", "paragraph-structure", "sentence-arrangement"],
+        tags: [],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1367,7 +1403,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "B", // 20. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "detail", "inference"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1398,7 +1434,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C", // 21. C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "vocabulary"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1444,7 +1480,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // 22. D
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "main-idea", "summary"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1487,7 +1523,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 23. A
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "cause-effect", "detail"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1524,7 +1560,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 24. A
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "detail"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1555,7 +1591,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // 25. D
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "reference"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1602,7 +1638,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 26. A
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "paraphrase"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1648,7 +1684,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "B", // 27. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "inference"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1680,7 +1716,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 28. A
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "sentence-insertion"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1726,7 +1762,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 29. A
         difficulty: "hard",
         subject: "Tiếng Anh",
-        tags: ["reading-comprehension", "summary", "main-idea"],
+        tags: ["reading"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1757,7 +1793,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 30. A
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "connector"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1788,7 +1824,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // 31. D (leading to)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "preposition"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1819,7 +1855,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // 32. D
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "quantifier"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1849,7 +1885,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C", // 33. C
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "word-order"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1880,7 +1916,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // 34. D
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["cloze", "vocabulary"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1911,7 +1947,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 35. A (money's worth)
         difficulty: "easy",
         subject: "Tiếng Anh",
-        tags: ["cloze", "idioms", "vocabulary"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -1958,7 +1994,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "A", // 36. A
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "relative-clause"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2003,7 +2039,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "C", // 37. C
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "tenses"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2050,7 +2086,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "B", // 38. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["cloze", "reading", "cohesion"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2097,7 +2133,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "B", // 39. B
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["cloze", "reading", "cohesion"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,
@@ -2144,7 +2180,7 @@ const mockExamEnglish: ExamWithDetails = {
         correctAnswer: "D", // 40. D
         difficulty: "medium",
         subject: "Tiếng Anh",
-        tags: ["cloze", "grammar", "sentence-structure"],
+        tags: ["cloze"],
         points: 0.25,
         createdBy: "admin",
         isPublic: true,

@@ -105,7 +105,6 @@ const ExamInterface = () => {
             question={currentQuestion.question!}
             questionNumber={examState.currentQuestionIndex + 1}
             sectionName={currentQuestion.section || "Phần I"}
-            sectionBadgeColor="bg-blue-500" // Có thể dùng utils getSectionBadgeStyle nếu muốn dynamic
             points={
               currentQuestion.maxScore || currentQuestion.question?.points || 1
             }

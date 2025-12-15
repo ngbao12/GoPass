@@ -14,7 +14,7 @@ import {
   ExamWithDetails,
   ExamQuestion,
   ExamSubmission,
-  ExamState, // Import từ file types/index.ts của bạn
+  ExamState,
   AnswerData,
 } from "../types";
 import { submissionService } from "@/services/exam/submission.service";
@@ -22,61 +22,48 @@ import { examStorage } from "@/utils/storage.utils";
 
 // --- TYPES ---
 interface ExamContextType {
-  // Data
   exam: ExamWithDetails;
   submission: ExamSubmission | null;
   currentQuestion: ExamQuestion | null;
-
-  // State
   examState: ExamState;
   timeRemaining: number;
   isTimeUp: boolean;
-
-  // State Setters
   setExamState: (state: Partial<ExamState>) => void;
-
-  // Navigation
   goToQuestion: (index: number) => void;
   goToNextQuestion: () => void;
   goToPreviousQuestion: () => void;
-
-  // Actions
   updateAnswer: (questionId: string, answer: AnswerData) => void;
   getAnswer: (questionId: string) => AnswerData | undefined;
   toggleFlag: (questionId: string) => void;
-
-  // Async Actions
   submitExam: () => Promise<void>;
   autoSaveToApi: () => Promise<void>;
 }
 
-// --- CONTEXT ---
 const ExamContext = createContext<ExamContextType | undefined>(undefined);
 
 export const useExam = () => {
   const context = useContext(ExamContext);
-  if (!context) {
-    throw new Error("useExam must be used within ExamProvider");
-  }
+  if (!context) throw new Error("useExam must be used within ExamProvider");
   return context;
 };
 
-// --- PROVIDER ---
 interface ExamProviderProps {
   children: ReactNode;
   initialExam: ExamWithDetails;
+  isReviewMode?: boolean; // Chế độ xem lại
 }
 
 export const ExamProvider: React.FC<ExamProviderProps> = ({
   children,
   initialExam,
+  isReviewMode = false,
 }) => {
   // --- 1. CORE STATE ---
   const [exam] = useState<ExamWithDetails>(initialExam);
   const [submission, setSubmission] = useState<ExamSubmission | null>(null);
   const [isTimeUp, setIsTimeUp] = useState(false);
 
-  // Khởi tạo state mặc định
+  // State mặc định
   const [examState, setExamStateRaw] = useState<ExamState>({
     currentQuestionIndex: 0,
     answers: new Map(),
@@ -86,13 +73,11 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     autoSaveStatus: "idle",
   });
 
-  // Ref để tránh stale closure trong setInterval (nếu cần dùng trong timer phức tạp)
   const examStateRef = useRef(examState);
   useEffect(() => {
     examStateRef.current = examState;
   }, [examState]);
 
-  // Helper update state an toàn
   const setExamState = useCallback((partial: Partial<ExamState>) => {
     setExamStateRaw((prev) => ({ ...prev, ...partial }));
   }, []);
@@ -100,40 +85,45 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
   const currentQuestion =
     exam.questions[examState.currentQuestionIndex] || null;
 
-  // --- 2. INITIALIZATION & TIME CALCULATION (Quan Trọng) ---
+  // --- 2. INITIALIZATION (SỬA LOGIC QUAN TRỌNG TẠI ĐÂY) ---
   useEffect(() => {
-    // Load dữ liệu từ LocalStorage
+    // Nếu đang chế độ Review -> Không làm gì cả
+    if (isReviewMode) return;
+
+    // CHECK 1: Nếu Server báo bài này user đã nộp rồi (status completed/graded)
+    // Thì đây là lượt thi mới hoặc user đang cố reload lại trang cũ -> Xóa sạch cache
+    const serverStatus = initialExam.userSubmission?.status;
+    if (serverStatus === "submitted" || serverStatus === "graded") {
+      console.log(
+        "🧹 Previous attempt finished. Clearing storage for new attempt."
+      );
+      examStorage.clear(initialExam._id);
+      return; // Dừng, không load cache cũ
+    }
+
+    // CHECK 2: Load dữ liệu từ LocalStorage
     const savedProgress = examStorage.load(initialExam._id);
 
     if (savedProgress) {
-      console.log("🔄 Found saved progress. Calculating real time...");
-
-      // --- LOGIC TÍNH THỜI GIAN TRÔI QUA KHI RỜI TRANG ---
+      // Logic tính thời gian (giữ nguyên)
       const now = Date.now();
-      // Lấy lastSaved từ storage (ép kiểu any vì ExamState gốc không có field này)
       const lastSaved = (savedProgress as any).lastSaved || now;
-
-      // Tính số giây đã trôi qua từ lần save cuối
       const secondsPassed = Math.floor((now - lastSaved) / 1000);
-
-      // Thời gian còn lại thực tế = Thời gian đã lưu - Thời gian trôi qua
       const realTimeRemaining =
         (savedProgress.timeRemaining || 0) - secondsPassed;
 
       console.log(
-        `⏱️ Saved: ${savedProgress.timeRemaining}s | Passed: ${secondsPassed}s | Real: ${realTimeRemaining}s`
+        `⏱️ Restoring session: Real time remaining: ${realTimeRemaining}s`
       );
 
       if (realTimeRemaining <= 0) {
-        // Nếu đã hết giờ trong lúc rời trang
         setExamStateRaw((prev) => ({
           ...prev,
           ...savedProgress,
           timeRemaining: 0,
         }));
-        setIsTimeUp(true); // Trigger nộp bài
+        setIsTimeUp(true);
       } else {
-        // Nếu vẫn còn giờ, khôi phục trạng thái và set thời gian mới
         setExamStateRaw((prev) => ({
           ...prev,
           ...savedProgress,
@@ -141,12 +131,11 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
         }));
       }
     }
-  }, [initialExam._id]);
+  }, [initialExam._id, initialExam.userSubmission, isReviewMode]);
 
-  // --- 3. TIMER LOGIC ---
+  // --- 3. TIMER ---
   useEffect(() => {
-    if (isTimeUp || examState.isSubmitting) return;
-
+    if (isTimeUp || examState.isSubmitting || isReviewMode) return;
     const interval = setInterval(() => {
       setExamStateRaw((prev) => {
         if (prev.timeRemaining <= 0) {
@@ -157,22 +146,16 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
         return { ...prev, timeRemaining: prev.timeRemaining - 1 };
       });
     }, 1000);
-
     return () => clearInterval(interval);
-  }, [isTimeUp, examState.isSubmitting]);
+  }, [isTimeUp, examState.isSubmitting, isReviewMode]);
 
-  // Tự động nộp khi hết giờ
-  useEffect(() => {
-    if (isTimeUp && !examState.isSubmitting) {
-      console.log("⏰ Time is up! Auto submitting...");
-      submitExam();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTimeUp]);
+  // --- 4. PERSISTENCE (SỬA LOGIC CHẶN GHI ĐÈ) ---
 
-  // --- 4. PERSISTENCE (AUTO-SAVE) ---
-  // Lưu mỗi khi có thay đổi quan trọng (trả lời, flag)
+  // Save khi có thay đổi
   useEffect(() => {
+    // SỬA: Nếu đang Submitting hoặc Review -> TUYỆT ĐỐI KHÔNG LƯU
+    if (examState.isSubmitting || isReviewMode) return;
+
     if (examState.answers.size > 0 || examState.flaggedQuestions.size > 0) {
       examStorage.save(initialExam._id, examState);
     }
@@ -180,101 +163,96 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     examState.answers,
     examState.flaggedQuestions,
     examState.currentQuestionIndex,
+    examState.isSubmitting, // Thêm dependency này
     initialExam._id,
+    isReviewMode,
   ]);
 
-  // Backup save: Lưu định kỳ mỗi 5s để cập nhật timeRemaining liên tục
-  // Giúp giảm sai số nếu user tắt trình duyệt đột ngột mà chưa trả lời thêm câu nào
+  // Backup Save mỗi 5s
   useEffect(() => {
+    // SỬA: Chặn backup khi đang nộp hoặc review
+    if (isReviewMode) return;
+
     const interval = setInterval(() => {
-      examStorage.save(initialExam._id, examStateRef.current);
+      // Check lại ref lần nữa cho chắc
+      if (!examStateRef.current.isSubmitting) {
+        examStorage.save(initialExam._id, examStateRef.current);
+      }
     }, 5000);
     return () => clearInterval(interval);
-  }, [initialExam._id]);
+  }, [initialExam._id, isReviewMode]);
 
-  // --- 5. HANDLERS ---
-  const goToQuestion = (index: number) => {
-    if (index >= 0 && index < exam.questions.length) {
-      setExamState({ currentQuestionIndex: index });
+  // Auto-submit khi hết giờ
+  useEffect(() => {
+    if (isTimeUp && !examState.isSubmitting && !isReviewMode) {
+      submitExam();
     }
-  };
+  }, [isTimeUp, examState.isSubmitting, isReviewMode]);
 
+  // --- HANDLERS (Giữ nguyên) ---
+  const goToQuestion = (index: number) => {
+    if (index >= 0 && index < exam.questions.length)
+      setExamState({ currentQuestionIndex: index });
+  };
   const goToNextQuestion = () => {
-    if (examState.currentQuestionIndex < exam.questions.length - 1) {
+    if (examState.currentQuestionIndex < exam.questions.length - 1)
       setExamState({
         currentQuestionIndex: examState.currentQuestionIndex + 1,
       });
-    }
   };
-
   const goToPreviousQuestion = () => {
-    if (examState.currentQuestionIndex > 0) {
+    if (examState.currentQuestionIndex > 0)
       setExamState({
         currentQuestionIndex: examState.currentQuestionIndex - 1,
       });
-    }
   };
-
   const updateAnswer = (questionId: string, answer: AnswerData) => {
+    if (isReviewMode) return;
     const newAnswers = new Map(examState.answers);
-    newAnswers.set(questionId, {
-      ...answer,
-      lastModified: new Date(),
-    });
+    newAnswers.set(questionId, { ...answer, lastModified: new Date() });
     setExamState({ answers: newAnswers });
   };
-
-  const getAnswer = (questionId: string): AnswerData | undefined => {
-    return examState.answers.get(questionId);
-  };
-
+  const getAnswer = (questionId: string) => examState.answers.get(questionId);
   const toggleFlag = (questionId: string) => {
+    if (isReviewMode) return;
     const newFlags = new Set(examState.flaggedQuestions);
-    if (newFlags.has(questionId)) {
-      newFlags.delete(questionId);
-    } else {
-      newFlags.add(questionId);
-    }
+    if (newFlags.has(questionId)) newFlags.delete(questionId);
+    else newFlags.add(questionId);
     setExamState({ flaggedQuestions: newFlags });
   };
 
-  // --- 6. API ACTIONS ---
   const autoSaveToApi = async () => {
-    if (examState.answers.size === 0) return;
+    if (examState.answers.size === 0 || isReviewMode) return;
     setExamState({ autoSaveStatus: "saving" });
-
     try {
-      const answersArray = Array.from(examState.answers.values());
-      await submissionService.saveAnswers(exam._id, answersArray);
+      await submissionService.saveAnswers(
+        exam._id,
+        Array.from(examState.answers.values())
+      );
       setExamState({ autoSaveStatus: "saved" });
       setTimeout(() => setExamState({ autoSaveStatus: "idle" }), 2000);
-    } catch (error) {
-      console.error("Auto-save API failed:", error);
+    } catch {
       setExamState({ autoSaveStatus: "error" });
     }
   };
 
   const submitExam = async () => {
-    if (examState.isSubmitting) return;
-    setExamState({ isSubmitting: true });
+    if (examState.isSubmitting || isReviewMode) return;
 
-    // Lưu state cuối cùng vào LocalStorage để backup
-    examStorage.save(initialExam._id, examState);
+    // 1. Đánh dấu đang nộp để CHẶN mọi hành động save khác
+    setExamState({ isSubmitting: true });
 
     try {
       const answersArray = Array.from(examState.answers.values());
-      console.log("🚀 Submitting exam...", { count: answersArray.length });
-
       await submissionService.submitExam(exam._id, answersArray);
 
-      // XÓA LOCAL STORAGE SAU KHI NỘP THÀNH CÔNG
+      // 2. Xóa sạch LocalStorage NGAY LẬP TỨC sau khi nộp thành công
       examStorage.clear(initialExam._id);
-
-      console.log("✅ Submit success & Cache cleared");
+      console.log("✅ Cleared storage for", initialExam._id);
     } catch (error) {
-      console.error("❌ Submit failed:", error);
+      console.error("Submit failed:", error);
       alert("Nộp bài thất bại. Vui lòng thử lại.");
-      setExamState({ isSubmitting: false });
+      setExamState({ isSubmitting: false }); // Mở khóa nếu lỗi để user nộp lại
     }
   };
 

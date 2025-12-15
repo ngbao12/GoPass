@@ -6,6 +6,8 @@ export interface AnswerData {
   selectedOptions?: string[]; // Legacy support
   isAnswered: boolean;
   lastModified: Date;
+  score?: number;
+  feedback?: string;
 }
 
 export interface QuestionNavigationItem {
