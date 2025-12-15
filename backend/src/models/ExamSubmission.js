@@ -4,7 +4,7 @@ const examSubmissionSchema = new mongoose.Schema({
   assignmentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ExamAssignment',
-    required: true,
+    required: false, // Optional theo spec
   },
   examId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -28,13 +28,23 @@ const examSubmissionSchema = new mongoose.Schema({
   submittedAt: {
     type: Date,
   },
+  
+  // Điểm số
   totalScore: {
     type: Number,
     default: 0,
   },
   maxScore: {
     type: Number,
+    default: 0,
   },
+  
+  // UI nhanh
+  correctQuestionsCount: {
+    type: Number,
+    default: 0,
+  },
+  
   attemptNumber: {
     type: Number,
     default: 1,

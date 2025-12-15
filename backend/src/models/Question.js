@@ -1,22 +1,70 @@
 const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
+  // 1. Loại câu hỏi
   type: {
     type: String,
     enum: ['multiple_choice', 'essay', 'short_answer', 'true_false'],
     required: true,
   },
+
+  // 2. Nội dung câu hỏi
   content: {
     type: String,
     required: true,
   },
+
+  // 3. Các lựa chọn (đồng bộ với Frontend)
   options: [{
-    text: String,
-    isCorrect: Boolean,
+    _id: false,
+    id: {
+      type: String, // "A", "B", "C", "D"
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    isCorrect: {
+      type: Boolean,
+      default: false,
+    },
   }],
+
+  // 4. Đáp án đúng (linh hoạt)
   correctAnswer: {
-    type: String, // For short_answer or essay reference
+    type: mongoose.Schema.Types.Mixed,
   },
+
+  // 5. Lời giải chi tiết
+  explanation: {
+    type: String,
+  },
+
+  // 6. Liên kết bài đọc
+  linkedPassageId: {
+    type: String,
+    index: true,
+  },
+
+  // 7. Hình ảnh đính kèm
+  image: {
+    url: String,
+    caption: String,
+    position: {
+      type: String,
+      enum: ['top', 'bottom'],
+      default: 'top',
+    },
+  },
+
+  // 8. Dữ liệu bảng biểu
+  tableData: {
+    headers: [String],
+    rows: [[String]],
+  },
+
+  // Các trường giữ nguyên
   difficulty: {
     type: String,
     enum: ['easy', 'medium', 'hard'],
@@ -25,6 +73,7 @@ const questionSchema = new mongoose.Schema({
   subject: {
     type: String,
     required: true,
+    index: true,
   },
   tags: [{
     type: String,
@@ -57,5 +106,6 @@ const questionSchema = new mongoose.Schema({
 questionSchema.index({ subject: 1, difficulty: 1 });
 questionSchema.index({ tags: 1 });
 questionSchema.index({ createdBy: 1 });
+questionSchema.index({ linkedPassageId: 1 });
 
 module.exports = mongoose.model('Question', questionSchema);

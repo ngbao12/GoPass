@@ -11,19 +11,29 @@ const examAnswerSchema = new mongoose.Schema({
     ref: 'Question',
     required: true,
   },
+  
+  // Nội dung trả lời
   answerText: {
     type: String,
+    default: '',
   },
+  
+  // Trắc nghiệm / Đúng sai
   selectedOptions: [{
     type: String,
   }],
+  
+  // Chấm điểm
   score: {
     type: Number,
     default: 0,
   },
   maxScore: {
     type: Number,
+    required: true,
+    default: 0,
   },
+  
   feedback: {
     type: String,
   },

@@ -11,15 +11,31 @@ const examQuestionSchema = new mongoose.Schema({
     ref: 'Question',
     required: true,
   },
+  
+  // Thứ tự câu hỏi trong đề
   order: {
     type: Number,
     required: true,
   },
+  
+  // Điểm tối đa của câu hỏi trong đề này
   maxScore: {
     type: Number,
     required: true,
     default: 1,
   },
+  
+  // Nhóm câu hỏi (phục vụ UI)
+  section: {
+    type: String,
+    default: '',
+  },
+  
+  // Đồng bộ frontend
+  points: {
+    type: Number,
+  },
+  
   createdAt: {
     type: Date,
     default: Date.now,

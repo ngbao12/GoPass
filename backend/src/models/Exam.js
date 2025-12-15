@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
 
+// Reading Passage Sub-schema
+const readingPassageSchema = new mongoose.Schema({
+  id: {
+    type: String, // VD: "passage-eng-01"
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String, // HTML
+    required: true,
+  },
+}, { _id: false });
+
 const examSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -40,6 +56,18 @@ const examSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  
+  // Bổ sung theo change1.md
+  readingPassages: [readingPassageSchema],
+  totalQuestions: {
+    type: Number,
+    default: 0,
+  },
+  totalPoints: {
+    type: Number,
+    default: 10,
+  },
+  
   createdAt: {
     type: Date,
     default: Date.now,
