@@ -1,140 +1,154 @@
 // src/services/exam/submission.service.ts
-import { AnswerData, ExamSubmission, ExamAnswer } from "@/features/exam/types";
-// Import mock data để test (sau này xóa khi có API thật)
-import { getMockExamById } from "@/features/exam/data/mock-exam";
+import { AnswerData, ExamSubmission } from "@/features/exam/types";
+import { examService } from "./exam.service";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export const submissionService = {
-  /**
-   * Gửi API lưu tự động (Auto-save)
-   * FIX: Tham số answers phải là AnswerData[] (dữ liệu từ frontend)
-   */
   saveAnswers: async (examId: string, answers: AnswerData[]) => {
-    // Mock delay
-    // Code thật: return httpClient.post(`/exams/${examId}/save`, { answers });
-    return new Promise((resolve) => setTimeout(resolve, 500));
+    return new Promise((resolve) => setTimeout(resolve, 300));
   },
 
-  /**
-   * Gửi API nộp bài (Submit)
-   * FIX: Tham số answers phải là AnswerData[]
-   */
-  submitExam: async (examId: string, answers: AnswerData[]) => {
-    // Mock delay
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+  submitExam: async (
+    examId: string,
+    answers: AnswerData[],
+    studentId: string = "student-01"
+  ) => {
+    try {
+      // B1: Lấy dữ liệu thô để chấm điểm (Manual Join)
+      const [examQuestionsRes, allQuestionsRes, examRes] = await Promise.all([
+        fetch(`${API_URL}/exam_questions?examId=${examId}`),
+        fetch(`${API_URL}/questions`),
+        fetch(`${API_URL}/exams/${examId}`),
+      ]);
+
+      const rawExamQuestions = await examQuestionsRes.json();
+      const allQuestions = await allQuestionsRes.json();
+      const examInfo = await examRes.json();
+
+      let totalScore = 0;
+      const maxPoints = examInfo.totalPoints || 10;
+
+      // B2: Chấm điểm
+      const gradedAnswers = answers.map((userAns) => {
+        // Tìm liên kết
+        const linkRecord = rawExamQuestions.find(
+          (eq: any) => eq.questionId === userAns.questionId
+        );
+        // Tìm câu hỏi gốc
+        const questionRecord = allQuestions.find(
+          (q: any) => q.id === userAns.questionId
+        );
+
+        if (!questionRecord) {
+          return { ...userAns, score: 0, feedback: "Lỗi dữ liệu" };
+        }
+
+        const correctKey = questionRecord.correctAnswer;
+        const maxScore = linkRecord?.maxScore || 0;
+
+        // So sánh đáp án
+        let isCorrect = false;
+        const userValue = Array.isArray(userAns.answer)
+          ? userAns.answer[0]
+          : userAns.answer;
+
+        if (
+          String(userValue).trim().toLowerCase() ===
+          String(correctKey).trim().toLowerCase()
+        ) {
+          isCorrect = true;
+        }
+
+        const earnedScore = isCorrect ? maxScore : 0;
+        totalScore += earnedScore;
+
+        return {
+          ...userAns,
+          score: earnedScore,
+          feedback: isCorrect
+            ? "Chính xác!"
+            : `Sai. Đáp án đúng là: ${correctKey}`,
+        };
+      });
+
+      // B3: Tạo Submission
+      const newSubmission = {
+        examId: examId,
+        studentId: studentId,
+        status: "graded",
+        startedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+        submittedAt: new Date().toISOString(),
+        totalScore: parseFloat(totalScore.toFixed(2)),
+        maxScore: maxPoints,
+        attemptNumber: 1,
+        answers: gradedAnswers,
+      };
+
+      const res = await fetch(`${API_URL}/submissions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newSubmission),
+      });
+
+      if (!res.ok) throw new Error("Lỗi lưu bài");
+      return await res.json();
+    } catch (error) {
+      console.error("Lỗi nộp bài:", error);
+      throw error;
+    }
   },
 
-  /**
-   * Lấy chi tiết bài làm để xem lại (Review)
-   * Trả về: { submission, exam, questions }
-   */
   getSubmissionDetails: async (submissionId: string) => {
-    if (!submissionId) return null;
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      const subRes = await fetch(`${API_URL}/submissions/${submissionId}`, {
+        cache: "no-store",
+      });
+      if (!subRes.ok) return null;
+      const submissionData = await subRes.json();
 
-    let targetExamId = "exam-001";
-    if (submissionId.includes("002")) targetExamId = "exam-002";
-    if (submissionId.includes("003")) targetExamId = "exam-003";
+      // Gọi lại examService để lấy cấu trúc đề (Service này đã sửa ở Bước 1 nên an toàn)
+      const examData = await examService.getExamById(submissionData.examId);
+      if (!examData) return null;
 
-    const mockExam = getMockExamById(targetExamId);
-    if (!mockExam) return null;
+      // Tuy nhiên, examService đã XÓA đáp án. Để Review, ta cần gọi lại bảng questions để lấy đáp án.
+      // Vì đây là giả lập, ta fetch lại questions một lần nữa cho chắc.
+      const questionsRes = await fetch(`${API_URL}/questions`);
+      const allQuestions = await questionsRes.json();
 
-    const now = new Date();
-    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      // Ghép lại đáp án vào questions của examData
+      const questionsWithAnswers = examData.questions.map((q) => {
+        const rawQ = allQuestions.find((item: any) => item.id === q.questionId);
+        return {
+          ...q.question,
+          _id: q.questionId,
+          correctAnswer: rawQ?.correctAnswer, // Bổ sung lại đáp án
+          explanation: rawQ?.explanation, // Bổ sung lại lời giải
+        };
+      });
 
-    // 2. TẠO CÂU TRẢ LỜI GIẢ LẬP
-    const mockAnswers: ExamAnswer[] = mockExam.questions.map((q, index) => {
-      const questionDetail = q.question;
-      const type = questionDetail?.type;
-      const correctAnswer = questionDetail?.correctAnswer;
-
-      let selectedOptions: string[] = [];
-      let answerText: string | undefined = undefined;
-      let score = 0;
-
-      // --- LOGIC MOCK ĐÁP ÁN (Dựa trên index để test Xanh/Đỏ) ---
-
-      // Trường hợp 1: TỰ LUẬN (Essay)
-      if (type === "essay") {
-        if (index <= 5) {
-          answerText = "Bài làm tốt, đầy đủ ý.";
-          score = q.maxScore; // Full điểm
-        } else if (index <= 10) {
-          answerText = "Bài làm còn sơ sài.";
-          score = q.maxScore / 2; // Nửa điểm
-        }
-        // Các câu còn lại bỏ trống -> 0 điểm
-      }
-
-      // Trường hợp 2: TRẮC NGHIỆM (Multiple Choice / Short Answer) - correctAnswer là string
-      else if (typeof correctAnswer === "string") {
-        const firstOptionId = questionDetail?.options?.[0]?.id || "A";
-        const secondOptionId = questionDetail?.options?.[1]?.id || "B";
-
-        if (index <= 5) {
-          // Mock ĐÚNG: Chọn đúng đáp án
-          selectedOptions = [correctAnswer];
-          score = q.maxScore;
-        } else if (index <= 10) {
-          // Mock SAI: Chọn đáp án khác
-          const wrong =
-            firstOptionId === correctAnswer ? secondOptionId : firstOptionId;
-          selectedOptions = [wrong];
-          score = 0;
-        }
-      }
-
-      // Trường hợp 3: ĐÚNG/SAI (True/False) - correctAnswer là Object
-      else if (typeof correctAnswer === "object" && correctAnswer !== null) {
-        // Mock ĐÚNG/SAI cho dạng bài phức tạp này khó hơn,
-        // ta tạm thời mock điểm số trực tiếp để test UI
-        if (index <= 5) {
-          score = q.maxScore; // Giả vờ làm đúng hết
-          // selectedOptions trong T/F thường lưu danh sách ID các câu chọn là True
-          // Ta mock tạm để không bị rỗng
-          selectedOptions = ["mock-true-option"];
-        } else if (index <= 10) {
-          score = 0; // Giả vờ làm sai
-          selectedOptions = ["mock-wrong-option"];
-        }
-      }
+      const submission: ExamSubmission = {
+        ...submissionData,
+        _id: submissionData.id,
+        answers: submissionData.answers.map((ans: any) => ({
+          ...ans,
+          answerText: typeof ans.answer === "string" ? ans.answer : undefined,
+          selectedOptions: Array.isArray(ans.answer)
+            ? ans.answer
+            : typeof ans.answer === "string"
+            ? [ans.answer]
+            : [],
+        })),
+      };
 
       return {
-        _id: `answer-${index}`,
-        submissionId: submissionId,
-        questionId: q.questionId,
-        answerText,
-        selectedOptions,
-        score, // Điểm số đã tính toán ở trên
-        maxScore: q.maxScore,
-        feedback:
-          type === "essay" ? "Nhận xét tự động từ hệ thống..." : undefined,
-        isAutoGraded: type !== "essay",
-        isManuallyGraded: type === "essay",
-        createdAt: oneHourAgo.toISOString(),
-        updatedAt: now.toISOString(),
+        submission: submission,
+        exam: examData,
+        questions: questionsWithAnswers,
       };
-    });
-
-    const mockSubmission: ExamSubmission = {
-      _id: submissionId,
-      examId: mockExam._id,
-      studentId: "student-01",
-      assignmentId: "assign-01",
-      status: "graded",
-      attemptNumber: 1,
-      totalScore: mockAnswers.reduce((acc, curr) => acc + (curr.score || 0), 0),
-      maxScore: mockExam.totalPoints || 10,
-      startedAt: oneHourAgo.toISOString(),
-      submittedAt: now.toISOString(),
-      answers: mockAnswers,
-      createdAt: oneHourAgo.toISOString(),
-      updatedAt: now.toISOString(),
-    };
-
-    return {
-      submission: mockSubmission,
-      exam: mockExam,
-      questions: mockExam.questions.map((q) => q.question).filter(Boolean),
-    };
+    } catch (error) {
+      console.error("Lỗi lấy chi tiết:", error);
+      return null;
+    }
   },
 };
