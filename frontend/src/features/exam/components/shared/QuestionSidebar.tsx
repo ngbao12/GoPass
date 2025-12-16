@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { getSectionBadgeStyle } from "@/utils/exam.utils";
+import { getSectionBadgeStyle } from "@/utils/exam";
 
 export interface QuestionStatus {
   questionId: string;

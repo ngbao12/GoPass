@@ -4,7 +4,7 @@
 import React, { useMemo } from "react";
 import Button from "@/components/ui/Button";
 import { ExamSectionConfig, ExamSubjectConfig } from "../../types";
-import { getExamConfigBySubject, formatExamDuration } from "@/utils/exam.utils";
+import { getExamConfigBySubject, formatExamDuration } from "@/utils/exam";
 
 interface StartExamPanelProps {
   examTitle: string;
