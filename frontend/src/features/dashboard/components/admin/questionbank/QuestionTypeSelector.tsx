@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { QuestionType } from "@/features/dashboard/types/question";
+import { QuestionType } from "@/features/exam/types";
 
 interface QuestionTypeSelectorProps {
   selectedType: QuestionType | null;
@@ -77,7 +77,7 @@ const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({
       color: "yellow",
     },
     {
-      type: "long_answer" as QuestionType,
+      type: "essay" as QuestionType,
       icon: (
         <svg
           className="w-8 h-8"
@@ -93,7 +93,7 @@ const QuestionTypeSelector: React.FC<QuestionTypeSelectorProps> = ({
           />
         </svg>
       ),
-      title: "Long Answer",
+      title: "Essay",
       description: "Tự luận / bài văn",
       color: "purple",
     },

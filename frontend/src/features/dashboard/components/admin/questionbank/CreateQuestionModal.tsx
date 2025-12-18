@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import {
   QuestionType,
   QuestionDraft,
-  Passage,
 } from "@/features/dashboard/types/question";
 import QuestionTypeSelector from "./QuestionTypeSelector";
 import PassageSelector from "./PassageSelector";
@@ -29,7 +28,9 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
   const [selectedPassageId, setSelectedPassageId] = useState<
     string | undefined
   >();
-  const [newPassage, setNewPassage] = useState<Partial<Passage> | undefined>();
+  const [newPassage, setNewPassage] = useState<
+    Partial<{ title: string; content: string }> | undefined
+  >();
   const [formData, setFormData] = useState<any>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
@@ -41,7 +42,6 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
         type: selectedType || undefined,
         passage: passageOption,
         passageId: selectedPassageId,
-        newPassage,
         formData,
         timestamp: Date.now(),
       };
@@ -81,7 +81,6 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
           setSelectedType(draft.type || null);
           setPassageOption(draft.passage || "none");
           setSelectedPassageId(draft.passageId);
-          setNewPassage(draft.newPassage);
           setFormData(draft.formData || null);
         } else {
           localStorage.removeItem("question_draft");
@@ -143,6 +142,12 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
     onSave(question);
     localStorage.removeItem("question_draft");
     handleClose();
+  };
+
+  const handleNewPassageChange = (
+    passage: Partial<{ title: string; content: string }>
+  ) => {
+    setNewPassage(passage);
   };
 
   return (
@@ -251,7 +256,7 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
                       selectedPassageId={selectedPassageId}
                       onPassageSelect={setSelectedPassageId}
                       newPassage={newPassage}
-                      onNewPassageChange={setNewPassage}
+                      onNewPassageChange={handleNewPassageChange}
                     />
                   </div>
                 ) : (

@@ -10,22 +10,25 @@ frontend/
 │ │ └─ # Reusable UI components (buttons, inputs, layout components)
 │ │
 │ ├─ features/  
-│ │ └─ # Domain-specific modules (Auth, User, Exam, Contest, etc.)
+│ │ └─ # Domain-specific modules (UI + Context, not services/types)
 │ │
 │ ├─ lib/  
 │ │ └─ # Core utilities (http client, configs, constants)
 │ │
 │ ├─ services/  
-│ │ └─ # API service layer calling backend endpoints
+│ │ └─ # API service layer - organized by domain subfolder
 │ │
 │ ├─ store/  
-│ │ └─ # Global state management (Zustand/Redux)
+│ │ └─ # Global state (optional, if needed beyond Context)
 │ │
 │ ├─ styles/  
 │ └─ # Global styles, Tailwind config overrides, theme
 │
 │ ├─ types/  
-│ └─ # Global TypeScript types & interfaces
+│ └─ # Global TypeScript types - organized by domain subfolder
+│
+│ ├─ hooks/  
+│ └─ # App-wide hooks (not feature-specific hooks)
 │
 │ └─ utils/  
 │ └─ # Helper functions shared across project
@@ -88,12 +91,16 @@ GOPASS/
 │ │ ├─ ClassCard.tsx
 │ │ └─ ExamCard.tsx
 │ │
-│ ├─ features/ # domain folders (colocate code per feature)
+│ ├─ features/ # domain folders (colocate UI components + context)
 │ │ ├─ auth/
-│ │ │ ├─ components/ # LoginForm, RegisterForm, ForgotPassword
-│ │ │ ├─ hooks.ts # useLogin, useRegister (feature hooks)
-│ │ │ ├─ service.ts # AuthApi wrapper functions
-│ │ │ └─ types.ts
+│ │ │ ├─ components/ # LoginForm, RegisterForm, AuthLayout
+│ │ │ ├─ context/ # AuthContext.tsx (provides useAuth hook)
+│ │ │ ├─ hooks.ts # (optional) feature-specific hooks
+│ │ │ └─ index.ts # barrel exports
+│ │ ├─ dashboard/
+│ │ │ ├─ components/ # dashboard UI components
+│ │ │ ├─ context/ # DashboardContext.tsx
+│ │ │ └─ types/ # dashboard-specific types
 │ │ ├─ user/
 │ │ ├─ class/
 │ │ ├─ exam/
@@ -103,39 +110,45 @@ GOPASS/
 │ │ └─ questionbank/
 │ │
 │ ├─ lib/ # low-level shared helpers
-│ │ ├─ api.ts # central http client (axios/fetch wrapper)
-│ │ ├─ http/ # infra & error handling
+│ │ ├─ api.ts # (future) central http client (axios/fetch wrapper)
+│ │ ├─ http/ # (future) infra & error handling
 │ │ │ ├─ httpClient.ts
 │ │ │ ├─ apiConfig.ts
 │ │ │ └─ errorHandler.ts
-│ │ └─ jwt.ts # token helpers (parse/refresh helpers)
+│ │ └─ jwt.ts # (future) token helpers (parse/refresh)
 │ │
-│ ├─ services/ # API service layer (high-level)
-│ │ ├─ auth.api.ts # AuthApi (login/logout/me)
-│ │ ├─ user.api.ts
-│ │ ├─ class.api.ts
-│ │ ├─ exam.api.ts
-│ │ ├─ submission.api.ts
-│ │ ├─ grading.api.ts
-│ │ ├─ contest.api.ts
-│ │ └─ questionbank.api.ts
+│ ├─ services/ # API service layer - organized by domain (subfolder approach)
+│ │ ├─ auth/
+│ │ │ ├─ authService.ts # Auth API calls (login/logout/register/me)
+│ │ │ ├─ constants.ts # API endpoints & storage keys
+│ │ │ └─ index.ts # barrel export
+│ │ ├─ class/ # (future) Class-related API calls
+│ │ │ ├─ classService.ts
+│ │ │ └─ index.ts
+│ │ ├─ exam/ # (future) Exam-related API calls
+│ │ ├─ submission/
+│ │ ├─ grading/
+│ │ ├─ contest/
+│ │ └─ questionbank/
 │ │
-│ ├─ store/ # global state (zustand or redux)
-│ │ ├─ index.ts
-│ │ └─ authStore.ts
+│ ├─ store/ # (optional) global state (Zustand/Redux) - if needed beyond Context
+│ │ └─ index.ts # Note: Auth uses Context, not store
 │ │
-│ ├─ hooks/ # app-wide hooks
-│ │ ├─ useAuth.ts
-│ │ ├─ useFetch.ts
-│ │ └─ useDebounce.ts
+│ ├─ hooks/ # app-wide custom hooks (not feature-specific)
+│ │ ├─ useFetch.ts # (future) generic data fetching
+│ │ └─ useDebounce.ts # (future) debounce utility
+│ │ # Note: useAuth is in features/auth/context, not here
 │ │
 │ ├─ styles/ # global css / tailwind or css modules
 │ │ ├─ globals.css
 │ │ └─ tailwind.css
 │ │
-│ ├─ types/ # shared TypeScript types / domain models
-│ │ ├─ domain.ts
-│ │ └─ api.ts
+│ ├─ types/ # shared TypeScript types - organized by domain (subfolder approach)
+│ │ ├─ auth/
+│ │ │ └─ index.ts # User, LoginCredentials, RegisterData, AuthResponse
+│ │ ├─ class/ # (future) Class, ClassMember types
+│ │ ├─ exam/ # (future) Exam types
+│ │ └─ api.ts # (future) generic API response types
 │ │
 │ ├─ constants/ # route names, roles, status codes, etc.
 │ │ └─ routes.ts
@@ -153,3 +166,101 @@ GOPASS/
 ├─ package.json
 ├─ README.md
 └─ .eslintrc.js
+
+---
+
+## Architecture Design Decisions
+
+### **1. Subfolder Organization for Services & Types**
+
+```
+✅ CURRENT APPROACH (Scalable):
+services/
+  ├─ auth/
+  │   ├─ authService.ts
+  │   ├─ constants.ts
+  │   └─ index.ts
+  └─ class/
+      ├─ classService.ts
+      └─ index.ts
+
+❌ FLAT APPROACH (Gets messy):
+services/
+  ├─ auth.api.ts
+  ├─ class.api.ts
+  ├─ exam.api.ts
+  └─ ...20 more files
+```
+
+**Why**: Subfolder approach scales better as the app grows. Each domain gets its own namespace.
+
+### **2. Context Over Store for Authentication**
+
+```
+✅ CURRENT: features/auth/context/AuthContext.tsx
+❌ ALTERNATIVE: store/authStore.ts (Zustand/Redux)
+```
+
+**Why**: React Context is sufficient for auth state. No need for external state management library. Simpler, fewer dependencies.
+
+### **3. useAuth Hook Location**
+
+```
+✅ CURRENT: Exported from features/auth/context/AuthContext.tsx
+❌ ALTERNATIVE: Separate file in src/hooks/useAuth.ts
+```
+
+**Why**: The hook is tightly coupled to AuthContext. Keeping them together is more maintainable.
+
+### **4. Features = UI + Context (Not Services/Types)**
+
+```
+features/auth/
+  ├─ components/      # UI components
+  ├─ context/         # React Context providers
+  └─ index.ts         # Barrel exports
+
+Services & Types are in top-level folders for reusability across features.
+```
+
+### **5. Import Pattern Examples**
+
+**✅ Recommended Imports:**
+
+```typescript
+// Types (shared, domain-organized)
+import type { User, LoginCredentials } from "@/types/auth";
+
+// Services (shared, domain-organized)
+import { authService } from "@/services/auth";
+
+// Features (UI + Context)
+import { useAuth, LoginForm } from "@/features/auth";
+
+// App-wide utilities
+import { useFetch } from "@/hooks/useFetch";
+import { formatDate } from "@/utils/date";
+```
+
+**❌ Avoid These Patterns:**
+
+```typescript
+// Don't import directly from nested paths
+import { authService } from "@/services/auth/authService";
+
+// Don't import from old flat structure
+import { User } from "@/features/auth/types";
+```
+
+### **6. When to Use Each Folder**
+
+| Folder        | Purpose                      | Example                                    |
+| ------------- | ---------------------------- | ------------------------------------------ |
+| `features/`   | Domain UI + Context          | LoginForm, useAuth, DashboardContext       |
+| `services/`   | API calls to backend         | authService.login(), classService.getAll() |
+| `types/`      | Shared TypeScript interfaces | User, Class, Exam                          |
+| `components/` | Generic UI components        | Button, Modal, Table                       |
+| `lib/`        | Low-level infrastructure     | httpClient, apiConfig                      |
+| `hooks/`      | App-wide hooks               | useFetch, useDebounce                      |
+| `store/`      | Global state (if needed)     | Zustand/Redux stores                       |
+| `utils/`      | Pure helper functions        | formatDate, parseJSON                      |

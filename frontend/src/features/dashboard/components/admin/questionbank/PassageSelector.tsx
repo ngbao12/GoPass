@@ -1,8 +1,12 @@
 "use client";
 
 import React from "react";
-import { Passage } from "@/features/dashboard/types/question";
 import Input from "@/components/ui/Input";
+
+interface Passage {
+  title: string;
+  content: string;
+}
 
 interface PassageSelectorProps {
   option: "none" | "existing" | "new";
@@ -13,10 +17,10 @@ interface PassageSelectorProps {
   onNewPassageChange: (passage: Partial<Passage>) => void;
 }
 
-// Mock passages for demo
-const mockPassages: Passage[] = [
-  { id: "1", title: "Đoạn văn về Chiến tranh Việt Nam", content: "..." },
-  { id: "2", title: "Bài đọc về Hệ sinh thái rừng nhiệt đới", content: "..." },
+// Mock passages from backend
+const mockPassages = [
+  { id: "1", title: "Đoạn văn về Chiến tranh Việt Nam" },
+  { id: "2", title: "Bài đọc về Hệ sinh thái rừng nhiệt đới" },
 ];
 
 const PassageSelector: React.FC<PassageSelectorProps> = ({

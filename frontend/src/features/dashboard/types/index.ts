@@ -1,23 +1,11 @@
 export type UserRole = 'admin' | 'student' | 'teacher';
 
-export type ExamType = 'contest' | 'public' | 'class';
+// Re-export actual exam types instead of duplicating
+export type { Exam, ExamMode, ExamStatus, ExamAssignment, ExamWithDetails } from '@/features/exam/types';
 
-export type ExamStatus = 'upcoming' | 'active' | 'completed';
+import type { Exam } from '@/features/exam/types';
 
-export interface Exam {
-  id: string;
-  title: string;
-  type: ExamType;
-  status: ExamStatus;
-  subject: string;
-  duration: number; // in minutes
-  questionCount: number;
-  participantCount: number;
-  createdAt: string;
-  startDate?: string;
-  endDate?: string;
-}
-
+// Dashboard-specific stats
 export interface DashboardStats {
   totalExams: number;
   contestExams: number;

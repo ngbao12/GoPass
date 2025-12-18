@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useAuth } from "@/features/auth";
 import { UserRole } from "@/features/dashboard/types";
 
 interface DashboardContextType {
@@ -29,10 +30,12 @@ interface DashboardProviderProps {
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   children,
 }) => {
-  // TODO: Replace with actual user data from auth context/session
+  const { user } = useAuth(); // Get user from auth context
   const [activeTab, setActiveTab] = useState("exams");
-  const [userRole] = useState<UserRole>("admin");
-  const [userName] = useState("Admin");
+
+  // Use actual user data from auth context, with fallback defaults
+  const userRole = (user?.role as UserRole) || "student";
+  const userName = user?.name || "User";
 
   return (
     <DashboardContext.Provider
