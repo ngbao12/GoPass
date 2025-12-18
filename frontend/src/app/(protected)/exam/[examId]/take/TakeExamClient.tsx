@@ -1,8 +1,7 @@
-// src/app/(protected)/exam/[examId]/take/TakeExamClient.tsx
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ExamProvider, useExam } from "@/features/exam/context/ExamContext";
 import { useExamUI } from "@/features/exam/context/useExamUI";
 import {
@@ -17,62 +16,155 @@ import {
   SubmitConfirmationDialog,
   SubmitSuccessDialog,
 } from "@/features/exam/components/exam-instructions";
-import {
-  formatTimeRemaining,
-  formatSubmissionTime,
-} from "@/utils/date-time.utils";
+import { formatTimeRemaining, formatSubmissionTime } from "@/utils/date-time";
 import { ExamWithDetails } from "@/features/exam/types";
+import { updateExamStatus } from "@/utils/contest-storage";
+import { examStorage } from "@/utils/exam-storage";
+import confetti from "canvas-confetti";
+import { getContestProgress } from "@/utils/contest-storage";
 
-// --- INNER COMPONENT: Sử dụng Hooks và Context ---
-const ExamInterface = () => {
+// ==========================================
+// 1. CUSTOM HOOKS (Tách biệt Logic)
+// ==========================================
+
+/** Hook: Xử lý điều hướng và cập nhật trạng thái Contest ban đầu */
+const useExamNavigation = (examId: string) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get("returnUrl");
+  const contestId = searchParams.get("contestId");
 
-  // 1. Hooks: Context & UI Logic
-  const {
-    exam,
-    currentQuestion,
-    examState,
-    goToNextQuestion,
-    goToPreviousQuestion,
-    goToQuestion,
-    updateAnswer,
-    toggleFlag,
-    submitExam,
-    timeRemaining,
-  } = useExam();
+  // Đánh dấu trạng thái 'ongoing' ngay khi vào bài (nếu là contest)
+  useEffect(() => {
+    if (contestId && examId) {
+      updateExamStatus(contestId, examId, "ongoing");
+    }
+  }, [contestId, examId]);
 
-  const { uiLayout, sectionsData, stats, navStatus } = useExamUI();
+  const handleNavigateBack = useCallback(() => {
+    if (returnUrl) {
+      router.push(decodeURIComponent(returnUrl));
+    } else {
+      router.push(contestId ? `/contest/${contestId}/hub` : `/exam/${examId}`);
+    }
+  }, [returnUrl, router, contestId, examId]);
 
-  // 2. Local State for Dialogs
+  const handleNavigateDashboard = useCallback(() => {
+    if (returnUrl) {
+      router.push(decodeURIComponent(returnUrl));
+    } else {
+      router.push("/dashboard");
+    }
+  }, [returnUrl, router]);
+
+  return { contestId, handleNavigateBack, handleNavigateDashboard };
+};
+
+/** Hook: Xử lý logic nộp bài (Gọi API + Dọn dẹp Storage) */
+const useExamSubmission = (
+  examId: string,
+  contestId: string | null,
+  submitExamCtx: () => Promise<void>
+) => {
   const [dialogs, setDialogs] = useState({
     submit: false,
     exit: false,
     success: false,
+    contestCompleted: false,
   });
 
-  // 3. Loading Guard (An toàn)
-  if (!exam || !currentQuestion || !uiLayout) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-4 border-[#00747F] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-500 font-medium">Đang tải giao diện...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleFinishExam = useCallback(async () => {
+    // 1. Submit dữ liệu (Context logic)
+    await submitExamCtx();
+    let isLastExam = false;
+    // 2. Xử lý Side-effects của Contest (Local Cleanup)
+    if (contestId && examId) {
+      // Đánh dấu hoàn thành để Hub hiển thị đúng
+      updateExamStatus(contestId, examId, "completed");
+      // XÓA STORAGE: Để lần sau vào không bị resume bài cũ
+      examStorage.clear(examId);
+      // Kiểm tra nếu đây là exam cuối cùng trong contest
+      const progress = getContestProgress(contestId);
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        zIndex: 9999,
+      });
 
-  // 4. Action Handlers
+      isLastExam = true;
+    }
+
+    // 3. Hiển thị Dialog thành công
+    setDialogs((prev) => ({
+      ...prev,
+      submit: false,
+      success: true,
+      contestCompleted: isLastExam,
+    }));
+  }, [contestId, examId, submitExamCtx]);
+
+  return { dialogs, setDialogs, handleFinishExam };
+};
+
+/** Hook: Tự động nộp bài khi hết giờ & Reset bài thi bỏ dở */
+const useAutoSubmit = (
+  examId: string,
+  timeRemaining: number,
+  isSuccessDialogOpen: boolean,
+  onAutoSubmit: () => void
+) => {
+  const isFirstLoad = useRef(true);
+
+  useEffect(() => {
+    // Logic chạy 1 lần duy nhất khi mount
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+
+      // ✅ RESET BÀI CŨ: Nếu vừa vào đã thấy hết giờ -> User đã bỏ dở từ lâu
+      if (timeRemaining <= 0) {
+        console.log("🚫 Phát hiện bài thi cũ quá hạn -> Reset session");
+        examStorage.clear(examId);
+        window.location.reload(); // Reload để Context khởi tạo lại bài mới
+        return;
+      }
+    }
+
+    // Logic chạy liên tục: Nếu đang làm (active) mà hết giờ -> Auto submit
+    if (timeRemaining <= 0 && !isSuccessDialogOpen) {
+      console.log("⏳ Hết giờ khi đang online -> Auto Submit");
+      onAutoSubmit();
+    }
+  }, [timeRemaining, isSuccessDialogOpen, onAutoSubmit, examId]);
+};
+
+// ==========================================
+// 2. SUB-COMPONENTS (Tách biệt UI)
+// ==========================================
+
+const MainQuestionArea = () => {
+  // Lấy data từ context
+  const {
+    exam,
+    currentQuestion,
+    examState,
+    updateAnswer,
+    toggleFlag,
+    goToNextQuestion,
+    goToPreviousQuestion,
+  } = useExam();
+  const { navStatus } = useExamUI();
+
+  // 🔴 FIX LỖI CURRENT QUESTION: Thêm guard clause
+  if (!exam || !currentQuestion) return null;
+
   const handleAnswerChange = (
     answer: string | string[] | Record<string, string>
   ) => {
-    let finalAnswer: string | string[];
-    if (typeof answer === "string" || Array.isArray(answer)) {
-      finalAnswer = answer;
-    } else {
-      finalAnswer = JSON.stringify(answer);
-    }
-
+    const finalAnswer =
+      typeof answer === "string" || Array.isArray(answer)
+        ? answer
+        : JSON.stringify(answer);
     updateAnswer(currentQuestion.questionId, {
       questionId: currentQuestion.questionId,
       answer: finalAnswer,
@@ -81,23 +173,7 @@ const ExamInterface = () => {
     });
   };
 
-  const actions = {
-    openSubmit: () => setDialogs((prev) => ({ ...prev, submit: true })),
-    closeSubmit: () => setDialogs((prev) => ({ ...prev, submit: false })),
-    confirmSubmit: () => {
-      setDialogs((prev) => ({ ...prev, submit: false }));
-      submitExam();
-      // Giả lập delay success để UX mượt hơn
-      setTimeout(() => setDialogs((prev) => ({ ...prev, success: true })), 300);
-    },
-    openExit: () => setDialogs((prev) => ({ ...prev, exit: true })),
-    closeExit: () => setDialogs((prev) => ({ ...prev, exit: false })),
-    confirmExit: () => router.push(`/exam/${exam._id}`),
-    goToDashboard: () => router.push("/dashboard"),
-  };
-
-  // 5. Render Blocks
-  const mainQuestionContent = (
+  return (
     <div className="flex flex-col h-full bg-[#F8F9FA]">
       <div className="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth custom-scrollbar">
         <div className="max-w-5xl mx-auto w-full pb-8">
@@ -119,7 +195,6 @@ const ExamInterface = () => {
           />
         </div>
       </div>
-
       <div className="flex-shrink-0 p-4 bg-white border-t border-gray-200 z-20">
         <div className="max-w-5xl mx-auto w-full">
           <QuestionNavigationButtons
@@ -135,15 +210,63 @@ const ExamInterface = () => {
       </div>
     </div>
   );
+};
 
+// ==========================================
+// 3. MAIN COMPONENT (Kết nối mọi thứ)
+// ==========================================
+
+const ExamInterface = () => {
+  const {
+    exam,
+    currentQuestion,
+    examState,
+    submitExam,
+    timeRemaining,
+    goToQuestion,
+  } = useExam();
+  const { uiLayout, sectionsData, stats } = useExamUI();
+
+  // 1. Kết nối Navigation Hook
+  const { contestId, handleNavigateBack, handleNavigateDashboard } =
+    useExamNavigation(exam?._id || "");
+
+  // 2. Kết nối Submission Hook
+  const { dialogs, setDialogs, handleFinishExam } = useExamSubmission(
+    exam?._id || "",
+    contestId,
+    submitExam
+  );
+
+  // 3. Kết nối Auto-Submit Hook
+  useAutoSubmit(
+    exam?._id || "",
+    timeRemaining,
+    dialogs.success,
+    handleFinishExam
+  );
+
+  // Guard: Chờ dữ liệu load xong mới render
+  if (!exam || !currentQuestion || !uiLayout) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-4 border-[#00747F] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-500 font-medium">Đang tải giao diện...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // --- UI Render ---
   return (
     <div className="h-screen flex flex-col bg-[#F8F9FA]">
       <ExamHeader
         examTitle={exam.title}
         examSubject={exam.subject || "Thi thử"}
         timeRemaining={timeRemaining}
-        onExit={actions.openExit}
-        onSubmit={actions.openSubmit}
+        onExit={() => setDialogs((prev) => ({ ...prev, exit: true }))}
+        onSubmit={() => setDialogs((prev) => ({ ...prev, submit: true }))}
         isSubmitting={examState.isSubmitting}
       />
 
@@ -159,7 +282,7 @@ const ExamInterface = () => {
           />
         </div>
 
-        {/* Content Area (Split View or Standard) */}
+        {/* Content Area */}
         <main className="flex-1 flex flex-col min-w-0 bg-[#F8F9FA] relative">
           {uiLayout.isSplitView ? (
             <div className="flex-1 flex overflow-hidden">
@@ -171,31 +294,35 @@ const ExamInterface = () => {
                 />
               </div>
               <div className="w-full md:w-1/2 overflow-hidden">
-                {mainQuestionContent}
+                <MainQuestionArea />
               </div>
             </div>
           ) : (
-            <div className="flex-1 overflow-hidden">{mainQuestionContent}</div>
+            <div className="flex-1 overflow-hidden">
+              <MainQuestionArea />
+            </div>
           )}
         </main>
       </div>
 
-      {/* Dialogs */}
+      {/* --- Dialogs --- */}
       <ExitExamDialog
         isOpen={dialogs.exit}
-        onClose={actions.closeExit}
-        onConfirm={actions.confirmExit}
+        onClose={() => setDialogs((prev) => ({ ...prev, exit: false }))}
+        onConfirm={handleNavigateBack} // Thoát thì quay về Hub
       />
+
       <SubmitConfirmationDialog
         isOpen={dialogs.submit}
-        onClose={actions.closeSubmit}
-        onConfirm={actions.confirmSubmit}
+        onClose={() => setDialogs((prev) => ({ ...prev, submit: false }))}
+        onConfirm={handleFinishExam} // Nộp bài -> Clean storage
         timeRemaining={formatTimeRemaining(timeRemaining)}
         answeredCount={stats.answered}
         totalQuestions={stats.total}
         unansweredQuestions={stats.unanswered}
         flaggedQuestions={stats.flagged}
       />
+
       <SubmitSuccessDialog
         isOpen={dialogs.success}
         examTitle={exam.title}
@@ -205,19 +332,25 @@ const ExamInterface = () => {
           answered: stats.answered,
           total: stats.total,
         }}
-        onGoToDashboard={actions.goToDashboard}
+        onGoToDashboard={handleNavigateDashboard}
+        actionLabel={
+          contestId ? "Quay về Hub Cuộc thi" : "Về trang chủ Dashboard"
+        }
+        isContestMode={!!contestId}
       />
     </div>
   );
 };
 
-// --- MAIN CLIENT COMPONENT: Wrapper ---
+// ==========================================
+// 4. PROVIDER WRAPPER
+// ==========================================
+
 interface TakeExamClientProps {
   exam: ExamWithDetails;
 }
 
 export default function TakeExamClient({ exam }: TakeExamClientProps) {
-  // Wrap ExamInterface trong Provider để Hooks hoạt động
   return (
     <ExamProvider initialExam={exam}>
       <ExamInterface />

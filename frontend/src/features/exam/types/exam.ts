@@ -1,4 +1,6 @@
-// src/features/exam/types/exam.ts
+import { ExamQuestion } from "./question";
+import { ExamSubmission } from "./submission";
+
 export type ExamMode = "practice" | "test" | "contest";
 export type ExamStatus =
   | "not_started"
@@ -44,8 +46,8 @@ export interface ReadingPassage {
 }
 
 export interface ExamWithDetails extends Exam {
-  questions: import("./question").ExamQuestion[];
+  questions: ExamQuestion[];
   assignment?: ExamAssignment;
-  userSubmission?: import("./submission").ExamSubmission;
-  readingPassage?: ReadingPassage; // For English exams
+  userSubmission?: ExamSubmission;
+  readingPassages?: ReadingPassage[];
 }

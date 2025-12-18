@@ -8,6 +8,34 @@
       "avatar": "https://i.pravatar.cc/150?u=student-01"
     },
     {
+      "id": "student-02",
+      "name": "Nguyễn Văn An",
+      "email": "an.nguyen@example.com",
+      "role": "student",
+      "avatar": "https://i.pravatar.cc/150?u=student-02"
+    },
+    {
+      "id": "student-03",
+      "name": "Trần Thị Bình",
+      "email": "binh.tran@example.com",
+      "role": "student",
+      "avatar": "https://i.pravatar.cc/150?u=student-03"
+    },
+    {
+      "id": "student-04",
+      "name": "Lê Hoàng Cường",
+      "email": "cuong.le@example.com",
+      "role": "student",
+      "avatar": "https://i.pravatar.cc/150?u=student-04"
+    },
+    {
+      "id": "student-05",
+      "name": "Phạm Thị Dung",
+      "email": "dung.pham@example.com",
+      "role": "student",
+      "avatar": "https://i.pravatar.cc/150?u=student-05"
+    },
+    {
       "id": "admin-01",
       "name": "Admin System",
       "email": "admin@gopass.vn",
@@ -15,6 +43,23 @@
     }
   ],
   "exams": [
+    {
+      "id": "exam-001",
+      "title": "KỲ THI TỐT NGHIỆP THPT NĂM 2025 - Môn TOÁN (Mã đề 0101)",
+      "description": "Đề thi chính thức. Thời gian: 90 phút.",
+      "subject": "Toán Học",
+      "durationMinutes": 90,
+      "mode": "test",
+      "showResultsImmediately": false,
+      "totalQuestions": 22,
+      "totalPoints": 10,
+      "readingPassages": [],
+      "shuffleQuestions": false,
+      "isPublished": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
     {
       "id": "exam-003",
       "title": "KỲ THI TỐT NGHIỆP THPT NĂM 2025 - Môn TIẾNG ANH (Mã đề 1102)",
@@ -57,6 +102,30 @@
       "createdBy": "admin-01",
       "createdAt": "2025-12-14T08:00:00Z",
       "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "exam-002",
+      "title": "KÌ THI THỬ TỐT NGHIỆP THPT NĂM 2025 - Môn NGỮ VĂN (SỞ GD&ĐT YÊN BÁI)",
+      "description": "Đề thi thử tốt nghiệp. Thời gian: 120 phút (không kể thời gian giao đề).",
+      "subject": "Ngữ Văn",
+      "durationMinutes": 120,
+      "mode": "test",
+      "shuffleQuestions": false,
+      "showResultsImmediately": false,
+      "isPublished": true,
+      "totalQuestions": 7,
+      "totalPoints": 10,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z",
+      "readingPassages": [
+        {
+          "id": "passage-van-01",
+          "title": "Phần 1: Đọc hiểu (3,0 điểm)",
+          "content": "<h3 class=\"font-bold text-center mb-4\">TIỆC XÒE VUI NHẤT</h3><p class=\"text-center italic mb-4\">(Trích)</p><p class=\"mb-3 text-justify\">Hà Thị B là con gái trưởng bản Hà Văn Nó. Hiếm có người xinh đẹp như E. Lưng như lưng kiến vàng, mắt long lanh như sao Khun Lú - Nàng Ủa, tiếng nói của nàng dịu dàng. Khi nàng cười, tiếng cười trong vắt và vô tư lự. E xinh đẹp đã đành nhưng đức hạnh của nàng cũng ít có người bì kịp. Nàng là niềm tự hào của người Hua Tát. Cả bản mong nàng tìm được người chồng xứng đáng, trưởng bản Hà Văn Nó cũng muốn thế, các bô lão trong bản cũng muốn thế.</p><p class=\"mb-3 text-justify\">(Lược một đoạn: Mọi người bàn việc chọn chồng cho nàng E. Các bô lão quyết định sẽ làm một cuộc thi tài để chọn người nào có đức tính quý nhất mà khó kiếm nhất làm chồng của E.)</p><p class=\"mb-3 text-justify\">Một bữa kia có một chàng trai dáng vẻ hùng dũng đến nói với trưởng bản và các bô lão:<br/>Dũng cảm là đức tính quý nhất và khó kiếm nhất. Tôi là người có đức tính ấy!<br/>Cứ chứng minh xem!<br/>Trưởng bản trả lời</p><p class=\"mb-3 text-justify\">Chàng trai đi vào rừng. Đến chiều chàng vác về một con lợn lòi bị chàng bắn chết. Con lợn lòi đến hơn tạ thịt, lông cứng tua tủa như lông nhím, chết rồi mà hai con mắt đỏ lừ của nó vẫn ngầu sắc máu. Chàng vứt con lợn xuống sàn, mắt chàng long lanh sáng, người chàng như có hào quang. Mọi người đều khen ngợi chàng. Trưởng bản hỏi con gái:<br/>Con xem, chàng trai thực là dũng cảm. Chàng ấy đã chứng minh đức tính dũng cảm của mình.</p><p class=\"mb-3 text-justify\">E mỉm cười, trái tim nàng rung động khi nhìn thấy đôi mắt dũng cảm của người cầu hôn. Đôi mắt ấy có ánh lửa. Nhưng vốn thông minh, E biết, những người dũng cảm sẽ mải mê với sự nghiệp của mình.<br/>E trả lời:<br/>Đúng thế, thưa cha! Chàng trai đã chứng minh đức tính dũng cảm của mình... đức tính thật đáng quý... Nhưng thưa cha, đức tính ấy đáng quý nhưng chắc không khó kiếm vì mới từ sáng đến chiều chàng đã chứng minh được nó.</p><p class=\"mb-3 text-justify\">Các bô lão gật gù. Người ta đồng ý với lời E nói. Con lợn được mổ thịt. Cả bản xòe suốt đêm để mừng đức tính dũng cảm, đức tính đáng quý nhưng không khó kiếm. Nhiều người con trai chân chính ở rừng có đức tính này....</p><p class=\"mb-3 text-justify\">(Lược một đoạn: Một lần khác, có một chàng trai trông thông minh, sáng sủa đến cầu hôn nàng E nhưng nàng từ chối vì đức tính khôn ngoan đáng quý nhưng không khó kiếm. Một lần khác nữa, có một chàng trai giàu có đến nhưng cũng không được nàng E chấp nhận vì nàng cho rằng giàu có không phải là đức tính.)</p><p class=\"mb-3 text-justify\">Cuối cùng có một chàng trai trong bản Hua Tát đến tìm gặp trưởng bản và các bô lão. Đấy là Hặc, chàng trai mồ côi, người thợ săn xuất sắc nhất bản. Hặc nói với mọi người:<br/>Trung thực là đức tính đáng quý và khó kiếm nhất!<br/>Cứ chứng minh xem! – Mọi người bảo chàng.</p><p class=\"mb-3 text-justify\">Hặc trả lời:<br/>Trung thực không phải cái vòng bạc ở cổ đưa ra cho mọi người trông thấy, sờ tay vào nó.</p><p class=\"mb-3 text-justify\">Mọi người xôn xao, các bô lão bàn tán. Trưởng bản tức giận, mặt ông đỏ bừng như lửa:<br/>Phải chứng minh! – Trưởng bản hét lên, ông đã nhìn thấy đôi mắt trìu mến của E nhìn Hặc.<br/>Ai tin mày! Ai bảo mày có đức tính trung thực? – Trưởng bản hỏi.<br/>Then biết! – Hặc trả lời.<br/>Cả con cũng biết! – E nói nghiêm trang.<br/>Điên rồ! – Trưởng bản gầm lên.<br/>Ông nhìn sang các bô lão cầu cứu. Ông biết, người già bao giờ cũng tìm ra được lối thoát đơn giản cho mọi rắc rối trên đời.</p><p class=\"mb-3 text-justify\">Hãy cầu Then đi! – Một vị bô lão bảo Hặc – Trời đang hạn hán, tất cả mó nước đều đã cạn khô. Nếu con trung thực, con hãy cầu Then mưa xuống!</p><p class=\"mb-3 text-justify\">Trưa hôm sau, dân bản Hua tát lập đàn cầu đảo, không khí oi nồng ngột ngạt. Hặc bước lên đàn, chàng ngước đôi mắt trang nghiêm nhìn trời. Chàng nói:<br/>Con sống trung thực, dẫu biết từng thực bao giờ cũng chịu đau khổ thiệt thòi. Tuy nhiên nếu lòng trung thực chuộc được tội lỗi và mang tình yêu đến được cho thế gian này, xin trời mưa xuống.</p><p class=\"mb-3 text-justify\">Trời cao tĩnh lặng. Bỗng nhiên từ đâu đó xa xôi có một cơn gió mơ hồ thổi về. Tất cả ngọn cây trên rừng xào xạc. Mặt đất bắt đầu xuất hiện những cơn lốc nhỏ.<br/>Buổi chiều, bầu trời đầy mây vần vũ và khi đêm xuống thì mưa như trút.</p><p class=\"mb-3 text-justify\">Lần ấy, người ta đã xòe suốt một tuần trăng để mừng đám cưới của Hặc với con gái trưởng bản.<br/>Đấy là tiệc xòe vui nhất ở bản Hua Tát. Cả bản đều say khướt. Từng cái cột nhà, thậm chí đến từng cái cây trong vườn cũng được mời uống một sừng rượu đại.</p><p class=\"mb-3 text-justify\">(Nguyễn Huy Thiệp, Truyện ngắn Nguyễn Huy Thiệp, NXB Văn học, Hà Nội, 2021, tr.19-22)</p><p class=\"mb-3 text-justify\">Chú thích:<br/>Sao Khun Lú – nàng Ủa: sao Hôm, sao Mai<br/>Mó nước: nguồn nước chảy từ núi</p>",
+          "audioUrl": ""
+        }
+      ]
     }
   ],
   "questions": [
@@ -1489,9 +1558,1063 @@
       "tags": [
         "cloze"
       ]
+    },
+    {
+      "id": "q-van-01",
+      "type": "essay",
+      "content": "Câu 1 (NB). Xác định điểm nhìn trần thuật của văn bản.",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b> Vận dụng kiến thức đã học về điểm nhìn trần thuật.</p><p><b>Cách giải:</b> Điểm nhìn trần thuật: Điểm nhìn của người kể chuyện toàn tri (từ bên ngoài).</p>",
+      "difficulty": "easy",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "đọc hiểu"
+      ],
+      "linkedPassageId": "passage-van-01",
+      "points": 0.5,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-van-02",
+      "type": "essay",
+      "content": "Câu 2 (TH). Nêu những suy nghĩ của nàng E về đức tính dũng cảm.",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b> Đọc phân tích, cảm nhận.</p><p><b>Cách giải:</b> Những suy nghĩ của nàng E về đức tính dũng cảm: những người dũng cảm sẽ mải mê với sự nghiệp của mình; đức tính ấy đáng quý nhưng chắc không khó kiếm.</p>",
+      "difficulty": "easy",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "đọc hiểu"
+      ],
+      "linkedPassageId": "passage-van-01",
+      "points": 0.5,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-van-03",
+      "type": "essay",
+      "content": "Câu 3 (TH). Phân tích đặc điểm của ngôn ngữ nói trong đoạn trích sau:<div class=\"space-y-2 text-justify\"><p class=\"mb-3 text-justify\">Mọi người xôn xao, các bô lão bàn tán. Trưởng bản tức giận, mặt ông đỏ bừng như lửa:<br/>- Phải chứng minh! – Trưởng bản hét lên, ông đã nhìn thấy đôi mắt trìu mến của E nhìn Hặc.<br/>- Ai tin mày! Ai bảo mày có đức tính trung thực? – Trưởng bản hỏi.<br/>- Then biết! – Hặc trả lời.<br/>- Cả con cũng biết! – E nói nghiêm trang.<br/>- Điên rồ! – Trưởng bản gầm lên.<br/>Ông nhìn sang các bô lão cầu cứu. Ông biết, người già bao giờ cũng tìm ra được lối thoát đơn giản cho mọi rắc rối trên đời.</p></div>",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b> Căn cứ bài đọc hiểu, phân tích.</p><p><b>Cách giải:</b> Đặc điểm của ngôn ngữ nói:</p><p>Sử dụng nhiều yếu tố phi ngôn ngữ: hét lên, nói nghiêm trang, gầm lên.</p><p>Ngôn ngữ đối thoại, có người nói, có người nghe.</p><p>Sử dụng nhiều từ ngữ dễ hiểu, biểu cảm: Ai tin mày, Then biết...</p><p>Sử dụng nhiều câu rút gọn: Phải chứng minh! Điên rồ!</p>",
+      "difficulty": "medium",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "đọc hiểu"
+      ],
+      "linkedPassageId": "passage-van-01",
+      "points": 0.5,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-van-04",
+      "type": "essay",
+      "content": "Câu 4 (TH). Trình bày ý nghĩa của chi tiết kì ảo trong văn bản.",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b> Căn cứ bài đọc hiểu.</p><p><b>Cách giải:</b> Ý nghĩa của chi tiết kì ảo trong văn bản:</p><p>Thể hiện đức tính trung thực của chàng Hặc.</p><p>Ngợi ca lòng trung thực là thiên tính &quot;đáng quý và khó kiếm nhất&quot; của con người, hơn cả sự dũng cảm, khôn ngoan và giàu có, thúc đẩy sự phát triển của cốt truyện, làm cho câu chuyện trở nên sinh động, hấp dẫn.</p>",
+      "difficulty": "medium",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "đọc hiểu"
+      ],
+      "linkedPassageId": "passage-van-01",
+      "points": 0.5,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-van-05",
+      "type": "essay",
+      "content": "Câu 5 (VD). Qua văn bản, anh/ chị hãy nêu thông điệp có ý nghĩa nhất đối với cuộc sống hôm nay và giải thích lí do (trình bày khoảng 5-7 dòng).",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b> Căn cứ bài đọc hiểu.</p><p><b>Cách giải:</b> Nêu thông điệp có ý nghĩa nhất đối với cuộc sống hôm nay (gợi ý: đức tính trung thực rất đáng quý, người trung thực đáng được trân trọng, yêu quý...).</p><p>Lí giải một cách hợp lí, thuyết phục.</p>",
+      "difficulty": "hard",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "đọc hiểu"
+      ],
+      "linkedPassageId": "passage-van-01",
+      "points": 1,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-van-06",
+      "type": "essay",
+      "content": "Câu 1 (VDC). Viết đoạn văn nghị luận (khoảng 200 chữ) phân tích nhân vật chàng Hặc trong văn bản ở phần đọc hiểu.",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b></p><p>Vận dụng kiến thức về cách viết đoạn văn nghị luận.</p><p>Lựa chọn được các thao tác lập luận phù hợp, kết hợp chặt chẽ lí lẽ.</p><p><b>Cách giải:</b> Gợi ý:</p><ul><li>Hặc là chàng trai mồ côi, một thợ săn xuất sắc nhất bản, có đức tính trung thực.</li><li>Chàng Hặc đến cầu hôn nàng E, được nàng E trân trọng. Trời giúp đỡ cuối cùng cưới được nàng E xinh đẹp, con gái của trưởng bản.</li><li>Nhân vật chàng Hặc thể hiện quan điểm của nhà văn: đức tính trung thực đáng quý nhất. Người có đức tính này có thể chịu đau khổ, thiệt thòi nhưng được trân trọng, yêu thương và có cuộc sống tốt đẹp.</li></ul>",
+      "difficulty": "hard",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "viết"
+      ],
+      "linkedPassageId": "passage-van-01",
+      "points": 2,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-van-07",
+      "type": "essay",
+      "content": "Câu 2 (VDC). Thời kì hội nhập quốc tế đem đến nhiều cơ hội nhưng cũng đặt ra không ít thách thức cho việc bảo tồn, phát triển văn hóa truyền thống. Từ góc nhìn của người trẻ, anh/chị hãy viết bài văn nghị luận (khoảng 600 chữ) trình bày suy nghĩ về vấn đề trên.",
+      "options": [],
+      "correctAnswer": null,
+      "explanation": "<p><b>Phương pháp:</b></p><p>Vận dụng kiến thức đã học về viết bài văn nghị luận.</p><p>Lựa chọn được các thao tác lập luận phù hợp, kết hợp nhuần nhuyễn lí lẽ và dẫn chứng.</p><p><b>Cách giải:</b> Có thể triển khai theo hướng:</p><ol><li><b>Mở bài:</b> Xác định đúng vấn đề nghị luận: Thời kì hội nhập quốc tế đem đến nhiều cơ hội nhưng cũng đặt ra không ít thách thức cho việc bảo tồn, phát triển văn hóa truyền thống.</li><li><b>Thân bài:</b><ul><li><b>Giải thích:</b> Văn hóa truyền thống là những giá trị vật chất và tinh thần được lưu truyền qua nhiều thế hệ. Hội nhập quốc tế là quá trình liên kết, gắn kết các quốc gia, dân tộc vì mục tiêu phát triển và tạo sức mạnh tập thể giải quyết vấn đề chung.</li><li><b>Hội nhập quốc tế là cơ hội</b> để văn hóa truyền thống được tiếp xúc với những nền văn hóa trên thế giới; trở nên phong phú, đa dạng, vừa mang nét truyền thống vừa hiện đại; tạo cơ hội để quảng bá du lịch, đất nước, thể hiện bản sắc dân tộc.</li><li><b>Hội nhập quốc tế là thách thức</b> bởi khi hội nhập, văn hóa truyền thống chịu áp lực cạnh tranh, xung đột lớn, có nguy cơ mai một, mất bản sắc.</li><li>Quá trình hội nhập văn hóa có thể tác động tiêu cực đến tâm lý và lối sống của con người, đặc biệt với người trẻ: Tuổi trẻ năng động, sáng tạo nhưng thiếu bản lĩnh và hiểu biết chưa sâu sắc nên cần ý thức được vai trò, trách nhiệm trong việc bảo tồn, phát triển văn hóa truyền thống; tích cực học tập, nghiên cứu, có hành động cụ thể để quảng bá văn hóa dân tộc; tiếp thu chọn lọc tinh hoa văn hóa nhân loại.</li><li><b>Mở rộng</b> vấn đề, trao đổi với quan điểm trái chiều hoặc ý kiến khác.</li></ul></li><li><b>Kết bài:</b> Khái quát vấn đề nghị luận.</li></ol>",
+      "difficulty": "hard",
+      "subject": "Ngữ Văn",
+      "tags": [
+        "viết"
+      ],
+      "linkedPassageId": null,
+      "points": 5,
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "q-math-01",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 1.</b> Cho hình lăng trụ $ABC.A'B'C'$. Phát biểu nào sau đây là đúng?</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$\\overrightarrow{BA} + \\overrightarrow{A'C'} = \\overrightarrow{BC'}$."
+        },
+        {
+          "id": "B",
+          "content": "$\\overrightarrow{BA} + \\overrightarrow{A'C'} = \\overrightarrow{C'B'}$."
+        },
+        {
+          "id": "C",
+          "content": "$\\overrightarrow{BA} + \\overrightarrow{A'C'} = \\overrightarrow{BC}$."
+        },
+        {
+          "id": "D",
+          "content": "$\\overrightarrow{BA} + \\overrightarrow{A'C'} = \\overrightarrow{A'A}$."
+        }
+      ],
+      "correctAnswer": "C",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Ta có $\\overrightarrow{A'C'}$ song song và bằng $\\overrightarrow{AC}$. Do đó $\\overrightarrow{BA}+\\overrightarrow{A'C'}=\\overrightarrow{BA}+\\overrightarrow{AC}=\\overrightarrow{BC}$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "https://lh3.googleusercontent.com/d/17JY2nEURc_GpaRfZSgAGY_-UbwvBUK04",
+        "caption": null,
+        "position": "bottom"
+      }
+    },
+    {
+      "id": "q-math-02",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 2.</b> Cho hình hộp $ABCD.A'B'C'D'$. Đường thẳng $AB$ song song với mặt phẳng nào sau đây?</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$(CC'A'A)$."
+        },
+        {
+          "id": "B",
+          "content": "$(BB'C'C)$."
+        },
+        {
+          "id": "C",
+          "content": "$(A'B'C'D')$."
+        },
+        {
+          "id": "D",
+          "content": "$(AA'D'D)$."
+        }
+      ],
+      "correctAnswer": "C",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Vì $AB$ song song với $A'B'$ và $A'B'$ nằm trong mặt phẳng $(A'B'C'D')$, nên $AB$ song song với mặt phẳng $(A'B'C'D')$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "https://lh3.googleusercontent.com/d/1c4CxEt7UFs-3tk3_XacW6cjELhRkTWXz",
+        "caption": null,
+        "position": "bottom"
+      }
+    },
+    {
+      "id": "q-math-03",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 3.</b> Một người chia thời lượng (đơn vị: giây) thực hiện các cuộc gọi điện thoại của mình trong một tuần thành sáu nhóm và lập bảng tần số ghép nhóm như sau. Tứ phân vị thứ ba $Q_3$ (đơn vị: giây) của mẫu số liệu ghép nhóm trên bằng:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "145."
+        },
+        {
+          "id": "B",
+          "content": "140."
+        },
+        {
+          "id": "C",
+          "content": "135."
+        },
+        {
+          "id": "D",
+          "content": "130."
+        }
+      ],
+      "correctAnswer": "C",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Cỡ mẫu $n=11+10+6+8+4+1=40$. Vị trí $Q_3$ là $\\frac{3n}{4}=30$. Tần số tích lũy đến các nhóm: $11,21,27,35$ nên $Q_3$ thuộc nhóm $[120;160)$. Áp dụng công thức nội suy: $Q_3=120+\\frac{30-27}{8}\\cdot(160-120)=135$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "tableData": {
+        "headers": [
+          "Nhóm",
+          "[0;40)",
+          "[40;80)",
+          "[80;120)",
+          "[120;160)",
+          "[160;200)",
+          "[200;240)"
+        ],
+        "rows": [
+          [
+            "Tần số",
+            "11",
+            "10",
+            "6",
+            "8",
+            "4",
+            "1"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "q-math-04",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 4.</b> Trong không gian với hệ tọa độ $Oxyz$, cho đường thẳng $(d): \\frac{x-3}{4} = \\frac{y+2}{-5} = \\frac{z-1}{2}$. Vectơ nào sau đây là một vectơ chỉ phương của đường thẳng $(d)$?</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$\\vec{v_3} = (4; 5; 2)$."
+        },
+        {
+          "id": "B",
+          "content": "$\\vec{v_1} = (3; -2; 1)$."
+        },
+        {
+          "id": "C",
+          "content": "$\\vec{v_4} = (3; 2; 1)$."
+        },
+        {
+          "id": "D",
+          "content": "$\\vec{v_2} = (4; -5; 2)$."
+        }
+      ],
+      "correctAnswer": "D",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Từ dạng đối xứng $\\frac{x-3}{4}=\\frac{y+2}{-5}=\\frac{z-1}{2}$, vectơ chỉ phương có thể lấy là $(4,-5,2)$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-05",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 5.</b> Họ nguyên hàm của hàm số $f(x) = x^2$ là:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$\\frac{1}{3}x^3 + C$."
+        },
+        {
+          "id": "B",
+          "content": "$2x^3 + C$."
+        },
+        {
+          "id": "C",
+          "content": "$3x^3 + C$."
+        },
+        {
+          "id": "D",
+          "content": "$\\frac{1}{2}x^3 + C$."
+        }
+      ],
+      "correctAnswer": "A",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Nguyên hàm cơ bản: $\\int x^2\\,dx=\\frac{1}{3}x^3+C$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-06",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 6.</b> Cho cấp số cộng $(u_n)$ có $u_1 = 4$ và công sai $d = -3$. Giá trị của $u_5$ bằng:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "16."
+        },
+        {
+          "id": "B",
+          "content": "19."
+        },
+        {
+          "id": "C",
+          "content": "$-8$."
+        },
+        {
+          "id": "D",
+          "content": "$-11$."
+        }
+      ],
+      "correctAnswer": "C",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Cấp số cộng: $u_n=u_1+(n-1)d$. Suy ra $u_5=4+4(-3)=-8$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-07",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 7.</b> Tập nghiệm của phương trình $\\sin x = 0$ là:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$S = \\left\\{ \\frac{\\pi}{2} + k\\pi \\mid k \\in \\mathbb{Z} \\right\\}$."
+        },
+        {
+          "id": "B",
+          "content": "$S = \\{ k2\\pi \\mid k \\in \\mathbb{Z} \\}$."
+        },
+        {
+          "id": "C",
+          "content": "$S = \\left\\{ \\frac{\\pi}{2} + k2\\pi \\mid k \\in \\mathbb{Z} \\right\\}$."
+        },
+        {
+          "id": "D",
+          "content": "$S = \\{ k\\pi \\mid k \\in \\mathbb{Z} \\}$."
+        }
+      ],
+      "correctAnswer": "D",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Phương trình $\\sin x=0 \\Leftrightarrow x=k\\pi,\\ k\\in\\mathbb{Z}$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-08",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 8.</b> Trong mặt phẳng với hệ tọa độ $Oxy$, diện tích $S$ của hình phẳng giới hạn bởi đồ thị của hàm số $y = 2x - 3$, trục hoành và hai đường thẳng $x = 1, x = 2$ được xác định bằng công thức:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$S = \\pi \\int_{1}^{2} |2x - 3| \\, dx$."
+        },
+        {
+          "id": "B",
+          "content": "$S = \\int_{1}^{2} |2x - 3| \\, dx$."
+        },
+        {
+          "id": "C",
+          "content": "$S = \\pi \\int_{1}^{2} (2x - 3)^2 \\, dx$."
+        },
+        {
+          "id": "D",
+          "content": "$S = \\left| \\int_{1}^{2} (2x - 3) \\, dx \\right|$."
+        }
+      ],
+      "correctAnswer": "B",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Diện tích hình phẳng giới hạn bởi $y=f(x)$, trục hoành và $x=a,b$ là $S=\\int_a^b |f(x)|\\,dx$. Ở đây $S=\\int_1^2 |2x-3|\\,dx$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-09",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 9.</b> Trong không gian với hệ tọa độ $Oxyz$, mặt phẳng đi qua điểm $A(2; 1; -4)$ nhận $\\vec{n} = (3; 2; -1)$ làm một vectơ pháp tuyến có phương trình là:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$3(x - 2) + 2(y - 1) - (z + 4) = 0$."
+        },
+        {
+          "id": "B",
+          "content": "$2(x + 3) + (y + 2) - 4(z - 1) = 0$."
+        },
+        {
+          "id": "C",
+          "content": "$3(x + 2) + 2(y + 1) - (z - 4) = 0$."
+        },
+        {
+          "id": "D",
+          "content": "$2(x - 3) + (y - 2) - 4(z + 1) = 0$."
+        }
+      ],
+      "correctAnswer": "A",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Mặt phẳng qua $A(x_0,y_0,z_0)$, pháp tuyến $\\vec n=(a,b,c)$: $a(x-x_0)+b(y-y_0)+c(z-z_0)=0$. Suy ra $3(x-2)+2(y-1)-(z+4)=0$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-10",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 10.</b> Nghiệm của phương trình $\\log_3(2x - 1) = 2$ là:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$x = \\frac{7}{2}$."
+        },
+        {
+          "id": "B",
+          "content": "$x = \\frac{5}{2}$."
+        },
+        {
+          "id": "C",
+          "content": "$x = 5$."
+        },
+        {
+          "id": "D",
+          "content": "$x = 4$."
+        }
+      ],
+      "correctAnswer": "C",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Điều kiện $2x-1>0\\Rightarrow x>\\frac12$. Giải $\\log_3(2x-1)=2\\Rightarrow 2x-1=9\\Rightarrow x=5$ (thỏa điều kiện).</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-11",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 11.</b> Cho hàm số $y = \\frac{ax + b}{cx + d}$ ($ac \\neq 0, ad - bc \\neq 0$) có đồ thị như hình dưới. Đường tiệm cận đứng của đồ thị hàm số đã cho có phương trình là:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "$y = 2$."
+        },
+        {
+          "id": "B",
+          "content": "$x = -1$."
+        },
+        {
+          "id": "C",
+          "content": "$y = -1$."
+        },
+        {
+          "id": "D",
+          "content": "$x = 2$."
+        }
+      ],
+      "correctAnswer": "B",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Dựa vào đồ thị, tiệm cận đứng là đường thẳng $x=-1$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "https://lh3.googleusercontent.com/d/1wmRzMQs7QfRP2zLwdZn-BKtSowxulcuh",
+        "caption": null,
+        "position": "bottom"
+      }
+    },
+    {
+      "id": "q-math-12",
+      "type": "multiple_choice",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 12.</b> Cho hình chóp $S.ABC$ có $SA$ vuông góc với mặt phẳng $(ABC)$, tam giác $ABC$ vuông tại $A$ và $SA = 3, AB = 4, AC = 5$. Thể tích của khối chóp $S.ABC$ bằng:</p>",
+      "options": [
+        {
+          "id": "A",
+          "content": "30."
+        },
+        {
+          "id": "B",
+          "content": "20."
+        },
+        {
+          "id": "C",
+          "content": "60."
+        },
+        {
+          "id": "D",
+          "content": "10."
+        }
+      ],
+      "correctAnswer": "D",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Tam giác $ABC$ vuông tại $A$ nên $S_{ABC}=\\frac12 AB\\cdot AC=\\frac12\\cdot4\\cdot5=10$. Thể tích $V=\\frac13 S_{ABC}\\cdot SA=\\frac13\\cdot10\\cdot3=10$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.25,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "",
+        "caption": null,
+        "position": "bottom"
+      }
+    },
+    {
+      "id": "q-math-13",
+      "type": "true_false",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 1.</b> Cho hàm số $f(x) = x^3 - 12x - 8$.</p>",
+      "options": [
+        {
+          "id": "a",
+          "content": "Hàm số đã cho có đạo hàm là $f'(x) = 3x^2 - 12$."
+        },
+        {
+          "id": "b",
+          "content": "Phương trình $f'(x) = 0$ có tập nghiệm là $S = \\{2\\}$."
+        },
+        {
+          "id": "c",
+          "content": "$f(2) = 24$."
+        },
+        {
+          "id": "d",
+          "content": "Giá trị lớn nhất của hàm số $f(x)$ trên đoạn $[-3; 3]$ bằng 24."
+        }
+      ],
+      "correctAnswer": {
+        "a": "true",
+        "b": "false",
+        "c": "false",
+        "d": "false"
+      },
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\"><b>a)</b> $f(x)=x^3-12x-8 \\Rightarrow f'(x)=3x^2-12$. Mệnh đề đúng.</p><p class=\"mb-3 text-justify\"><b>b)</b> $f'(x)=0 \\Leftrightarrow 3x^2-12=0 \\Leftrightarrow x^2=4 \\Leftrightarrow x=\\pm 2$. Tập nghiệm là $\\{-2,2\\}$ nên mệnh đề sai.</p><p class=\"mb-3 text-justify\"><b>c)</b> $f(2)=2^3-12\\cdot 2-8=8-24-8=-24$ nên mệnh đề sai.</p><p class=\"mb-3 text-justify\"><b>d)</b> Tính các giá trị: $f(-3)=1$, $f(-2)=8$, $f(2)=-24$, $f(3)=-17$. Giá trị lớn nhất trên $[-3,3]$ là $8$ tại $x=-2$, không phải $24$ nên mệnh đề sai.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 1,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-14",
+      "type": "true_false",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 2.</b> Đối với ngành nuôi trồng thủy sản, việc kiểm soát lượng thuốc tồn dư trong nước là một nhiệm vụ quan trọng. Khi nghiên cứu một loại thuốc trị bệnh, nồng độ thuốc tồn dư $y(t)$ (đơn vị: mg/lít) thỏa mãn $y(t) > 0$ và $y'(t) = k\\,y(t)$ ($t \\ge 0$), trong đó $k$ là hằng số khác không. Đo nồng độ thuốc tồn dư tại các thời điểm $t = 6$ (ngày); $t = 12$ (ngày) nhận được kết quả lần lượt là 2 mg/lít; 1 mg/lít. Cho biết $y(t) = e^{g(t)}$ ($t \\ge 0$).</p>",
+      "options": [
+        {
+          "id": "a",
+          "content": "$g(t) = kt + C$ ($t \\ge 0$) với $C$ là một hằng số xác định."
+        },
+        {
+          "id": "b",
+          "content": "$k = -\\frac{\\ln 2}{6}$."
+        },
+        {
+          "id": "c",
+          "content": "$C = 2\\ln 2$."
+        },
+        {
+          "id": "d",
+          "content": "Nồng độ thuốc tồn dư trong nước tại thời điểm $t = 25$ (ngày) kể từ lúc sử dụng thuốc lớn hơn 0,25 mg/lít."
+        }
+      ],
+      "correctAnswer": {
+        "a": "true",
+        "b": "true",
+        "c": "true",
+        "d": "false"
+      },
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\"><b>a)</b> Từ $y'(t)=k\\,y(t)$, ta có $\\frac{y'(t)}{y(t)}=k$. Lấy nguyên hàm hai vế ta được $\\ln y(t)=kt+C$. Vì $y(t)=e^{g(t)}$, suy ra $g(t)=\\ln y(t)=kt+C$. Mệnh đề đúng.</p><p class=\"mb-3 text-justify\"><b>b), c)</b> Ta có:</p><ul class=\"list-disc pl-6 space-y-1\"><li class=\"text-justify\">Khi $t=6$, $y(6)=2 \\Rightarrow g(6)=\\ln 2 \\Rightarrow 6k+C=\\ln 2$.</li><li class=\"text-justify\">Khi $t=12$, $y(12)=1 \\Rightarrow g(12)=\\ln 1=0 \\Rightarrow 12k+C=0$.</li><li class=\"text-justify\">Giải hệ phương trình, ta được $k=-\\frac{\\ln 2}{6}$ và $C=2\\ln 2$. Mệnh đề (b) và (c) đều đúng.</li></ul><p class=\"mb-3 text-justify\"><b>d)</b> Ta có $g(t)=\\left(-\\frac{\\ln 2}{6}\\right)t+2\\ln 2$.</p><ul class=\"list-disc pl-6 space-y-1\"><li class=\"text-justify\">Khi $t=25$, $g(25)=-\\frac{25\\ln 2}{6}+2\\ln 2$.</li><li class=\"text-justify\">Nồng độ thuốc là $y(25)=e^{g(25)}\\approx 0{,}222725$ (mg/lít).</li><li class=\"text-justify\">Vì $0{,}222725<0{,}25$ nên mệnh đề sai.</li></ul></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 1,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-15",
+      "type": "true_false",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 3.</b> Mô hình toán học sau đây được sử dụng trong quan sát chuyển động của một vật. Trong không gian $Oxyz$, cho hai điểm $A$ và $B$, trong đó điểm $A$ có tọa độ là $(5; 5; 0)$. Một vật chuyển động thẳng với tốc độ phụ thuộc thời gian $t$ theo công thức $v(t) = \\beta t + 300$ (m/giây). Vật đi qua $A$ với tốc độ 300 m/giây và hướng tới $B$. Sau 2 giây kể từ thời điểm ban đầu, vật đi được quãng đường 604 m. Gọi $\\vec{u} = (a; b; c)$ là vectơ cùng hướng với vectơ $\\overrightarrow{AB}$. Biết $|\\vec{u}| = 1$ và góc giữa vectơ $\\vec{u}$ lần lượt với các vectơ $\\vec{i}, \\vec{j}, \\vec{k}$ có số đo tương ứng bằng $60^\\circ, 60^\\circ, 45^\\circ$.</p>",
+      "options": [
+        {
+          "id": "a",
+          "content": "$a = \\cos 60^\\circ$."
+        },
+        {
+          "id": "b",
+          "content": "Phương trình đường thẳng $AB$ là $\\frac{x-5}{1} = \\frac{y-5}{1} = \\frac{z}{2}$."
+        },
+        {
+          "id": "c",
+          "content": "$\\beta = 2$."
+        },
+        {
+          "id": "d",
+          "content": "Giả sử sau 5 giây kể từ thời điểm ban đầu, vật đến điểm $B(x_B; y_B; z_B)$. Khi đó $x_B > 768$."
+        }
+      ],
+      "correctAnswer": {
+        "a": "true",
+        "b": "false",
+        "c": "true",
+        "d": "false"
+      },
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\"><b>a)</b> Vì $|\\vec u|=1$ và góc giữa $\\vec u$ với $\\vec i$ bằng $60^\\circ$ nên $a=\\cos 60^\\circ$. Mệnh đề đúng.</p><p class=\"mb-3 text-justify\"><b>b)</b> Ta có $b=\\cos 60^\\circ=\\frac12$, $c=\\cos 45^\\circ=\\frac{\\sqrt2}{2}$ nên $\\vec u=\\left(\\frac12,\\frac12,\\frac{\\sqrt2}{2}\\right)$. Vectơ chỉ phương của $AB$ có thể lấy $2\\vec u=(1,1,\\sqrt2)$, do đó phương trình đúng phải là $\\frac{x-5}{1}=\\frac{y-5}{1}=\\frac{z}{\\sqrt2}$. Mệnh đề đã cho sai.</p><p class=\"mb-3 text-justify\"><b>c)</b> Quãng đường sau 2 giây: $S=\\int_0^2(\\beta t+300)\\,dt=\\left[\\frac{\\beta t^2}{2}+300t\\right]_0^2=2\\beta+600$. Theo đề $2\\beta+600=604\\Rightarrow \\beta=2$. Mệnh đề đúng.</p><p class=\"mb-3 text-justify\"><b>d)</b> Sau 5 giây: $AB=\\int_0^5(2t+300)\\,dt=\\left[t^2+300t\\right]_0^5=1525$. Khi đó $x_B=5+1525\\cdot\\frac12=767{,}5<768$ nên mệnh đề sai.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 1,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-16",
+      "type": "true_false",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 4.</b> Một phần mềm nhận dạng tin nhắn quảng cáo có 15% số tin nhắn bị đánh dấu. Trong số các tin nhắn bị đánh dấu, có 10% số tin nhắn không phải là quảng cáo. Trong số các tin nhắn không bị đánh dấu, có 5% số tin nhắn là quảng cáo. Chọn ngẫu nhiên một tin nhắn:</p>",
+      "options": [
+        {
+          "id": "a",
+          "content": "Xác suất để tin nhắn đó không bị đánh dấu bằng 0,85."
+        },
+        {
+          "id": "b",
+          "content": "Xác suất để tin nhắn đó không phải là quảng cáo, biết rằng nó không bị đánh dấu, bằng 0,95."
+        },
+        {
+          "id": "c",
+          "content": "Xác suất để tin nhắn đó là quảng cáo bằng 0,85."
+        },
+        {
+          "id": "d",
+          "content": "Xác suất để tin nhắn đó không bị đánh dấu, biết rằng nó không phải là quảng cáo, lớn hơn 0,95."
+        }
+      ],
+      "correctAnswer": {
+        "a": "true",
+        "b": "true",
+        "c": "false",
+        "d": "true"
+      },
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Gọi $A$: “tin nhắn bị đánh dấu”, $B$: “tin nhắn là quảng cáo”. Ta có $P(A)=0{,}15$, $P(\\overline{B}|A)=0{,}10$, $P(B|\\overline{A})=0{,}05$.</p><p class=\"mb-3 text-justify\"><b>a)</b> $P(\\overline{A})=1-P(A)=0{,}85$. Mệnh đề đúng.</p><p class=\"mb-3 text-justify\"><b>b)</b> $P(\\overline{B}|\\overline{A})=1-P(B|\\overline{A})=1-0{,}05=0{,}95$. Mệnh đề đúng.</p><p class=\"mb-3 text-justify\"><b>c)</b> $P(\\overline{B})=P(\\overline{B}|A)P(A)+P(\\overline{B}|\\overline{A})P(\\overline{A})=0{,}10\\cdot0{,}15+0{,}95\\cdot0{,}85=0{,}8225\\neq 0{,}85$. Mệnh đề sai.</p><p class=\"mb-3 text-justify\"><b>d)</b> $P(\\overline{A}|\\overline{B})=\\dfrac{P(\\overline{A}\\cap\\overline{B})}{P(\\overline{B})}=\\dfrac{P(\\overline{B}|\\overline{A})P(\\overline{A})}{P(\\overline{B})}=\\dfrac{0{,}95\\cdot0{,}85}{0{,}8225}\\approx 0{,}98>0{,}95$. Mệnh đề đúng.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 1,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-17",
+      "type": "short_answer",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 1.</b> Bạn Nam tham gia cuộc thi giải một mật thư. Theo quy tắc của cuộc thi, người chơi cần chọn ra sáu số từ tập $S = \\{11; 12; 13; 14; 15; 16; 17; 18; 19\\}$ và xếp mỗi số vào đúng một vị trí trong sáu vị trí $A, B, C, M, N, P$ như hình bên sao cho mỗi vị trí chỉ được xếp một số. Mật thư sẽ được giải nếu các bộ ba số xuất hiện ở những bộ ba vị trí $(A, M, B); (B, N, C); (C, P, A)$ tạo thành các cấp số cộng theo thứ tự đó. Bạn Nam chọn ngẫu nhiên sáu số trong tập $S$ và xếp ngẫu nhiên vào các vị trí được yêu cầu. Gọi xác suất để bạn Nam giải được mật thư ở lần chọn và xếp đó là $a$. Giá trị của $\\frac{1}{a}$ bằng bao nhiêu?</p>",
+      "options": [],
+      "correctAnswer": "1260",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Không gian mẫu có $A_9^6=60480$ cách chọn và xếp. Theo lời giải tài liệu, có 48 trường hợp thuận lợi nên $a=\\frac{48}{60480}=\\frac{1}{1260}$. Do đó $\\frac{1}{a}=1260$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.5,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "https://lh3.googleusercontent.com/d/1K30sd0UjKBK9W8vP_Ij8bG4R1ssJxIy0",
+        "caption": null,
+        "position": "bottom"
+      }
+    },
+    {
+      "id": "q-math-18",
+      "type": "short_answer",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 2.</b> Nếu một doanh nghiệp sản xuất $x$ sản phẩm trong một tháng ($x \\in \\mathbb{N}^*; 1 \\le x \\le 4500$) thì doanh thu nhận được là $F(x) = -0{,}01x^2 + 300x$ (nghìn đồng), chi phí sản xuất bình quân là $G(x) = \\frac{30000}{x} + 200$ (nghìn đồng). Để lợi nhuận thu được lớn hơn 100 triệu đồng thì doanh nghiệp cần sản xuất ít nhất bao nhiêu sản phẩm?</p>",
+      "options": [],
+      "correctAnswer": "1536",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Lợi nhuận $P(x)=F(x)-xG(x)=(-0{,}01x^2+300x)-(30000+200x)=-0{,}01x^2+100x-30000$. Điều kiện $P(x)>100000$ (nghìn) $\\Rightarrow -0{,}01x^2+100x-130000>0$. Giải ra $1535{,}9<x<8464{,}1$. Kết hợp $x\\in\\mathbb{N}^*, x\\le4500$ suy ra $x_{\\min}=1536$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.5,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-19",
+      "type": "short_answer",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 3.</b> Để gây quỹ từ thiện, câu lạc bộ tổ chức bán hai mặt hàng là nước chanh và khoai chiên. Thực đơn 1 giá 30 nghìn đồng (2 cốc nước chanh + 1 túi khoai). Thực đơn 2 giá 50 nghìn đồng (3 cốc nước chanh + 2 túi khoai). Biết rằng câu lạc bộ chỉ làm được không quá 165 cốc nước chanh và 100 túi khoai chiên. Số tiền lớn nhất mà câu lạc bộ có thể nhận được sau khi bán hết hàng bằng bao nhiêu nghìn đồng?</p>",
+      "options": [],
+      "correctAnswer": "2650",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Đặt $x,y$ là số thực đơn 1 và 2. Tối đa hóa $F=30x+50y$ với ràng buộc $2x+3y\\le165$, $x+2y\\le100$, $x,y\\ge0$. Các đỉnh: $O(0,0)$, $A(82{,}5,0)$, $B(30,35)$, $C(0,50)$. Giá trị $F$: $0$, $2475$, $2650$, $2500$ nên lớn nhất là $2650$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.5,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-20",
+      "type": "short_answer",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 4.</b> Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thoi với $\\widehat{ABC} = 60^\\circ$ và $AB = 2$. Hình chiếu vuông góc của $S$ trên $(ABCD)$ là trọng tâm $H$ của tam giác $ABC$ và $SH = \\sqrt{3}$. Khoảng cách giữa hai đường thẳng $AC$ và $SD$ bằng bao nhiêu (làm tròn kết quả đến hàng phần trăm)?</p>",
+      "options": [],
+      "correctAnswer": "1.04",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Theo tính toán hình học không gian trong lời giải tài liệu: $d(AC,SD)=\\frac{3\\sqrt3}{5}\\approx1{,}04$ (làm tròn đến hàng phần trăm).</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.5,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "",
+        "caption": null,
+        "position": "bottom"
+      }
+    },
+    {
+      "id": "q-math-21",
+      "type": "short_answer",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 5.</b> Có bốn ngăn sách được đánh số $1, 2, 3, 4$ và tám quyển sách khác nhau. Bạn An xếp hết tám quyển sách này vào bốn ngăn đó sao cho mỗi ngăn có ít nhất một quyển sách và cách xếp được gọi là giống nhau nếu số lượng quyển sách ở mỗi ngăn là như nhau và thứ tự từ trái sang phải của các quyển sách là như nhau. Gọi $T$ là số cách xếp đôi một khác nhau của bạn An. Giá trị của $\\frac{T}{100}$ bằng bao nhiêu?</p>",
+      "options": [],
+      "correctAnswer": "1008",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Theo lời giải bạn cung cấp: Xếp $7$ quyển sách thành hàng có $7!$ cách. Giữa 7 quyển có 6 khoảng trống, đặt 3 vách ngăn để chia thành 4 ngăn có $\\binom{6}{3}$ cách. Suy ra $T=7!\\binom{6}{3}=5040\\cdot20=100800$, nên $\\frac{T}{100}=1008$.</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.5,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "q-math-22",
+      "type": "short_answer",
+      "content": "<p class=\"mb-3 text-justify\"><b>Câu 6.</b> Để đặt một vật trang trí trên mặt bàn, người ta thiết kế một chân đế như hình vẽ. Lấy một khối gỗ có dạng khối chóp cụt tứ giác đều với độ dài cạnh đáy lần lượt bằng 7,4 cm và 10,4 cm, bề dày khối gỗ bằng 1,5 cm. Sau đó khoét bỏ đi một phần của khối gỗ sao cho phần đó có dạng vật thể $H$, ở đó $H$ nhận được bằng cách cắt khối cầu bán kính 5,8 cm bởi một mặt phẳng cắt mà mặt cắt là hình tròn bán kính 3,5 cm. Thể tích của khối chân đế bằng bao nhiêu xăng-ti-mét khối (làm tròn đến hàng phần mười)?</p>",
+      "options": [],
+      "correctAnswer": "96.5",
+      "explanation": "<div class=\"space-y-2\"><p class=\"mb-3 text-justify\">Thể tích khối gỗ (chóp cụt tứ giác đều) $V_{\\text{gỗ}}\\approx119{,}94$ cm$^3$. Thể tích phần khoét là chỏm cầu tính bằng tích phân: $V_{\\text{khoét}}=\\pi\\int_{\\sqrt{21{,}39}}^{5{,}8}(5{,}8^2-x^2)\\,dx$. Suy ra thể tích chân đế $V\\approx96{,}5$ cm$^3$ (làm tròn đến hàng phần mười).</p></div>",
+      "difficulty": "medium",
+      "subject": "Toán Học",
+      "points": 0.5,
+      "tags": [],
+      "isPublic": true,
+      "createdBy": "admin-01",
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z",
+      "image": {
+        "url": "https://lh3.googleusercontent.com/d/1clzMdy2WQ7C-EWRH4P3kP5F0gLooSghj",
+        "caption": null,
+        "position": "bottom"
+      }
     }
   ],
   "exam_questions": [
+    {
+      "id": "eq-math-01",
+      "examId": "exam-001",
+      "questionId": "q-math-01",
+      "order": 1,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-02",
+      "examId": "exam-001",
+      "questionId": "q-math-02",
+      "order": 2,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-03",
+      "examId": "exam-001",
+      "questionId": "q-math-03",
+      "order": 3,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-04",
+      "examId": "exam-001",
+      "questionId": "q-math-04",
+      "order": 4,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-05",
+      "examId": "exam-001",
+      "questionId": "q-math-05",
+      "order": 5,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-06",
+      "examId": "exam-001",
+      "questionId": "q-math-06",
+      "order": 6,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-07",
+      "examId": "exam-001",
+      "questionId": "q-math-07",
+      "order": 7,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-08",
+      "examId": "exam-001",
+      "questionId": "q-math-08",
+      "order": 8,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-09",
+      "examId": "exam-001",
+      "questionId": "q-math-09",
+      "order": 9,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-10",
+      "examId": "exam-001",
+      "questionId": "q-math-10",
+      "order": 10,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-11",
+      "examId": "exam-001",
+      "questionId": "q-math-11",
+      "order": 11,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-12",
+      "examId": "exam-001",
+      "questionId": "q-math-12",
+      "order": 12,
+      "section": "Phần I",
+      "maxScore": 0.25,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-13",
+      "examId": "exam-001",
+      "questionId": "q-math-13",
+      "order": 13,
+      "section": "Phần II",
+      "maxScore": 1,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-14",
+      "examId": "exam-001",
+      "questionId": "q-math-14",
+      "order": 14,
+      "section": "Phần II",
+      "maxScore": 1,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-15",
+      "examId": "exam-001",
+      "questionId": "q-math-15",
+      "order": 15,
+      "section": "Phần II",
+      "maxScore": 1,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-16",
+      "examId": "exam-001",
+      "questionId": "q-math-16",
+      "order": 16,
+      "section": "Phần II",
+      "maxScore": 1,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-17",
+      "examId": "exam-001",
+      "questionId": "q-math-17",
+      "order": 17,
+      "section": "Phần III",
+      "maxScore": 0.5,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-18",
+      "examId": "exam-001",
+      "questionId": "q-math-18",
+      "order": 18,
+      "section": "Phần III",
+      "maxScore": 0.5,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-19",
+      "examId": "exam-001",
+      "questionId": "q-math-19",
+      "order": 19,
+      "section": "Phần III",
+      "maxScore": 0.5,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-20",
+      "examId": "exam-001",
+      "questionId": "q-math-20",
+      "order": 20,
+      "section": "Phần III",
+      "maxScore": 0.5,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-21",
+      "examId": "exam-001",
+      "questionId": "q-math-21",
+      "order": 21,
+      "section": "Phần III",
+      "maxScore": 0.5,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
+    {
+      "id": "eq-math-22",
+      "examId": "exam-001",
+      "questionId": "q-math-22",
+      "order": 22,
+      "section": "Phần III",
+      "maxScore": 0.5,
+      "createdAt": "2025-12-16T08:00:00Z",
+      "updatedAt": "2025-12-16T08:00:00Z"
+    },
     {
       "id": "eq-eng-01",
       "examId": "exam-003",
@@ -1891,194 +3014,223 @@
       "section": "Cloze Test",
       "createdAt": "2025-12-14T08:00:00Z",
       "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-01",
+      "examId": "exam-002",
+      "questionId": "q-van-01",
+      "order": 1,
+      "maxScore": 0.5,
+      "section": "Đọc hiểu",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-02",
+      "examId": "exam-002",
+      "questionId": "q-van-02",
+      "order": 2,
+      "maxScore": 0.5,
+      "section": "Đọc hiểu",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-03",
+      "examId": "exam-002",
+      "questionId": "q-van-03",
+      "order": 3,
+      "maxScore": 0.5,
+      "section": "Đọc hiểu",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-04",
+      "examId": "exam-002",
+      "questionId": "q-van-04",
+      "order": 4,
+      "maxScore": 0.5,
+      "section": "Đọc hiểu",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-05",
+      "examId": "exam-002",
+      "questionId": "q-van-05",
+      "order": 5,
+      "maxScore": 1,
+      "section": "Đọc hiểu",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-06",
+      "examId": "exam-002",
+      "questionId": "q-van-06",
+      "order": 6,
+      "maxScore": 2,
+      "section": "Viết",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
+    },
+    {
+      "id": "eq-van-07",
+      "examId": "exam-002",
+      "questionId": "q-van-07",
+      "order": 7,
+      "maxScore": 5,
+      "section": "Viết",
+      "createdAt": "2025-12-14T08:00:00Z",
+      "updatedAt": "2025-12-14T08:00:00Z"
     }
   ],
   "submissions": [
     {
-      "id": "3f3e",
-      "examId": "exam-003",
+      "id": "6abc",
+      "examId": "exam-002",
       "studentId": "student-01",
+      "contestId": null,
       "status": "graded",
-      "startedAt": "2025-12-15T10:39:38.127Z",
-      "submittedAt": "2025-12-15T11:39:38.127Z",
-      "totalScore": 2,
+      "startedAt": "2025-12-16T12:38:12.391Z",
+      "submittedAt": "2025-12-16T13:38:12.391Z",
+      "totalScore": 0,
       "maxScore": 10,
       "attemptNumber": 1,
-      "answers": [
-        {
-          "questionId": "q-01",
-          "answer": [
-            "D"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:49.318Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-02",
-          "answer": [
-            "D"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:50.932Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-03",
-          "answer": [
-            "D"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:52.165Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-04",
-          "answer": [
-            "A"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:53.429Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-05",
-          "answer": [
-            "C"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:54.829Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-06",
-          "answer": [
-            "D"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:56.693Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-07",
-          "answer": [
-            "C"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:57.893Z",
-          "score": 0,
-          "feedback": "Sai. Đáp án đúng là: B"
-        },
-        {
-          "questionId": "q-08",
-          "answer": [
-            "B"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:38:59.157Z",
-          "score": 0,
-          "feedback": "Sai. Đáp án đúng là: C"
-        },
-        {
-          "questionId": "q-09",
-          "answer": [
-            "C"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:39:01.206Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-10",
-          "answer": [
-            "B"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:39:14.038Z",
-          "score": 0,
-          "feedback": "Sai. Đáp án đúng là: A"
-        },
-        {
-          "questionId": "q-11",
-          "answer": [
-            "A"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:39:15.302Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-12",
-          "answer": [
-            "C"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:39:16.622Z",
-          "score": 0,
-          "feedback": "Sai. Đáp án đúng là: A"
-        }
-      ]
+      "answers": []
     },
     {
-      "id": "32fa",
-      "examId": "exam-003",
+      "id": "1b8c",
+      "examId": "exam-001",
       "studentId": "student-01",
+      "contestId": null,
       "status": "graded",
-      "startedAt": "2025-12-15T10:45:41.349Z",
-      "submittedAt": "2025-12-15T11:45:41.349Z",
-      "totalScore": 0.5,
+      "startedAt": "2025-12-16T12:38:38.285Z",
+      "submittedAt": "2025-12-16T13:38:38.285Z",
+      "totalScore": 0,
       "maxScore": 10,
       "attemptNumber": 1,
-      "answers": [
-        {
-          "questionId": "q-01",
-          "answer": [
-            "D"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:45:26.403Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-02",
-          "answer": [
-            "D"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:45:31.378Z",
-          "score": 0.25,
-          "feedback": "Chính xác!"
-        },
-        {
-          "questionId": "q-03",
-          "answer": [
-            "A"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:45:32.602Z",
-          "score": 0,
-          "feedback": "Sai. Đáp án đúng là: D"
-        },
-        {
-          "questionId": "q-04",
-          "answer": [
-            "B"
-          ],
-          "isAnswered": true,
-          "lastModified": "2025-12-15T11:45:33.946Z",
-          "score": 0,
-          "feedback": "Sai. Đáp án đúng là: A"
-        }
-      ]
+      "answers": []
+    },
+    {
+      "id": "c221",
+      "examId": "exam-003",
+      "studentId": "student-01",
+      "contestId": null,
+      "status": "graded",
+      "startedAt": "2025-12-16T12:38:45.111Z",
+      "submittedAt": "2025-12-16T13:38:45.111Z",
+      "totalScore": 0,
+      "maxScore": 10,
+      "attemptNumber": 1,
+      "answers": []
+    }
+  ],
+  "contests": [
+    {
+      "id": "contest-olympic-2025",
+      "name": "Olympic THPT Quốc Gia 2025",
+      "description": "Kỳ thi thử toàn diện với 3 môn: Toán, Tiếng Anh, Ngữ Văn.",
+      "startTime": "2025-11-28T08:00:00Z",
+      "endTime": "2025-12-05T23:59:00Z",
+      "ownerId": "admin-01",
+      "isPublic": true,
+      "status": "ongoing",
+      "participantsCount": 6,
+      "createdAt": "2025-11-20T00:00:00Z",
+      "updatedAt": "2025-11-20T00:00:00Z"
+    }
+  ],
+  "contest_exams": [
+    {
+      "id": "ce-01",
+      "contestId": "contest-olympic-2025",
+      "examId": "exam-001",
+      "order": 2,
+      "weight": 1
+    },
+    {
+      "id": "ce-02",
+      "contestId": "contest-olympic-2025",
+      "examId": "exam-003",
+      "order": 3,
+      "weight": 1
+    },
+    {
+      "id": "ce-03",
+      "contestId": "contest-olympic-2025",
+      "examId": "exam-002",
+      "order": 1,
+      "weight": 1
+    }
+  ],
+  "contest_participations": [
+    {
+      "id": "cp-student-02",
+      "contestId": "contest-olympic-2025",
+      "userId": "student-02",
+      "enrolledAt": "2025-11-30T08:00:00Z",
+      "completedExams": [
+        "exam-001",
+        "exam-003",
+        "exam-002"
+      ],
+      "totalScore": 28.5,
+      "rank": 1,
+      "percentile": 100
+    },
+    {
+      "id": "cp-student-03",
+      "contestId": "contest-olympic-2025",
+      "userId": "student-03",
+      "enrolledAt": "2025-12-01T09:00:00Z",
+      "completedExams": [
+        "exam-001",
+        "exam-003",
+        "exam-002"
+      ],
+      "totalScore": 28,
+      "rank": 2,
+      "percentile": 80
+    },
+    {
+      "id": "cp-student-04",
+      "contestId": "contest-olympic-2025",
+      "userId": "student-04",
+      "enrolledAt": "2025-12-02T10:30:00Z",
+      "completedExams": [
+        "exam-001",
+        "exam-003",
+        "exam-002"
+      ],
+      "totalScore": 25.5,
+      "rank": 3,
+      "percentile": 60
+    },
+    {
+      "id": "cp-student-05",
+      "contestId": "contest-olympic-2025",
+      "userId": "student-05",
+      "enrolledAt": "2025-12-03T14:20:00Z",
+      "completedExams": [
+        "exam-001",
+        "exam-003",
+        "exam-002"
+      ],
+      "totalScore": 22.5,
+      "rank": 5,
+      "percentile": 20
+    },
+    {
+      "id": "e30d",
+      "contestId": "contest-olympic-2025",
+      "userId": "student-01",
+      "enrolledAt": "2025-12-16T13:37:29.277Z",
+      "completedExams": [],
+      "totalScore": 0,
+      "rank": null,
+      "percentile": null
     }
   ]
 }
