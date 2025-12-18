@@ -15,5 +15,8 @@
     },
     "dependencies": {
         "canvas-confetti": "^1.9.4"
+        "json-server": "^1.0.0-beta.3"
+
     }
 }
+
