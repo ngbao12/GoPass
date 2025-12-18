@@ -54,8 +54,8 @@ class ClassController {
   // GET /classes/my-learning
   async getLearningClasses(req, res) {
     try {
-      const studentId = req.user.userId;
-      const classes = await ClassService.getLearningClasses(studentId);
+      const studentUserId = req.user.userId;
+      const classes = await ClassService.getLearningClasses(studentUserId);
       res.status(200).json({
         success: true,
         data: classes,

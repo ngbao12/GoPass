@@ -2,31 +2,10 @@
   "users": [
     {
       "id": "student-01",
-      "name": "Học sinh Demo",
-      "email": "student@example.com",
+      "name": "Phạm Thị Hưng",
+      "email": "hung.pham@example.com",
       "role": "student",
-      "avatar": "https://i.pravatar.cc/150?u=student-01"
-    },
-    {
-      "id": "student-02",
-      "name": "Nguyễn Văn An",
-      "email": "an.nguyen@example.com",
-      "role": "student",
-      "avatar": "https://i.pravatar.cc/150?u=student-02"
-    },
-    {
-      "id": "student-03",
-      "name": "Trần Thị Bình",
-      "email": "binh.tran@example.com",
-      "role": "student",
-      "avatar": "https://i.pravatar.cc/150?u=student-03"
-    },
-    {
-      "id": "student-04",
-      "name": "Lê Hoàng Cường",
-      "email": "cuong.le@example.com",
-      "role": "student",
-      "avatar": "https://i.pravatar.cc/150?u=student-04"
+      "avatar": "https://i.pravatar.cc/150?u=student-05"
     },
     {
       "id": "student-05",
@@ -36,378 +15,373 @@
       "avatar": "https://i.pravatar.cc/150?u=student-05"
     },
     {
-      "id": "admin-01",
+      "id": "u_student_01",
+      "name": "Nguyễn Văn An",
+      "email": "student@gopass.vn",
+      "passwordHash": "$2b$10$EixZaYVK1fsdf...",
+      "role": "student",
+      "status": "active",
+      "createdAt": "2024-01-01T08:00:00Z",
+      "updatedAt": "2024-06-15T08:00:00Z"
+    },
+    {
+      "id": "u_student_02",
+      "name": "Lê Thị Bình",
+      "email": "binh.le@student.gopass.vn",
+      "passwordHash": "$2b$10$...",
+      "role": "student",
+      "status": "active",
+      "createdAt": "2024-02-01T08:00:00Z",
+      "updatedAt": "2024-06-15T08:00:00Z"
+    },
+    {
+      "id": "u_student_03",
+      "name": "Trần Văn Cường",
+      "email": "cuong.tran@student.gopass.vn",
+      "passwordHash": "$2b$10$...",
+      "role": "student",
+      "status": "active",
+      "createdAt": "2024-02-10T08:00:00Z",
+      "updatedAt": "2024-06-15T08:00:00Z"
+    },
+    {
+      "id": "u_student_04",
+      "name": "Phạm Minh Đức",
+      "email": "duc.pham@student.gopass.vn",
+      "passwordHash": "$2b$10$...",
+      "role": "student",
+      "status": "active",
+      "createdAt": "2024-03-01T08:00:00Z",
+      "updatedAt": "2024-06-15T08:00:00Z"
+    },
+    {
+      "id": "u_student_05",
+      "name": "Hoàng Thị Lan",
+      "email": "lan.hoang@student.gopass.vn",
+      "passwordHash": "$2b$10$...",
+      "role": "student",
+      "status": "active",
+      "createdAt": "2024-03-05T08:00:00Z",
+      "updatedAt": "2024-06-15T08:00:00Z"
+    },
+    {
+      "id": "u_teacher_01",
+      "name": "Thầy Nguyễn Văn B",
+      "email": "teacher1@gopass.vn",
+      "passwordHash": "$2b$10$H8s9d7f...",
+      "role": "teacher",
+      "status": "active",
+      "createdAt": "2023-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "u_teacher_02",
+      "name": "Cô Phạm Thị Hằng",
+      "email": "teacher2@gopass.vn",
+      "passwordHash": "$2b$10$Lks8d2...",
+      "role": "teacher",
+      "status": "active",
+      "createdAt": "2023-02-15T00:00:00Z",
+      "updatedAt": "2024-02-20T00:00:00Z"
+    },
+    {
+      "id": "u_teacher_03",
+      "name": "Thầy Lê Văn Dũng",
+      "email": "teacher3@gopass.vn",
+      "passwordHash": "$2b$10$...",
+      "role": "teacher",
+      "status": "active",
+      "createdAt": "2023-05-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "u_admin_01",
       "name": "Admin System",
       "email": "admin@gopass.vn",
-      "role": "admin"
-    },
-    {
-      "user_id": "u_student_01",
-      "id": "u_student_01",
-      "full_name": "Nguyễn Văn An",
-      "email": "student@gopass.vn",
-      "password_hash": "$2b$10$EixZaYVK1fsdf...",
-      "role": "student",
-      "status": "active",
-      "created_at": "2024-01-01T08:00:00Z",
-      "updated_at": "2024-06-15T08:00:00Z"
-    },
-    {
-      "user_id": "u_student_02",
-      "id": "u_student_02",
-      "full_name": "Lê Thị Bình",
-      "email": "binh.le@student.gopass.vn",
-      "password_hash": "$2b$10$...",
-      "role": "student",
-      "status": "active",
-      "created_at": "2024-02-01T08:00:00Z",
-      "updated_at": "2024-06-15T08:00:00Z"
-    },
-    {
-      "user_id": "u_student_03",
-      "id": "u_student_03",
-      "full_name": "Trần Văn Cường",
-      "email": "cuong.tran@student.gopass.vn",
-      "password_hash": "$2b$10$...",
-      "role": "student",
-      "status": "active",
-      "created_at": "2024-02-10T08:00:00Z",
-      "updated_at": "2024-06-15T08:00:00Z"
-    },
-    {
-      "user_id": "u_student_04",
-      "id": "u_student_04",
-      "full_name": "Phạm Minh Đức",
-      "email": "duc.pham@student.gopass.vn",
-      "password_hash": "$2b$10$...",
-      "role": "student",
-      "status": "active",
-      "created_at": "2024-03-01T08:00:00Z",
-      "updated_at": "2024-06-15T08:00:00Z"
-    },
-    {
-      "user_id": "u_student_05",
-      "id": "u_student_05",
-      "full_name": "Hoàng Thị Lan",
-      "email": "lan.hoang@student.gopass.vn",
-      "password_hash": "$2b$10$...",
-      "role": "student",
-      "status": "active",
-      "created_at": "2024-03-05T08:00:00Z",
-      "updated_at": "2024-06-15T08:00:00Z"
-    },
-    {
-      "user_id": "u_teacher_01",
-      "id": "u_teacher_01",
-      "full_name": "Thầy Nguyễn Văn B",
-      "email": "teacher1@gopass.vn",
-      "password_hash": "$2b$10$H8s9d7f...",
-      "role": "teacher",
-      "status": "active",
-      "created_at": "2023-01-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
-    },
-    {
-      "user_id": "u_teacher_02",
-      "id": "u_teacher_02",
-      "full_name": "Cô Phạm Thị Hằng",
-      "email": "teacher2@gopass.vn",
-      "password_hash": "$2b$10$Lks8d2...",
-      "role": "teacher",
-      "status": "active",
-      "created_at": "2023-02-15T00:00:00Z",
-      "updated_at": "2024-02-20T00:00:00Z"
-    },
-    {
-      "user_id": "u_teacher_03",
-      "id": "u_teacher_03",
-      "full_name": "Thầy Lê Văn Dũng",
-      "email": "teacher3@gopass.vn",
-      "password_hash": "$2b$10$...",
-      "role": "teacher",
-      "status": "active",
-      "created_at": "2023-05-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
-    },
-    {
-      "user_id": "u_admin_01",
-      "id": "u_admin_01",
-      "full_name": "Admin System",
-      "email": "admin@gopass.vn",
-      "password_hash": "$2b$10$Admn123...",
+      "passwordHash": "$2b$10$Admn123...",
       "role": "admin",
       "status": "active",
-      "created_at": "2022-12-01T00:00:00Z",
-      "updated_at": "2024-01-01T00:00:00Z"
+      "createdAt": "2022-12-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": "admin-01",
+      "name": "Admin System2",
+      "email": "admin2@gopass.vn",
+      "passwordHash": "$2b$10$Admn123...",
+      "role": "admin",
+      "status": "active",
+      "createdAt": "2022-12-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
     }
   ],
   "classes": [
     {
       "id": "c_math_01",
-      "teacher_user_id": "u_teacher_01",
-      "class_name": "Lớp 12A1 - Toán Nâng Cao",
+      "teacherUserId": "u_teacher_01",
+      "className": "Lớp 12A1 - Toán Nâng Cao",
       "description": "Lớp chuyên Toán ôn thi THPTQG mục tiêu 9+.",
-      "class_code": "CLASS001",
-      "created_at": "2025-08-01T08:00:00Z"
+      "classCode": "CLASS001",
+      "createdAt": "2025-08-01T08:00:00Z"
     },
     {
       "id": "c_math_02",
-      "teacher_user_id": "u_teacher_01",
-      "class_name": "Toán 12 - Lấy Gốc Cơ Bản",
+      "teacherUserId": "u_teacher_01",
+      "className": "Toán 12 - Lấy Gốc Cơ Bản",
       "description": "Dành cho các bạn mất gốc, mục tiêu 7+.",
-      "class_code": "MATH_BASIC",
-      "created_at": "2025-08-05T08:00:00Z"
+      "classCode": "MATH_BASIC",
+      "createdAt": "2025-08-05T08:00:00Z"
     },
     {
       "id": "c_phys_02",
-      "teacher_user_id": "u_teacher_02",
-      "class_name": "Luyện thi Vật Lý - Cơ bản",
+      "teacherUserId": "u_teacher_02",
+      "className": "Luyện thi Vật Lý - Cơ bản",
       "description": "Ôn tập kiến thức nền tảng Vật Lý 12.",
-      "class_code": "PHYS_PRO_25",
-      "created_at": "2025-08-15T09:30:00Z"
+      "classCode": "PHYS_PRO_25",
+      "createdAt": "2025-08-15T09:30:00Z"
     },
     {
       "id": "c_chem",
-      "teacher_user_id": "u_teacher_02",
-      "class_name": "Hóa Học Chuyên Sâu",
+      "teacherUserId": "u_teacher_02",
+      "className": "Hóa Học Chuyên Sâu",
       "description": "Lớp Hóa dành cho HSG.",
-      "class_code": "CHEM_ADV",
-      "created_at": "2025-09-01T10:00:00Z"
+      "classCode": "CHEM_ADV",
+      "createdAt": "2025-09-01T10:00:00Z"
     },
     {
       "id": "c_lit",
-      "teacher_user_id": "u_teacher_01",
-      "class_name": "Ngữ Văn - Nghị Luận",
+      "teacherUserId": "u_teacher_01",
+      "className": "Ngữ Văn - Nghị Luận",
       "description": "Rèn kỹ năng viết văn.",
-      "class_code": "LIT_01",
-      "created_at": "2025-09-05T14:00:00Z"
+      "classCode": "LIT_01",
+      "createdAt": "2025-09-05T14:00:00Z"
     },
     {
       "id": "c_eng_01",
-      "teacher_user_id": "u_teacher_03",
-      "class_name": "Tiếng Anh IELTS 6.5+",
+      "teacherUserId": "u_teacher_03",
+      "className": "Tiếng Anh IELTS 6.5+",
       "description": "Luyện 4 kỹ năng Nghe - Nói - Đọc - Viết.",
-      "class_code": "ENG_IELTS",
-      "created_at": "2025-09-10T18:00:00Z"
+      "classCode": "ENG_IELTS",
+      "createdAt": "2025-09-10T18:00:00Z"
     },
     {
       "id": "c_bio_01",
-      "teacher_user_id": "u_teacher_02",
-      "class_name": "Sinh Học - Di Truyền",
+      "teacherUserId": "u_teacher_02",
+      "className": "Sinh Học - Di Truyền",
       "description": "Chuyên đề bài tập Di truyền học.",
-      "class_code": "BIO_GENE",
-      "created_at": "2025-09-12T14:00:00Z"
+      "classCode": "BIO_GENE",
+      "createdAt": "2025-09-12T14:00:00Z"
     },
     {
       "id": "c_hist_01",
-      "teacher_user_id": "u_teacher_03",
-      "class_name": "Lịch Sử 12 - Tổng Ôn",
+      "teacherUserId": "u_teacher_03",
+      "className": "Lịch Sử 12 - Tổng Ôn",
       "description": "Ôn tập kiến thức lịch sử Việt Nam hiện đại.",
-      "class_code": "HIST_12",
-      "created_at": "2025-09-20T08:00:00Z"
+      "classCode": "HIST_12",
+      "createdAt": "2025-09-20T08:00:00Z"
     },
     {
       "id": "c_geo_01",
-      "teacher_user_id": "u_teacher_03",
-      "class_name": "Địa Lý - Vùng Kinh Tế",
+      "teacherUserId": "u_teacher_03",
+      "className": "Địa Lý - Vùng Kinh Tế",
       "description": "Phân tích Atlat và các vùng kinh tế trọng điểm.",
-      "class_code": "GEO_12",
-      "created_at": "2025-09-21T09:00:00Z"
+      "classCode": "GEO_12",
+      "createdAt": "2025-09-21T09:00:00Z"
     },
     {
       "id": "c_it_01",
-      "teacher_user_id": "u_teacher_01",
-      "class_name": "Tin Học 11 - Python Cơ Bản",
+      "teacherUserId": "u_teacher_01",
+      "className": "Tin Học 11 - Python Cơ Bản",
       "description": "Lập trình Python cho người mới bắt đầu.",
-      "class_code": "IT_PYTHON",
-      "created_at": "2025-09-22T10:00:00Z"
+      "classCode": "IT_PYTHON",
+      "createdAt": "2025-09-22T10:00:00Z"
     }
   ],
   "classmembers": [
     {
       "id": "cm_01",
-      "class_id": "c_math_01",
-      "student_user_id": "u_student_01",
-      "joined_date": "2025-09-01T08:00:00Z",
-      "status": "approved"
+      "classId": "c_math_01",
+      "studentUserId": "u_student_01",
+      "joinedDate": "2025-09-01T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_02",
-      "class_id": "c_phys_02",
-      "student_user_id": "u_student_01",
-      "joined_date": "2025-09-05T09:00:00Z",
-      "status": "approved"
+      "classId": "c_phys_02",
+      "studentUserId": "u_student_01",
+      "joinedDate": "2025-09-05T09:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_03",
-      "class_id": "c_eng_01",
-      "student_user_id": "u_student_01",
-      "joined_date": "2025-09-15T08:00:00Z",
-      "status": "approved"
+      "classId": "c_eng_01",
+      "studentUserId": "u_student_01",
+      "joinedDate": "2025-09-15T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_04",
-      "class_id": "c_math_01",
-      "student_user_id": "u_student_02",
-      "joined_date": "2025-09-02T08:00:00Z",
-      "status": "approved"
+      "classId": "c_math_01",
+      "studentUserId": "u_student_02",
+      "joinedDate": "2025-09-02T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_05",
-      "class_id": "c_math_01",
-      "student_user_id": "u_student_03",
-      "joined_date": "2025-09-02T09:00:00Z",
-      "status": "approved"
+      "classId": "c_math_01",
+      "studentUserId": "u_student_03",
+      "joinedDate": "2025-09-02T09:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_06",
-      "class_id": "c_phys_02",
-      "student_user_id": "u_student_02",
-      "joined_date": "2025-09-06T09:00:00Z",
-      "status": "approved"
+      "classId": "c_phys_02",
+      "studentUserId": "u_student_02",
+      "joinedDate": "2025-09-06T09:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_07",
-      "class_id": "c_phys_02",
-      "student_user_id": "u_student_04",
-      "joined_date": "2025-09-06T10:00:00Z",
-      "status": "approved"
+      "classId": "c_phys_02",
+      "studentUserId": "u_student_04",
+      "joinedDate": "2025-09-06T10:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_08",
-      "class_id": "c_eng_01",
-      "student_user_id": "u_student_05",
-      "joined_date": "2025-09-16T18:00:00Z",
-      "status": "approved"
+      "classId": "c_eng_01",
+      "studentUserId": "u_student_05",
+      "joinedDate": "2025-09-16T18:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_09",
-      "class_id": "c_math_02",
-      "student_user_id": "u_student_04",
-      "joined_date": "2025-08-10T08:00:00Z",
-      "status": "approved"
+      "classId": "c_math_02",
+      "studentUserId": "u_student_04",
+      "joinedDate": "2025-08-10T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_10",
-      "class_id": "c_math_02",
-      "student_user_id": "u_student_05",
-      "joined_date": "2025-08-11T08:00:00Z",
-      "status": "approved"
+      "classId": "c_math_02",
+      "studentUserId": "u_student_05",
+      "joinedDate": "2025-08-11T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_11",
-      "class_id": "c_hist_01",
-      "student_user_id": "u_student_02",
-      "joined_date": "2025-09-21T08:00:00Z",
-      "status": "approved"
+      "classId": "c_hist_01",
+      "studentUserId": "u_student_02",
+      "joinedDate": "2025-09-21T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_12",
-      "class_id": "c_hist_01",
-      "student_user_id": "u_student_03",
-      "joined_date": "2025-09-22T08:00:00Z",
-      "status": "approved"
+      "classId": "c_hist_01",
+      "studentUserId": "u_student_03",
+      "joinedDate": "2025-09-22T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_13",
-      "class_id": "c_geo_01",
-      "student_user_id": "u_student_04",
-      "joined_date": "2025-09-22T09:00:00Z",
-      "status": "approved"
+      "classId": "c_geo_01",
+      "studentUserId": "u_student_04",
+      "joinedDate": "2025-09-22T09:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_14",
-      "class_id": "c_it_01",
-      "student_user_id": "u_student_05",
-      "joined_date": "2025-09-23T10:00:00Z",
-      "status": "approved"
+      "classId": "c_it_01",
+      "studentUserId": "u_student_05",
+      "joinedDate": "2025-09-23T10:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_15",
-      "class_id": "c_it_01",
-      "student_user_id": "u_student_02",
-      "joined_date": "2025-09-23T10:30:00Z",
-      "status": "approved"
+      "classId": "c_it_01",
+      "studentUserId": "u_student_02",
+      "joinedDate": "2025-09-23T10:30:00Z",
+      "status": "active"
     },
     {
       "id": "cm_new_01",
-      "class_id": "c_hist_01",
-      "student_user_id": "u_student_01",
-      "joined_date": "2025-09-25T08:00:00Z",
-      "status": "approved"
+      "classId": "c_hist_01",
+      "studentUserId": "u_student_01",
+      "joinedDate": "2025-09-25T08:00:00Z",
+      "status": "active"
     },
     {
       "id": "cm_new_02",
-      "class_id": "c_it_01",
-      "student_user_id": "u_student_01",
-      "joined_date": "2025-09-26T08:00:00Z",
-      "status": "approved"
+      "classId": "c_it_01",
+      "studentUserId": "u_student_01",
+      "joinedDate": "2025-09-26T08:00:00Z",
+      "status": "active"
     }
   ],
   "classjoinrequests": [
     {
       "id": "req_01",
-      "class_id": "c_chem",
-      "student_user_id": "u_student_01",
+      "classId": "c_chem",
+      "studentUserId": "u_student_01",
       "status": "pending",
-      "requested_at": "2025-12-14T10:00:00Z",
-      "processed_at": null
+      "requestedAt": "2025-12-14T10:00:00Z",
+      "processedAt": null
     },
     {
       "id": "req_02",
-      "class_id": "c_lit",
-      "student_user_id": "u_student_01",
+      "classId": "c_lit",
+      "studentUserId": "u_student_01",
       "status": "rejected",
-      "requested_at": "2025-11-20T08:00:00Z",
-      "processed_at": "2025-11-21T09:00:00Z"
+      "requestedAt": "2025-11-20T08:00:00Z",
+      "processedAt": "2025-11-21T09:00:00Z"
     },
     {
       "id": "req_03",
-      "class_id": "c_bio_01",
-      "student_user_id": "u_student_01",
+      "classId": "c_bio_01",
+      "studentUserId": "u_student_01",
       "status": "pending",
-      "requested_at": "2025-12-15T08:00:00Z",
-      "processed_at": null
+      "requestedAt": "2025-12-15T08:00:00Z",
+      "processedAt": null
     },
     {
       "id": "req_04",
-      "class_id": "c_math_02",
-      "student_user_id": "u_student_02",
+      "classId": "c_math_02",
+      "studentUserId": "u_student_02",
       "status": "pending",
-      "requested_at": "2025-12-14T09:00:00Z",
-      "processed_at": null
+      "requestedAt": "2025-12-14T09:00:00Z",
+      "processedAt": null
     },
     {
       "id": "req_05",
-      "class_id": "c_eng_01",
-      "student_user_id": "u_student_03",
+      "classId": "c_eng_01",
+      "studentUserId": "u_student_03",
       "status": "pending",
-      "requested_at": "2025-12-13T10:00:00Z",
-      "processed_at": null
+      "requestedAt": "2025-12-13T10:00:00Z",
+      "processedAt": null
     },
     {
       "id": "req_06",
-      "class_id": "c_math_01",
-      "student_user_id": "u_student_04",
+      "classId": "c_math_01",
+      "studentUserId": "u_student_04",
       "status": "pending",
-      "requested_at": "2025-12-15T07:30:00Z",
-      "processed_at": null
+      "requestedAt": "2025-12-15T07:30:00Z",
+      "processedAt": null
     },
     {
       "id": "req_07",
-      "class_id": "c_eng_01",
-      "student_user_id": "u_student_02",
+      "classId": "c_eng_01",
+      "studentUserId": "u_student_02",
       "status": "rejected",
-      "requested_at": "2025-11-15T10:00:00Z",
-      "processed_at": "2025-11-16T10:00:00Z"
+      "requestedAt": "2025-11-15T10:00:00Z",
+      "processedAt": "2025-11-16T10:00:00Z"
     },
     {
       "id": "37bb",
-      "class_id": "c_it_01",
-      "student_user_id": "u_student_01",
+      "classId": "c_it_01",
+      "studentUserId": "u_student_01",
       "status": "pending",
-      "requested_at": "2025-12-15T06:47:28.464Z",
-      "processed_at": null
+      "requestedAt": "2025-12-15T06:47:28.464Z",
+      "processedAt": null
     }
   ],
   "exams": [
@@ -417,7 +391,7 @@
       "description": "Đề thi chính thức. Thời gian: 90 phút.",
       "subject": "Toán Học",
       "durationMinutes": 90,
-      "mode": "test",
+      "mode": "contest",
       "showResultsImmediately": false,
       "totalQuestions": 22,
       "totalPoints": 10,
@@ -434,7 +408,7 @@
       "description": "Đề thi chính thức. Thời gian: 50 phút.",
       "subject": "Tiếng Anh",
       "durationMinutes": 50,
-      "mode": "test",
+      "mode": "practice_test",
       "showResultsImmediately": false,
       "totalQuestions": 40,
       "totalPoints": 10,
@@ -477,7 +451,7 @@
       "description": "Đề thi thử tốt nghiệp. Thời gian: 120 phút (không kể thời gian giao đề).",
       "subject": "Ngữ Văn",
       "durationMinutes": 120,
-      "mode": "test",
+      "mode": "practice_global",
       "shuffleQuestions": false,
       "showResultsImmediately": false,
       "isPublished": true,
@@ -498,68 +472,68 @@
   ],
   "examassignments": [
     {
-      "assignment_id": "assign_math_01_c01",
-      "exam_id": "ex_math_01",
-      "class_id": "c_math_01",
-      "start_time": "2025-10-01T08:00:00Z",
-      "end_time": "2025-10-01T09:00:00Z",
-      "attempt_limit": 1
+      "assignmentId": "assign_math_01_c01",
+      "examId": "ex_math_01",
+      "classId": "c_math_01",
+      "startTime": "2025-10-01T08:00:00Z",
+      "endTime": "2025-10-01T09:00:00Z",
+      "attemptLimit": 1
     },
     {
-      "assignment_id": "assign_phys_01_c02",
-      "exam_id": "ex_phys_01",
-      "class_id": "c_phys_02",
-      "start_time": "2025-10-15T09:00:00Z",
-      "end_time": "2025-10-15T10:30:00Z",
-      "attempt_limit": 2
+      "assignmentId": "assign_phys_01_c02",
+      "examId": "ex_phys_01",
+      "classId": "c_phys_02",
+      "startTime": "2025-10-15T09:00:00Z",
+      "endTime": "2025-10-15T10:30:00Z",
+      "attemptLimit": 2
     },
     {
-      "assignment_id": "assign_eng_01_c03",
-      "exam_id": "ex_eng_01",
-      "class_id": "c_eng_01",
-      "start_time": "2025-10-20T18:00:00Z",
-      "end_time": "2025-10-20T20:00:00Z",
-      "attempt_limit": 1
+      "assignmentId": "assign_eng_01_c03",
+      "examId": "ex_eng_01",
+      "classId": "c_eng_01",
+      "startTime": "2025-10-20T18:00:00Z",
+      "endTime": "2025-10-20T20:00:00Z",
+      "attemptLimit": 1
     },
     {
-      "assignment_id": "assign_it_01_c14",
-      "exam_id": "ex_it_01",
-      "class_id": "c_it_01",
-      "start_time": "2025-10-25T10:00:00Z",
-      "end_time": "2025-10-25T11:00:00Z",
-      "attempt_limit": 3
+      "assignmentId": "assign_it_01_c14",
+      "examId": "ex_it_01",
+      "classId": "c_it_01",
+      "startTime": "2025-10-25T10:00:00Z",
+      "endTime": "2025-10-25T11:00:00Z",
+      "attemptLimit": 3
     },
     {
-      "assignment_id": "assign_hist_ongoing",
-      "exam_id": "ex_hist_mid",
-      "class_id": "c_hist_01",
-      "start_time": "2025-12-14T00:00:00Z",
-      "end_time": "2025-12-16T23:59:00Z",
-      "attempt_limit": 1
+      "assignmentId": "assign_hist_ongoing",
+      "examId": "ex_hist_mid",
+      "classId": "c_hist_01",
+      "startTime": "2025-12-14T00:00:00Z",
+      "endTime": "2025-12-16T23:59:00Z",
+      "attemptLimit": 1
     },
     {
-      "assignment_id": "assign_math_upcoming",
-      "exam_id": "ex_math_mock_01",
-      "class_id": "c_math_01",
-      "start_time": "2025-12-20T08:00:00Z",
-      "end_time": "2025-12-20T11:00:00Z",
-      "attempt_limit": 1
+      "assignmentId": "assign_math_upcoming",
+      "examId": "ex_math_mock_01",
+      "classId": "c_math_01",
+      "startTime": "2025-12-20T08:00:00Z",
+      "endTime": "2025-12-20T11:00:00Z",
+      "attemptLimit": 1
     },
     {
-      "assignment_id": "assign_it_overdue",
-      "exam_id": "ex_it_basic_chk",
-      "class_id": "c_it_01",
-      "start_time": "2025-11-10T08:00:00Z",
-      "end_time": "2025-11-10T20:00:00Z",
-      "attempt_limit": 1
+      "assignmentId": "assign_it_overdue",
+      "examId": "ex_it_basic_chk",
+      "classId": "c_it_01",
+      "startTime": "2025-11-10T08:00:00Z",
+      "endTime": "2025-11-10T20:00:00Z",
+      "attemptLimit": 1
     },
     {
-      "assignment_id": "assign_eng_retake",
-      "exam_id": "ex_eng_vocab",
-      "class_id": "c_eng_01",
-      "start_time": "2025-12-01T08:00:00Z",
-      "end_time": "2025-12-30T20:00:00Z",
-      "attempt_limit": 3
+      "assignmentId": "assign_eng_retake",
+      "examId": "ex_eng_vocab",
+      "classId": "c_eng_01",
+      "startTime": "2025-12-01T08:00:00Z",
+      "endTime": "2025-12-30T20:00:00Z",
+      "attemptLimit": 3
     }
   ],
   "examquestions": [
@@ -1256,103 +1230,102 @@
   ],
   "examsubmissions": [
     {
-      "submission_id": "sub_m01_u01",
-      "exam_id": "ex_math_01",
-      "student_user_id": "u_student_01",
-      "class_id": "c_math_01",
-      "started_at": "2025-10-01T08:05:00Z",
-      "submitted_at": "2025-10-01T08:45:00Z",
-      "status": "completed",
-      "objective_score": 8,
-      "final_score": 8
+      "examId": "ex_math_01",
+      "studentUserId": "u_student_01",
+      "contestId": null,
+      "classId": "c_math_01",
+      "status": "submitted",
+      "startedAt": "2025-10-01T08:05:00Z",
+      "submittedAt": "2025-10-01T08:45:00Z",
+      "totalScore": 8,
+      "maxScore": 10,
+      "durationSeconds": 2400,
+      "attemptNumber": 1,
+      "answers": []
     },
     {
-      "submission_id": "sub_m01_u02",
-      "exam_id": "ex_math_01",
-      "student_user_id": "u_student_02",
-      "class_id": "c_math_01",
-      "started_at": "2025-10-01T08:00:00Z",
-      "submitted_at": "2025-10-01T08:40:00Z",
-      "status": "completed",
-      "objective_score": 7.5,
-      "final_score": 7.5
+      "examId": "ex_math_01",
+      "studentUserId": "u_student_02",
+      "contestId": null,
+      "classId": "c_math_01",
+      "status": "submitted",
+      "startedAt": "2025-10-01T08:00:00Z",
+      "submittedAt": "2025-10-01T08:40:00Z",
+      "totalScore": 7.5,
+      "maxScore": 10,
+      "durationSeconds": 2400,
+      "attemptNumber": 1,
+      "answers": []
     },
     {
-      "submission_id": "sub_p01_u01",
-      "exam_id": "ex_phys_01",
-      "student_user_id": "u_student_01",
-      "class_id": "c_phys_02",
-      "started_at": "2025-10-15T09:05:00Z",
-      "submitted_at": "2025-10-15T10:00:00Z",
-      "status": "completed",
-      "objective_score": 9,
-      "final_score": 9
-    },
-    {
-      "submission_id": "sub_e01_u05",
-      "exam_id": "ex_eng_01",
-      "student_user_id": "u_student_05",
-      "class_id": "c_eng_01",
-      "started_at": "2025-10-20T18:15:00Z",
-      "submitted_at": null,
+      "examId": "ex_eng_01",
+      "studentUserId": "u_student_05",
+      "contestId": null,
+      "classId": "c_eng_01",
       "status": "in_progress",
-      "objective_score": 0,
-      "final_score": 0
+      "startedAt": "2025-10-20T18:15:00Z",
+      "submittedAt": null,
+      "totalScore": 0,
+      "maxScore": 10,
+      "durationSeconds": 0,
+      "attemptNumber": 1,
+      "answers": []
     },
     {
-      "submission_id": "sub_it01_u02",
-      "exam_id": "ex_it_01",
-      "student_user_id": "u_student_02",
-      "class_id": "c_it_01",
-      "started_at": "2025-10-25T10:05:00Z",
-      "submitted_at": "2025-10-25T10:30:00Z",
-      "status": "completed",
-      "objective_score": 10,
-      "final_score": 10
+      "examId": "ex_contest_math_final",
+      "studentUserId": "u_student_01",
+      "contestId": "ct_01",
+      "classId": null,
+      "status": "submitted",
+      "startedAt": "2025-12-10T09:00:00Z",
+      "submittedAt": "2025-12-10T10:30:00Z",
+      "totalScore": 9.5,
+      "maxScore": 10,
+      "durationSeconds": 5400,
+      "attemptNumber": 1,
+      "answers": []
     },
     {
-      "submission_id": "sub_eng_vocab_01",
-      "exam_id": "ex_eng_vocab",
-      "student_user_id": "u_student_01",
-      "class_id": "c_eng_01",
-      "started_at": "2025-12-05T09:00:00Z",
-      "submitted_at": "2025-12-05T09:18:00Z",
-      "status": "completed",
-      "objective_score": 7,
-      "final_score": 7
+      "examId": "exam-002",
+      "studentUserId": "student-01",
+      "contestId": null,
+      "classId": null,
+      "status": "graded",
+      "startedAt": "2025-12-16T12:38:12.391Z",
+      "submittedAt": "2025-12-16T13:38:12.391Z",
+      "totalScore": 0,
+      "maxScore": 10,
+      "durationSeconds": 3600,
+      "attemptNumber": 1,
+      "answers": []
     },
     {
-      "submission_id": "sub_contest_01",
-      "exam_id": "ex_contest_math_final",
-      "student_user_id": "u_student_01",
-      "class_id": null,
-      "started_at": "2025-12-10T09:00:00Z",
-      "submitted_at": "2025-12-10T10:30:00Z",
-      "status": "completed",
-      "objective_score": 9.5,
-      "final_score": 9.5
+      "examId": "exam-001",
+      "studentUserId": "student-01",
+      "contestId": null,
+      "classId": null,
+      "status": "graded",
+      "startedAt": "2025-12-16T12:38:38.285Z",
+      "submittedAt": "2025-12-16T13:38:38.285Z",
+      "totalScore": 0,
+      "maxScore": 10,
+      "durationSeconds": 3600,
+      "attemptNumber": 1,
+      "answers": []
     },
     {
-      "submission_id": "sub_global_01",
-      "exam_id": "ex_global_iq",
-      "student_user_id": "u_student_01",
-      "class_id": null,
-      "started_at": "2025-12-12T14:00:00Z",
-      "submitted_at": "2025-12-12T14:30:00Z",
-      "status": "completed",
-      "objective_score": 85,
-      "final_score": 85
-    },
-    {
-      "submission_id": "sub_class_01",
-      "exam_id": "ex_phys_01",
-      "student_user_id": "u_student_01",
-      "class_id": "c_phys_02",
-      "started_at": "2025-12-14T08:00:00Z",
-      "submitted_at": "2025-12-14T09:00:00Z",
-      "status": "completed",
-      "objective_score": 8,
-      "final_score": 8
+      "examId": "exam-003",
+      "studentUserId": "student-01",
+      "contestId": null,
+      "classId": null,
+      "status": "graded",
+      "startedAt": "2025-12-16T12:38:45.111Z",
+      "submittedAt": "2025-12-16T13:38:45.111Z",
+      "totalScore": 0,
+      "maxScore": 10,
+      "durationSeconds": 3600,
+      "attemptNumber": 1,
+      "answers": []
     }
   ],
   "questions": [
@@ -3636,19 +3609,24 @@
       "updatedAt": "2025-11-20T00:00:00Z"
     },
     {
-      "contest_id": "ct_01",
-      "title": "Olympic Toán Học Mùa Xuân",
-      "description": "Cuộc thi toán học thường niên.",
-      "start_time": "2025-12-01T00:00:00Z",
-      "end_time": "2025-12-30T00:00:00Z",
-      "status": "ongoing"
+      "id": "ct_01",
+      "name": "Olympic Toán Học Mùa Xuân",
+      "description": "Cuộc thi toán học thường niên dành cho học sinh khối THPT, tập trung vào các dạng toán tư duy và logic.",
+      "startTime": "2025-12-01T00:00:00Z",
+      "endTime": "2025-12-30T00:00:00Z",
+      "ownerId": "admin-01",
+      "isPublic": true,
+      "status": "ongoing",
+      "participantsCount": 120,
+      "createdAt": "2025-11-15T09:00:00Z",
+      "updatedAt": "2025-11-15T09:00:00Z"
     }
   ],
   "contestexams": [
     {
       "id": "ce_01",
-      "contest_id": "ct_01",
-      "exam_id": "ex_contest_math_final",
+      "contestId": "ct_01",
+      "examId": "ex_contest_math_final",
       "order": 1,
       "weight": 1
     }
@@ -3719,47 +3697,6 @@
       "totalScore": 0,
       "rank": null,
       "percentile": null
-    }
-  ],
-  "submissions": [
-    {
-      "id": "6abc",
-      "examId": "exam-002",
-      "studentId": "student-01",
-      "contestId": null,
-      "status": "graded",
-      "startedAt": "2025-12-16T12:38:12.391Z",
-      "submittedAt": "2025-12-16T13:38:12.391Z",
-      "totalScore": 0,
-      "maxScore": 10,
-      "attemptNumber": 1,
-      "answers": []
-    },
-    {
-      "id": "1b8c",
-      "examId": "exam-001",
-      "studentId": "student-01",
-      "contestId": null,
-      "status": "graded",
-      "startedAt": "2025-12-16T12:38:38.285Z",
-      "submittedAt": "2025-12-16T13:38:38.285Z",
-      "totalScore": 0,
-      "maxScore": 10,
-      "attemptNumber": 1,
-      "answers": []
-    },
-    {
-      "id": "c221",
-      "examId": "exam-003",
-      "studentId": "student-01",
-      "contestId": null,
-      "status": "graded",
-      "startedAt": "2025-12-16T12:38:45.111Z",
-      "submittedAt": "2025-12-16T13:38:45.111Z",
-      "totalScore": 0,
-      "maxScore": 10,
-      "attemptNumber": 1,
-      "answers": []
     }
   ],
   "manualgradings": [],

@@ -10,21 +10,21 @@ class ClassMemberRepository extends BaseRepository {
     return await this.find({ classId, status: 'active' }, options);
   }
 
-  async findByStudent(studentId, options = {}) {
-    return await this.find({ studentId, status: 'active' }, options);
+  async findByStudent(studentUserId, options = {}) {
+    return await this.find({ studentUserId, status: 'active' }, options);
   }
 
-  async findMember(classId, studentId) {
-    return await this.findOne({ classId, studentId });
+  async findMember(classId, studentUserId) {
+    return await this.findOne({ classId, studentUserId });
   }
 
-  async isMember(classId, studentId) {
-    return await this.exists({ classId, studentId, status: 'active' });
+  async isMember(classId, studentUserId) {
+    return await this.exists({ classId, studentUserId, status: 'active' });
   }
 
-  async removeMember(classId, studentId) {
+  async removeMember(classId, studentUserId) {
     return await this.updateOne(
-      { classId, studentId },
+      { classId, studentUserId },
       { status: 'removed' }
     );
   }
