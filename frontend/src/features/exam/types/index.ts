@@ -4,6 +4,7 @@ export * from "./question";
 export * from "./submission";
 export * from "./answer";
 export * from "./exam-config";
+export * from "./contest";
 
 // UI State Types
 export interface ExamState {

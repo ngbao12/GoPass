@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { QuestionType } from "@/features/dashboard/types/question";
+import { QuestionType } from "@/features/exam/types";
 import MultipleChoiceForm from "./forms/MultipleChoiceForm";
 import TrueFalseForm from "./forms/TrueFalseForm";
 import ShortAnswerForm from "./forms/ShortAnswerForm";
@@ -37,7 +37,7 @@ const QuestionFormContainer: React.FC<QuestionFormContainerProps> = ({
         return <TrueFalseForm {...commonProps} />;
       case "short_answer":
         return <ShortAnswerForm {...commonProps} />;
-      case "long_answer":
+      case "essay":
         return <LongAnswerForm {...commonProps} />;
       default:
         return null;
