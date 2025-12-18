@@ -2,6 +2,7 @@
 
 import React from "react";
 import { QuestionOption } from "@/features/exam/types/question";
+import MathText from "@/components/ui/MathText";
 
 interface TrueFalseInputProps {
   options: QuestionOption[];
@@ -150,9 +151,9 @@ const TrueFalseInput: React.FC<TrueFalseInputProps> = ({
               <div className="flex-shrink-0 w-8 h-8 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center font-bold text-sm border border-slate-200">
                 {opt.id})
               </div>
-              <p className="flex-1 text-base text-slate-700 leading-relaxed pt-1 font-medium">
-                {opt.content}
-              </p>
+              <div className="flex-1 pt-1 text-base text-slate-700 leading-relaxed font-medium">
+                <MathText content={opt.content} />
+              </div>
             </div>
 
             {/* Buttons Group */}

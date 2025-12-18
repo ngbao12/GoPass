@@ -18,7 +18,7 @@ import {
   AnswerData,
 } from "../types";
 import { submissionService } from "@/services/exam/submission.service";
-import { examStorage } from "@/utils/storage.utils";
+import { examStorage } from "@/utils/exam-storage";
 
 // --- TYPES ---
 interface ExamContextType {

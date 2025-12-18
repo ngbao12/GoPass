@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { contestService } from "@/services/contest/contest.service";
 import {
   Calendar,
   Clock,
@@ -9,7 +10,8 @@ import {
   ArrowRight,
   PlayCircle,
   Trophy,
-} from "lucide-react"; // Thêm PlayCircle
+  Loader2, // Thêm icon loading
+} from "lucide-react";
 import {
   CONTEST_RULES,
   LANDING_SUBJECTS,
@@ -23,21 +25,45 @@ interface LandingProps {
   startTime: string;
   endTime: string;
   participantCount: number;
-  // ✅ THÊM: Trạng thái tiến độ của user
   userProgress?: {
-    hasJoined: boolean; // Đã tham gia chưa?
-    completed: number; // Số môn đã xong
-    total: number; // Tổng số môn
-    isFinished: boolean; // Đã xong hết chưa?
+    hasJoined: boolean;
+    completed: number;
+    total: number;
+    isFinished: boolean;
   };
 }
 
 export default function ContestLanding({ data }: { data: LandingProps }) {
   const router = useRouter();
   const { userProgress } = data;
+  const [isLoading, setIsLoading] = useState(false); // ✅ State xử lý loading khi bấm nút
+
+  // --- HÀM XỬ LÝ JOIN (GỌI API) ---
+  const handleJoin = async () => {
+    try {
+      setIsLoading(true);
+      // 1. Gọi API POST để đăng ký
+      const res = await contestService.joinContest(data.id, "student-01");
+
+      if (res.success) {
+        // 2. Refresh để Server Component tải lại data mới (số thí sinh tăng, nút đổi thành Tiếp tục)
+        router.refresh();
+      } else {
+        alert("Có lỗi xảy ra: " + (res.message || "Không thể tham gia"));
+      }
+    } catch (error) {
+      console.error("Join error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleStart = () => {
     router.push(`/contest/${data.id}/hub`);
+  };
+
+  const handleViewResult = () => {
+    router.push(`/contest/${data.id}/result`);
   };
 
   const formatDate = (isoString: string) => {
@@ -48,18 +74,21 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
     });
   };
 
-  // --- LOGIC NÚT BẤM ---
-  let MainButton = (
-    <button
-      onClick={handleStart}
-      className="flex-[2] py-2.5 rounded-xl bg-teal-600 text-white text-sm font-bold shadow-md shadow-teal-200 hover:bg-teal-700 active:scale-95 transition-all flex items-center justify-center gap-2"
-    >
-      Tham gia ngay <ArrowRight size={16} />
-    </button>
-  );
+  // --- LOGIC NÚT BẤM (RENDER THEO TRẠNG THÁI) ---
+  let MainButton;
 
-  // Nếu đã tham gia và chưa xong hết -> Hiển thị nút "Tiếp tục"
-  if (userProgress?.hasJoined && !userProgress.isFinished) {
+  if (userProgress?.isFinished) {
+    // 1. TRƯỜNG HỢP: ĐÃ HOÀN THÀNH -> XEM KẾT QUẢ
+    MainButton = (
+      <button
+        onClick={handleViewResult}
+        className="flex-[2] py-2.5 rounded-xl bg-purple-600 text-white text-sm font-bold shadow-md shadow-purple-200 hover:bg-purple-700 transition-all flex items-center justify-center gap-2"
+      >
+        <Trophy size={18} /> Xem kết quả
+      </button>
+    );
+  } else if (userProgress?.hasJoined) {
+    // 2. TRƯỜNG HỢP: ĐANG LÀM DỞ -> TIẾP TỤC
     MainButton = (
       <button
         onClick={handleStart}
@@ -69,15 +98,27 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
         {userProgress.total})
       </button>
     );
-  }
-  // Nếu đã xong hết -> Hiển thị nút "Xem kết quả"
-  else if (userProgress?.isFinished) {
+  } else {
+    // 3. TRƯỜNG HỢP: CHƯA THAM GIA -> NÚT ĐĂNG KÝ (GỌI API)
     MainButton = (
       <button
-        onClick={() => router.push(`/contest/${data.id}/result`)}
-        className="flex-[2] py-2.5 rounded-xl bg-purple-600 text-white text-sm font-bold shadow-md shadow-purple-200 hover:bg-purple-700 transition-all flex items-center justify-center gap-2"
+        onClick={handleJoin}
+        disabled={isLoading}
+        className={`flex-[2] py-2.5 rounded-xl text-white text-sm font-bold shadow-md transition-all flex items-center justify-center gap-2 ${
+          isLoading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-teal-600 shadow-teal-200 hover:bg-teal-700 active:scale-95"
+        }`}
       >
-        <Trophy size={18} /> Xem kết quả
+        {isLoading ? (
+          <>
+            <Loader2 size={16} className="animate-spin" /> Đang đăng ký...
+          </>
+        ) : (
+          <>
+            Tham gia ngay <ArrowRight size={16} />
+          </>
+        )}
       </button>
     );
   }
