@@ -152,20 +152,25 @@ class VnSocialProvider {
    */
   async getPostsByKeyword(params) {
     try {
+      console.log('📰 VnSocial: Fetching posts by keyword with params:', JSON.stringify(params, null, 2));
       const token = await this.ensureToken();
       
-      const {
-        project_id,
-        source,
-        start_time,
-        end_time,
-        from = 0,
-        size = 10,
-        reactionary = false,
-        senti = ['negative', 'neutral', 'positive'],
-        time_type = 'createDate',
-        province = null
-      } = params;
+      // Extract and ensure all required fields have values
+      const project_id = params.project_id;
+      const source = params.source;
+      const start_time = params.start_time;
+      const end_time = params.end_time;
+      const from = params.from ?? 0; // Use nullish coalescing to handle undefined/null
+      const size = params.size ?? 10;
+      const reactionary = params.reactionary ?? false;
+      const senti = params.senti ?? ['negative', 'neutral', 'positive'];
+      const time_type = params.time_type ?? 'createDate';
+      const province = params.province;
+
+      // Validate required fields
+      if (!project_id || !source || start_time === undefined || start_time === null || end_time === undefined || end_time === null) {
+        throw new Error('Missing required fields: project_id, source, start_time, end_time');
+      }
 
       const requestBody = {
         project_id,
@@ -179,9 +184,21 @@ class VnSocialProvider {
         time_type
       };
 
-      if (province) {
+      // Only add province if it has a value
+      if (province && typeof province === 'string' && province.trim() !== '') {
         requestBody.province = province;
       }
+
+      console.log('📤 VnSocial: Request body:', JSON.stringify(requestBody, null, 2));
+      console.log('🔍 VnSocial: Validating required fields:');
+      console.log('  - project_id:', project_id, typeof project_id);
+      console.log('  - source:', source, typeof source);
+      console.log('  - start_time:', start_time, typeof start_time);
+      console.log('  - end_time:', end_time, typeof end_time);
+      console.log('  - from:', from, typeof from);
+      console.log('  - size:', size, typeof size);
+      console.log('  - reactionary:', reactionary, typeof reactionary);
+      console.log('  - senti:', senti, Array.isArray(senti) ? `Array[${senti.length}]` : typeof senti);
 
       const response = await axios.post(
         `${this.baseUrl}/projects/posts`,
@@ -194,10 +211,18 @@ class VnSocialProvider {
         }
       );
 
+      console.log('✅ VnSocial: Posts retrieved successfully, count:', response.data?.object?.length || 0);
       return response.data;
     } catch (error) {
-      console.error('VnSocial getPostsByKeyword error:', error.response?.data || error.message);
-      throw new Error('Failed to get posts by keyword from VnSocial');
+      console.error('❌ VnSocial getPostsByKeyword error:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: `${this.baseUrl}/projects/posts`,
+        requestParams: params
+      });
+      throw new Error(`Failed to get posts by keyword from VnSocial: ${error.response?.data?.message || error.message}`);
     }
   }
 
@@ -218,6 +243,8 @@ class VnSocialProvider {
         time_type = 'createDate'
       } = params;
 
+      console.log('📰 VnSocial: Fetching posts by source with params:', JSON.stringify(params, null, 2));
+
       const requestBody = {
         source_id,
         start_time,
@@ -227,6 +254,8 @@ class VnSocialProvider {
         senti,
         time_type
       };
+
+      console.log('📤 VnSocial: Request body for source-follow/posts:', JSON.stringify(requestBody, null, 2));
 
       const response = await axios.post(
         `${this.baseUrl}/source-follow/posts`,
@@ -239,10 +268,18 @@ class VnSocialProvider {
         }
       );
 
+      console.log('✅ VnSocial: Posts by source retrieved successfully');
       return response.data;
     } catch (error) {
-      console.error('VnSocial getPostsBySource error:', error.response?.data || error.message);
-      throw new Error('Failed to get posts by source from VnSocial');
+      console.error('❌ VnSocial getPostsBySource error:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        requestParams: params
+      });
+      throw new Error(`Failed to get posts by source from VnSocial: ${error.response?.data?.message || error.message}`);
     }
   }
 

@@ -147,30 +147,32 @@ Content-Type: application/json
 **Body (raw JSON):**
 ```json
 {
-  "projectId": "project-123",
+  "project_id": "69438bd945065e19984503e7",
   "source": "facebook",
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18",
-  "page": 1,
-  "limit": 10,
-  "sentiment": ["positive", "neutral"],
+  "start_time": 1733011200000,
+  "end_time": 1734480000000,
+  "from": 0,
+  "size": 10,
+  "senti": ["positive", "neutral"],
   "reactionary": false,
-  "province": "Hà Nội"
+  "province": "Hà Nội",
+  "time_type": "createDate"
 }
 ```
 
 **Tham số bắt buộc:**
-- `projectId` (string): ID của dự án/chủ đề
+- `project_id` (string): ID của dự án/chủ đề (lấy từ GET /topics)
 - `source` (string): Nguồn dữ liệu (`facebook`, `youtube`, `tiktok`, `forum`, `baochi`)
-- `startDate` (string): Ngày bắt đầu (YYYY-MM-DD)
-- `endDate` (string): Ngày kết thúc (YYYY-MM-DD)
+- `start_time` (number): Thời gian bắt đầu (milliseconds timestamp)
+- `end_time` (number): Thời gian kết thúc (milliseconds timestamp)
 
 **Tham số tùy chọn:**
-- `page` (number, default: 1): Trang hiện tại
-- `limit` (number, default: 10): Số bài viết mỗi trang
-- `sentiment` (array): Cảm xúc [`positive`, `neutral`, `negative`]
-- `reactionary` (boolean): Lọc bài viết phản động
+- `from` (number, default: 0): Số bản ghi bỏ qua (pagination offset)
+- `size` (number, default: 10): Số bài viết trả về
+- `senti` (array, default: ['negative','neutral','positive']): Sắc thái [`positive`, `neutral`, `negative`]
+- `reactionary` (boolean, default: false): false = tin chính thống, true = tin trái chiều
 - `province` (string): Tỉnh/thành phố
+- `time_type` (string, default: 'createDate'): Loại thời gian ('createDate' hoặc 'updateDate')
 
 **Response:**
 ```json
@@ -195,8 +197,6 @@ Content-Type: application/json
         "province": "Hà Nội"
       }
     ],
-    "page": 1,
-    "limit": 10,
     "total": 25
   }
 }
@@ -208,6 +208,10 @@ Content-Type: application/json
 
 **Endpoint:** `POST {{BASE_URL}}/api/vnsocial/posts/search-by-source`
 
+**⚠️ LƯU Ý QUAN TRỌNG:**
+- `source_id` là ID của một **nguồn cụ thể** (fanpage Facebook, kênh YouTube, tài khoản TikTok...) mà bạn đã **theo dõi** trong VnSocial
+- Để lấy `source_id`, gọi `GET /api/vnsocial/topics?type=source` hoặc tạo nguồn mới trên https://vnsocial.vnpt.vn tại mục **"Theo dõi nguồn"**
+
 **Headers:**
 ```
 Authorization: Bearer {{TOKEN}}
@@ -217,24 +221,47 @@ Content-Type: application/json
 **Body (raw JSON):**
 ```json
 {
-  "sourceId": "source-789",
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18",
-  "page": 1,
-  "limit": 20,
-  "sentiment": ["positive"]
+  "source_id": "69438bd945065e19984503e7",
+  "start_time": 1733011200000,
+  "end_time": 1734480000000,
+  "from": 0,
+  "size": 20,
+  "senti": ["positive"],
+  "time_type": "createDate"
 }
 ```
 
 **Tham số bắt buộc:**
-- `sourceId` (string): ID của nguồn cụ thể (fanpage, kênh, tài khoản)
-- `startDate` (string): Ngày bắt đầu (YYYY-MM-DD)
-- `endDate` (string): Ngày kết thúc (YYYY-MM-DD)
+- `source_id` (string): ID của nguồn cụ thể (lấy từ GET /topics?type=source)
+- `start_time` (number): Thời gian bắt đầu (milliseconds timestamp)
+- `end_time` (number): Thời gian kết thúc (milliseconds timestamp)
 
 **Tham số tùy chọn:**
-- `page` (number, default: 1)
-- `limit` (number, default: 10)
-- `sentiment` (array): [`positive`, `neutral`, `negative`]
+- `from` (number, default: 0): Số bản ghi bỏ qua
+- `size` (number, default: 10): Số bài viết trả về
+- `senti` (array): [`positive`, `neutral`, `negative`]
+- `time_type` (string): 'createDate' hoặc 'updateDate'
+
+**Cách lấy source_id:**
+```
+GET {{BASE_URL}}/api/vnsocial/topics?type=source
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "topics": [
+      {
+        "id": "source-abc123",  // ← Đây là source_id
+        "name": "Fanpage Giáo dục VN",
+        "type": "PERSONAL_POST"
+      }
+    ]
+  }
+}
+```
 
 **Response:** Tương tự endpoint #2
 
@@ -253,17 +280,17 @@ Content-Type: application/json
 **Body (raw JSON):**
 ```json
 {
-  "projectId": "project-123",
+  "project_id": "69438bd945065e19984503e7",
   "sources": ["facebook", "youtube", "baochi"],
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18"
+  "start_time": 1733011200000,
+  "end_time": 1734480000000
 }
 ```
 
 **Tham số bắt buộc:**
-- `projectId` (string): ID dự án
-- `startDate` (string): Ngày bắt đầu
-- `endDate` (string): Ngày kết thúc
+- `project_id` (string): ID dự án
+- `start_time` (number): Thời gian bắt đầu (milliseconds timestamp)
+- `end_time` (number): Thời gian kết thúc (milliseconds timestamp)
 
 **Tham số tùy chọn:**
 - `sources` (array): Danh sách nguồn (mặc định: tất cả)
@@ -314,18 +341,18 @@ Content-Type: application/json
 **Body (raw JSON):**
 ```json
 {
-  "projectId": "project-123",
+  "project_id": "69438bd945065e19984503e7",
   "source": "facebook",
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18"
+  "start_time": 1733011200000,
+  "end_time": 1734480000000
 }
 ```
 
 **Tham số bắt buộc:**
-- `projectId` (string): ID dự án
+- `project_id` (string): ID dự án
 - `source` (string): Nguồn (`facebook`, `youtube`, `tiktok`, `forum`, `baochi`)
-- `startDate` (string): Ngày bắt đầu
-- `endDate` (string): Ngày kết thúc
+- `start_time` (number): Thời gian bắt đầu (milliseconds timestamp)
+- `end_time` (number): Thời gian kết thúc (milliseconds timestamp)
 
 **Response:**
 ```json
@@ -369,17 +396,17 @@ Content-Type: application/json
 **Body (raw JSON):**
 ```json
 {
-  "projectId": "project-123",
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18",
+  "project_id": "69438bd945065e19984503e7",
+  "start_time": 1733011200000,
+  "end_time": 1734480000000,
   "sources": ["facebook", "youtube", "baochi"]
 }
 ```
 
 **Tham số bắt buộc:**
-- `projectId` (string): ID dự án
-- `startDate` (string): Ngày bắt đầu
-- `endDate` (string): Ngày kết thúc
+- `project_id` (string): ID dự án
+- `start_time` (number): Thời gian bắt đầu (milliseconds timestamp)
+- `end_time` (number): Thời gian kết thúc (milliseconds timestamp)
 
 **Tham số tùy chọn:**
 - `sources` (array): Danh sách nguồn (mặc định: [`facebook`, `baochi`, `youtube`])
@@ -409,8 +436,8 @@ Content-Type: application/json
       }
     ],
     "period": {
-      "start": "2024-12-01",
-      "end": "2024-12-18"
+      "start_time": 1733011200000,
+      "end_time": 1734480000000
     }
   }
 }
@@ -471,7 +498,7 @@ Content-Type: application/json
 ```json
 {
   "success": false,
-  "message": "Thiếu thông tin: projectId, source, startDate, endDate là bắt buộc"
+  "message": "Thiếu thông tin: project_id, source, start_time, end_time là bắt buộc"
 }
 ```
 **Giải pháp:** Kiểm tra lại body request
@@ -502,16 +529,30 @@ pm.environment.set("TOKEN", jsonData.data.tokens.accessToken);
 ```
 
 ### 3. Date Format
-Luôn sử dụng format `YYYY-MM-DD` cho startDate và endDate:
-- ✅ Đúng: `"2024-12-18"`
-- ❌ Sai: `"18/12/2024"` hoặc `"12-18-2024"`
+Sử dụng **milliseconds timestamp** cho start_time và end_time:
+- ✅ Đúng: `"start_time": 1734220800000`
+- ❌ Sai: `"start_time": "2024-12-15"` hoặc `"start_time": "15/12/2024"`
+
+**Công cụ chuyển đổi:**
+```javascript
+// JavaScript
+const start_time = new Date('2024-12-15').getTime(); // 1734220800000
+const end_time = new Date('2024-12-18').getTime();   // 1734480000000
+```
 
 ### 4. Pagination
-Để lấy nhiều dữ liệu, tăng `limit` hoặc loop qua các `page`:
+Sử dụng `from` và `size` để phân trang:
 ```json
 {
-  "page": 1,
-  "limit": 50
+  "from": 0,    // Bỏ qua 0 bản ghi (trang 1)
+  "size": 50    // Lấy 50 bản ghi
+}
+```
+
+```json
+{
+  "from": 50,   // Bỏ qua 50 bản ghi (trang 2)
+  "size": 50    // Lấy 50 bản ghi tiếp theo
 }
 ```
 
@@ -519,13 +560,13 @@ Luôn sử dụng format `YYYY-MM-DD` cho startDate và endDate:
 Có thể filter nhiều sentiment cùng lúc:
 ```json
 {
-  "sentiment": ["positive", "neutral"]
+  "senti": ["positive", "neutral"]
 }
 ```
 Hoặc chỉ 1 sentiment:
 ```json
 {
-  "sentiment": ["negative"]
+  "senti": ["negative"]
 }
 ```
 
@@ -550,13 +591,13 @@ Nên giới hạn khoảng thời gian để tránh timeout:
    ```
    GET /api/vnsocial/topics?type=keyword
    ```
-   → Copy `projectId` từ response
+   → Copy `project_id` (trường `id`) từ response
 
 3. **Tìm bài viết theo từ khóa**
    ```
    POST /api/vnsocial/posts/search-by-keyword
    ```
-   → Sử dụng `projectId` vừa lấy
+   → Sử dụng `project_id` vừa lấy
 
 4. **Lấy từ khóa nổi bật**
    ```
@@ -580,32 +621,32 @@ Nên giới hạn khoảng thời gian để tránh timeout:
 ### Use Case 1: Theo dõi dư luận về giáo dục
 ```json
 {
-  "projectId": "giao-duc-vn",
+  "project_id": "69438bd945065e19984503e7",
   "source": "facebook",
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18",
-  "sentiment": ["negative"],
-  "limit": 50
+  "start_time": 1733011200000,
+  "end_time": 1734480000000,
+  "senti": ["negative"],
+  "size": 50
 }
 ```
 
 ### Use Case 2: Tìm bài viết viral về kỳ thi
 ```json
 {
-  "projectId": "ky-thi-2024",
+  "project_id": "ky-thi-2024",
   "source": "baochi",
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18"
+  "start_time": 1733011200000,
+  "end_time": 1734480000000
 }
 ```
 
 ### Use Case 3: Phân tích xu hướng từ khóa
 ```json
 {
-  "projectId": "giao-duc-vn",
+  "project_id": "69438bd945065e19984503e7",
   "sources": ["facebook", "youtube", "baochi"],
-  "startDate": "2024-12-01",
-  "endDate": "2024-12-18"
+  "start_time": 1733011200000,
+  "end_time": 1734480000000
 }
 ```
 
@@ -617,7 +658,7 @@ Nếu gặp vấn đề, kiểm tra:
 1. ✅ Token còn hạn chưa? (15 phút)
 2. ✅ VNSOCIAL_USERNAME và VNSOCIAL_PASSWORD đã đúng chưa?
 3. ✅ Server backend đang chạy chưa?
-4. ✅ Format date có đúng `YYYY-MM-DD` không?
+4. ✅ start_time và end_time có đúng milliseconds timestamp không?
 5. ✅ Body request có đầy đủ tham số bắt buộc không?
 
 ---
@@ -659,10 +700,9 @@ Nếu gặp vấn đề, kiểm tra:
    Response thành công:
    ```json
    {
-     "code": 200,
-     "object": {
-       "token": "eyJhbGc..."
-     }
+     "success": true,
+     "token": "eyJhbGc...",
+     "account": {...}
    }
    ```
 
@@ -680,6 +720,84 @@ Nếu gặp vấn đề, kiểm tra:
    - URL: `https://api-vnsocialplus.vnpt.vn`
    - OAuth URL: `https://vnsocial.vnpt.vn`
 
+---
+
+### Lỗi 500: "Yêu cầu xử lý không thành công. Vui lòng thử lại sau."
+
+**Đây là lỗi từ VnSocial API khi request không hợp lệ.**
+
+**Nguyên nhân thường gặp:**
+1. ❌ **project_id không tồn tại** - Dùng ID của project không thuộc tài khoản
+2. ❌ **source không hợp lệ** - Phải là: `facebook`, `youtube`, `tiktok`, `forum`, `baochi`
+3. ❌ **Project chưa được tạo** - Cần tạo project trên web VnSocial trước
+
+**Cách khắc phục:**
+
+#### Bước 1: Lấy danh sách projects có sẵn
+```
+GET http://localhost:5001/api/vnsocial/topics
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "topics": [
+      {
+        "id": "abc123",
+        "name": "Dự án test",
+        "type": "TOPIC_POLICY"
+      }
+    ],
+    "total": 1
+  }
+}
+```
+
+**Nếu topics = []** (rỗng), bạn cần:
+1. Truy cập: https://vnsocial.vnpt.vn
+2. Login với tài khoản VNSOCIAL_USERNAME/PASSWORD
+3. Tạo project mới:
+   - Click "Tạo dự án mới"
+   - Chọn loại: "Chủ đề theo từ khóa" hoặc "Nguồn theo dõi"
+   - Nhập tên và từ khóa
+   - Lưu lại
+4. Copy `projectId` từ URL hoặc API
+
+#### Bước 2: Sử dụng project_id đúng
+```json
+{
+  "project_id": "abc123",  // ← ID thật từ topics
+  "source": "facebook",
+  "start_time": 1733011200000,
+  "end_time": 1734480000000
+}
+```
+
+#### Bước 3: Kiểm tra logs
+Xem terminal logs:
+```
+📰 VnSocial: Fetching posts by keyword with params: {
+  "project_id": "abc123",
+  "source": "facebook",
+  ...
+}
+📤 VnSocial: Request body: {
+  "project_id": "abc123",
+  "source": "facebook",
+  "start_time": 1733011200000,
+  "end_time": 1734480000000,
+  ...
+}
+```
+
+Nếu thấy `❌ VnSocial getPostsByKeyword error`, check:
+- `status`: 400 = Bad Request (sai tham số)
+- `data.message`: Chi tiết lỗi từ VnSocial
+
+---
+
 ### Lỗi 401: "Token không hợp lệ"
 
 **Giải pháp:** GoPass token (JWT) đã hết hạn sau 15 phút
@@ -688,13 +806,48 @@ POST /api/auth/login
 ```
 Lấy accessToken mới và cập nhật vào Postman Environment
 
+---
+
 ### Lỗi 400: "Thiếu thông tin"
 
 **Giải pháp:** Kiểm tra body request có đủ các trường bắt buộc:
-- `projectId` (string)
-- `source` (string) 
-- `startDate` (string YYYY-MM-DD)
-- `endDate` (string YYYY-MM-DD)
+- `project_id` (string) - **Phải lấy từ GET /topics**
+- `source` (string) - Một trong: `facebook`, `youtube`, `tiktok`, `forum`, `baochi`
+- `start_time` (number) - milliseconds timestamp
+- `end_time` (number) - milliseconds timestamp
+
+---
+
+### Debug Checklist
+
+Trước khi search posts, luôn làm theo thứ tự:
+
+✅ **Step 1:** Login GoPass
+```
+POST /api/auth/login
+→ Copy accessToken
+```
+
+✅ **Step 2:** List VnSocial projects
+```
+GET /api/vnsocial/topics
+→ Copy project_id (trường "id") từ response
+```
+
+✅ **Step 3:** Search posts với project_id thật
+```
+POST /api/vnsocial/posts/search-by-keyword
+Body: {
+  "project_id": "<id-từ-step-2>",
+  "source": "facebook",
+  "start_time": 1734220800000,
+  "end_time": 1734480000000
+}
+```
+
+✅ **Step 4:** Check terminal logs nếu lỗi
+- Tìm `🔍 DEBUG` để xem request/response
+- Tìm `❌` để xem error details
 
 ---
 
