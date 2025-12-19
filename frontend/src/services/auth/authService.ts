@@ -144,9 +144,15 @@ class AuthService {
 
       this.setUserData(data.data);
       return data.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Get current user error:', error);
-      this.removeTokens();
+      
+      // Only remove tokens if it's a 401 (unauthorized)
+      // Don't remove on network errors or server errors
+      if (error.statusCode === 401) {
+        this.removeTokens();
+      }
+      
       return null;
     }
   }

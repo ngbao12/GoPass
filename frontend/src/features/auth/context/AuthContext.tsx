@@ -33,14 +33,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const loadUser = async () => {
       try {
-        if (authService.isAuthenticated()) {
-          const userData = await authService.getCurrentUser();
-          setUser(userData);
+        // First check if we have tokens in localStorage
+        const hasToken = authService.isAuthenticated();
+        
+        if (hasToken) {
+          // Try to get user from localStorage first (faster)
+          const cachedUser = authService.getUserData();
+          
+          if (cachedUser) {
+            // Set cached user immediately for better UX
+            setUser(cachedUser);
+            setLoading(false);
+            
+            // Then verify with backend in background
+            authService.getCurrentUser()
+              .then(freshUser => {
+                if (freshUser) {
+                  setUser(freshUser);
+                }
+              })
+              .catch(err => {
+                console.error('Failed to refresh user data:', err);
+                // Keep cached user if backend fails
+              });
+          } else {
+            // No cached user, fetch from backend
+            const userData = await authService.getCurrentUser();
+            setUser(userData);
+            setLoading(false);
+          }
+        } else {
+          setLoading(false);
         }
       } catch (error) {
         console.error("Failed to load user:", error);
         setUser(null);
-      } finally {
         setLoading(false);
       }
     };
