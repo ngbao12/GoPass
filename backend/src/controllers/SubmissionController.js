@@ -54,6 +54,23 @@ class SubmissionController {
       res.status(400).json({ success: false, message: error.message });
     }
   }
+
+  async getMySubmissions(req, res) {
+    try {
+      console.log('Query params:', req.query);
+      const { examId, contestId, status, page, limit } = req.query;
+      const submissions = await SubmissionService.getMySubmissions(req.user.userId, {
+        examId,
+        contestId,
+        status,
+        page,
+        limit
+      });
+      res.status(200).json({ success: true, data: { submissions } });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
 }
 
 module.exports = new SubmissionController();

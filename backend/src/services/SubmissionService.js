@@ -155,6 +155,25 @@ class SubmissionService {
 
     return submission;
   }
+
+  // Get all submissions for current student
+  async getMySubmissions(studentId, query = {}) {
+    const { examId, contestId, status, page = 1, limit = 20 } = query;
+    
+    const filter = { studentUserId: studentId };
+    if (examId) filter.examId = examId;
+    if (contestId) filter.contestId = contestId;
+    if (status) filter.status = status;
+
+    const submissions = await ExamSubmissionRepository.find(filter, {
+      populate: ['examId', 'classId', 'contestId'],
+      sort: { submittedAt: -1, createdAt: -1 },
+      skip: (page - 1) * limit,
+      limit: parseInt(limit)
+    });
+
+    return submissions;
+  }
 }
 
 module.exports = new SubmissionService();
