@@ -7,31 +7,15 @@ class ClassJoinRequestRepository extends BaseRepository {
   }
 
   async findPendingRequests(classId) {
-    return await this.find({ classId, status: 'pending' }, { sort: { requestedAt: -1 } });
+    return await this.find({ classId, status: 'pending' }, { sort: { createdAt: -1 } });
   }
 
-  async findByStudent(studentId, options = {}) {
-    return await this.find({ studentId }, options);
+  async findByStudent(studentUserId, options = {}) {
+    return await this.find({ studentUserId }, options);
   }
 
-  async findRequest(classId, studentId) {
-    return await this.findOne({ classId, studentId, status: 'pending' });
-  }
-
-  async approveRequest(requestId, processedBy) {
-    return await this.update(requestId, {
-      status: 'accepted',
-      processedAt: new Date(),
-      processedBy,
-    });
-  }
-
-  async rejectRequest(requestId, processedBy) {
-    return await this.update(requestId, {
-      status: 'rejected',
-      processedAt: new Date(),
-      processedBy,
-    });
+  async findRequest(classId, studentUserId) {
+    return await this.findOne({ classId, studentUserId });
   }
 }
 

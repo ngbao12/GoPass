@@ -16,15 +16,15 @@ class ClassService {
 
   // Create new class
   async createClass(teacherId, dto) {
-    const { name, description, requireApproval = false } = dto;
+    const { className, description, requireApproval = false } = dto;
 
     // Generate unique class code
-    const code = await ClassRepository.generateUniqueCode();
+    const classCode = await ClassRepository.generateUniqueCode();
 
     const classData = await ClassRepository.create({
-      name,
-      code,
-      teacherId,
+      className,
+      classCode,
+      teacherUserId: teacherId,
       description,
       requireApproval,
       isActive: true,
@@ -34,11 +34,39 @@ class ClassService {
   }
 
   // Get classes taught by teacher
-  async getTeachingClasses(teacherId) {
-    return await ClassRepository.findByTeacher(teacherId, {
-      populate: 'teacherId',
+  async getTeachingClasses(teacherId, query = {}) {
+    const { page = 1, limit = 10, isActive } = query;
+    const filter = { teacherUserId: teacherId };
+    if (isActive !== undefined) filter.isActive = isActive;
+
+    const skip = (page - 1) * limit;
+    const classes = await ClassRepository.find(filter, {
+      populate: 'teacherUserId',
       sort: { createdAt: -1 },
+      limit: parseInt(limit),
+      skip,
     });
+
+    const total = await ClassRepository.count(filter);
+    const membersCountPromises = classes.map(async (classItem) => {
+      const count = await ClassMemberRepository.countClassMembers(classItem._id);
+      return {
+        ...classItem.toObject(),
+        studentCount: count,
+      };
+    });
+
+    const classesWithCounts = await Promise.all(membersCountPromises);
+
+    return {
+      classes: classesWithCounts,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalItems: total,
+        itemsPerPage: parseInt(limit),
+      },
+    };
   }
 
   // Get classes where student is enrolled
@@ -47,32 +75,128 @@ class ClassService {
       populate: 'classId',
     });
 
-    return memberships.map(m => m.classId);
+    const classesData = await Promise.all(
+      memberships.map(async (m) => {
+        const classItem = m.classId;
+        const studentCount = await ClassMemberRepository.countClassMembers(classItem._id);
+        
+        // Get teacher info
+        const UserRepository = require('../repositories/UserRepository');
+        const teacher = await UserRepository.findById(classItem.teacherUserId);
+
+        // Get assignment stats (optional - simplified version)
+        const ExamAssignmentRepository = require('../repositories/ExamAssignmentRepository');
+        const ExamSubmissionRepository = require('../repositories/ExamSubmissionRepository');
+        
+        const assignments = await ExamAssignmentRepository.findByClass(classItem._id);
+        const submissions = await ExamSubmissionRepository.find({
+          classId: classItem._id,
+          studentUserId,
+          status: 'graded',
+        });
+
+        const totalAssignments = assignments.length;
+        const completedAssignments = new Set(submissions.map(s => s.examId.toString())).size;
+        
+        let avgScore = 0;
+        if (submissions.length > 0) {
+          const totalScore = submissions.reduce((sum, s) => sum + (s.finalScore || 0), 0);
+          avgScore = totalScore / submissions.length;
+        }
+
+        return {
+          _id: classItem._id,
+          className: classItem.className,
+          classCode: classItem.classCode,
+          teacher: {
+            name: teacher?.name || 'Unknown',
+            avatar: teacher?.avatar || '',
+          },
+          studentCount,
+          status: m.status,
+          joinedDate: m.createdAt,
+          stats: {
+            totalAssignments,
+            completedAssignments,
+            avgScore: Number(avgScore.toFixed(1)),
+          },
+        };
+      })
+    );
+
+    return { classes: classesData };
   }
 
   // Get class detail
   async getClassDetail(classId, currentUserId) {
-    const classData = await ClassRepository.findById(classId);
+    const classData = await ClassRepository.findById(classId, {
+      populate: 'teacherUserId',
+    });
     if (!classData) {
       throw new Error('Class not found');
     }
 
     // Get members count
-    const membersCount = await ClassMemberRepository.countClassMembers(classId);
+    const studentCount = await ClassMemberRepository.countClassMembers(classId);
 
-    // Get members if user is teacher
-    let members = [];
-    if (classData.teacherId.toString() === currentUserId.toString()) {
-      members = await ClassMemberRepository.findByClass(classId, {
-        populate: 'studentId',
-      });
-    }
+    const classObj = classData.toObject();
+    const teacher = classObj.teacherUserId;
 
     return {
-      ...classData.toObject(),
-      membersCount,
-      members,
+      _id: classObj._id,
+      className: classObj.className,
+      classCode: classObj.classCode,
+      teacherUserId: teacher._id,
+      teacher: {
+        _id: teacher._id,
+        name: teacher.name,
+        email: teacher.email,
+        avatar: teacher.avatar || '',
+      },
+      description: classObj.description || '',
+      requireApproval: classObj.requireApproval,
+      isActive: classObj.isActive,
+      studentCount,
+      createdAt: classObj.createdAt,
+      updatedAt: classObj.updatedAt,
     };
+  }
+
+  // Get class members
+  async getClassMembers(classId, currentUserId, query = {}) {
+    const classData = await ClassRepository.findById(classId);
+    if (!classData) {
+      throw new Error('Class not found');
+    }
+
+    const { status } = query;
+    const filter = { classId };
+    if (status) filter.status = status;
+    else filter.status = 'active'; // Default to active members
+
+    const members = await ClassMemberRepository.find(filter, {
+      populate: 'studentUserId',
+      sort: { createdAt: -1 },
+    });
+
+    const formattedMembers = members.map(member => {
+      const memberObj = member.toObject();
+      const student = memberObj.studentUserId;
+      return {
+        _id: memberObj._id,
+        studentUserId: student._id,
+        student: {
+          _id: student._id,
+          name: student.name,
+          email: student.email,
+          avatar: student.avatar || '',
+        },
+        status: memberObj.status,
+        joinedDate: memberObj.createdAt,
+      };
+    });
+
+    return { members: formattedMembers };
   }
 
   // Update class
@@ -83,15 +207,16 @@ class ClassService {
     }
 
     // Check ownership
-    if (classData.teacherId.toString() !== teacherId.toString()) {
+    if (classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized to update this class');
     }
 
-    const { name, description, requireApproval } = dto;
+    const { className, description, requireApproval, isActive } = dto;
     const updateData = {};
-    if (name !== undefined) updateData.name = name;
+    if (className !== undefined) updateData.className = className;
     if (description !== undefined) updateData.description = description;
     if (requireApproval !== undefined) updateData.requireApproval = requireApproval;
+    if (isActive !== undefined) updateData.isActive = isActive;
 
     return await ClassRepository.update(classId, updateData);
   }
@@ -104,35 +229,36 @@ class ClassService {
     }
 
     // Check ownership
-    if (classData.teacherId.toString() !== teacherId.toString()) {
+    if (classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized to delete this class');
     }
 
-    await ClassRepository.delete(classId);
+    // Soft delete - set isActive to false
+    await ClassRepository.update(classId, { isActive: false });
     return { message: 'Class deleted successfully' };
   }
 
   // Add member to class (teacher action)
-  async addMember(classId, teacherId, studentId) {
+  async addMember(classId, teacherId, studentUserId) {
     const classData = await ClassRepository.findById(classId);
     if (!classData) {
       throw new Error('Class not found');
     }
 
     // Check ownership
-    if (classData.teacherId.toString() !== teacherId.toString()) {
+    if (classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized to add members');
     }
 
     // Check if already a member
-    const existing = await ClassMemberRepository.findMember(classId, studentId);
+    const existing = await ClassMemberRepository.findMember(classId, studentUserId);
     if (existing && existing.status === 'active') {
       throw new Error('Student is already a member');
     }
 
     const member = await ClassMemberRepository.create({
       classId,
-      studentId,
+      studentUserId,
       status: 'active',
     });
 
@@ -151,15 +277,15 @@ class ClassService {
       throw new Error('Unauthorized to remove members');
     }
 
-    await ClassMemberRepository.removeMember(classId, memberId);
-    return { message: 'Member removed successfully' };
+    await ClassMemberRepository.removeMember(classId, studentUserId);
+    return { message: 'Student removed from class successfully' };
   }
 
   // Join class by code
-  async joinByCode(studentId, classCode) {
+  async joinByCode(studentUserId, classCode) {
     const classData = await ClassRepository.findByCode(classCode);
     if (!classData) {
-      throw new Error('Invalid class code');
+      throw new Error('Class not found');
     }
 
     if (!classData.isActive) {
@@ -167,70 +293,120 @@ class ClassService {
     }
 
     // Check if already a member
-    const existing = await ClassMemberRepository.findMember(classData._id, studentId);
+    const existing = await ClassMemberRepository.findMember(classData._id, studentUserId);
     if (existing && existing.status === 'active') {
       throw new Error('You are already a member of this class');
     }
 
     // If requires approval, create join request
     if (classData.requireApproval) {
-      const request = await ClassJoinRequestRepository.create({
+      const existingRequest = await ClassJoinRequestRepository.findRequest(classData._id, studentUserId);
+      if (existingRequest && existingRequest.status === 'pending') {
+        return {
+          classId: classData._id,
+          className: classData.className,
+          status: 'pending',
+          message: 'Join request already sent',
+        };
+      }
+
+      await ClassJoinRequestRepository.create({
         classId: classData._id,
-        studentId,
+        studentUserId,
         status: 'pending',
       });
-      return { type: 'request', data: request };
+
+      return {
+        classId: classData._id,
+        className: classData.className,
+        status: 'pending',
+        message: 'Join request sent successfully',
+      };
     }
 
     // Otherwise, add directly
-    const member = await ClassMemberRepository.create({
+    await ClassMemberRepository.create({
       classId: classData._id,
-      studentId,
+      studentUserId,
       status: 'active',
     });
 
-    return { type: 'member', data: member };
+    return {
+      classId: classData._id,
+      className: classData.className,
+      status: 'approved',
+      message: 'Joined class successfully',
+    };
   }
 
   // Create join request
-  async createJoinRequest(classId, studentId) {
+  async createJoinRequest(classId, studentUserId) {
     const classData = await ClassRepository.findById(classId);
     if (!classData) {
       throw new Error('Class not found');
     }
 
     // Check if already has pending request
-    const existing = await ClassJoinRequestRepository.findRequest(classId, studentId);
-    if (existing) {
+    const existing = await ClassJoinRequestRepository.findRequest(classId, studentUserId);
+    if (existing && existing.status === 'pending') {
       throw new Error('You already have a pending request');
     }
 
     return await ClassJoinRequestRepository.create({
       classId,
-      studentId,
+      studentUserId,
       status: 'pending',
     });
   }
 
   // Get join requests for a class
-  async getJoinRequests(classId, teacherId) {
+  async getJoinRequests(classId, teacherId, query = {}) {
     const classData = await ClassRepository.findById(classId);
     if (!classData) {
       throw new Error('Class not found');
     }
 
     // Check ownership
-    if (classData.teacherId.toString() !== teacherId.toString()) {
+    if (classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized to view join requests');
     }
 
-    return await ClassJoinRequestRepository.findPendingRequests(classId);
+    const { status } = query;
+    const filter = { classId };
+    if (status) filter.status = status;
+
+    const requests = await ClassJoinRequestRepository.find(filter, {
+      populate: 'studentUserId',
+      sort: { createdAt: -1 },
+    });
+
+    const formattedRequests = requests.map(req => {
+      const reqObj = req.toObject();
+      const student = reqObj.studentUserId;
+      return {
+        _id: reqObj._id,
+        classId: reqObj.classId,
+        studentUserId: student._id,
+        student: {
+          _id: student._id,
+          name: student.name,
+          email: student.email,
+          avatar: student.avatar || '',
+        },
+        status: reqObj.status,
+        requestedAt: reqObj.createdAt,
+        processedAt: reqObj.processedAt,
+        processedBy: reqObj.processedBy,
+      };
+    });
+
+    return { requests: formattedRequests };
   }
 
   // Approve join request
   async approveJoinRequest(classId, teacherId, requestId) {
     const classData = await ClassRepository.findById(classId);
-    if (!classData || classData.teacherId.toString() !== teacherId.toString()) {
+    if (!classData || classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized');
     }
 
@@ -239,23 +415,36 @@ class ClassService {
       throw new Error('Request not found');
     }
 
+    if (request.status !== 'pending') {
+      throw new Error('Request has already been processed');
+    }
+
     // Approve request
-    await ClassJoinRequestRepository.approveRequest(requestId, teacherId);
+    const updatedRequest = await ClassJoinRequestRepository.update(requestId, {
+      status: 'approved',
+      processedBy: teacherId,
+      processedAt: new Date(),
+    });
 
     // Add member
     await ClassMemberRepository.create({
       classId,
-      studentId: request.studentId,
+      studentUserId: request.studentUserId,
       status: 'active',
     });
 
-    return { message: 'Request approved successfully' };
+    return {
+      _id: updatedRequest._id,
+      status: updatedRequest.status,
+      processedAt: updatedRequest.processedAt,
+      processedBy: updatedRequest.processedBy,
+    };
   }
 
   // Reject join request
   async rejectJoinRequest(classId, teacherId, requestId) {
     const classData = await ClassRepository.findById(classId);
-    if (!classData || classData.teacherId.toString() !== teacherId.toString()) {
+    if (!classData || classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized');
     }
 
@@ -264,14 +453,28 @@ class ClassService {
       throw new Error('Request not found');
     }
 
-    await ClassJoinRequestRepository.rejectRequest(requestId, teacherId);
-    return { message: 'Request rejected successfully' };
+    if (request.status !== 'pending') {
+      throw new Error('Request has already been processed');
+    }
+
+    const updatedRequest = await ClassJoinRequestRepository.update(requestId, {
+      status: 'rejected',
+      processedBy: teacherId,
+      processedAt: new Date(),
+    });
+
+    return {
+      _id: updatedRequest._id,
+      status: updatedRequest.status,
+      processedAt: updatedRequest.processedAt,
+      processedBy: updatedRequest.processedBy,
+    };
   }
 
   // Get class progress
   async getClassProgress(classId, teacherId) {
     const classData = await ClassRepository.findById(classId);
-    if (!classData || classData.teacherId.toString() !== teacherId.toString()) {
+    if (!classData || classData.teacherUserId.toString() !== teacherId.toString()) {
       throw new Error('Unauthorized');
     }
 
@@ -280,8 +483,11 @@ class ClassService {
 
     const progress = [];
     for (const assignment of assignments) {
-      const submissions = await ExamSubmissionRepository.findByAssignment(assignment._id);
-      const completedCount = submissions.filter(s => s.status === 'graded').length;
+      const submissions = await ExamSubmissionRepository.find({
+        examAssignmentId: assignment._id,
+        status: 'graded',
+      });
+      const completedCount = submissions.length;
 
       progress.push({
         assignmentId: assignment._id,

@@ -42,6 +42,7 @@ class HttpClient {
 
     if (requiresAuth) {
       const token = this.getAccessToken();
+      const role = this.getAccessToken
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }

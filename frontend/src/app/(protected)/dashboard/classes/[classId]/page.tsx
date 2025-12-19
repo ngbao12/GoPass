@@ -1,7 +1,5 @@
 import React from "react";
 import StudentClassDetailView from "@/features/dashboard/components/student/class/StudentClassDetailView";
-
-// [UPDATE 1] Import từ API mới thay vì mock data cũ
 import { getClassDetailById } from "@/services/student/classApi";
 
 export default async function ClassDetailsPage({
@@ -9,10 +7,7 @@ export default async function ClassDetailsPage({
 }: {
   params: Promise<{ classId: string }>;
 }) {
-  // Trong Next.js 15+, params là một Promise nên cần await
   const { classId } = await params;
-
-  // [UPDATE 2] Thêm 'await' vì hàm bây giờ là bất đồng bộ (Async)
   const classData = await getClassDetailById(classId);
 
   // 3. Handle Case: Class Not Found

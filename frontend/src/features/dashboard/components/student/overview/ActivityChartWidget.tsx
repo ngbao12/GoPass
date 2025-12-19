@@ -12,7 +12,7 @@ const ActivityChartWidget: React.FC = () => {
   const [loading, setLoading] = useState(true);
   
   // Hardcode ID
-  const currentStudentId = "u_student_01";
+  const currentStudentId = "694425e97eff90a0a3cdc635";
 
   useEffect(() => {
     const loadData = async () => {

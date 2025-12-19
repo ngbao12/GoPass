@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { StudentStats } from "@/features/dashboard/types/student";
-// Import hàm API vừa tạo thay vì import db trực tiếp
 import { fetchStudentStats } from "@/services/student/studentStatsApi";
 
 // --- Internal Component: SolidCard (Giữ nguyên không đổi) ---
@@ -44,16 +43,13 @@ const StudentStatsGrid: React.FC = () => {
   const [stats, setStats] = useState<StudentStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Hardcode ID (Sau này lấy từ Context/Auth)
-  const currentStudentId = "u_student_01"; 
   const iconClasses = "w-12 h-12";
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // GỌI API TỪ SERVICE
-        const data = await fetchStudentStats(currentStudentId);
+        const data = await fetchStudentStats();
         setStats(data);
       } catch (error) {
         // Xử lý lỗi (ví dụ: hiện thông báo)

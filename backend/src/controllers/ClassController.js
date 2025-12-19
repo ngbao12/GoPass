@@ -1,22 +1,6 @@
 const ClassService = require('../services/ClassService');
 
 class ClassController {
-  // GET /classes - Get all classes
-  async getAllClasses(req, res) {
-    try {
-      const classes = await ClassService.getAllClasses();
-      res.status(200).json({
-        success: true,
-        data: classes,
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  }
-
   // POST /classes
   async createClass(req, res) {
     try {
@@ -34,14 +18,14 @@ class ClassController {
     }
   }
 
-  // GET /classes/my-teaching
+  // GET /classes/my-classes
   async getTeachingClasses(req, res) {
     try {
       const teacherId = req.user.userId;
-      const classes = await ClassService.getTeachingClasses(teacherId);
+      const result = await ClassService.getTeachingClasses(teacherId, req.query);
       res.status(200).json({
         success: true,
-        data: classes,
+        data: result,
       });
     } catch (error) {
       res.status(400).json({
@@ -51,14 +35,14 @@ class ClassController {
     }
   }
 
-  // GET /classes/my-learning
+  // GET /classes/my-enrolled
   async getLearningClasses(req, res) {
     try {
       const studentUserId = req.user.userId;
-      const classes = await ClassService.getLearningClasses(studentUserId);
+      const result = await ClassService.getLearningClasses(studentUserId);
       res.status(200).json({
         success: true,
-        data: classes,
+        data: result,
       });
     } catch (error) {
       res.status(400).json({
@@ -80,6 +64,24 @@ class ClassController {
       });
     } catch (error) {
       res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  // GET /classes/:classId/members
+  async getClassMembers(req, res) {
+    try {
+      const { classId } = req.params;
+      const currentUserId = req.user.userId;
+      const result = await ClassService.getClassMembers(classId, currentUserId, req.query);
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      res.status(400).json({
         success: false,
         message: error.message,
       });
@@ -127,8 +129,8 @@ class ClassController {
     try {
       const { classId } = req.params;
       const teacherId = req.user.userId;
-      const { studentId } = req.body;
-      const member = await ClassService.addMember(classId, teacherId, studentId);
+      const { studentUserId } = req.body;
+      const member = await ClassService.addMember(classId, teacherId, studentUserId);
       res.status(201).json({
         success: true,
         data: member,
@@ -141,12 +143,12 @@ class ClassController {
     }
   }
 
-  // DELETE /classes/:classId/members/:memberId
+  // DELETE /classes/:classId/members/:studentUserId
   async removeMember(req, res) {
     try {
-      const { classId, memberId } = req.params;
+      const { classId, studentUserId } = req.params;
       const teacherId = req.user.userId;
-      const result = await ClassService.removeMember(classId, teacherId, memberId);
+      const result = await ClassService.removeMember(classId, teacherId, studentUserId);
       res.status(200).json({
         success: true,
         message: result.message,
@@ -159,12 +161,30 @@ class ClassController {
     }
   }
 
-  // POST /classes/join-by-code
+  // POST /classes/join
   async joinByCode(req, res) {
     try {
-      const studentId = req.user.userId;
+      const studentUserId = req.user.userId;
       const { classCode } = req.body;
-      const result = await ClassService.joinByCode(studentId, classCode);
+      const result = await ClassService.joinByCode(studentUserId, classCode);
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      res.status(404).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  }
+
+  // GET /classes/:classId/join-requests
+  async getJoinRequests(req, res) {
+    try {
+      const { classId } = req.params;
+      const teacherId = req.user.userId;
+      const result = await ClassService.getJoinRequests(classId, teacherId, req.query);
       res.status(200).json({
         success: true,
         data: result,
@@ -177,87 +197,31 @@ class ClassController {
     }
   }
 
-  // POST /classes/:classId/join-requests
-  async requestJoinClass(req, res) {
-    try {
-      const { classId } = req.params;
-      const studentId = req.user.userId;
-      const request = await ClassService.createJoinRequest(classId, studentId);
-      res.status(201).json({
-        success: true,
-        data: request,
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  }
-
-  // GET /classes/:classId/join-requests
-  async getJoinRequests(req, res) {
-    try {
-      const { classId } = req.params;
-      const teacherId = req.user.userId;
-      const requests = await ClassService.getJoinRequests(classId, teacherId);
-      res.status(200).json({
-        success: true,
-        data: requests,
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  }
-
-  // POST /classes/:classId/join-requests/:requestId/approve
-  async approveJoinRequest(req, res) {
+  // PUT /classes/:classId/join-requests/:requestId
+  async processJoinRequest(req, res) {
     try {
       const { classId, requestId } = req.params;
+      const { action } = req.body;
       const teacherId = req.user.userId;
-      const result = await ClassService.approveJoinRequest(classId, teacherId, requestId);
-      res.status(200).json({
-        success: true,
-        message: result.message,
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  }
 
-  // POST /classes/:classId/join-requests/:requestId/reject
-  async rejectJoinRequest(req, res) {
-    try {
-      const { classId, requestId } = req.params;
-      const teacherId = req.user.userId;
-      const result = await ClassService.rejectJoinRequest(classId, teacherId, requestId);
-      res.status(200).json({
-        success: true,
-        message: result.message,
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
-  }
+      if (!action || !['approve', 'reject'].includes(action)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Action must be either "approve" or "reject"',
+        });
+      }
 
-  // GET /classes/:classId/progress
-  async getClassProgress(req, res) {
-    try {
-      const { classId } = req.params;
-      const teacherId = req.user.userId;
-      const progress = await ClassService.getClassProgress(classId, teacherId);
+      let result;
+      if (action === 'approve') {
+        result = await ClassService.approveJoinRequest(classId, teacherId, requestId);
+      } else {
+        result = await ClassService.rejectJoinRequest(classId, teacherId, requestId);
+      }
+
       res.status(200).json({
         success: true,
-        data: progress,
+        data: result,
+        message: 'Request processed successfully',
       });
     } catch (error) {
       res.status(400).json({
