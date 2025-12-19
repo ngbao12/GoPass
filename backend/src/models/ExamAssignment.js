@@ -28,7 +28,7 @@ const examAssignmentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    maxAttempts: {
+    attemptLimit: {
       type: Number,
       default: 1,
     },

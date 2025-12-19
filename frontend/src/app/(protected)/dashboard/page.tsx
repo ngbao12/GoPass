@@ -9,6 +9,8 @@ import StudentPracticeView from "@/features/dashboard/components/student/practic
 import StudentContestsView from "@/features/dashboard/components/student/contest/StudentContestsView";
 import StudentHistoryView from "@/features/dashboard/components/student/history/StudentHistoryView";
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
+import AdminForumView from "@/features/dashboard/components/admin/forum/AdminForumView";
+import StudentForumView from "@/features/dashboard/components/student/forum/StudentForumView";
 
 const DashboardPage: React.FC = () => {
   const { activeTab, userRole } = useDashboard();
@@ -24,6 +26,8 @@ const DashboardPage: React.FC = () => {
       case "contests":
         return <CreateContestView />;
 
+      case "forum":
+        return <AdminForumView />; // TODO: Implement Forum View
       default:
         return <AdminDashboardView />;
     }
@@ -42,6 +46,9 @@ const DashboardPage: React.FC = () => {
 
       case "history":
         return <StudentHistoryView />;
+
+      case "forum":
+        return <StudentForumView />;
 
       default:
         return <StudentDashboardView />;

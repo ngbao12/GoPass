@@ -1,0 +1,98 @@
+// Forum Article from VnSocial
+export interface ForumArticle {
+    id: number;
+    title: string;
+    content: string[];
+    excerpt: string;
+    category: string;
+    categoryColor: string;
+    source: string;
+    sourceUrl: string;
+    timeAgo: string;
+    views: number;
+    likes: number;
+    discussionPostsCount: number;
+    commentsCount: number;
+    isTrending: boolean;
+    createdAt: string;
+    updatedAt: string;
+    tags?: string[];
+    relatedExamId?: string;
+}
+
+// AI-generated discussion post or student-created question
+export interface ForumDiscussionPost {
+    id: string;
+    articleId: number;
+    type: "ai-generated" | "student-created";
+    question: string;
+    description: string;
+    commentsCount: number;
+    likes: number;
+    createdAt: string;
+    generatedBy?: string;
+    createdBy?: string;
+    authorName?: string;
+    authorAvatar?: string;
+}
+
+// Legacy interface for backward compatibility
+export interface ForumPost extends ForumArticle {
+    // Keep for backward compatibility
+}
+
+export interface ForumComment {
+    id: string;
+    discussionPostId: string;
+    userId: string;
+    parentId?: string; // For nested replies
+    userName: string;
+    userAvatar: string;
+    timeAgo: string;
+    content: string;
+    likes: number;
+    replies: number;
+    isLiked: boolean;
+    createdAt: string;
+}
+
+export interface DiscussionThread {
+    id: string;
+    articleId: number;
+    type: "ai-suggestion" | "student-question";
+    question: string;
+    aiGenerated?: boolean;
+    authorName?: string;
+    authorAvatar?: string;
+    timeAgo?: string;
+    comments: ForumComment[];
+    createdAt: string;
+}
+
+export interface RelatedExam {
+    id: string;
+    articleId: number;
+    examId: string;
+    title: string;
+    subject: string;
+    duration: number;
+    questionCount: number;
+    relevanceScore: number;
+}
+
+export interface ForumCategory {
+    id: string;
+    name: string;
+    color: string;
+    description?: string;
+    articlesCount?: number;
+}
+
+export interface ForumStats {
+    totalArticles: number;
+    totalDiscussionPosts: number;
+    totalComments: number;
+    activeUsers: number;
+}
+
+export type ForumFilter = "trending" | "newest" | "popular" | "following" | "community";

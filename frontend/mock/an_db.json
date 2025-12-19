@@ -586,15 +586,15 @@
       "final_score": 7.0
     },
     {
-    "submission_id": "sub_contest_01",
-    "exam_id": "ex_contest_math_final",
-    "student_user_id": "u_student_01",
-    "class_id": null, 
-    "started_at": "2025-12-10T09:00:00Z",
-    "submitted_at": "2025-12-10T10:30:00Z",
-    "status": "completed",
-    "objective_score": 9.5,
-    "final_score": 9.5
+      "submission_id": "sub_contest_01",
+      "exam_id": "ex_contest_math_final",
+      "student_user_id": "u_student_01",
+      "class_id": null, 
+      "started_at": "2025-12-10T09:00:00Z",
+      "submitted_at": "2025-12-10T10:30:00Z",
+      "status": "completed",
+      "objective_score": 9.5,
+      "final_score": 9.5
     },
     {
       "submission_id": "sub_global_01",

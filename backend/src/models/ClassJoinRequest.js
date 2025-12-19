@@ -6,14 +6,14 @@ const classJoinRequestSchema = new mongoose.Schema({
     ref: 'Class',
     required: true,
   },
-  studentId: {
+  studentUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
   status: {
     type: String,
-    enum: ['pending', 'accepted', 'rejected'],
+    enum: ['pending', 'approved', 'rejected'],
     default: 'pending',
   },
   requestedAt: {
@@ -33,6 +33,6 @@ const classJoinRequestSchema = new mongoose.Schema({
 
 // Index for faster queries
 classJoinRequestSchema.index({ classId: 1, status: 1 });
-classJoinRequestSchema.index({ studentId: 1 });
+classJoinRequestSchema.index({ studentUserId: 1 });
 
 module.exports = mongoose.model('ClassJoinRequest', classJoinRequestSchema);

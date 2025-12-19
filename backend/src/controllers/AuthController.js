@@ -1,6 +1,7 @@
 const AuthService = require('../services/AuthService');
 
 class AuthController {
+  
   // POST /auth/register
   async register(req, res) {
     try {
@@ -100,6 +101,8 @@ class AuthController {
       });
     }
   }
+
+  
 }
 
 module.exports = new AuthController();

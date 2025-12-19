@@ -4,4 +4,6 @@ module.exports = {
   PasswordHasher: require('./PasswordHasher'),
   MailProvider: require('./MailProvider'),
   AiScoringProvider: require('./AiScoringProvider'),
+  VnSocialProvider: require('./VnSocialProvider'),
+  VnSmartBotProvider: require('./VnSmartBotProvider'),
 };

@@ -152,9 +152,11 @@ class HttpClient {
           });
           return this.handleResponse<T>(retryResponse);
         } else {
-          // Token refresh failed - redirect to login
+          // Token refresh failed - clear only auth data and redirect to login
           if (typeof window !== 'undefined') {
-            localStorage.clear();
+            localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.USER_DATA);
             window.location.href = '/login';
           }
           throw new ApiError(401, 'Session expired. Please login again.');

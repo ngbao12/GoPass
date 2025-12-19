@@ -11,6 +11,9 @@ const gradingRoutes = require('./grading.routes');
 const questionBankRoutes = require('./questionbank.routes');
 const contestRoutes = require('./contest.routes');
 const adminRoutes = require('./admin.routes');
+const vnsocialRoutes = require('./vnsocial.routes');
+const vnsmartbotRoutes = require("./vnsmartbot.routes");
+const forumRoutes = require("./forum.routes");
 
 // API routes
 router.use('/auth', authRoutes);
@@ -22,6 +25,10 @@ router.use('/grading', gradingRoutes);
 router.use('/questions', questionBankRoutes);
 router.use('/contests', contestRoutes);
 router.use('/admin', adminRoutes);
+router.use('/vnsocial', vnsocialRoutes);
+router.use("/smartbot", vnsmartbotRoutes);
+router.use("/forum", forumRoutes);
+
 
 // Health check
 router.get('/health', (req, res) => {
