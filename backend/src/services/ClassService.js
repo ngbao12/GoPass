@@ -42,8 +42,8 @@ class ClassService {
   }
 
   // Get classes where student is enrolled
-  async getLearningClasses(studentId) {
-    const memberships = await ClassMemberRepository.findByStudent(studentId, {
+  async getLearningClasses(studentUserId) {
+    const memberships = await ClassMemberRepository.findByStudent(studentUserId, {
       populate: 'classId',
     });
 

@@ -6,19 +6,19 @@ import AdminStatsGrid from "./AdminStatsGrid";
 import AdminActionToolbar from "./AdminActionToolbar";
 import ExamManagementTable from "./ExamManagementTable";
 import { mockAdminDashboardData } from "@/features/dashboard/data/mock-admin";
-import { Exam } from "@/features/dashboard/types";
+import { ExamMode } from "@/features/exam/types";
 
 const AdminDashboardView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState("all");
+  const [filterType, setFilterType] = useState<ExamMode | "all">("all");
 
   // Filter exams based on search and filter
   const filteredExams = useMemo(() => {
     let filtered = mockAdminDashboardData.exams;
 
-    // Filter by type
+    // Filter by mode
     if (filterType !== "all") {
-      filtered = filtered.filter((exam) => exam.type === filterType);
+      filtered = filtered.filter((exam) => exam.mode === filterType);
     }
 
     // Filter by search query

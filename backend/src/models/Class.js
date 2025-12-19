@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 
 const classSchema = new mongoose.Schema({
-  name: {
+  className: {
     type: String,
     required: true,
     trim: true,
   },
-  code: {
+  classCode: {
     type: String,
     required: true,
     unique: true,
     uppercase: true,
   },
-  teacherId: {
+  teacherUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,

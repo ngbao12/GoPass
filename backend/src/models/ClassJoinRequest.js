@@ -6,14 +6,14 @@ const classJoinRequestSchema = new mongoose.Schema({
     ref: 'Class',
     required: true,
   },
-  studentId: {
+  studentUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
   status: {
     type: String,
-    enum: ['pending', 'accepted', 'rejected'],
+    enum: ['pending', 'approved', 'rejected'],
     default: 'pending',
   },
   requestedAt: {

@@ -1,3 +1,5 @@
+const ContestParticipation = require('./ContestParticipation');
+
 // Export all models
 module.exports = {
   User: require('./User'),
@@ -13,4 +15,5 @@ module.exports = {
   ManualGrading: require('./ManualGrading'),
   Contest: require('./Contest'),
   ContestExam: require('./ContestExam'),
+  ContestParticipation: require('./ContestParticipation'),
 };
