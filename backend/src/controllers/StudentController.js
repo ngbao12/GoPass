@@ -37,6 +37,16 @@ class StudentController {
       res.status(400).json({ success: false, message: error.message });
     }
   }
+
+  async getStudentContests(req, res) {
+    try {
+      const { status } = req.query;
+      const data = await StudentService.getStudentContests(req.user.userId, status);
+      res.status(200).json({ success: true, data });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
 }
 
 module.exports = new StudentController();

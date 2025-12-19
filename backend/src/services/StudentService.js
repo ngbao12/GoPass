@@ -2,6 +2,7 @@ const ClassMemberRepository = require('../repositories/ClassMemberRepository');
 const ExamSubmissionRepository = require('../repositories/ExamSubmissionRepository');
 const ExamAssignmentRepository = require('../repositories/ExamAssignmentRepository');
 const ContestRepository = require('../repositories/ContestRepository');
+const ContestExamRepository = require('../repositories/ContestExamRepository');
 const ExamRepository = require('../repositories/ExamRepository');
 
 class StudentService {
@@ -185,16 +186,94 @@ class StudentService {
     };
   }
 
+
   /**
-   * Get student activity for last 7 days
+   * Get contests for student with subjects and progress
    */
+  async getStudentContests(studentId, statusFilter) {
+    const filter = { isPublic: true };
+    if (statusFilter) {
+      filter.status = statusFilter;
+    }
+
+    const contests = await ContestRepository.find(filter, { sort: { startTime: 1 } });
+    const contestIds = contests.map(c => c._id);
+
+    // Fetch contest exams to derive subjects
+    const contestExams = await ContestExamRepository.find({
+      contestId: { $in: contestIds }
+    }, { populate: 'examId' });
+
+    const subjectsMap = new Map();
+    const totalsMap = new Map();
+    contestExams.forEach(ce => {
+      const cid = ce.contestId?.toString();
+      const subj = ce.examId?.subject || 'Tổng hợp';
+      if (!subjectsMap.has(cid)) subjectsMap.set(cid, new Set());
+      subjectsMap.get(cid).add(subj);
+      totalsMap.set(cid, (totalsMap.get(cid) || 0) + 1);
+    });
+
+    // Student submissions per contest for progress and score
+    const submissions = await ExamSubmissionRepository.find({
+      studentUserId: studentId,
+      contestId: { $in: contestIds }
+    }, { populate: 'examId' });
+
+    const progressMap = new Map();
+    const bestScoreMap = new Map();
+    submissions.forEach(sub => {
+      const cid = sub.contestId?.toString();
+      if (!cid) return;
+      const isCompleted = sub.status !== 'in_progress';
+      if (isCompleted) {
+        const prev = progressMap.get(cid) || 0;
+        progressMap.set(cid, prev + 1);
+        const score = Number(sub.totalScore || sub.finalScore || 0);
+        const best = bestScoreMap.get(cid) || 0;
+        if (score > best) bestScoreMap.set(cid, score);
+      }
+    });
+
+    const contestsDto = contests.map(c => {
+      const cid = c._id.toString();
+      const subjectsSet = subjectsMap.get(cid) || new Set();
+      const total = totalsMap.get(cid) || 0;
+      const completed = progressMap.get(cid) || 0;
+      const startDate = new Date(c.startTime).toLocaleDateString('vi-VN');
+      const endDate = new Date(c.endTime).toLocaleDateString('vi-VN');
+      const score = bestScoreMap.get(cid) || undefined;
+      const status = c.status === 'ended' ? 'completed' : c.status;
+
+      return {
+        id: cid,
+        title: c.name,
+        subjects: Array.from(subjectsSet),
+        startDate,
+        endDate,
+        participants: c.participantsCount || 0,
+        status,
+        progress: { completed, total },
+        rank: undefined,
+        score
+      };
+    });
+
+    return {
+      contests: contestsDto,
+      total: contestsDto.length
+    };
+  }
+    /**
+     * Get student activity for last 7 days
+     */
   async getStudentActivity(studentId) {
     const submissions = await ExamSubmissionRepository.find(
       { studentUserId: studentId },
       { populate: 'examId' }
     );
 
-    // Initialize 7-day structure
+
     const activity = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
@@ -230,6 +309,7 @@ class StudentService {
       hours: Number(d.hours.toFixed(1))
     }));
   }
+
 
   /**
    * Get available practice exams for student

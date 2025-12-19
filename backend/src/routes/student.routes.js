@@ -15,4 +15,7 @@ router.get('/activity', authorize('student'), StudentController.getStudentActivi
 // Student practice exams endpoint
 router.get('/practice', authorize('student'), StudentController.getPracticeExams);
 
+// Student contests endpoint
+router.get('/contests', authorize('student'), StudentController.getStudentContests);
+
 module.exports = router;
