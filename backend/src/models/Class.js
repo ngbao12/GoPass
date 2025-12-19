@@ -23,7 +23,7 @@ const classSchema = new mongoose.Schema({
   },
   requireApproval: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   isActive: {
     type: Boolean,

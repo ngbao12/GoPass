@@ -1,95 +1,150 @@
-import { StudentStats, ClassSummary } from "@/features/dashboard/types/student/";
+import { ClassSummary } from "@/features/dashboard/types/student/";
 import { httpClient } from "@/lib/http";
 
 /**
- * 1. GET: Get all enrolled classes for the current student
+ * Helper: Maps backend data objects to the standardized ClassSummary frontend interface.
+ * Based on the backend refactor, the data is already partially enriched (populated).
  */
-export const getMyClasses = async (): Promise<ClassSummary[]> => {
-  try {
-    const response = await httpClient.get<{ success: boolean; data: { classes: any[] } }>(
-      '/classes/my-enrolled',
-      { requiresAuth: true }
-    );
+const mapToClassSummary = (item: any, status: 'active' | 'pending'): ClassSummary => {
+  return {
+    // Backend uses _id from MongoDB
+    id: item._id, 
+    name: item.className || "Unnamed Class",
+    code: item.classCode || "N/A",
+    students: item.studentCount || 0,
+    teacher: item.teacher?.name || "Instructor",
+    status: status,
+    requestDate: item.joinedDate || item.requestDate 
+      ? new Date(item.joinedDate || item.requestDate).toLocaleDateString('vi-VN') 
+      : "N/A",
+    requestId: item.requestId
+  };
+};
 
-    if (!response.success || !response.data?.classes) {
+/**
+ * 1. GET: Fetch all classes where the student is an active member.
+ * Endpoint: /api/classes/enrolled (Aligns with Spec 2.11)
+ */
+export const getEnrolledClasses = async (): Promise<ClassSummary[]> => {
+  try {
+    const response = await httpClient.get<{ 
+      success: boolean; 
+      data: any[] 
+    }>('/classes/enrolled', { requiresAuth: true });
+
+    if (!response.success || !Array.isArray(response.data)) {
       return [];
     }
 
-    return response.data.classes.map((cls: any) => ({
-      id: cls._id,
-      name: cls.className,
-      code: cls.classCode,
-      students: cls.studentCount || 0,
-      teacher: cls.teacher?.name || "Unknown",
-      status: cls.status || 'active',
-      requestDate: cls.joinedDate,
-      requestId: cls._id
-    }));
-
+    return response.data.map((item) => mapToClassSummary(item, 'active'));
   } catch (error) {
-    console.error("Failed to fetch my classes:", error);
+    console.error("Failed to fetch enrolled classes:", error);
     return [];
   }
 };
 
 /**
- * 2. POST: Gửi yêu cầu tham gia lớp học
- * Logic: Tìm Class theo Code -> Tạo dòng mới trong ClassJoinRequest
+ * 2. GET: Fetch all join requests awaiting teacher approval.
+ * Endpoint: /api/classes/join-requests (Aligns with Spec 2.8)
  */
-// src/features/dashboard/data/student/myClassesApi.ts
+export const getPendingRequests = async (): Promise<ClassSummary[]> => {
+  try {
+    const response = await httpClient.get<{ 
+      success: boolean; 
+      data: any[] 
+    }>('/classes/pending-requests', { requiresAuth: true });
 
-// Định nghĩa kiểu kết quả trả về
-type JoinClassResult = 
+    if (!response.success || !Array.isArray(response.data)) {
+      return [];
+    }
+
+    return response.data.map((item) => mapToClassSummary(item, 'pending'));
+  } catch (error) {
+    console.error("Failed to fetch pending requests:", error);
+    return [];
+  }
+};
+
+/**
+ * 3. GET: Combined fetch for both active and pending classes.
+ * Runs both requests in parallel to optimize dashboard loading.
+ */
+export const getMyClasses = async (): Promise<ClassSummary[]> => {
+  const [enrolled, pending] = await Promise.all([
+    getEnrolledClasses(),
+    getPendingRequests()
+  ]);
+  return [...enrolled, ...pending];
+};
+
+/**
+ * Result type for the joinClass operation.
+ */
+export type JoinClassResult = 
   | { success: true; data: ClassSummary }
   | { success: false; error: 'NOT_FOUND' | 'SERVER_ERROR' | 'EXISTED' };
 
 /**
- * 2. POST: Join class by code
+ * 4. POST: Send a request to join a class using a class code.
+ * Endpoint: /api/classes/join (Aligns with Spec 2.7)
  */
 export const joinClass = async (code: string): Promise<JoinClassResult> => {
   try {
-    const response = await httpClient.post<{ success: boolean; data: any }>(
+    const response = await httpClient.post<{ 
+      success: boolean; 
+      data: any;
+      message?: string;
+    }>(
       '/classes/join',
-      { classCode: code },
+      { classCode: code.trim().toUpperCase() },
       { requiresAuth: true }
     );
 
     if (!response.success || !response.data) {
       return { success: false, error: 'SERVER_ERROR' };
     }
-    const data = response.data;
+
+    const { data } = response;
     
     return {
       success: true,
       data: {
         id: data.classId,
         name: data.className,
-        code: code,
+        code: code.toUpperCase(),
         students: 0,
-        status: data.status,
-        teacher: "Unknown",
-        requestDate: new Date().toISOString(),
-        requestId: data.classId
+        // New requests are 'pending' unless the class does not require approval
+        status: data.status === 'approved' ? 'active' : 'pending',
+        teacher: data.teacherName || "Instructor",
+        requestDate: new Date().toLocaleDateString('vi-VN'),
+        requestId: data._id || data.classId
       }
     };
 
   } catch (error: any) {
-    if (error.status === 404) {
-      return { success: false, error: 'NOT_FOUND' };
-    }
+    const status = error.status || error.response?.status;
+    
+    // Handle specific error codes from backend
+    if (status === 404) return { success: false, error: 'NOT_FOUND' };
+    if (status === 409) return { success: false, error: 'EXISTED' }; 
+    
     console.error("Join Class Error:", error);
     return { success: false, error: 'SERVER_ERROR' };
   }
 };
 
 /**
- * 3. DELETE: Cancel class join request (Not implemented in backend yet)
+ * 5. DELETE: Cancel a pending join request.
+ * Endpoint: /api/classes/join-requests/:requestId
  */
 export const cancelClassRequest = async (requestId: string): Promise<boolean> => {
+  console.log("Cancelling class request with ID:", requestId);
   try {
-    // TODO: Implement when backend endpoint is ready
-    console.warn('cancelClassRequest not yet implemented');
-    return false;
+    const response = await httpClient.delete<{ success: boolean }>(
+      `/classes/cancel-request/${requestId}`,
+      { requiresAuth: true }
+    );
+    return response.success;
   } catch (error) {
     console.error("Failed to cancel class request:", error);
     return false;

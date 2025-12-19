@@ -178,7 +178,42 @@ class ClassController {
       });
     }
   }
+  
+  // GET /classes/pending-requests
+  async getPendingRequests(req, res) {
+    try {
+      const studentUserId = req.user.userId; 
+      const data = await ClassService.getStudentPendingRequests(studentUserId);
+      return res.status(200).json({
+        success: true,
+        data: data
+      });
+    } catch (error) {
+      console.error("Controller Error:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Internal Server Error"
+      });
+    }
+  }
 
+  // GET /classes/enrolled
+  async getEnrolledClasses(req, res) {
+    try {
+      const studentUserId = req.user.userId;
+      const data = await ClassService.getStudentEnrolledClasses(studentUserId);
+      return res.status(200).json({
+        success: true,
+        data: data
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+  
   // GET /classes/:classId/join-requests
   async getJoinRequests(req, res) {
     try {
@@ -193,6 +228,25 @@ class ClassController {
       res.status(400).json({
         success: false,
         message: error.message,
+      });
+    }
+  }
+
+   // DELETE /classes/cancel-request/:requestId
+  async cancelJoinRequest(req, res) {
+    try {
+      const { requestId } = req.params;
+      const studentUserId = req.user.userId; 
+      await ClassService.cancelJoinRequest(requestId, studentUserId);
+
+      res.status(200).json({
+        success: true,
+        message: 'Join request has been cancelled.'
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message
       });
     }
   }
@@ -230,6 +284,8 @@ class ClassController {
       });
     }
   }
+
+ 
 }
 
 module.exports = new ClassController();

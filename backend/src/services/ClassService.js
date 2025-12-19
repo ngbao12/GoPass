@@ -471,6 +471,96 @@ class ClassService {
     };
   }
 
+  // Get student's enrolled classes
+  async getStudentEnrolledClasses(studentUserId) {
+    const filter = { status: 'active' }; 
+    
+    const options = {
+      populate: { 
+        path: 'classId', 
+        select: 'className classCode teacherUserId studentCount',
+       populate: {
+          path: 'teacherUserId',
+          select: 'name avatar'
+        }
+      },
+      sort: { createdAt: -1 },
+      lean: true
+    };
+
+    const memberships = await ClassMemberRepository.findByStudent(studentUserId, filter, options);
+
+    // Map to standardized format to match Frontend ClassSummary
+    return memberships
+      .filter(m => m.classId) // Safety check for deleted classes
+      .map(m => ({
+        _id: m.classId._id,
+        className: m.classId.className,
+        classCode: m.classId.classCode,
+        teacher: {
+          name: m.classId.teacherUserId?.name || "Instructor",
+          avatar: m.classId.teacherUserId?.avatar || ""
+        },
+        studentCount: m.classId.studentCount || 0,
+        status: 'active',
+        joinedDate: m.createdAt,
+        // Optional: you can add stats here later as per Spec 2.11
+      }));
+  }
+
+// Get student's pending join requests
+  async getStudentPendingRequests(studentUserId) {
+    const filter = { 
+      studentUserId: studentUserId, 
+      status: 'pending' 
+    };
+
+    const options = {
+      populate: {
+        path: 'classId',
+        select: 'className classCode teacherUserId studentCount',
+        populate: { 
+          path: 'teacherUserId', 
+          select: 'name avatar' 
+        }
+      },
+      sort: { requestedAt: -1 }, 
+      lean: true
+    };
+
+    const requests = await ClassJoinRequestRepository.find(filter, options);
+
+    return requests
+      .filter(req => req.classId) 
+      .map(req => ({
+        _id: req.classId._id,      
+        className: req.classId.className,
+        classCode: req.classId.classCode,
+        teacher: {
+          name: req.classId.teacherUserId?.name || "Instructor",
+          avatar: req.classId.teacherUserId?.avatar || ""
+        },
+        studentCount: req.classId.studentCount || 0,
+        status: 'pending',
+        requestDate: req.requestedAt || req.createdAt, 
+        requestId: req._id  
+      }));
+  }
+
+  async cancelJoinRequest(requestId, studentUserId) {
+
+    console.log("DEBUG: RequestID from Frontend:", requestId);
+    console.log("DEBUG: UserID from Middleware:", studentUserId);
+    
+    const deletedRequest = await ClassJoinRequestRepository.deleteRequest(requestId, studentUserId);
+    
+    if (!deletedRequest) {
+      throw new Error('Request not found or you are not authorized to cancel it');
+    }
+    
+    return true;
+  }
+
   // Get class progress
   async getClassProgress(classId, teacherId) {
     const classData = await ClassRepository.findById(classId);
@@ -500,6 +590,8 @@ class ClassService {
 
     return progress;
   }
+
+
 }
 
 module.exports = new ClassService();
