@@ -1,22 +1,41 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { TeacherDataProvider } from "./TeacherDataContext";
-
-type UserRole = "admin" | "teacher" | "student";
+import { useAuth } from "@/features/auth";
+import { UserRole } from "@/features/dashboard/types";
 
 interface DashboardContextType {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   userRole: UserRole;
-  setUserRole: (role: UserRole) => void;
+  userName: string;
 }
 
-const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
+const DashboardContext = createContext<DashboardContextType | undefined>(
+  undefined
+);
 
-export const DashboardProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [userRole, setUserRole] = useState<UserRole>("teacher");
+export const useDashboard = () => {
+  const context = useContext(DashboardContext);
+  if (!context) {
+    throw new Error("useDashboard must be used within DashboardProvider");
+  }
+  return context;
+};
+
+interface DashboardProviderProps {
+  children: ReactNode;
+}
+
+export const DashboardProvider: React.FC<DashboardProviderProps> = ({
+  children,
+}) => {
+  const { user } = useAuth(); // Get user from auth context
+  const [activeTab, setActiveTab] = useState("exams");
+
+  // Use actual user data from auth context, with fallback defaults
+  const userRole = (user?.role as UserRole) || "student";
+  const userName = user?.name || "User";
 
   return (
     <DashboardContext.Provider
@@ -24,20 +43,10 @@ export const DashboardProvider: React.FC<{ children: ReactNode }> = ({ children 
         activeTab,
         setActiveTab,
         userRole,
-        setUserRole,
+        userName,
       }}
     >
-      <TeacherDataProvider>
-        {children}
-      </TeacherDataProvider>
+      {children}
     </DashboardContext.Provider>
   );
-};
-
-export const useDashboard = (): DashboardContextType => {
-  const context = useContext(DashboardContext);
-  if (context === undefined) {
-    throw new Error("useDashboard must be used within a DashboardProvider");
-  }
-  return context;
 };

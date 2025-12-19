@@ -1,3 +1,4 @@
+// src/repositories/ClassJoinRequestRepository.js
 const BaseRepository = require('./BaseRepository');
 const ClassJoinRequest = require('../models/ClassJoinRequest');
 
@@ -6,31 +7,25 @@ class ClassJoinRequestRepository extends BaseRepository {
     super(ClassJoinRequest);
   }
 
-  async findPendingRequests(classId) {
-    return await this.find({ classId, status: 'pending' }, { sort: { requestedAt: -1 } });
+  async findPendingRequests(classId, options = {}) {
+    return await this.find({ classId, status: 'pending' }, options);
   }
 
-  async findByStudent(studentId, options = {}) {
-    return await this.find({ studentId }, options);
+  async findByStudent(studentUserId, filter = {}, options = {}) {
+    // Merges the required student ID with optional filters (like status)
+    const finalFilter = { studentUserId, ...filter };
+    return await this.find(finalFilter, options);
   }
 
-  async findRequest(classId, studentId) {
-    return await this.findOne({ classId, studentId, status: 'pending' });
+  async findRequest(classId, studentUserId) {
+    return await this.findOne({ classId, studentUserId });
   }
 
-  async approveRequest(requestId, processedBy) {
-    return await this.update(requestId, {
-      status: 'accepted',
-      processedAt: new Date(),
-      processedBy,
-    });
-  }
-
-  async rejectRequest(requestId, processedBy) {
-    return await this.update(requestId, {
-      status: 'rejected',
-      processedAt: new Date(),
-      processedBy,
+  async deleteRequest(requestId, studentUserId) {
+    return await this.model.findOneAndDelete({ 
+      _id: requestId, 
+      studentUserId: studentUserId,
+      status: 'pending'
     });
   }
 }

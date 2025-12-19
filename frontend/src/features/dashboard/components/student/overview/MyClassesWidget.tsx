@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation"; 
-import { getMyClasses, joinClass, cancelClassRequest } from "@/services/student/myClassesApi"; 
+import { 
+  getEnrolledClasses, 
+  getPendingRequests, 
+  joinClass, 
+  cancelClassRequest 
+} from "@/services/student/myClassesApi"; 
 import { ClassSummary } from "@/features/dashboard/types/student";
 
 // --- INTERNAL: Join Class Modal ---
@@ -71,66 +76,84 @@ const MyClassesWidget = () => {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const [isViewPending, setIsViewPending] = useState(false); 
   
-  // State quản lý dữ liệu và loading
   const [myClasses, setMyClasses] = useState<ClassSummary[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-  // 1. Fetch dữ liệu khi load trang
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoadingData(true);
-      const data = await getMyClasses(); // Lấy tất cả (active + pending)
-      setMyClasses(data);
+  /**
+   * 1. Re-fetch Logic: 
+   * Fetches both enrolled and pending separately to ensure DB synchronization.
+   */
+  const loadAllData = useCallback(async () => {
+    setIsLoadingData(true);
+    try {
+      const [enrolled, pending] = await Promise.all([
+        getEnrolledClasses(),
+        getPendingRequests()
+      ]);
+      setMyClasses([...enrolled, ...pending]);
+      console.log("Loaded classes:", { enrolled, pending });
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    } finally {
       setIsLoadingData(false);
-    };
-    fetchData();
+    }
   }, []);
 
-  // 2. Logic tính toán hiển thị
+  useEffect(() => {
+    loadAllData();
+  }, [loadAllData]);
+
+  // 2. Computed values for UI
   const pendingCount = myClasses.filter(c => c.status === 'pending').length;
 
-  const currentList = myClasses.filter(c => 
-    (isViewPending ? c.status === 'pending' : c.status === 'active')
-  );
+  const filteredList = myClasses
+    .filter(c => (isViewPending ? c.status === 'pending' : c.status === 'active'))
+    .filter(c => 
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      c.code.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-  const filteredList = currentList.filter(c => 
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    c.code.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // 3. Handler: Tham gia lớp (Gọi API POST)
+  /**
+   * 3. Join Class Handler:
+   * Optimized to refresh only the pending list upon success.
+   */
   const handleJoinSubmit = async (code: string) => {
-    const cleanCode = code.trim();
-    
-    // Gọi API (Lúc này nó trả về object { success, error, data })
-    const result = await joinClass(cleanCode); 
+    const result = await joinClass(code); 
 
     if (result.success) {
-      // ✅ THÀNH CÔNG
-      setMyClasses(prev => [result.data, ...prev]);
-      setIsViewPending(true);
+      // Instead of manual push, fetch fresh pending requests from DB
+      const updatedPending = await getPendingRequests();
+      const enrolled = myClasses.filter(c => c.status === 'active');
+      
+      setMyClasses([...enrolled, ...updatedPending]);
+      setIsViewPending(true); // Switch to pending view to see the new request
     } else {
+      // Improved error feedback based on our backend status codes
       if (result.error === 'NOT_FOUND') {
-        alert(`Không tìm thấy lớp nào có mã: "${cleanCode}".\nVui lòng kiểm tra lại mã lớp.`);
-      } else if (result.error === 'SERVER_ERROR') {
-        alert("Lỗi hệ thống hoặc kết nối mạng.\nVui lòng thử lại sau ít phút.");
+        alert(`Class code "${code}" does not exist.`);
+      } else if (result.error === 'EXISTED') {
+        alert("You have already joined or sent a request to this class.");
       } else {
-         alert("Có lỗi không xác định xảy ra.");
+        alert("Server error. Please try again later.");
       }
     }
   };
 
-  // 4. Handler: Hủy yêu cầu (Gọi API DELETE)
+  /**
+   * 4. Cancel Request Handler:
+   * Uses the specific requestId provided by our new Service layer.
+   */
   const handleCancelRequest = async (id: string) => {
-    if(!confirm("Bạn có chắc muốn hủy yêu cầu này?")) return;
+    if(!confirm("Bạn có chắc chắn muốn hủy yêu cầu này không?")) return;
 
-    const success = await cancelClassRequest(id); // Gọi API
+    console.log("Attempting to cancel request with RequestID:", id);
+    const success = await cancelClassRequest(id);
 
     if (success) {
-      // Thành công: Xóa khỏi state UI
-      setMyClasses(prev => prev.filter(c => c.id !== id));
+      // Cập nhật State: Loại bỏ item có requestId trùng với ID vừa xóa
+      setMyClasses(prev => prev.filter(c => c.requestId !== id));
     } else {
-      alert("Có lỗi khi hủy yêu cầu!");
+      alert("Không thể hủy yêu cầu. Có thể giáo viên đã phê duyệt yêu cầu này rồi.");
     }
   };
 
@@ -224,7 +247,7 @@ const MyClassesWidget = () => {
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     <span className="text-[10px] bg-white text-orange-600 px-2 py-0.5 rounded-full font-bold border border-orange-200 shadow-sm">Chờ duyệt</span>
-                    <button onClick={() => handleCancelRequest(cls.id)} className="text-[10px] text-gray-400 hover:text-red-500 hover:underline flex items-center gap-0.5 transition-colors">Hủy yêu cầu</button>
+                    <button onClick={() => cls.requestId && handleCancelRequest(cls.requestId)} className="text-[10px] text-gray-400 hover:text-red-500 hover:underline flex items-center gap-0.5 transition-colors">Hủy yêu cầu</button>
                   </div>
                 </div>
               ) : (

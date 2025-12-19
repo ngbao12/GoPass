@@ -15,9 +15,13 @@ const CreateContestView: React.FC = () => {
     startDate: "",
     endDate: "",
     subjects: [],
+    isPublic: true,
   });
 
-  const handleInputChange = (field: keyof ContestFormData, value: string) => {
+  const handleInputChange = (
+    field: keyof ContestFormData,
+    value: string | boolean
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -33,7 +37,8 @@ const CreateContestView: React.FC = () => {
 
   const handleCreateContest = () => {
     console.log("Create contest:", formData);
-    // TODO: Validate and submit
+    // TODO: Validate and submit to API
+    // Convert to Contest type format with proper field names
   };
 
   const handleReset = () => {
@@ -43,6 +48,7 @@ const CreateContestView: React.FC = () => {
       startDate: "",
       endDate: "",
       subjects: [],
+      isPublic: true,
     });
   };
 
@@ -106,6 +112,26 @@ const CreateContestView: React.FC = () => {
             />
           </div>
 
+          {/* Public/Private Toggle */}
+          <div>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.isPublic}
+                onChange={(e) =>
+                  handleInputChange("isPublic", e.target.checked)
+                }
+                className="w-4 h-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Cuộc thi công khai (Public)
+              </span>
+            </label>
+            <p className="text-sm text-gray-500 mt-1 ml-6">
+              Cho phép tất cả học sinh tham gia cuộc thi
+            </p>
+          </div>
+
           {/* Date Range */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
@@ -138,7 +164,7 @@ const CreateContestView: React.FC = () => {
               Môn thi <span className="text-red-500">*</span>
             </label>
             <p className="text-sm text-gray-500 mb-3">
-              Thêm đề thi cho từng môn
+              Chọn đề thi cho từng môn học
             </p>
             <SubjectSelector
               selectedSubjects={formData.subjects}

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { StartExamPanel } from "@/features/exam/components/exam-instructions";
 import { ExamWithDetails } from "@/features/exam/types";
-import { examStorage } from "@/utils/storage.utils";
+import { examStorage } from "@/utils/exam-storage";
 
 interface Props {
   exam: ExamWithDetails;

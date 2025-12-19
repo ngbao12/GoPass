@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
 const contestExamSchema = new mongoose.Schema({
   contestId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -13,15 +12,11 @@ const contestExamSchema = new mongoose.Schema({
   },
   order: {
     type: Number,
-    required: true,
+    required: true, // Để sắp xếp môn 1, môn 2...
   },
   weight: {
     type: Number,
-    default: 1,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+    default: 1, // Hệ số điểm (ví dụ Toán nhân đôi thì để 2)
   },
 }, {
   timestamps: true,
@@ -31,4 +26,4 @@ const contestExamSchema = new mongoose.Schema({
 contestExamSchema.index({ contestId: 1, examId: 1 }, { unique: true });
 contestExamSchema.index({ contestId: 1, order: 1 });
 
-module.exports = mongoose.model('ContestExam', contestExamSchema);
+module.exports = mongoose.model("ContestExam", contestExamSchema);

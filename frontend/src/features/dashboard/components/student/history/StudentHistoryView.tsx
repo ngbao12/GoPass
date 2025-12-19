@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import HistoryItemCard from "./HistoryItemCard";
 import HistoryStatsOverview from "./HistoryStatsOverview";
-
-// Import Types và API
 import { HistoryItem, HistoryStats } from "@/features/dashboard/types/student/";
 import { fetchStudentHistory } from "@/services/student/studentStatsApi";
 
@@ -18,14 +16,11 @@ const StudentHistoryView = () => {
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [timeSort, setTimeSort] = useState<string>("newest"); // "newest" | "oldest"
 
-  // Hardcode ID (Sau này lấy từ Auth)
-  const currentStudentId = "u_student_01";
-
   // Fetch Data
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      const data = await fetchStudentHistory(currentStudentId);
+      const data = await fetchStudentHistory();
       setHistoryList(data.list);
       setStats(data.stats);
       setLoading(false);

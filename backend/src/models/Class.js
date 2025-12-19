@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 
 const classSchema = new mongoose.Schema({
-  name: {
+  className: {
     type: String,
     required: true,
     trim: true,
   },
-  code: {
+  classCode: {
     type: String,
     required: true,
     unique: true,
     uppercase: true,
   },
-  teacherId: {
+  teacherUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
@@ -23,7 +23,7 @@ const classSchema = new mongoose.Schema({
   },
   requireApproval: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   isActive: {
     type: Boolean,
@@ -42,7 +42,7 @@ const classSchema = new mongoose.Schema({
 });
 
 // Index for faster queries
-classSchema.index({ code: 1 });
-classSchema.index({ teacherId: 1 });
+classSchema.index({ classCode: 1 });
+classSchema.index({ teacherUserId: 1 });
 
 module.exports = mongoose.model('Class', classSchema);

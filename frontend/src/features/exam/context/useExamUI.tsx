@@ -1,7 +1,7 @@
-// src/features/exam/context/useExamUI.ts
+// src/features/exam/context/useExamUI.tsx
 import { useMemo } from "react";
 import { useExam } from "./ExamContext";
-import { getLayoutForQuestion } from "@/utils/exam.utils";
+import { getLayoutForQuestion } from "@/utils/exam";
 
 export const useExamUI = () => {
   const { exam, examState, currentQuestion } = useExam();

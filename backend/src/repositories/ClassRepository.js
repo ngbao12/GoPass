@@ -6,25 +6,25 @@ class ClassRepository extends BaseRepository {
     super(Class);
   }
 
-  async findByCode(code) {
-    return await this.model.findOne({ code: code.toUpperCase() });
+  async findByCode(classCode) {
+    return await this.model.findOne({ classCode: classCode.toUpperCase() });
   }
 
-  async findByTeacher(teacherId, options = {}) {
-    return await this.find({ teacherId }, options);
+  async findByTeacher(teacherUserId, options = {}) {
+    return await this.find({ teacherUserId }, options);
   }
 
   async generateUniqueCode() {
-    let code;
+    let classCode;
     let exists = true;
 
     while (exists) {
       // Generate 6-character random code
-      code = Math.random().toString(36).substring(2, 8).toUpperCase();
-      exists = await this.model.exists({ code });
+      classCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      exists = await this.model.exists({ classCode });
     }
 
-    return code;
+    return classCode;
   }
 
   async findActiveClasses(filter = {}) {

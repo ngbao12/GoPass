@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const contestSchema = new mongoose.Schema({
   name: {
@@ -31,16 +31,13 @@ const contestSchema = new mongoose.Schema({
     enum: ['upcoming', 'ongoing', 'ended'],
     default: 'upcoming',
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
+  // ✅ BỔ SUNG: Cache số lượng người tham gia (Update khi user bấm "Tham gia")
+  participantsCount: {
+    type: Number,
+    default: 0,
   },
 }, {
-  timestamps: true,
+  timestamps: true, // Tự động tạo createdAt, updatedAt
 });
 
 // Index for queries
@@ -48,4 +45,4 @@ contestSchema.index({ ownerId: 1 });
 contestSchema.index({ startTime: 1, endTime: 1 });
 contestSchema.index({ status: 1 });
 
-module.exports = mongoose.model('Contest', contestSchema);
+module.exports = mongoose.model("Contest", contestSchema);

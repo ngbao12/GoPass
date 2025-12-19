@@ -6,7 +6,7 @@ const classMemberSchema = new mongoose.Schema({
     ref: 'Class',
     required: true,
   },
-  studentId: {
+  studentUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
@@ -16,7 +16,7 @@ const classMemberSchema = new mongoose.Schema({
     enum: ['active', 'removed'],
     default: 'active',
   },
-  joinedAt: {
+  joinedDate: {
     type: Date,
     default: Date.now,
   },
@@ -25,7 +25,7 @@ const classMemberSchema = new mongoose.Schema({
 });
 
 // Ensure unique student per class
-classMemberSchema.index({ classId: 1, studentId: 1 }, { unique: true });
-classMemberSchema.index({ studentId: 1 });
+classMemberSchema.index({ classId: 1, studentUserId: 1 }, { unique: true });
+classMemberSchema.index({ studentUserId: 1 });
 
 module.exports = mongoose.model('ClassMember', classMemberSchema);
