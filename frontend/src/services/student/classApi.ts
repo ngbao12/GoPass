@@ -18,6 +18,7 @@ export const getClassDetailById = async (
   classId: string
 ): Promise<ClassDetail | null> => {
   try {
+    console.log("Fetching class details for ID:", classId);
     const response = await httpClient.get<{ success: boolean; data: any }>(
       `/classes/${classId}`,
       { requiresAuth: true }

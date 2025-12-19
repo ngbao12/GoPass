@@ -35,19 +35,36 @@ class ClassController {
     }
   }
 
+ // GET /classes/enrolled
+  async getEnrolledClasses(req, res) {
+    try {
+      const studentUserId = req.user.userId;
+      const data = await ClassService.getStudentEnrolledClasses(studentUserId);
+      return res.status(200).json({
+        success: true,
+        data: data
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
   // GET /classes/my-enrolled
   async getLearningClasses(req, res) {
     try {
       const studentUserId = req.user.userId;
-      const result = await ClassService.getLearningClasses(studentUserId);
-      res.status(200).json({
+      const data = await ClassService.getStudentEnrolledClasses(studentUserId);
+      return res.status(200).json({
         success: true,
-        data: result,
+        data: data
       });
     } catch (error) {
-      res.status(400).json({
+      return res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -197,22 +214,7 @@ class ClassController {
     }
   }
 
-  // GET /classes/enrolled
-  async getEnrolledClasses(req, res) {
-    try {
-      const studentUserId = req.user.userId;
-      const data = await ClassService.getStudentEnrolledClasses(studentUserId);
-      return res.status(200).json({
-        success: true,
-        data: data
-      });
-    } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: error.message
-      });
-    }
-  }
+ 
   
   // GET /classes/:classId/join-requests
   async getJoinRequests(req, res) {

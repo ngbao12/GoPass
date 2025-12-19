@@ -91,6 +91,7 @@ const MyClassesWidget = () => {
         getPendingRequests()
       ]);
       setMyClasses([...enrolled, ...pending]);
+      console.log("Loaded classes:", { enrolled, pending });
     } catch (error) {
       console.error("Error refreshing data:", error);
     } finally {
