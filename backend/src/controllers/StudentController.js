@@ -27,6 +27,16 @@ class StudentController {
       res.status(400).json({ success: false, message: error.message });
     }
   }
+
+  async getPracticeExams(req, res) {
+    try {
+      const { subject } = req.query;
+      const data = await StudentService.getPracticeExams(req.user.userId, subject);
+      res.status(200).json({ success: true, data });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
 }
 
 module.exports = new StudentController();

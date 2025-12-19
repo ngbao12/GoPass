@@ -1,5 +1,8 @@
 const ClassMemberRepository = require('../repositories/ClassMemberRepository');
 const ExamSubmissionRepository = require('../repositories/ExamSubmissionRepository');
+const ExamAssignmentRepository = require('../repositories/ExamAssignmentRepository');
+const ContestRepository = require('../repositories/ContestRepository');
+const ExamRepository = require('../repositories/ExamRepository');
 
 class StudentService {
   /**
@@ -53,33 +56,82 @@ class StudentService {
     const submissions = await ExamSubmissionRepository.find(
       { 
         studentUserId: studentId,
-        status: { $in: ['graded', 'completed'] }
+        status: { $ne: 'in_progress' }  // All submitted exams, not in progress
       },
       {
-        populate: ['examId', 'classId', 'contestId'],
+        populate: ['examId', 'contestId'],
         sort: { submittedAt: -1, createdAt: -1 }
       }
     );
 
+    // Get all exam assignments to determine which exams are class assignments
+    const examIds = submissions.map(sub => sub.examId?._id).filter(Boolean);
+    const contestIds = submissions.map(sub => sub.contestId?._id || sub.contestId).filter(Boolean);
+    
+    const [examAssignments, contests] = await Promise.all([
+      ExamAssignmentRepository.find({ 
+        examId: { $in: examIds } 
+      }, { populate: 'classId' }),
+      contestIds.length > 0 ? ContestRepository.find({ 
+        _id: { $in: contestIds } 
+      }) : Promise.resolve([])
+    ]);
+    
+    // Create maps for quick lookup
+    const examAssignmentMap = new Map();
+    examAssignments.forEach(assignment => {
+      const examIdStr = assignment.examId?.toString() || '';
+      if (!examAssignmentMap.has(examIdStr)) {
+        examAssignmentMap.set(examIdStr, assignment);
+      }
+    });
+    
+    const contestMap = new Map();
+    contests.forEach(contest => {
+      contestMap.set(contest._id.toString(), contest);
+    });
+
     // Map to history items
     const list = submissions.map(sub => {
-      let type = 'practice_global';
-      if (sub.classId) type = 'practice_class';
-      else if (sub.contestId) type = 'contest';
-
       const exam = sub.examId || {};
+      const examIdStr = exam._id?.toString() || '';
+      const contestIdStr = sub.contestId?._id?.toString() || sub.contestId?.toString() || '';
+      
+      // Determine type based on contestId and exam assignment
+      let type = 'practice_global';
+      let displayTitle = exam.title || 'Bài thi';
+      let displaySubject = exam.subject || 'Tổng hợp';
+      let duration = exam.durationMinutes || 0;
+      let className = undefined;
+      
+      if (contestIdStr && contestMap.has(contestIdStr)) {
+        type = 'contest';
+        const contest = contestMap.get(contestIdStr);
+        displayTitle = contest.name || displayTitle;
+        displaySubject = 'Cuộc thi';
+        // Calculate contest duration in minutes from start to end time
+        if (contest.startTime && contest.endTime) {
+          const durationMs = new Date(contest.endTime).getTime() - new Date(contest.startTime).getTime();
+          duration = Math.round(durationMs / (1000 * 60)); // Convert to minutes
+        }
+      } else if (examAssignmentMap.has(examIdStr)) {
+        type = 'practice_class';
+        const assignment = examAssignmentMap.get(examIdStr);
+        className = assignment.classId?.className;
+      }
+
       const dateObj = new Date(sub.submittedAt || sub.createdAt);
 
       return {
         id: sub._id.toString(),
-        title: exam.title || 'Bài thi',
-        subject: exam.subject || 'Tổng hợp',
-        duration: exam.durationMinutes || 0,
+        title: displayTitle,
+        subject: displaySubject,
+        duration: duration,
         score: sub.totalScore || sub.finalScore || 0,
         maxScore: sub.maxScore || exam.totalPoints || 10,
         completedDate: dateObj.toLocaleDateString('vi-VN'),
         type,
-        className: sub.classId?.className,
+        className,
         rank: undefined
       };
     });
@@ -177,6 +229,86 @@ class StudentService {
       ...d,
       hours: Number(d.hours.toFixed(1))
     }));
+  }
+
+  /**
+   * Get available practice exams for student
+   * Returns global practice exams with student's attempt status
+   */
+  async getPracticeExams(studentId, subjectFilter) {
+    // Build filter for practice_global exams
+    const filter = { 
+      mode: 'practice_global',
+      isPublished: true 
+    };
+    
+    if (subjectFilter) {
+      filter.subject = subjectFilter;
+    }
+
+    // Fetch practice exams
+    const exams = await ExamRepository.find(filter, { 
+      sort: { createdAt: -1 } 
+    });
+
+    // Get student's submissions for these exams
+    const examIds = exams.map(e => e._id);
+    const submissions = await ExamSubmissionRepository.find({
+      studentUserId: studentId,
+      examId: { $in: examIds }
+    });
+
+    // Create submission map for quick lookup
+    const submissionMap = new Map();
+    submissions.forEach(sub => {
+      const examIdStr = sub.examId?.toString() || '';
+      if (!submissionMap.has(examIdStr)) {
+        submissionMap.set(examIdStr, sub);
+      }
+    });
+
+    // Map exams to practice exam format with status
+    const practiceExams = exams.map(exam => {
+      const examIdStr = exam._id.toString();
+      const submission = submissionMap.get(examIdStr);
+      
+      let status = 'new';
+      let score = undefined;
+      let maxScore = undefined;
+      let completedDate = undefined;
+      const tags = [];
+
+      if (submission) {
+        if (submission.status === 'in_progress') {
+          status = 'in-progress';
+          tags.push('Đang làm');
+        } else if (submission.status === 'graded' || submission.status === 'completed') {
+          status = 'completed';
+          score = submission.totalScore || submission.finalScore || 0;
+          maxScore = submission.maxScore || exam.totalPoints || 10;
+          completedDate = new Date(submission.submittedAt || submission.createdAt).toLocaleDateString('vi-VN');
+          tags.push('Đã hoàn thành');
+        }
+      }
+
+      return {
+        id: exam._id.toString(),
+        title: exam.title,
+        subject: exam.subject,
+        duration: exam.durationMinutes,
+        questionCount: exam.totalQuestions || 0,
+        status,
+        tags,
+        score,
+        maxScore,
+        completedDate
+      };
+    });
+
+    return {
+      exams: practiceExams,
+      total: practiceExams.length
+    };
   }
 }
 

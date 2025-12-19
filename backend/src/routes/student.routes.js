@@ -12,4 +12,7 @@ router.get('/stats', authorize('student'), StudentController.getStudentStats);
 router.get('/history', authorize('student'), StudentController.getStudentHistory);
 router.get('/activity', authorize('student'), StudentController.getStudentActivity);
 
+// Student practice exams endpoint
+router.get('/practice', authorize('student'), StudentController.getPracticeExams);
+
 module.exports = router;

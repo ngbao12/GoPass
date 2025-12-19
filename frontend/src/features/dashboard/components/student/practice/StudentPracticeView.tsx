@@ -1,20 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { useRouter } from "next/navigation"; 
-import { MOCK_PRACTICE_EXAMS } from "@/features/dashboard/data/student/mock-practice-exams";
-import PracticeExamCard from "./PracticeExamCard"; // Import component vừa tách
+import { fetchPracticeExams } from "@/services/student/studentPracticeApi";
+import { PracticeExam } from "@/features/dashboard/types/student";
+import PracticeExamCard from "./PracticeExamCard";
 
 const StudentPracticeView = () => {
   // const router = useRouter(); 
   const [filterSubject, setFilterSubject] = useState("all");
+  const [exams, setExams] = useState<PracticeExam[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredExams = MOCK_PRACTICE_EXAMS.filter((exam) => {
-    if (filterSubject === "all") return true;
-    return exam.subject === filterSubject;
-  });
+  // Fetch practice exams
+  useEffect(() => {
+    const loadExams = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchPracticeExams(filterSubject === "all" ? undefined : filterSubject);
+        setExams(data);
+      } catch (err) {
+        console.error("Error loading practice exams:", err);
+        setError("Không thể tải danh sách bài luyện tập");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const subjects = Array.from(new Set(MOCK_PRACTICE_EXAMS.map((e) => e.subject)));
+    loadExams();
+  }, [filterSubject]);
+
+  // Get unique subjects from exams
+  const subjects = Array.from(new Set(exams.map((e) => e.subject)));
 
   // Handlers
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => setFilterSubject(e.target.value);
@@ -54,15 +73,30 @@ const StudentPracticeView = () => {
 
         {/* --- LIST (Using Component) --- */}
         <div className="p-6 bg-white space-y-4">
-          {filteredExams.map((exam) => (
-            <PracticeExamCard
-              key={exam.id}
-              exam={exam}
-              onStart={handleStartExam}
-              onReview={handleReviewExam}
-              onRetry={handleRetryExam}
-            />
-          ))}
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+              <p className="mt-4 text-gray-600">Đang tải...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-600">{error}</p>
+            </div>
+          ) : exams.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Không có bài luyện tập nào</p>
+            </div>
+          ) : (
+            exams.map((exam) => (
+              <PracticeExamCard
+                key={exam.id}
+                exam={exam}
+                onStart={handleStartExam}
+                onReview={handleReviewExam}
+                onRetry={handleRetryExam}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
