@@ -8,14 +8,14 @@ const examSubmissionSchema = new mongoose.Schema({
   examId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Exam',
-    required: true,
+    default: null,
   },
   contestId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Contest',
     default: null,
   },
-  studentId: {
+  studentUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
