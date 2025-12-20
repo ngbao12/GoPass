@@ -7,20 +7,22 @@ import { ForumTopicCard } from "./components/TopicCard";
 import { TopInteractionsWidget } from "./components/TopInteractionsWidget";
 import { ForumBanner } from "./components/ForumBanner";
 import { ForumService } from "@/services/forum/forum.service";
-import { ForumPost, ForumStats } from "@/features/dashboard/types/forum";
+import { ForumArticle, ForumStats } from "@/features/dashboard/types/forum";
 
 const POSTS_PER_PAGE = 3;
 
 const StudentForumView: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState("trending");
-  const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
+  const [articles, setArticles] = useState<ForumArticle[]>([]);
   const [forumStats, setForumStats] = useState<ForumStats>({
     totalArticles: 0,
     totalDiscussionPosts: 0,
     totalComments: 0,
     activeUsers: 0,
   });
-  const [displayedPosts, setDisplayedPosts] = useState<ForumPost[]>([]);
+  const [displayedArticles, setDisplayedArticles] = useState<ForumArticle[]>(
+    []
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -30,14 +32,27 @@ const StudentForumView: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [posts, stats] = await Promise.all([
-          ForumService.getPosts(),
-          ForumService.getStats(),
-        ]);
-        setForumPosts(posts);
+        // Use getArticles() to match admin view data source
+        const articlesData = await ForumService.getArticles();
+        setArticles(articlesData);
+
+        // Calculate stats from articles
+        const stats: ForumStats = {
+          totalArticles: articlesData.length,
+          totalDiscussionPosts: articlesData.reduce(
+            (sum, a) => sum + (a.discussionPostsCount || 0),
+            0
+          ),
+          totalComments: articlesData.reduce(
+            (sum, a) => sum + (a.commentsCount || 0),
+            0
+          ),
+          activeUsers: 0, // This can be calculated separately if needed
+        };
         setForumStats(stats);
-        // Hiển thị 3 posts đầu tiên
-        setDisplayedPosts(posts.slice(0, POSTS_PER_PAGE));
+
+        // Hiển thị 3 articles đầu tiên
+        setDisplayedArticles(articlesData.slice(0, POSTS_PER_PAGE));
         setCurrentPage(1);
       } catch (error) {
         console.error("Error fetching forum data:", error);
@@ -57,18 +72,31 @@ const StudentForumView: React.FC = () => {
       const nextPage = currentPage + 1;
       const startIndex = (nextPage - 1) * POSTS_PER_PAGE;
       const endIndex = startIndex + POSTS_PER_PAGE;
-      const newPosts = forumPosts.slice(startIndex, endIndex);
+      const newArticles = articles.slice(startIndex, endIndex);
 
-      setDisplayedPosts((prev) => [...prev, ...newPosts]);
+      setDisplayedArticles((prev) => [...prev, ...newArticles]);
       setCurrentPage(nextPage);
       setLoadingMore(false);
     }, 500);
   };
 
-  const hasMorePosts = displayedPosts.length < forumPosts.length;
+  const hasMoreArticles = displayedArticles.length < articles.length;
 
-  const handleTopicClick = (post: ForumPost) => {
-    router.push(`/dashboard/forum/post/${post.id}`);
+  const handleArticleClick = (article: ForumArticle) => {
+    router.push(`/dashboard/forum/article/${article.id}`);
+  };
+
+  const fetchArticles = async () => {
+    setLoading(true);
+    try {
+      const articlesData = await ForumService.getArticles();
+      setArticles(articlesData);
+      setDisplayedArticles(articlesData.slice(0, POSTS_PER_PAGE));
+    } catch (error) {
+      console.error("Error fetching articles:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
@@ -110,7 +138,7 @@ const StudentForumView: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">Hiển thị</span>
                   <span className="text-sm font-medium text-blue-600">
-                    {forumPosts.length} chủ đề
+                    {articles.length} bài viết
                   </span>
                 </div>
                 <select className="text-sm border border-gray-200 rounded px-3 py-1.5">
@@ -121,19 +149,19 @@ const StudentForumView: React.FC = () => {
               </div>
             </div>
 
-            {/* Posts */}
+            {/* Articles */}
             <div className="space-y-4 mb-6">
-              {displayedPosts.map((post) => (
+              {displayedArticles.map((article) => (
                 <ForumTopicCard
-                  key={post.id}
-                  topic={post}
-                  onClick={() => handleTopicClick(post)}
+                  key={article.id}
+                  topic={article}
+                  onClick={() => handleArticleClick(article)}
                 />
               ))}
             </div>
 
             {/* Load More Button */}
-            {hasMorePosts && (
+            {hasMoreArticles && (
               <div className="text-center">
                 <button
                   onClick={handleLoadMore}
@@ -152,11 +180,11 @@ const StudentForumView: React.FC = () => {
               </div>
             )}
 
-            {/* No more posts message */}
-            {!hasMorePosts && displayedPosts.length > 0 && (
+            {/* No more articles message */}
+            {!hasMoreArticles && displayedArticles.length > 0 && (
               <div className="text-center py-6">
                 <p className="text-gray-500 text-sm">
-                  Đã hiển thị tất cả {forumPosts.length} chủ đề
+                  Đã hiển thị tất cả {articles.length} bài viết
                 </p>
               </div>
             )}

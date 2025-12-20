@@ -78,9 +78,10 @@ export class ForumService {
     // Get a single article by ID
     static async getArticleById(id: string): Promise<ForumArticle | null> {
         try {
-            return await httpClient.get<ForumArticle>(`/forum_articles/${id}`, { requiresAuth: true });
+            const pkg = await this.getPackageById(id);
+            return pkg ? transformPackageToArticle(pkg) : null;
         } catch (error) {
-            console.error('Error fetching forum article:', error);
+            console.error('Error fetching forum package:', error);
             return null;
         }
     }
