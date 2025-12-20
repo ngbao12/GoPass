@@ -19,6 +19,11 @@ router.post(
 router.get("/topics", authenticate, ForumController.getTopics);
 
 /**
+ * Get list of forum packages (Public)
+ */
+router.get("/packages", authenticate, ForumController.getPackages);
+
+/**
  * Get forum topic detail (Public)
  */
 router.get("/topics/:id", authenticate, ForumController.getTopicDetail);

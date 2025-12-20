@@ -8,6 +8,33 @@ export interface vnsocialTopic{
     status: boolean
 }
 
+// Backend ForumPackage type
+export interface ForumPackage {
+    _id: string;
+    packageTitle: string;
+    packageSummary: string;
+    sourceArticle: {
+        articleId: string;
+        title?: string;
+        url?: string;
+    };
+    vnsocialTopic: {
+        topicId: string;
+        name?: string;
+    };
+    createdBy: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+    };
+    forumTopics: any[];
+    status: string;
+    tags?: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
 // Forum Article from VnSocial
 export interface ForumArticle {
     id: number;

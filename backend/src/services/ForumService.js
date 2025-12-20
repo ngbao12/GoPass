@@ -434,6 +434,13 @@ class ForumService {
   }
 
   /**
+   * Lấy danh sách forum packages
+   */
+  async getForumPackages({ status, topicId, page, limit }) {
+    return await ForumPackageRepository.findAll({ status, topicId, page, limit });
+  }
+
+  /**
    * Lấy danh sách forum topics
    */
   async getForumTopics({ status, tags, page, limit }) {

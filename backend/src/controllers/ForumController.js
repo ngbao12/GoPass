@@ -59,6 +59,30 @@ class ForumController {
   }
 
   /**
+   * Lấy danh sách forum packages
+   * GET /api/forum/packages?status=published&page=1&limit=20
+   */
+  async getPackages(req, res, next) {
+    try {
+      const { status, topicId, page, limit } = req.query;
+
+      const result = await ForumService.getForumPackages({
+        status: status || "published",
+        topicId,
+        page: parseInt(page) || 1,
+        limit: parseInt(limit) || 20,
+      });
+
+      res.json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Lấy danh sách forum topics
    * GET /api/forum/topics?status=published&page=1&limit=20
    */

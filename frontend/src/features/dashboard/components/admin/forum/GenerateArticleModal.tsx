@@ -71,16 +71,55 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
   const handleGenerate = async () => {
     setStep("generating");
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      setStep("success");
-      setTimeout(() => {
-        onGenerated();
-        onClose();
-      }, 2000);
-    } catch (error) {
-      console.error("Error generating articles:", error);
-      alert("Đã có lỗi xảy ra. Vui lòng thử lại.");
+      // Calculate time range (last 7 days) in Unix timestamps (milliseconds)
+      const endTime = Date.now();
+      const startTime = endTime - 7 * 24 * 60 * 60 * 1000;
+
+      console.log("🚀 Starting forum generation...");
+      console.log("📝 Parameters:", {
+        topicId: selectedCategory,
+        count: discussionCount,
+        source: "baochi",
+        startTime: new Date(startTime).toISOString(),
+        endTime: new Date(endTime).toISOString(),
+      });
+
+      // Call API to generate articles (this can take 1-3 minutes)
+      const response = await ForumService.generateArticles({
+        topicId: selectedCategory,
+        count: discussionCount, // Use discussionCount as the number of forum topics to create
+        source: "baochi",
+        startTime: startTime,
+        endTime: endTime,
+      });
+
+      console.log("✅ Generation successful:", response);
+
+      if (response.success) {
+        setStep("success");
+        setTimeout(() => {
+          onGenerated();
+          onClose();
+        }, 2000);
+      } else {
+        throw new Error(response.message || "Failed to generate articles");
+      }
+    } catch (error: any) {
+      console.error("❌ Error generating articles:", error);
+
+      // Better error message for timeout
+      let errorMessage = "Đã có lỗi xảy ra. Vui lòng thử lại.";
+      if (
+        error.message?.includes("timeout") ||
+        error.message?.includes("Request timeout")
+      ) {
+        errorMessage =
+          "Quá trình tạo bài viết mất nhiều thời gian. Vui lòng kiểm tra lại danh sách bài viết - bài viết có thể đã được tạo thành công.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      alert(errorMessage);
       setStep("configure");
     }
   };
