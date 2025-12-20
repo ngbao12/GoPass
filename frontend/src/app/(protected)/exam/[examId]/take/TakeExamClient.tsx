@@ -227,6 +227,8 @@ const ExamInterface = () => {
   } = useExam();
   const { uiLayout, sectionsData, stats } = useExamUI();
 
+  console.log("🏁 Render Exam Interface", currentQuestion);
+
   // 1. Kết nối Navigation Hook
   const { contestId, handleNavigateBack, handleNavigateDashboard } =
     useExamNavigation(exam?._id || "");

@@ -462,7 +462,7 @@
       "description": "Đề thi chính thức. Thời gian: 50 phút.",
       "subject": "Tiếng Anh",
       "durationMinutes": 50,
-      "mode": "practice_test",
+      "mode": "practice_global",
       "showResultsImmediately": false,
       "totalQuestions": 40,
       "totalPoints": 10,

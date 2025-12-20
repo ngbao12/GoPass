@@ -257,7 +257,7 @@ async function seedExam(questions) {
     description: '[TEST DATA] Đề thi thử bám sát cấu trúc đề thi THPT Quốc gia. Thời gian: 90 phút.',
     subject: 'Toán Học',
     durationMinutes: 90,
-    mode: 'practice_test',
+    mode: 'practice_global',
     shuffleQuestions: false,
     showResultsImmediately: true,
     createdBy: dummyUserId,

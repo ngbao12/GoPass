@@ -55,10 +55,10 @@ const examSubmissionSchema = new mongoose.Schema({
 });
 
 // Index for queries
-examSubmissionSchema.index({ examId: 1, studentId: 1 });
-examSubmissionSchema.index({ assignmentId: 1, studentId: 1 });
-examSubmissionSchema.index({ contestId: 1, studentId: 1 });
-examSubmissionSchema.index({ studentId: 1 });
+examSubmissionSchema.index({ examId: 1, studentUserId: 1 });
+examSubmissionSchema.index({ assignmentId: 1, studentUserId: 1 });
+examSubmissionSchema.index({ contestId: 1, studentUserId: 1 });
+examSubmissionSchema.index({ studentUserId: 1 });
 examSubmissionSchema.index({ status: 1 });
 
 module.exports = mongoose.model("ExamSubmission", examSubmissionSchema);

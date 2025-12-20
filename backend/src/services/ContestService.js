@@ -123,24 +123,24 @@ class ContestService {
     const submissions = await ExamSubmissionRepository.find({
       examId: { $in: examIds },
       status: 'graded',
-    }, { populate: 'studentId' });
+    }, { populate: 'studentUserId' });
 
     // Group by student and calculate total score
     const studentScores = {};
 
     for (const submission of submissions) {
-      const studentId = submission.studentId._id.toString();
+      const studentUserId = submission.studentUserId._id.toString();
       
-      if (!studentScores[studentId]) {
-        studentScores[studentId] = {
-          student: submission.studentId,
+      if (!studentScores[studentUserId]) {
+        studentScores[studentUserId] = {
+          student: submission.studentUserId,
           totalScore: 0,
           examsCompleted: 0,
         };
       }
 
-      studentScores[studentId].totalScore += submission.totalScore;
-      studentScores[studentId].examsCompleted += 1;
+      studentScores[studentUserId].totalScore += submission.totalScore;
+      studentScores[studentUserId].examsCompleted += 1;
     }
 
     // Convert to array and sort by total score

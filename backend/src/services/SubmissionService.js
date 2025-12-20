@@ -9,7 +9,7 @@ const ContestParticipationRepository = require('../repositories/ContestParticipa
 
 class SubmissionService {
   // Start exam
-  async startExam(assignmentId, studentId) {
+  async startExam(assignmentId, studentUserId) {
     const assignment = await ExamAssignmentRepository.findById(assignmentId);
     if (!assignment) {
       throw new Error('Assignment not found');
@@ -33,7 +33,7 @@ class SubmissionService {
     // Check existing submissions
     const existingSubmission = await ExamSubmissionRepository.findInProgressSubmission(
       assignmentId,
-      studentId
+      studentUserId
     );
 
     if (existingSubmission) {
@@ -41,7 +41,7 @@ class SubmissionService {
     }
 
     // Check attempts
-    const attempts = await ExamSubmissionRepository.getStudentAttempts(assignmentId, studentId);
+    const attempts = await ExamSubmissionRepository.getStudentAttempts(assignmentId, studentUserId);
     if (attempts >= assignment.maxAttempts) {
       throw new Error('Maximum attempts reached');
     }
@@ -53,7 +53,7 @@ class SubmissionService {
     const submission = await ExamSubmissionRepository.create({
       assignmentId,
       examId: assignment.examId,
-      studentId,
+      studentUserId,
       status: 'in_progress',
       maxScore,
       attemptNumber: attempts + 1,
@@ -117,8 +117,8 @@ class SubmissionService {
   }
 
   // Submit exam
-  async submitExam(submissionId, studentId, answers = [], timeSpentSeconds = 0) {
-    console.log('🔍 SubmissionService.submitExam called:', { submissionId, studentId, answersCount: answers.length });
+  async submitExam(submissionId, studentUserId, answers = [], timeSpentSeconds = 0) {
+    console.log('🔍 SubmissionService.submitExam called:', { submissionId, studentUserId, answersCount: answers.length });
 
     const submission = await ExamSubmissionRepository.findById(submissionId);
     if (!submission) {
@@ -129,10 +129,10 @@ class SubmissionService {
       id: submission._id, 
       examId: submission.examId,
       status: submission.status,
-      studentId: submission.studentId
+      studentUserId: submission.studentUserId
     });
 
-    if (submission.studentId.toString() !== studentId.toString()) {
+    if (submission.studentUserId.toString() !== studentUserId.toString()) {
       throw new Error('Unauthorized');
     }
 
@@ -307,7 +307,7 @@ class SubmissionService {
       try {
         const participation = await ContestParticipationRepository.findOne({
           contestId: submission.contestId,
-          studentId,
+          studentUserId,
         });
 
         if (participation) {
@@ -348,7 +348,7 @@ class SubmissionService {
 
     // Check permission: user must be the student or a teacher
     // For now, simplified check - you can enhance with teacher verification
-    if (submission.studentId.toString() !== userId.toString()) {
+    if (submission.studentUserId.toString() !== userId.toString()) {
       // Could add teacher check here
       // For now, allow if submission is graded/submitted
       if (submission.status === 'in_progress') {
@@ -425,24 +425,24 @@ class SubmissionService {
   }
 
   // Get or create submission for assignment
-  async getOrCreateSubmission(assignmentId, studentId) {
+  async getOrCreateSubmission(assignmentId, studentUserId) {
     let submission = await ExamSubmissionRepository.findInProgressSubmission(
       assignmentId,
-      studentId
+      studentUserId
     );
 
     if (!submission) {
-      submission = await this.startExam(assignmentId, studentId);
+      submission = await this.startExam(assignmentId, studentUserId);
     }
 
     return submission;
   }
 
   // Get all submissions for current student
-  async getMySubmissions(studentId, query = {}) {
+  async getMySubmissions(studentUserId, query = {}) {
     const { examId, contestId, status, page = 1, limit = 20 } = query;
     
-    const filter = { studentUserId: studentId };
+    const filter = { studentUserId: studentUserId };
     if (examId) filter.examId = examId;
     if (contestId) filter.contestId = contestId;
     if (status) filter.status = status;

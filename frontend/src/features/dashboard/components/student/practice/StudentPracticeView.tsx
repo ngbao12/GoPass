@@ -44,7 +44,9 @@ const StudentPracticeView = () => {
     router.push(`/exam/${id}`);
   };
   const handleReviewExam = (id: number) => console.log(`Reviewing: ${id}`);
-  const handleRetryExam = (id: number) => console.log(`Retrying: ${id}`);
+  const handleRetryExam = (id: number) => {
+    router.push(`/exam/${id}`);
+  };
 
   return (
     <div className="pb-10">

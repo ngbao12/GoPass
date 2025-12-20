@@ -28,7 +28,7 @@ async function listRecentSubmissions(limit = 10) {
     console.log(`🔍 Fetching ${limit} most recent submissions...\n`);
     const submissions = await ExamSubmission.find()
       .populate('examId', 'title')
-      .populate('studentId', 'name email')
+      .populate('studentUserId', 'name email')
       .sort({ startedAt: -1 })
       .limit(limit);
 
@@ -53,7 +53,7 @@ async function listRecentSubmissions(limit = 10) {
     submissions.forEach((sub) => {
       const id = sub._id.toString().substring(0, 24);
       const exam = (sub.examId?.title || 'N/A').substring(0, 23);
-      const student = (sub.studentId?.name || 'N/A').substring(0, 18);
+      const student = (sub.studentUserId?.name || 'N/A').substring(0, 18);
       const status = sub.status;
       const score = `${sub.totalScore}/${sub.maxScore}`;
       const submitted = sub.submittedAt 

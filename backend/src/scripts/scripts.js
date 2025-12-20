@@ -12,6 +12,7 @@ const Class = require('../models/Class');
 const ClassMember = require('../models/ClassMember');
 const ClassJoinRequest = require('../models/ClassJoinRequest');
 const Question = require('../models/Question');
+const ExamQuestion = require('../models/ExamQuestion');
 const Contest = require('../models/Contest');
 const ExamAssignment = require('../models/ExamAssignment');
 const ExamSubmission = require('../models/ExamSubmission');
@@ -128,6 +129,43 @@ const seedData = async () => {
         questionMap[id] = newQuestion._id;
       }
       console.log("✅ Đã nạp Questions.");
+    }
+
+    // 6.5. SEED EXAM QUESTIONS (Junction table linking Exams to Questions)
+    if (data.examquestions) {
+      await ExamQuestion.deleteMany({});
+      const examQuestionsToInsert = data.examquestions.map(eq => {
+        const { id, ...rest } = eq; // Loại bỏ id cũ nếu có
+        const mappedExamId = examMap[eq.examId];
+        const mappedQuestionId = questionMap[eq.questionId];
+        
+        if (!mappedExamId) {
+          console.warn(`⚠️  ExamQuestion: Exam ID "${eq.examId}" không được tìm thấy trong examMap`);
+        }
+        if (!mappedQuestionId) {
+          console.warn(`⚠️  ExamQuestion: Question ID "${eq.questionId}" không được tìm thấy trong questionMap`);
+        }
+        
+        return {
+          ...rest,
+          examId: mappedExamId || null,
+          questionId: mappedQuestionId || null,
+          maxScore: eq.maxScore || 1,
+          order: eq.order || 0,
+          section: eq.section || '',
+          points: eq.points || eq.maxScore || 1
+        };
+      });
+      
+      // Filter out entries with null examId or questionId
+      const validExamQuestions = examQuestionsToInsert.filter(eq => eq.examId && eq.questionId);
+      
+      if (validExamQuestions.length > 0) {
+        await ExamQuestion.insertMany(validExamQuestions);
+        console.log(`✅ Đã nạp ${validExamQuestions.length} ExamQuestions.`);
+      } else {
+        console.warn("⚠️  Không có ExamQuestion hợp lệ để nạp.");
+      }
     }
 
     // 7. SEED CONTESTS
