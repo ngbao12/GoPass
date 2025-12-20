@@ -1,14 +1,11 @@
-import { ForumArticle, ForumPost, ForumDiscussionPost, ForumComment, ForumStats, ForumCategory, RelatedExam } from "@/features/dashboard/types/forum";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+import { ForumArticle, ForumPost, ForumDiscussionPost, ForumComment, ForumStats, ForumCategory, RelatedExam, vnsocialTopic } from "@/features/dashboard/types/forum";
+import { httpClient } from "@/lib/http";
 
 export class ForumService {
     // Get all articles from VnSocial
     static async getArticles(): Promise<ForumArticle[]> {
         try {
-            const response = await fetch(`${API_BASE_URL}/forum_articles`);
-            if (!response.ok) throw new Error('Failed to fetch articles');
-            return response.json();
+            return await httpClient.get<ForumArticle[]>('/forum_articles', { requiresAuth: true });
         } catch (error) {
             console.error('Error fetching forum articles:', error);
             return [];
@@ -23,9 +20,7 @@ export class ForumService {
     // Get a single article by ID
     static async getArticleById(id: string): Promise<ForumArticle | null> {
         try {
-            const response = await fetch(`${API_BASE_URL}/forum_articles/${id}`);
-            if (!response.ok) throw new Error('Failed to fetch article');
-            return response.json();
+            return await httpClient.get<ForumArticle>(`/forum_articles/${id}`, { requiresAuth: true });
         } catch (error) {
             console.error('Error fetching forum article:', error);
             return null;
@@ -40,9 +35,10 @@ export class ForumService {
     // Get discussion posts for an article
     static async getDiscussionPostsByArticleId(articleId: number): Promise<ForumDiscussionPost[]> {
         try {
-            const response = await fetch(`${API_BASE_URL}/forum_discussion_posts?articleId=${articleId}`);
-            if (!response.ok) throw new Error('Failed to fetch discussion posts');
-            return response.json();
+            return await httpClient.get<ForumDiscussionPost[]>(
+                `/forum_discussion_posts?articleId=${articleId}`,
+                { requiresAuth: true }
+            );
         } catch (error) {
             console.error('Error fetching discussion posts:', error);
             return [];
@@ -52,9 +48,10 @@ export class ForumService {
     // Get comments for a discussion post
     static async getCommentsByDiscussionPostId(discussionPostId: string): Promise<ForumComment[]> {
         try {
-            const response = await fetch(`${API_BASE_URL}/forum_comments?discussionPostId=${discussionPostId}`);
-            if (!response.ok) throw new Error('Failed to fetch comments');
-            return response.json();
+            return await httpClient.get<ForumComment[]>(
+                `/forum_comments?discussionPostId=${discussionPostId}`,
+                { requiresAuth: true }
+            );
         } catch (error) {
             console.error('Error fetching comments:', error);
             return [];
@@ -78,9 +75,7 @@ export class ForumService {
 
     static async getCategories(): Promise<ForumCategory[]> {
         try {
-            const response = await fetch(`${API_BASE_URL}/forum_categories`);
-            if (!response.ok) throw new Error('Failed to fetch categories');
-            return response.json();
+            return await httpClient.get<ForumCategory[]>('/forum_categories', { requiresAuth: true });
         } catch (error) {
             console.error('Error fetching categories:', error);
             return [];
@@ -89,9 +84,7 @@ export class ForumService {
 
     static async getStats(): Promise<ForumStats> {
         try {
-            const response = await fetch(`${API_BASE_URL}/forum_stats`);
-            if (!response.ok) throw new Error('Failed to fetch stats');
-            return response.json();
+            return await httpClient.get<ForumStats>('/forum_stats', { requiresAuth: true });
         } catch (error) {
             console.error('Error fetching stats:', error);
             return {
@@ -106,13 +99,29 @@ export class ForumService {
     // Get related exam for an article
     static async getRelatedExam(articleId: number): Promise<RelatedExam | null> {
         try {
-            const response = await fetch(`${API_BASE_URL}/related_exams?articleId=${articleId}`);
-            if (!response.ok) throw new Error('Failed to fetch related exam');
-            const exams = await response.json();
+            const exams = await httpClient.get<RelatedExam[]>(
+                `/related_exams?articleId=${articleId}`,
+                { requiresAuth: true }
+            );
             return exams[0] || null;
         } catch (error) {
             console.error('Error fetching related exam:', error);
             return null;
+        }
+    }
+
+    // Get VnSocial topics
+    static async getVnSocialTopics(type?: string): Promise<vnsocialTopic[]> {
+        try {
+            const endpoint = type ? `/vnsocial/topics?type=${type}` : '/vnsocial/topics';
+            const result = await httpClient.get<{ success: boolean; data: { topics: vnsocialTopic[]; total: number } }>(
+                endpoint,
+                { requiresAuth: true }
+            );
+            return result.data?.topics || [];
+        } catch (error) {
+            console.error('Error fetching VnSocial topics:', error);
+            return [];
         }
     }
 }

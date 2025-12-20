@@ -1,3 +1,13 @@
+export interface vnsocialTopic{
+    id: string;
+    name: string;
+    type: string;
+    created_date: string;
+    created_by: string;
+    updated_date: string;
+    status: boolean
+}
+
 // Forum Article from VnSocial
 export interface ForumArticle {
     id: number;
