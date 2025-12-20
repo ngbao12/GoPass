@@ -84,11 +84,23 @@ class ForumController {
 
   /**
    * Lấy danh sách forum topics
-   * GET /api/forum/topics?status=published&page=1&limit=20
+   * GET /api/forum/topics?status=published&page=1&limit=20&packageId=xxx
    */
   async getTopics(req, res, next) {
     try {
-      const { status, tags, page, limit } = req.query;
+      const { status, tags, page, limit, packageId } = req.query;
+
+      // If packageId is provided, get topics for that package
+      if (packageId) {
+        const topics = await ForumService.getForumTopicsByPackageId(packageId);
+        return res.json({
+          success: true,
+          data: {
+            topics,
+            total: topics.length,
+          },
+        });
+      }
 
       const result = await ForumService.getForumTopics({
         status,

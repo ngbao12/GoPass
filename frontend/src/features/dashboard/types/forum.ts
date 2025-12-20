@@ -57,6 +57,38 @@ export interface ForumArticle {
     relatedExamId?: string;
 }
 
+// ForumTopic from backend
+export interface ForumTopic {
+    _id: string;
+    title: string;
+    packageId: string;
+    sourceArticle?: {
+        articleId: string;
+        title?: string;
+        url?: string;
+    };
+    vnsocialTopic?: {
+        topicId: string;
+        name?: string;
+    };
+    createdBy: {
+        _id: string;
+        name?: string;
+        email?: string;
+    };
+    seedComment: string;
+    essayPrompt: string;
+    status: string;
+    stats: {
+        totalComments: number;
+        totalLikes: number;
+        totalViews: number;
+    };
+    tags?: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
 // AI-generated discussion post or student-created question
 export interface ForumDiscussionPost {
     id: string;

@@ -448,6 +448,13 @@ class ForumService {
   }
 
   /**
+   * Lấy forum topics theo packageId
+   */
+  async getForumTopicsByPackageId(packageId) {
+    return await ForumTopicRepository.getTopicsByPackageId(packageId);
+  }
+
+  /**
    * Lấy chi tiết forum topic
    */
   async getForumTopicDetail(topicId) {

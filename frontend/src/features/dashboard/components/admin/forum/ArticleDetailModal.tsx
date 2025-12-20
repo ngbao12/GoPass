@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  ForumArticle,
-  ForumDiscussionPost,
-} from "@/features/dashboard/types/forum";
+import { ForumArticle, ForumTopic } from "@/features/dashboard/types/forum";
 import {
   X,
   Sparkles,
@@ -13,6 +10,8 @@ import {
   Eye,
   MessageCircle,
   Edit,
+  FileText,
+  User,
 } from "lucide-react";
 import { ForumService } from "@/services/forum/forum.service";
 
@@ -27,25 +26,24 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
   onClose,
   onRefresh,
 }) => {
-  const [discussionPosts, setDiscussionPosts] = useState<ForumDiscussionPost[]>(
-    []
-  );
+  const [forumTopics, setForumTopics] = useState<ForumTopic[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
-    fetchDiscussionPosts();
+    fetchForumTopics();
   }, [article.id]);
 
-  const fetchDiscussionPosts = async () => {
+  const fetchForumTopics = async () => {
     setLoading(true);
     try {
-      const posts = await ForumService.getDiscussionPostsByArticleId(
-        article.id
+      // article.id is the packageId (_id from ForumPackage)
+      const topics = await ForumService.getTopicsByPackageId(
+        article.id.toString()
       );
-      setDiscussionPosts(posts);
+      setForumTopics(topics);
     } catch (error) {
-      console.error("Error fetching discussion posts:", error);
+      console.error("Error fetching forum topics:", error);
     } finally {
       setLoading(false);
     }
@@ -54,11 +52,10 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
   const handleGenerateDiscussions = async () => {
     setGenerating(true);
     try {
-      // Simulate AI generation
+      // TODO: Implement generate more topics for existing package
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      // TODO: Call API to generate discussion posts
-      alert("Tạo thành công 3 chủ đề thảo luận mới!");
-      fetchDiscussionPosts();
+      alert("Tính năng đang được phát triển!");
+      fetchForumTopics();
     } catch (error) {
       console.error("Error generating discussions:", error);
     } finally {
@@ -66,10 +63,10 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
     }
   };
 
-  const handleDeleteDiscussion = async (discussionId: string) => {
+  const handleDeleteTopic = async (topicId: string) => {
     if (confirm("Bạn có chắc chắn muốn xóa chủ đề thảo luận này?")) {
       // TODO: Implement delete API
-      setDiscussionPosts(discussionPosts.filter((d) => d.id !== discussionId));
+      setForumTopics(forumTopics.filter((t) => t._id !== topicId));
     }
   };
 
@@ -126,7 +123,7 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
           <div className="border-t border-gray-200 pt-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
-                Chủ đề thảo luận AI ({discussionPosts.length})
+                Chủ đề thảo luận ({forumTopics.length})
               </h3>
               <button
                 onClick={handleGenerateDiscussions}
@@ -142,53 +139,98 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
-            ) : discussionPosts.length > 0 ? (
-              <div className="space-y-3">
-                {discussionPosts.map((discussion, index) => (
+            ) : forumTopics.length > 0 ? (
+              <div className="space-y-6">
+                {forumTopics.map((topic, index) => (
                   <div
-                    key={discussion.id}
-                    className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition-all"
+                    key={topic._id}
+                    className="border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 hover:shadow-md transition-all"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          {discussion.type === "ai-generated" ? (
-                            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-xs font-semibold flex items-center gap-1 border border-indigo-200">
+                    {/* Topic Header */}
+                    <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 border-b border-gray-200">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold flex items-center gap-1 border border-indigo-200">
                               <Sparkles className="w-3 h-3" />
-                              AI
+                              Chủ đề #{index + 1}
                             </span>
-                          ) : (
-                            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs font-semibold border border-emerald-200">
-                              Học sinh
-                            </span>
-                          )}
-                          <span className="text-xs text-gray-500 font-medium">
-                            #{index + 1}
-                          </span>
-                        </div>
-                        <h4 className="font-medium text-gray-900 mb-1">
-                          {discussion.question}
-                        </h4>
-                        <p className="text-sm text-gray-600 mb-3">
-                          {discussion.description}
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <MessageCircle className="w-4 h-4" />
-                            {discussion.commentsCount} bình luận
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Eye className="w-4 h-4" />
-                            {discussion.likes} lượt thích
+                          <h4 className="font-bold text-gray-900 text-lg mb-1">
+                            {topic.title}
+                          </h4>
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
+                            <div className="flex items-center gap-1">
+                              <MessageCircle className="w-4 h-4" />
+                              {topic.stats.totalComments} bình luận
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Eye className="w-4 h-4" />
+                              {topic.stats.totalViews} lượt xem
+                            </div>
+                            <div className="flex items-center gap-1">
+                              ❤️ {topic.stats.totalLikes} lượt thích
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteTopic(topic._id)}
+                          className="ml-4 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Seed Comment (AI-generated first comment) */}
+                    <div className="p-4 bg-amber-50 border-b border-amber-200">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                          <Sparkles className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="font-semibold text-gray-900">
+                              AI Gợi ý
+                            </span>
+                            <span className="px-2 py-0.5 bg-amber-200 text-amber-800 rounded text-xs font-semibold">
+                              Seed Comment
+                            </span>
+                          </div>
+                          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                            {topic.seedComment}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Essay Prompt */}
+                    {topic.essayPrompt && (
+                      <div className="p-4 bg-blue-50 border-b border-blue-200">
+                        <div className="flex items-start gap-3">
+                          <FileText className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                          <div className="flex-1">
+                            <h5 className="font-semibold text-blue-900 mb-1">
+                              Đề bài nghị luận
+                            </h5>
+                            <p className="text-blue-800 leading-relaxed">
+                              {topic.essayPrompt}
+                            </p>
                           </div>
                         </div>
                       </div>
-                      <button
-                        onClick={() => handleDeleteDiscussion(discussion.id)}
-                        className="ml-4 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    )}
+
+                    {/* User Comments Section Placeholder */}
+                    <div className="p-4 bg-gray-50">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <User className="w-4 h-4" />
+                        <span>
+                          {topic.stats.totalComments > 0
+                            ? `${topic.stats.totalComments} bình luận từ học sinh`
+                            : "Chưa có bình luận từ học sinh"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -198,7 +240,7 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
                 <Sparkles className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-gray-600 mb-2">Chưa có chủ đề thảo luận</p>
                 <p className="text-sm text-gray-500 mb-4">
-                  Tạo chủ đề thảo luận để học sinh có thể bình luận
+                  Bài viết này chưa có chủ đề thảo luận nào
                 </p>
               </div>
             )}

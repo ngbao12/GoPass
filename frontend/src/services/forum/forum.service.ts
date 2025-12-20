@@ -1,4 +1,4 @@
-import { ForumArticle, ForumPost, ForumDiscussionPost, ForumComment, ForumStats, ForumCategory, RelatedExam, vnsocialTopic, ForumPackage } from "@/features/dashboard/types/forum";
+import { ForumArticle, ForumPost, ForumDiscussionPost, ForumComment, ForumStats, ForumCategory, RelatedExam, vnsocialTopic, ForumPackage, ForumTopic } from "@/features/dashboard/types/forum";
 import { httpClient } from "@/lib/http";
 
 // Helper function to generate a color for a category
@@ -88,6 +88,20 @@ export class ForumService {
     // Legacy method for backward compatibility
     static async getPostById(id: string): Promise<ForumPost | null> {
         return this.getArticleById(id);
+    }
+
+    // Get forum topics by packageId (article ID)
+    static async getTopicsByPackageId(packageId: string): Promise<ForumTopic[]> {
+        try {
+            const response = await httpClient.get<{ success: boolean; data: { topics: ForumTopic[] } }>(
+                `/forum/topics?packageId=${packageId}`,
+                { requiresAuth: true }
+            );
+            return response.data?.topics || [];
+        } catch (error) {
+            console.error('Error fetching forum topics:', error);
+            return [];
+        }
     }
 
     // Get discussion posts for an article

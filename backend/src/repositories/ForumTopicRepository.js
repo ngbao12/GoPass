@@ -7,6 +7,19 @@ class ForumTopicRepository extends BaseRepository {
   }
 
   /**
+   * Lấy topics theo packageId
+   */
+  async getTopicsByPackageId(packageId) {
+    return await this.find(
+      { packageId },
+      {
+        sort: { createdAt: -1 },
+        populate: "createdBy",
+      }
+    );
+  }
+
+  /**
    * Lấy danh sách forum topics với pagination và filter
    */
   async getTopics({ status, tags, page = 1, limit = 20 }) {
