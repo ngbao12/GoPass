@@ -1,16 +1,12 @@
 const ExamRepository = require("../repositories/ExamRepository");
 const ExamQuestionRepository = require("../repositories/ExamQuestionRepository");
 const ExamAssignmentRepository = require("../repositories/ExamAssignmentRepository");
-const QuestionRepository = require("../repositories/QuestionRepository");
-const vnSmartBotProvider = require("../providers/VnSmartBotProvider");
-const { ESSAY_EXPLANATION_GENERATION_PROMPT } = require("../config/prompts");
-const ExamRepository = require('../repositories/ExamRepository');
-const ExamQuestionRepository = require('../repositories/ExamQuestionRepository');
-const ExamAssignmentRepository = require('../repositories/ExamAssignmentRepository');
 const ExamSubmissionRepository = require('../repositories/ExamSubmissionRepository');
-const QuestionRepository = require('../repositories/QuestionRepository');
+const QuestionRepository = require("../repositories/QuestionRepository");
 const ClassMemberRepository = require('../repositories/ClassMemberRepository');
 const ContestParticipationRepository = require('../repositories/ContestParticipationRepository');
+const vnSmartBotProvider = require("../providers/VnSmartBotProvider");
+const { ESSAY_EXPLANATION_GENERATION_PROMPT } = require("../config/prompts");
 
 class ExamService {
   // Create exam
@@ -53,8 +49,6 @@ class ExamService {
       throw new Error("Exam not found");
     }
 
-    const questions = await ExamQuestionRepository.findByExam(examId, {
-      populate: "questionId",
     // Get exam questions with populated question details
     const examQuestions = await ExamQuestionRepository.findByExam(examId, {
       populate: 'questionId',
