@@ -81,65 +81,18 @@ class SubmissionController {
     }
   }
 
-  // NEW: Auto-save answers (batch update)
-  async autoSaveAnswers(req, res) {
+  async getMySubmissions(req, res) {
     try {
-      const result = await SubmissionService.autoSaveAnswers(
-        req.params.submissionId,
-        req.user.userId,
-        req.body.answers
-      );
-      res.status(200).json({ 
-        success: true, 
-        message: 'Answers saved successfully',
-        data: result
+      console.log('Query params:', req.query);
+      const { examId, contestId, status, page, limit } = req.query;
+      const submissions = await SubmissionService.getMySubmissions(req.user.userId, {
+        examId,
+        contestId,
+        status,
+        page,
+        limit
       });
-    } catch (error) {
-      const statusCode = error.message.includes('not found') ? 404 : 
-                        error.message.includes('finalized') ? 403 : 400;
-      res.status(statusCode).json({ success: false, message: error.message });
-    }
-  }
-
-  // NEW: Get submission answers
-  async getSubmissionAnswers(req, res) {
-    try {
-      const result = await SubmissionService.getSubmissionAnswers(
-        req.params.submissionId,
-        req.user.userId
-      );
-      res.status(200).json({ success: true, data: result });
-    } catch (error) {
-      const statusCode = error.message.includes('not found') ? 404 : 400;
-      res.status(statusCode).json({ success: false, message: error.message });
-    }
-  }
-
-  // NEW: Manual grading by teacher
-  async manualGrade(req, res) {
-    try {
-      const result = await SubmissionService.manualGrade(
-        req.params.submissionId,
-        req.user.userId,
-        req.body.grades
-      );
-      res.status(200).json({ 
-        success: true, 
-        message: 'Manual grading completed',
-        data: result
-      });
-    } catch (error) {
-      const statusCode = error.message.includes('not found') ? 404 : 
-                        error.message.includes('permission') ? 403 : 400;
-      res.status(statusCode).json({ success: false, message: error.message });
-    }
-  }
-
-  // NEW: Get active submissions
-  async getMyActiveSubmissions(req, res) {
-    try {
-      const submissions = await SubmissionService.getMyActiveSubmissions(req.user.userId);
-      res.status(200).json({ success: true, data: submissions });
+      res.status(200).json({ success: true, data: { submissions } });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
     }

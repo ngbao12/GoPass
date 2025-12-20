@@ -438,150 +438,23 @@ class SubmissionService {
     return submission;
   }
 
-  // NEW: Auto-save answers (batch update)
-  async autoSaveAnswers(submissionId, userId, answers) {
-    const submission = await ExamSubmissionRepository.findById(submissionId);
-    if (!submission) {
-      throw new Error('Submission not found');
-    }
+  // Get all submissions for current student
+  async getMySubmissions(studentId, query = {}) {
+    const { examId, contestId, status, page = 1, limit = 20 } = query;
+    
+    const filter = { studentUserId: studentId };
+    if (examId) filter.examId = examId;
+    if (contestId) filter.contestId = contestId;
+    if (status) filter.status = status;
 
-    if (submission.studentId.toString() !== userId.toString()) {
-      throw new Error('Unauthorized');
-    }
-
-    if (submission.status !== 'in_progress') {
-      throw new Error('Submission has already been finalized');
-    }
-
-    let savedCount = 0;
-
-    for (const answerDto of answers) {
-      await this.saveAnswer(submissionId, answerDto);
-      savedCount++;
-    }
-
-    // Update submission timestamp
-    await ExamSubmissionRepository.update(submissionId, {
-      updatedAt: new Date(),
+    const submissions = await ExamSubmissionRepository.find(filter, {
+      populate: ['examId', 'classId', 'contestId'],
+      sort: { submittedAt: -1, createdAt: -1 },
+      skip: (page - 1) * limit,
+      limit: parseInt(limit)
     });
 
-    return {
-      submissionId,
-      savedCount,
-      lastSavedAt: new Date(),
-    };
-  }
-
-  // NEW: Get submission answers
-  async getSubmissionAnswers(submissionId, userId) {
-    const submission = await ExamSubmissionRepository.findById(submissionId);
-    if (!submission) {
-      throw new Error('Submission not found');
-    }
-
-    if (submission.studentId.toString() !== userId.toString()) {
-      throw new Error('Unauthorized');
-    }
-
-    const answers = await ExamAnswerRepository.findBySubmission(submissionId);
-
-    return {
-      submissionId,
-      status: submission.status,
-      answers: answers.map(a => ({
-        _id: a._id,
-        submissionId: a.submissionId,
-        questionId: a.questionId,
-        answerText: a.answerText,
-        selectedOptions: a.selectedOptions,
-        score: submission.status === 'in_progress' ? 0 : a.score,
-        maxScore: a.maxScore,
-        isAutoGraded: a.isAutoGraded,
-        isManuallyGraded: a.isManuallyGraded,
-        createdAt: a.createdAt,
-        updatedAt: a.updatedAt,
-      })),
-    };
-  }
-
-  // NEW: Manual grading
-  async manualGrade(submissionId, teacherId, grades) {
-    const submission = await ExamSubmissionRepository.findById(submissionId);
-    if (!submission) {
-      throw new Error('Submission not found');
-    }
-
-    // TODO: Verify teacher has permission to grade this submission
-    // For now, simplified - you can add class membership check
-
-    let gradedCount = 0;
-    let newTotalScore = submission.totalScore;
-
-    for (const grade of grades) {
-      const answer = await ExamAnswerRepository.findById(grade.answerId);
-      if (!answer || answer.submissionId.toString() !== submissionId.toString()) {
-        continue;
-      }
-
-      // Update score - subtract old score, add new score
-      newTotalScore = newTotalScore - answer.score + grade.score;
-
-      await ExamAnswerRepository.update(grade.answerId, {
-        score: grade.score,
-        feedback: grade.feedback,
-        isManuallyGraded: true,
-      });
-
-      gradedCount++;
-    }
-
-    // Update submission total score and status
-    await ExamSubmissionRepository.update(submissionId, {
-      totalScore: parseFloat(newTotalScore.toFixed(2)),
-      status: 'graded',
-    });
-
-    return {
-      submissionId,
-      gradedCount,
-      newTotalScore: parseFloat(newTotalScore.toFixed(2)),
-      maxScore: submission.maxScore,
-      status: 'graded',
-    };
-  }
-
-  // NEW: Get active submissions
-  async getMyActiveSubmissions(studentId) {
-    const submissions = await ExamSubmissionRepository.find({
-      studentId,
-      status: 'in_progress',
-    }, {
-      populate: 'examId assignmentId',
-      sort: { startedAt: -1 },
-    });
-
-    return submissions.map(s => {
-      const exam = s.examId;
-      const assignment = s.assignmentId;
-
-      // Calculate time remaining
-      let timeRemaining = null;
-      if (exam && exam.durationMinutes) {
-        const elapsedSeconds = Math.floor((Date.now() - new Date(s.startedAt).getTime()) / 1000);
-        const totalSeconds = exam.durationMinutes * 60;
-        timeRemaining = Math.max(0, totalSeconds - elapsedSeconds);
-      }
-
-      return {
-        _id: s._id,
-        examId: s.examId._id || s.examId,
-        examTitle: exam ? exam.title : 'Unknown Exam',
-        startedAt: s.startedAt,
-        timeRemaining,
-        assignmentId: assignment ? assignment._id : null,
-        contestId: s.contestId,
-      };
-    });
+    return submissions;
   }
 }
 
