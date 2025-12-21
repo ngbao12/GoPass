@@ -511,6 +511,19 @@ export default function ArticleDetailPage({ params }: PageProps) {
                           <h3 className="text-lg font-semibold text-gray-900 mb-2">
                             {topic.title}
                           </h3>
+                          {topic.examId && (
+                            <button
+                              onClick={() =>
+                                router.push(
+                                  `/dashboard/practice?focusExamId=${topic.examId}`
+                                )
+                              }
+                              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-teal-700 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 transition-colors"
+                            >
+                              <Sparkles className="w-4 h-4" />
+                              Luyện đề liên quan
+                            </button>
+                          )}
                         </div>
 
                         <button

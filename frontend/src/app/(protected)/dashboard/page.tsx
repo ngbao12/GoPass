@@ -6,7 +6,7 @@ import StudentDashboardView from "@/features/dashboard/components/student/overvi
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 
 const DashboardPage: React.FC = () => {
-  const { userRole } = useDashboard();
+  const { userRole, isLoading } = useDashboard();
 
   const renderTeacherContent = () => {
     return (
@@ -51,6 +51,11 @@ const DashboardPage: React.FC = () => {
   };
 
   const renderDashboardByRole = () => {
+    // Wait for loading to complete and userRole to be available
+    if (isLoading || !userRole) {
+      return null;
+    }
+
     switch (userRole) {
       case "admin":
         return <AdminDashboardView />;
@@ -62,7 +67,11 @@ const DashboardPage: React.FC = () => {
         return <StudentDashboardView />;
 
       default:
-        return null;
+        return (
+          <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+            <p className="text-gray-600">Invalid user role</p>
+          </div>
+        );
     }
   };
 
