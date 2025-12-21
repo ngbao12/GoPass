@@ -7,13 +7,19 @@ import { ForumTopicCard } from "./components/TopicCard";
 import { TopInteractionsWidget } from "./components/TopInteractionsWidget";
 import { ForumBanner } from "./components/ForumBanner";
 import { ForumService } from "@/services/forum/forum.service";
-import { ForumArticle, ForumStats } from "@/features/dashboard/types/forum";
+import {
+  ForumArticle,
+  ForumStats,
+  vnsocialTopic,
+} from "@/features/dashboard/types/forum";
 
 const POSTS_PER_PAGE = 3;
 
 const StudentForumView: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState("trending");
   const [articles, setArticles] = useState<ForumArticle[]>([]);
+  const [allArticles, setAllArticles] = useState<ForumArticle[]>([]); // Store all articles for filtering
+  const [vnsocialTopics, setVnsocialTopics] = useState<vnsocialTopic[]>([]);
   const [forumStats, setForumStats] = useState<ForumStats>({
     totalArticles: 0,
     totalDiscussionPosts: 0,
@@ -32,8 +38,13 @@ const StudentForumView: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Fetch VnSocial topics for categories
+        const topics = await ForumService.getVnSocialTopics("keyword");
+        setVnsocialTopics(topics);
+
         // Use getArticles() to match admin view data source
         const articlesData = await ForumService.getArticles();
+        setAllArticles(articlesData);
         setArticles(articlesData);
 
         // Calculate stats from articles (aggregated from forum topics)
@@ -63,6 +74,44 @@ const StudentForumView: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    setCurrentPage(1);
+
+    let filteredArticles = [...allArticles];
+
+    // Apply filtering based on the selected filter
+    if (filter === "trending") {
+      // Show trending articles (sort by likes + comments)
+      filteredArticles.sort((a, b) => {
+        const scoreA = a.likes + a.commentsCount;
+        const scoreB = b.likes + b.commentsCount;
+        return scoreB - scoreA;
+      });
+    } else if (filter === "all") {
+      // Show all articles (no filter)
+      filteredArticles = [...allArticles];
+    } else if (filter === "for-you") {
+      // For now, same as trending - can be personalized later
+      filteredArticles.sort((a, b) => {
+        const scoreA = a.likes + a.commentsCount;
+        const scoreB = b.likes + b.commentsCount;
+        return scoreB - scoreA;
+      });
+    } else {
+      // Filter by category (VnSocial topic)
+      const selectedTopic = vnsocialTopics.find((t) => t.id === filter);
+      if (selectedTopic) {
+        filteredArticles = allArticles.filter(
+          (article) => article.category === selectedTopic.name
+        );
+      }
+    }
+
+    setArticles(filteredArticles);
+    setDisplayedArticles(filteredArticles.slice(0, POSTS_PER_PAGE));
+  };
 
   const handleLoadMore = async () => {
     setLoadingMore(true);
@@ -117,7 +166,9 @@ const StudentForumView: React.FC = () => {
           {/* Left Navigation */}
           <ForumLeftNav
             activeItem={activeFilter}
-            onItemClick={setActiveFilter}
+            onItemClick={handleFilterChange}
+            vnsocialTopics={vnsocialTopics}
+            totalArticles={allArticles.length}
           />
 
           {/* Main Content */}

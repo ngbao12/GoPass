@@ -14,7 +14,10 @@ interface TopInteractionsWidgetProps {
   onTopicClick?: (id: string) => void;
 }
 
-export function TopInteractionsWidget({ topTopics, onTopicClick }: TopInteractionsWidgetProps) {
+export function TopInteractionsWidget({
+  topTopics,
+  onTopicClick,
+}: TopInteractionsWidgetProps) {
   const getRankColor = (rank: number) => {
     switch (rank) {
       case 1:
