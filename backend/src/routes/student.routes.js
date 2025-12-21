@@ -3,19 +3,19 @@ const router = express.Router();
 const { StudentController } = require('../controllers');
 const { authenticate, authorize } = require('../middleware');
 
-// All routes require authentication and student role
+// All routes require authentication
 router.use(authenticate);
-router.use(authorize('student'));
 
-// Student statistics endpoints
-router.get('/stats', authorize('student'), StudentController.getStudentStats);
-router.get('/history', authorize('student'), StudentController.getStudentHistory);
-router.get('/activity', authorize('student'), StudentController.getStudentActivity);
+// Student statistics endpoints (accessible by students and admins)
+router.get('/stats', authorize('student', 'admin'), StudentController.getStudentStats);
+router.get('/history', authorize('student', 'admin'), StudentController.getStudentHistory);
+router.get('/activity', authorize('student', 'admin'), StudentController.getStudentActivity);
+router.get('/subject-performance', authorize('student', 'admin'), StudentController.getSubjectPerformance);
 
 // Student practice exams endpoint
-router.get('/practice', authorize('student'), StudentController.getPracticeExams);
+router.get('/practice', authorize('student', 'admin'), StudentController.getPracticeExams);
 
 // Student contests endpoint
-router.get('/contests', authorize('student'), StudentController.getStudentContests);
+router.get('/contests', authorize('student', 'admin'), StudentController.getStudentContests);
 
 module.exports = router;

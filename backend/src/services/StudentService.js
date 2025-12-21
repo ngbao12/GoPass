@@ -4,6 +4,7 @@ const ExamAssignmentRepository = require('../repositories/ExamAssignmentReposito
 const ContestRepository = require('../repositories/ContestRepository');
 const ContestExamRepository = require('../repositories/ContestExamRepository');
 const ExamRepository = require('../repositories/ExamRepository');
+const ForumTopicRepository = require('../repositories/ForumTopicRepository');
 
 class StudentService {
   /**
@@ -17,6 +18,9 @@ class StudentService {
         studentUserId: studentId
       })
     ]);
+
+    console.log('Class memberships:', classMemberships.length);
+    console.log('Exam submissions:', submissions.length);
 
     const joinedClasses = classMemberships.length;
     
@@ -338,8 +342,17 @@ class StudentService {
       sort: { createdAt: -1 } 
     });
 
-    // Get student's submissions for these exams
+    // Map examId -> forumTopic (if any) for cross-linking
     const examIds = exams.map(e => e._id);
+    let forumTopicMap = new Map();
+    if (examIds.length > 0) {
+      const forumTopics = await ForumTopicRepository.find({ examId: { $in: examIds } });
+      forumTopicMap = new Map(
+        forumTopics.map((t) => [t.examId?.toString(), t])
+      );
+    }
+
+    // Get student's submissions for these exams
     const submissions = await ExamSubmissionRepository.find({
       studentUserId: studentId,
       examId: { $in: examIds }
@@ -358,6 +371,7 @@ class StudentService {
     const practiceExams = exams.map(exam => {
       const examIdStr = exam._id.toString();
       const submission = submissionMap.get(examIdStr);
+      const forumTopic = forumTopicMap.get(examIdStr);
       
       let status = 'new';
       let score = undefined;
@@ -388,7 +402,10 @@ class StudentService {
         tags,
         score,
         maxScore,
-        completedDate
+        completedDate,
+        forumTopicId: forumTopic?._id?.toString(),
+        forumPackageId: forumTopic?.packageId?.toString(),
+        forumTopicTitle: forumTopic?.title
       };
     });
 
@@ -396,6 +413,64 @@ class StudentService {
       exams: practiceExams,
       total: practiceExams.length
     };
+  }
+
+  /**
+   * Get student performance by subject
+   * Aggregates exam submissions grouped by subject with average scores
+   */
+  async getSubjectPerformance(studentId) {
+    // Get all graded or submitted exam submissions for the student
+    const submissions = await ExamSubmissionRepository.find(
+      { 
+        studentUserId: studentId,
+        status: { $in: ['submitted', 'graded'] }
+      },
+      {
+        populate: 'examId'
+      }
+    );
+
+    // Group submissions by subject
+    const subjectMap = new Map();
+
+    submissions.forEach(submission => {
+      const exam = submission.examId;
+      if (!exam || !exam.subject) return;
+
+      const subject = exam.subject;
+      const score = Number(submission.totalScore || 0);
+      const maxScore = Number(submission.maxScore || exam.totalPoints || 10);
+      
+      // Normalize score to 10-point scale
+      const normalizedScore = maxScore > 0 ? (score / maxScore) * 10 : 0;
+
+      if (!subjectMap.has(subject)) {
+        subjectMap.set(subject, {
+          name: subject,
+          totalScore: 0,
+          count: 0,
+          scores: []
+        });
+      }
+
+      const subjectData = subjectMap.get(subject);
+      subjectData.totalScore += normalizedScore;
+      subjectData.count += 1;
+      subjectData.scores.push(normalizedScore);
+    });
+
+    // Calculate average and format results
+    const subjectPerformance = Array.from(subjectMap.values()).map(data => ({
+      name: data.name,
+      score: data.count > 0 ? Number((data.totalScore / data.count).toFixed(1)) : 0,
+      total: data.count
+    }));
+
+    // Sort by subject name
+    subjectPerformance.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+
+    return subjectPerformance;
   }
 }
 

@@ -10,22 +10,22 @@ class ExamSubmissionRepository extends BaseRepository {
     return await this.find({ assignmentId }, options);
   }
 
-  async findByStudent(studentId, options = {}) {
-    return await this.find({ studentId }, options);
+  async findByStudent(studentUserId, options = {}) {
+    return await this.find({ studentUserId }, options);
   }
 
   async findByExam(examId, options = {}) {
     return await this.find({ examId }, options);
   }
 
-  async findStudentSubmission(assignmentId, studentId) {
-    return await this.findOne({ assignmentId, studentId });
+  async findStudentSubmission(assignmentId, studentUserId) {
+    return await this.findOne({ assignmentId, studentUserId });
   }
 
-  async findInProgressSubmission(assignmentId, studentId) {
+  async findInProgressSubmission(assignmentId, studentUserId) {
     return await this.findOne({ 
       assignmentId, 
-      studentId,
+      studentUserId,
       status: 'in_progress' 
     });
   }
@@ -44,8 +44,8 @@ class ExamSubmissionRepository extends BaseRepository {
     });
   }
 
-  async getStudentAttempts(assignmentId, studentId) {
-    return await this.count({ assignmentId, studentId });
+  async getStudentAttempts(assignmentId, studentUserId) {
+    return await this.count({ assignmentId, studentUserId });
   }
 
   async calculateClassAverage(assignmentId) {
@@ -60,8 +60,8 @@ class ExamSubmissionRepository extends BaseRepository {
     return total / submissions.length;
   }
 
-  async findByExamAndStudent(examId, studentId, options = {}) {
-    return await this.find({ examId, studentId }, options);
+  async findByExamAndStudent(examId, studentUserId, options = {}) {
+    return await this.find({ examId, studentUserId }, options);
   }
 }
 

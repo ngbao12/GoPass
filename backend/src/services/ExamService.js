@@ -5,6 +5,7 @@ const ExamSubmissionRepository = require('../repositories/ExamSubmissionReposito
 const QuestionRepository = require("../repositories/QuestionRepository");
 const ClassMemberRepository = require('../repositories/ClassMemberRepository');
 const ContestParticipationRepository = require('../repositories/ContestParticipationRepository');
+const ForumTopicRepository = require('../repositories/ForumTopicRepository');
 const vnSmartBotProvider = require("../providers/VnSmartBotProvider");
 const { ESSAY_EXPLANATION_GENERATION_PROMPT } = require("../config/prompts");
 
@@ -98,20 +99,20 @@ class ExamService {
     if (assignmentId) {
       userSubmission = await ExamSubmissionRepository.findOne({
         assignmentId,
-        studentId: userId,
+        studentUserId: userId,
         status: 'in_progress', // Only get in-progress submissions
       }, { sort: { createdAt: -1 } });
     } else if (contestId) {
       userSubmission = await ExamSubmissionRepository.findOne({
         examId,
-        studentId: userId,
+        studentUserId: userId,
         contestId,
         status: 'in_progress', // Only get in-progress submissions
       }, { sort: { createdAt: -1 } });
     } else {
       userSubmission = await ExamSubmissionRepository.findOne({
         examId,
-        studentId: userId,
+        studentUserId: userId,
         assignmentId: null,
         contestId: null,
         status: 'in_progress', // Only get in-progress submissions
@@ -120,12 +121,22 @@ class ExamService {
 
     console.log('📋 User submission found:', userSubmission ? { id: userSubmission._id, status: userSubmission.status } : 'None');
 
+    // Link to forum topic if this exam was generated from forum
+    const relatedForumTopic = await ForumTopicRepository.findOne({ examId });
+
     return {
       ...exam.toObject(),
       questions,
       assignment,
       userSubmission,
       readingPassages: exam.readingPassages || [],
+      relatedForumTopic: relatedForumTopic
+        ? {
+            _id: relatedForumTopic._id,
+            title: relatedForumTopic.title,
+            packageId: relatedForumTopic.packageId,
+          }
+        : null,
     };
   }
 
@@ -595,7 +606,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
   }
 
   // NEW: Create submission (start exam)
-  async createSubmission(examId, studentId, assignmentId = null, contestId = null) {
+  async createSubmission(examId, studentUserId, assignmentId = null, contestId = null) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error('Exam not found');
@@ -618,7 +629,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       }
 
       // Check class membership
-      const isMember = await ClassMemberRepository.isMember(assignment.classId, studentId);
+      const isMember = await ClassMemberRepository.isMember(assignment.classId, studentUserId);
       if (!isMember) {
         throw new Error('You don\'t have permission to access this exam');
       }
@@ -626,7 +637,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       // Check for existing in-progress submission
       const existing = await ExamSubmissionRepository.findOne({
         assignmentId,
-        studentId,
+        studentUserId,
         status: 'in_progress',
       });
 
@@ -637,7 +648,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       // Check attempts
       const attempts = await ExamSubmissionRepository.count({
         assignmentId,
-        studentId,
+        studentUserId,
       });
 
       if (attempts >= assignment.maxAttempts) {
@@ -651,7 +662,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       const submission = await ExamSubmissionRepository.create({
         assignmentId,
         examId,
-        studentId,
+        studentUserId,
         contestId: null,
         status: 'in_progress',
         startedAt: new Date(),
@@ -665,7 +676,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
     // For contest or standalone exams
     const existing = await ExamSubmissionRepository.findOne({
       examId,
-      studentId,
+      studentUserId,
       contestId: contestId || null,
       assignmentId: null,
       status: 'in_progress',
@@ -678,14 +689,14 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
     const maxScore = await ExamQuestionRepository.calculateTotalScore(examId);
     const attempts = await ExamSubmissionRepository.count({
       examId,
-      studentId,
+      studentUserId,
       contestId: contestId || null,
     });
 
     const submission = await ExamSubmissionRepository.create({
       assignmentId: null,
       examId,
-      studentId,
+      studentUserId,
       contestId: contestId || null,
       status: 'in_progress',
       startedAt: new Date(),
@@ -697,7 +708,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
   }
 
   // NEW: Get user's submissions for an exam
-  async getMySubmissions(examId, studentId, assignmentId = null) {
+  async getMySubmissions(examId, studentUserId, assignmentId = null) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error('Exam not found');
@@ -705,7 +716,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
 
     const filter = {
       examId,
-      studentId,
+      studentUserId,
     };
 
     if (assignmentId) {

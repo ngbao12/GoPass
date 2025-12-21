@@ -29,7 +29,7 @@ async function checkSubmission(submissionId) {
     console.log(`🔍 Looking for submission: ${submissionId}\n`);
     const submission = await ExamSubmission.findById(submissionId)
       .populate('examId', 'title durationMinutes')
-      .populate('studentId', 'name email');
+      .populate('studentUserId', 'name email');
 
     if (!submission) {
       console.log('❌ Submission not found');
@@ -41,7 +41,7 @@ async function checkSubmission(submissionId) {
     console.log('='.repeat(60));
     console.log(`ID:              ${submission._id}`);
     console.log(`Exam:            ${submission.examId?.title || 'N/A'}`);
-    console.log(`Student:         ${submission.studentId?.name || 'N/A'} (${submission.studentId?.email || 'N/A'})`);
+    console.log(`Student:         ${submission.studentUserId?.name || 'N/A'} (${submission.studentUserId?.email || 'N/A'})`);
     console.log(`Status:          ${submission.status}`);
     console.log(`Total Score:     ${submission.totalScore}/${submission.maxScore}`);
     console.log(`Started At:      ${submission.startedAt}`);

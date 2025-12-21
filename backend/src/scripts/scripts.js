@@ -12,9 +12,11 @@ const Class = require('../models/Class');
 const ClassMember = require('../models/ClassMember');
 const ClassJoinRequest = require('../models/ClassJoinRequest');
 const Question = require('../models/Question');
+const ExamQuestion = require('../models/ExamQuestion');
 const Contest = require('../models/Contest');
 const ExamAssignment = require('../models/ExamAssignment');
 const ExamSubmission = require('../models/ExamSubmission');
+const { assign } = require('nodemailer/lib/shared');
 
 const seedData = async () => {
   try {
@@ -30,6 +32,7 @@ const seedData = async () => {
     const examMap = {};
     const questionMap = {};
     const contestMap = {};
+    const assignmentMap = {};
 
     console.log("🚀 Bắt đầu quy trình Seed (Auto-gen IDs & Mapping refs)...");
 
@@ -107,8 +110,10 @@ const seedData = async () => {
           createdBy: userMap[e.createdBy] || null
         });
         examMap[id] = newExam._id;
+        console.log(`  [Exam] ${id} -> ${newExam._id}`);
       }
       console.log("✅ Đã nạp Exams.");
+      console.log(`   Exam Map: ${JSON.stringify(Object.keys(examMap))}`);
     }
 
     // 6. SEED QUESTIONS
@@ -124,6 +129,43 @@ const seedData = async () => {
         questionMap[id] = newQuestion._id;
       }
       console.log("✅ Đã nạp Questions.");
+    }
+
+    // 6.5. SEED EXAM QUESTIONS (Junction table linking Exams to Questions)
+    if (data.examquestions) {
+      await ExamQuestion.deleteMany({});
+      const examQuestionsToInsert = data.examquestions.map(eq => {
+        const { id, ...rest } = eq; // Loại bỏ id cũ nếu có
+        const mappedExamId = examMap[eq.examId];
+        const mappedQuestionId = questionMap[eq.questionId];
+        
+        if (!mappedExamId) {
+          console.warn(`⚠️  ExamQuestion: Exam ID "${eq.examId}" không được tìm thấy trong examMap`);
+        }
+        if (!mappedQuestionId) {
+          console.warn(`⚠️  ExamQuestion: Question ID "${eq.questionId}" không được tìm thấy trong questionMap`);
+        }
+        
+        return {
+          ...rest,
+          examId: mappedExamId || null,
+          questionId: mappedQuestionId || null,
+          maxScore: eq.maxScore || 1,
+          order: eq.order || 0,
+          section: eq.section || '',
+          points: eq.points || eq.maxScore || 1
+        };
+      });
+      
+      // Filter out entries with null examId or questionId
+      const validExamQuestions = examQuestionsToInsert.filter(eq => eq.examId && eq.questionId);
+      
+      if (validExamQuestions.length > 0) {
+        await ExamQuestion.insertMany(validExamQuestions);
+        console.log(`✅ Đã nạp ${validExamQuestions.length} ExamQuestions.`);
+      } else {
+        console.warn("⚠️  Không có ExamQuestion hợp lệ để nạp.");
+      }
     }
 
     // 7. SEED CONTESTS
@@ -146,16 +188,25 @@ const seedData = async () => {
     if (data.examassignments) {
       await ExamAssignment.deleteMany({});
       const assignmentsToInsert = data.examassignments.map((assign) => {
-        const { assignmentID, ...rest } = assign; // Loại bỏ assignmentID cũ
+        const { assignmentID, id, ...rest } = assign; // Loại bỏ assignmentID cũ hoặc id cũ
+        const oldAssignmentId = assignmentID || id || assign.id;
         return {
           ...rest,
           examId: examMap[assign.examId] || null,
           classId: classMap[assign.classId] || null,
           shuffleQuestions: assign.shuffleQuestions || false,
           allowLateSubmission: assign.allowLateSubmission || false,
+          _oldId: oldAssignmentId // Lưu tạm ID cũ để map sau
         };
       });
-      await ExamAssignment.insertMany(assignmentsToInsert);
+      const createdAssignments = await ExamAssignment.insertMany(assignmentsToInsert);
+      
+      // Map old assignment IDs to new MongoDB ObjectIds
+      createdAssignments.forEach((assignment, index) => {
+        const oldId = assignmentsToInsert[index]._oldId;
+        assignmentMap[oldId] = assignment._id;
+      });
+      
       console.log("✅ Đã nạp Exam Assignments.");
     }
 
@@ -166,10 +217,22 @@ const seedData = async () => {
       await ExamSubmission.deleteMany({});
       const subsToInsert = allSubmissions.map(s => {
         const { id, submission_id, ...rest } = s; // Loại bỏ mọi loại id cũ
+        const mappedExamId = examMap[s.examId];
+        const mappedAssignmentId = s.assignmentId ? assignmentMap[s.assignmentId] : null;
+        const mappedStudentId = userMap[s.studentUserId || s.studentId];
+        
+        if (!mappedExamId) {
+          console.warn(`⚠️  Exam ID "${s.examId}" không được tìm thấy trong examMap`);
+        }
+        if (s.assignmentId && !mappedAssignmentId) {
+          console.warn(`⚠️  Assignment ID "${s.assignmentId}" không được tìm thấy trong assignmentMap`);
+        }
+        
         return {
           ...rest,
-          examId: examMap[s.examId] || null,
-          studentUserId: userMap[s.studentUserId || s.studentId] || null,
+          examId: mappedExamId || null,
+          assignmentId: mappedAssignmentId || null,
+          studentUserId: mappedStudentId || null,
           classId: classMap[s.classId] || null,
           contestId: contestMap[s.contestId] || null
         };

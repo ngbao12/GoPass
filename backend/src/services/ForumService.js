@@ -7,6 +7,9 @@ const VnsocialTopicRepository = require("../repositories/VnsocialTopicRepository
 const VnsocialArticleRepository = require("../repositories/VnsocialArticleRepository");
 const UsedArticleRepository = require("../repositories/UsedArticleRepository");
 const { FORUM_CONTENT_GENERATION_PROMPT } = require("../config/prompts");
+const Exam = require("../models/Exam");
+const Question = require("../models/Question");
+const ExamQuestion = require("../models/ExamQuestion");
 
 /**
  * Service quản lý Forum system
@@ -72,6 +75,9 @@ class ForumService {
         24
       );
       console.log(`📊 Used articles (24h): ${usedArticleIds.length}`);
+      if (usedArticleIds.length > 0) {
+        console.log(`📋 Used externalIds:`, usedArticleIds.slice(0, 5)); // Show first 5
+      }
 
       // 3. Fetch hot posts từ VnSocial
       console.log("📌 Step 3: Fetching hot posts from VnSocial...");
@@ -91,9 +97,21 @@ class ForumService {
       // 4. Lọc bỏ articles đã sử dụng gần đây
       const availablePosts = posts.filter((post) => {
         const docId = post.docId || post.id;
-        // Check if article exists in used list
-        return !usedArticleIds.some((usedId) => usedId === docId);
+        const isUsed = usedArticleIds.includes(docId);
+        if (isUsed) {
+          console.log(
+            `⏭️  Skipping used article: ${docId} - ${post.title?.substring(
+              0,
+              50
+            )}`
+          );
+        }
+        return !isUsed;
       });
+
+      console.log(
+        `📊 Available posts after filtering: ${availablePosts.length}/${posts.length}`
+      );
 
       if (availablePosts.length === 0) {
         throw new Error(
@@ -223,6 +241,24 @@ class ForumService {
               isAiGenerated: true,
               status: "active",
             });
+
+            // Create corresponding exam for this forum topic
+            try {
+              console.log("📝 Creating exam for forum topic...");
+              const exam = await this._createExamForForumTopic(
+                forumTopic,
+                article,
+                topicData,
+                adminUserId
+              );
+              console.log(`✅ Exam created: ${exam._id}`);
+            } catch (examError) {
+              console.error(
+                `⚠️ Failed to create exam for topic ${forumTopic._id}:`,
+                examError.message
+              );
+              // Continue even if exam creation fails
+            }
 
             forumTopics.push(forumTopic);
           }
@@ -434,10 +470,152 @@ class ForumService {
   }
 
   /**
+   * Tạo đề thi Ngữ Văn từ forum topic
+   * @private
+   * @param {Object} forumTopic - Forum topic đã tạo
+   * @param {Object} article - Article gốc
+   * @param {Object} topicData - Data từ AI (chứa essayPrompt)
+   * @param {string} adminUserId - ID của admin
+   * @returns {Promise<Object>} Created exam
+   */
+  async _createExamForForumTopic(forumTopic, article, topicData, adminUserId) {
+    try {
+      // 1. Tạo Exam
+      const exam = await Exam.create({
+        title: `Nghị luận xã hội - ${topicData.topicTitle}`,
+        description: "Đề thi ngữ văn nghị luận xã hội",
+        subject: "Ngữ Văn",
+        durationMinutes: 30,
+        mode: "practice_global",
+        shuffleQuestions: false,
+        showResultsImmediately: false,
+        createdBy: adminUserId,
+        isPublished: true,
+        readingPassages: [],
+        totalQuestions: 1,
+        totalPoints: 10,
+      });
+
+      console.log(`✅ Exam created: ${exam._id}`);
+
+      // 2. Tạo Question (Essay)
+      const question = await Question.create({
+        type: "essay",
+        content: `Câu 1 (VDC). ${topicData.essayPrompt}`,
+        options: [],
+        correctAnswer: null,
+        explanation:
+          "<p><b>Phương pháp:</b></p><p>Vận dụng kiến thức về cách viết đoạn văn nghị luận xã hội, phân tích vấn đề, đưa ra luận điểm và luận cứ chặt chẽ.</p>",
+        linkedPassageId: null, // Có thể link đến article URL nếu cần
+        image: {
+          url: "",
+          caption: "",
+          position: "top",
+        },
+        tableData: {
+          headers: [],
+          rows: [],
+        },
+        difficulty: "hard",
+        subject: "Ngữ Văn",
+        tags: ["viết"],
+        points: 2,
+        createdBy: adminUserId,
+        isPublic: true,
+      });
+
+      console.log(`✅ Question created: ${question._id}`);
+
+      // 3. Tạo ExamQuestion (liên kết Exam và Question)
+      const examQuestion = await ExamQuestion.create({
+        examId: exam._id,
+        questionId: question._id,
+        order: 1,
+        maxScore: 10,
+        section: "Viết",
+        points: 10,
+      });
+
+      console.log(`✅ ExamQuestion created: ${examQuestion._id}`);
+
+      // 4. Cập nhật forumTopic với examId (optional - để link ngược)
+      await ForumTopicRepository.update(forumTopic._id, {
+        examId: exam._id, // Lưu examId vào forum topic
+      });
+
+      return exam;
+    } catch (error) {
+      console.error("❌ Error creating exam for forum topic:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Lấy danh sách forum packages
+   */
+  async getForumPackages({ status, topicId, page, limit }) {
+    return await ForumPackageRepository.findAll({ status, topicId, page, limit });
+  }
+
+  /**
+   * Lấy chi tiết forum package
+   */
+  async getForumPackageById(packageId) {
+    const pkg = await ForumPackageRepository.findById(packageId);
+    if (!pkg) {
+      throw new Error("Forum package not found");
+    }
+    return pkg;
+  }
+
+  /**
+   * Cập nhật forum package (Admin)
+   */
+  async updateForumPackage(packageId, updateData) {
+    const pkg = await ForumPackageRepository.findById(packageId);
+    if (!pkg) {
+      throw new Error("Forum package not found");
+    }
+
+    return await ForumPackageRepository.update(packageId, updateData);
+  }
+
+  /**
+   * Xóa forum package (Admin)
+   */
+  async deleteForumPackage(packageId) {
+    const pkg = await ForumPackageRepository.findById(packageId);
+    if (!pkg) {
+      throw new Error("Forum package not found");
+    }
+
+    // Get all topics for this package
+    const topics = await ForumTopicRepository.find({ packageId });
+    const topicIds = topics.map(t => t._id.toString());
+
+    // Delete all comments for all topics
+    if (topicIds.length > 0) {
+      await ForumCommentRepository.deleteMany({ topicId: { $in: topicIds } });
+    }
+
+    // Delete all related topics
+    await ForumTopicRepository.deleteMany({ packageId });
+
+    return await ForumPackageRepository.delete(packageId);
+  }
+
+  /**
    * Lấy danh sách forum topics
    */
   async getForumTopics({ status, tags, page, limit }) {
     return await ForumTopicRepository.getTopics({ status, tags, page, limit });
+  }
+
+  /**
+   * Lấy forum topics theo packageId
+   */
+  async getForumTopicsByPackageId(packageId) {
+    return await ForumTopicRepository.getTopicsByPackageId(packageId);
   }
 
   /**
@@ -467,6 +645,40 @@ class ForumService {
       comments: commentsData.comments,
       commentsTotal: commentsData.total,
     };
+  }
+
+  /**
+   * Cập nhật forum topic (Admin)
+   */
+  async updateForumTopic(topicId, updateData) {
+    const topic = await ForumTopicRepository.findById(topicId);
+    if (!topic) {
+      throw new Error("Forum topic not found");
+    }
+
+    return await ForumTopicRepository.update(topicId, updateData);
+  }
+
+  /**
+   * Xóa forum topic (Admin)
+   */
+  async deleteForumTopic(topicId) {
+    const topic = await ForumTopicRepository.findById(topicId);
+    if (!topic) {
+      throw new Error("Forum topic not found");
+    }
+
+    // Delete all comments for this topic
+    await ForumCommentRepository.deleteMany({ topicId });
+
+    return await ForumTopicRepository.delete(topicId);
+  }
+
+  /**
+   * Lấy comments cho một topic
+   */
+  async getTopicComments(topicId, { page, limit }) {
+    return await ForumCommentRepository.getTopicComments(topicId, { page, limit });
   }
 
   /**
@@ -518,6 +730,88 @@ class ForumService {
     await ForumTopicRepository.incrementCommentsCount(parentComment.topicId);
 
     return reply;
+  }
+
+  /**
+   * Cập nhật comment
+   */
+  async updateComment(commentId, userId, content) {
+    const comment = await ForumCommentRepository.findById(commentId);
+
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+
+    // Check ownership
+    if (comment.userId.toString() !== userId.toString()) {
+      throw new Error("Not authorized to update this comment");
+    }
+
+    return await ForumCommentRepository.update(commentId, { content });
+  }
+
+  /**
+   * Xóa comment
+   */
+  async deleteComment(commentId, userId) {
+    const comment = await ForumCommentRepository.findById(commentId);
+
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+
+    // Check ownership
+    if (comment.userId.toString() !== userId.toString()) {
+      throw new Error("Not authorized to delete this comment");
+    }
+
+    // Soft delete - set status to deleted
+    await ForumCommentRepository.update(commentId, { status: "deleted" });
+
+    // Update topic stats
+    await ForumTopicRepository.decrementCommentsCount(comment.topicId);
+
+    return { success: true };
+  }
+
+  /**
+   * Like comment
+   */
+  async likeComment(commentId, userId) {
+    const comment = await ForumCommentRepository.findById(commentId);
+
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+
+    // Check if already liked
+    if (comment.likedBy && comment.likedBy.includes(userId)) {
+      throw new Error("Already liked this comment");
+    }
+
+    await ForumCommentRepository.addLike(commentId, userId);
+    return { success: true };
+  }
+
+  /**
+   * Unlike comment
+   */
+  async unlikeComment(commentId, userId) {
+    const comment = await ForumCommentRepository.findById(commentId);
+
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+
+    await ForumCommentRepository.removeLike(commentId, userId);
+    return { success: true };
+  }
+
+  /**
+   * Giảm comment count cho topic
+   */
+  async decrementCommentsCount(topicId) {
+    await ForumTopicRepository.decrementCommentsCount(topicId);
   }
 
   /**

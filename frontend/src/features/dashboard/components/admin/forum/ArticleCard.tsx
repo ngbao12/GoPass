@@ -2,7 +2,14 @@
 
 import React from "react";
 import { ForumArticle } from "@/features/dashboard/types/forum";
-import { Eye, Trash2, TrendingUp, MessageCircle, ThumbsUp, Sparkles } from "lucide-react";
+import {
+  Eye,
+  Trash2,
+  TrendingUp,
+  MessageCircle,
+  ThumbsUp,
+  Sparkles,
+} from "lucide-react";
 
 interface ArticleCardProps {
   article: ForumArticle;
@@ -10,29 +17,16 @@ interface ArticleCardProps {
   onDelete: () => void;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, onView, onDelete }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({
+  article,
+  onView,
+  onDelete,
+}) => {
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md hover:border-gray-300 transition-all group">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <span
-              className="px-3 py-1 rounded-full text-xs font-medium"
-              style={{
-                backgroundColor: `${article.categoryColor}15`,
-                color: article.categoryColor,
-              }}
-            >
-              {article.category}
-            </span>
-            {article.isTrending && (
-              <div className="flex items-center gap-1 px-2 py-1 bg-rose-50 text-rose-700 rounded-full text-xs font-semibold border border-rose-200">
-                <TrendingUp className="w-3 h-3" />
-                Trending
-              </div>
-            )}
-          </div>
           <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
             {article.title}
           </h3>
@@ -40,29 +34,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, onView, onDelete }) 
       </div>
 
       {/* Excerpt */}
-      <p className="text-gray-600 text-sm line-clamp-2 mb-4">{article.excerpt}</p>
-
-      {/* Stats */}
-      <div className="flex items-center gap-4 text-sm text-gray-600 mb-4 pb-4 border-b border-gray-100">
-        <div className="flex items-center gap-1">
-          <Eye className="w-4 h-4" />
-          {article.views.toLocaleString()}
-        </div>
-        <div className="flex items-center gap-1">
-          <ThumbsUp className="w-4 h-4" />
-          {article.likes}
-        </div>
-        <div className="flex items-center gap-1">
-          <MessageCircle className="w-4 h-4" />
-          {article.commentsCount}
-        </div>
-        <div className="flex items-center gap-1">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
-          <span className="text-indigo-700 font-semibold">
-            {article.discussionPostsCount} thảo luận
-          </span>
-        </div>
-      </div>
+      <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+        {article.excerpt}
+      </p>
 
       {/* Meta */}
       <div className="flex items-center justify-between mb-4">

@@ -7,6 +7,19 @@ class ForumTopicRepository extends BaseRepository {
   }
 
   /**
+   * Lấy topics theo packageId
+   */
+  async getTopicsByPackageId(packageId) {
+    return await this.find(
+      { packageId },
+      {
+        sort: { createdAt: -1 },
+        populate: "createdBy",
+      }
+    );
+  }
+
+  /**
    * Lấy danh sách forum topics với pagination và filter
    */
   async getTopics({ status, tags, page = 1, limit = 20 }) {
@@ -85,6 +98,17 @@ class ForumTopicRepository extends BaseRepository {
     return await this.model.findByIdAndUpdate(
       topicId,
       { $inc: { "stats.totalViews": 1 } },
+      { new: true }
+    );
+  }
+
+  /**
+   * Giảm số lượng comments
+   */
+  async decrementCommentsCount(topicId) {
+    return await this.model.findByIdAndUpdate(
+      topicId,
+      { $inc: { "stats.totalComments": -1 } },
       { new: true }
     );
   }

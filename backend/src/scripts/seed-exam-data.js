@@ -355,7 +355,7 @@ async function seedClassMembers(classData, students) {
   for (const student of students) {
     const member = await ClassMember.create({
       classId: classData._id,
-      studentId: student._id,
+      studentUserId: student._id,
       role: 'student',
       joinedAt: new Date(),
     });
@@ -432,7 +432,7 @@ async function seedSampleSubmission(exam, student, assignment) {
   // Create submission
   const submission = await ExamSubmission.create({
     examId: exam._id,
-    studentId: student._id,
+    studentUserId: student._id,
     assignmentId: assignment ? assignment._id : null,
     status: 'submitted',
     startedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // Started 2 hours ago

@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Sparkles, TrendingUp } from "lucide-react";
+import { ForumService } from "@/services/forum/forum.service";
+import { vnsocialTopic } from "@/features/dashboard/types/forum";
 
 interface GenerateArticleModalProps {
   onClose: () => void;
@@ -12,32 +14,112 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
   onClose,
   onGenerated,
 }) => {
-  const [step, setStep] = useState<"select" | "configure" | "generating" | "success">("select");
+  const [step, setStep] = useState<
+    "select" | "configure" | "generating" | "success"
+  >("select");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [articleCount, setArticleCount] = useState(3);
   const [discussionCount, setDiscussionCount] = useState(3);
   const [autoGenerate, setAutoGenerate] = useState(true);
+  const [categories, setCategories] = useState<
+    Array<{ id: string; name: string; color: string }>
+  >([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = [
-    { id: "xa-hoi", name: "Xã hội", color: "#3B82F6" },
-    { id: "khoa-hoc", name: "Khoa học", color: "#10B981" },
-    { id: "van-hoa", name: "Văn hóa", color: "#8B5CF6" },
-    { id: "giao-duc", name: "Giáo dục", color: "#F59E0B" },
+  // Color palette for categories
+  const colors = [
+    "#3B82F6",
+    "#10B981",
+    "#8B5CF6",
+    "#F59E0B",
+    "#EF4444",
+    "#EC4899",
+    "#14B8A6",
+    "#F97316",
   ];
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const topics = await ForumService.getVnSocialTopics("keyword");
+        const formattedCategories = topics
+          .filter((topic) => topic.status)
+          .map((topic, index) => ({
+            id: topic.id,
+            name: topic.name,
+            color: colors[index % colors.length],
+          }));
+        setCategories(formattedCategories);
+      } catch (error) {
+        console.error("Error fetching VnSocial topics:", error);
+        // Fallback to default categories
+        setCategories([
+          { id: "xa-hoi", name: "Xã hội", color: "#3B82F6" },
+          { id: "khoa-hoc", name: "Khoa học", color: "#10B981" },
+          { id: "van-hoa", name: "Văn hóa", color: "#8B5CF6" },
+          { id: "giao-duc", name: "Giáo dục", color: "#F59E0B" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleGenerate = async () => {
     setStep("generating");
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      setStep("success");
-      setTimeout(() => {
-        onGenerated();
-        onClose();
-      }, 2000);
-    } catch (error) {
-      console.error("Error generating articles:", error);
-      alert("Đã có lỗi xảy ra. Vui lòng thử lại.");
+      // Calculate time range (last 7 days) in Unix timestamps (milliseconds)
+      const endTime = Date.now();
+      const startTime = endTime - 7 * 24 * 60 * 60 * 1000;
+
+      console.log("🚀 Starting forum generation...");
+      console.log("📝 Parameters:", {
+        topicId: selectedCategory,
+        count: discussionCount,
+        source: "baochi",
+        startTime: new Date(startTime).toISOString(),
+        endTime: new Date(endTime).toISOString(),
+      });
+
+      // Call API to generate articles (this can take 1-3 minutes)
+      const response = await ForumService.generateArticles({
+        topicId: selectedCategory,
+        count: discussionCount, // Use discussionCount as the number of forum topics to create
+        source: "baochi",
+        startTime: startTime,
+        endTime: endTime,
+      });
+
+      console.log("✅ Generation successful:", response);
+
+      if (response.success) {
+        setStep("success");
+        setTimeout(() => {
+          onGenerated();
+          onClose();
+        }, 2000);
+      } else {
+        throw new Error(response.message || "Failed to generate articles");
+      }
+    } catch (error: any) {
+      console.error("❌ Error generating articles:", error);
+
+      // Better error message for timeout
+      let errorMessage = "Đã có lỗi xảy ra. Vui lòng thử lại.";
+      if (
+        error.message?.includes("timeout") ||
+        error.message?.includes("Request timeout")
+      ) {
+        errorMessage =
+          "Quá trình tạo bài viết mất nhiều thời gian. Vui lòng kiểm tra lại danh sách bài viết - bài viết có thể đã được tạo thành công.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      alert(errorMessage);
       setStep("configure");
     }
   };
@@ -48,28 +130,34 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Chọn chủ đề:
         </h3>
-        <div className="grid grid-cols-2 gap-3">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => {
-                setSelectedCategory(category.id);
-                setStep("configure");
-              }}
-              className="p-4 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md hover:bg-indigo-50 transition-all text-left group"
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-4 h-4 rounded-full shadow-sm"
-                  style={{ backgroundColor: category.color }}
-                />
-                <span className="font-semibold text-gray-900 group-hover:text-indigo-700">
-                  {category.name}
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-200 border-t-indigo-600"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategory(category.id);
+                  setStep("configure");
+                }}
+                className="p-4 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md hover:bg-indigo-50 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-4 h-4 rounded-full shadow-sm"
+                    style={{ backgroundColor: category.color }}
+                  />
+                  <span className="font-semibold text-gray-900 group-hover:text-indigo-700">
+                    {category.name}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -89,7 +177,7 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
   );
 
   const renderConfigureStep = () => {
-    const selectedCat = categories.find(c => c.id === selectedCategory);
+    const selectedCat = categories.find((c) => c.id === selectedCategory);
     return (
       <div className="space-y-6">
         <div>
@@ -113,7 +201,6 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
         </div>
 
         <div className="space-y-4">
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Số chủ đề thảo luận mỗi bài
@@ -122,12 +209,15 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
               type="number"
               min="2"
               max="6"
+              disabled
               value={discussionCount}
               onChange={(e) => setDiscussionCount(parseInt(e.target.value))}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 font-medium"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-medium cursor-not-allowed"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Mỗi bài viết sẽ có 2-6 chủ đề thảo luận AI
+              Mặc định:{" "}
+              <span className="font-semibold text-gray-700">3 chủ đề</span> mỗi
+              bài viết. Tùy chọn khác sẽ có trong phiên bản tiếp theo.
             </p>
           </div>
 
@@ -139,8 +229,13 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
               onChange={(e) => setAutoGenerate(e.target.checked)}
               className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
             />
-            <label htmlFor="autoGenerate" className="flex-1 text-sm text-indigo-900">
-              <span className="font-semibold">Tự động tạo chủ đề thảo luận</span>
+            <label
+              htmlFor="autoGenerate"
+              className="flex-1 text-sm text-indigo-900"
+            >
+              <span className="font-semibold">
+                Tự động tạo chủ đề thảo luận
+              </span>
               <p className="text-indigo-700 text-xs mt-1">
                 AI sẽ phân tích nội dung và tạo câu hỏi thảo luận phù hợp
               </p>
@@ -153,9 +248,7 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
           className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold"
         >
           <Sparkles className="w-5 h-5" />
-          <span>
-            Tạo bài viết
-          </span>
+          <span>Tạo bài viết</span>
         </button>
       </div>
     );
@@ -193,15 +286,26 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
   const renderSuccessStep = () => (
     <div className="py-12 text-center">
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        <svg
+          className="w-8 h-8 text-green-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 13l4 4L19 7"
+          />
         </svg>
       </div>
       <h3 className="text-xl font-semibold text-gray-900 mb-2">
         Tạo thành công!
       </h3>
       <p className="text-gray-600">
-        Đã tạo {articleCount} bài viết với {discussionCount} chủ đề thảo luận mỗi bài
+        Đã tạo {articleCount} bài viết với {discussionCount} chủ đề thảo luận
+        mỗi bài
       </p>
     </div>
   );

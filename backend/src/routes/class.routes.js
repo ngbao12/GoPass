@@ -15,12 +15,12 @@ router.get('/:classId/join-requests', authorize('teacher'), ClassController.getJ
 router.put('/:classId/join-requests/:requestId', authorize('teacher'), ClassController.processJoinRequest);
 router.delete('/:classId/members/:studentUserId', authorize('teacher'), ClassController.removeMember);
 
-// Student routes
-router.get( '/enrolled', authorize('student'), ClassController.getEnrolledClasses);
-router.get('/pending-requests', authorize('student'), ClassController.getPendingRequests);
+// Student routes (accessible by students and admins for testing)
+router.get( '/enrolled', authorize('student', 'admin'), ClassController.getEnrolledClasses);
+router.get('/pending-requests', authorize('student', 'admin'), ClassController.getPendingRequests);
 router.post('/join', authorize('student'), ClassController.joinByCode);
 router.delete('/cancel-request/:requestId', authorize('student'), ClassController.cancelJoinRequest);
-router.get('/my-enrolled', authorize('student'), ClassController.getLearningClasses);
+router.get('/my-enrolled', authorize('student', 'admin'), ClassController.getLearningClasses);
 
 // Shared routes
 router.get('/:classId', ClassController.getClassDetail);

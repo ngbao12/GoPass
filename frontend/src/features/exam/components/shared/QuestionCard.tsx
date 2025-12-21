@@ -380,7 +380,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             <div className="text-base text-slate-800 font-medium leading-7">
               <MathText content={question.content} />
             </div>
-            {question.image && <QuestionImage data={question.image} />}
+            {question.image && question.image.url && (
+              <QuestionImage data={question.image} />
+            )}
             {question.tableData && <QuestionTable data={question.tableData} />}
           </div>
         </div>

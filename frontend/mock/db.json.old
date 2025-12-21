@@ -1,12 +1,66 @@
 {
   "exams": [
     {
+      "id": "ex_math_01",
+      "title": "Kiểm tra 1 tiết - Hàm số",
+      "description": "Bài kiểm tra khảo sát sự biến thiên và vẽ đồ thị hàm số.",
+      "subject": "Toán học",
+      "durationMinutes": 45,
+      "totalPoints": 10,
+      "createdBy": "u_teacher_01"
+    },
+    {
+      "id": "ex_phys_01",
+      "title": "Kiểm tra chương 1 - Dao động cơ",
+      "description": "Kiểm tra kiến thức về dao động điều hòa, con lắc lò xo.",
+      "subject": "Vật Lý",
+      "durationMinutes": 60,
+      "totalPoints": 10,
+      "createdBy": "u_teacher_02"
+    },
+    {
+      "id": "ex_eng_01",
+      "title": "IELTS Reading Practice 01",
+      "description": "Bài luyện tập kỹ năng đọc hiểu format IELTS.",
+      "subject": "Tiếng Anh",
+      "durationMinutes": 60,
+      "totalPoints": 9.0,
+      "createdBy": "u_teacher_03"
+    },
+    {
+      "id": "ex_hist_mid",
+      "title": "Thi giữa kỳ - Lịch Sử Việt Nam",
+      "description": "Kiểm tra kiến thức giai đoạn 1945-1975.",
+      "subject": "Lịch Sử",
+      "durationMinutes": 50,
+      "totalPoints": 10,
+      "createdBy": "u_teacher_03"
+    },
+    {
+      "id": "ex_math_mock_01",
+      "title": "Thi thử THPTQG Toán - Lần 1",
+      "description": "Đề thi thử chuẩn cấu trúc bộ giáo dục.",
+      "subject": "Toán học",
+      "durationMinutes": 90,
+      "totalPoints": 10,
+      "createdBy": "u_teacher_01"
+    },
+    {
+      "id": "ex_eng_vocab",
+      "title": "Vocabulary Test: Topic Environment",
+      "description": "Kiểm tra từ vựng chủ đề môi trường.",
+      "subject": "Tiếng Anh",
+      "durationMinutes": 20,
+      "totalPoints": 10,
+      "createdBy": "u_teacher_03"
+    },
+    {
       "id": "exam-001",
       "title": "KỲ THI TỐT NGHIỆP THPT NĂM 2025 - Môn TOÁN (Mã đề 0101)",
       "description": "Đề thi chính thức. Thời gian: 90 phút.",
       "subject": "Toán Học",
       "durationMinutes": 90,
-      "mode": "test",
+      "mode": "contest",
       "showResultsImmediately": false,
       "totalQuestions": 22,
       "totalPoints": 10,
@@ -23,7 +77,7 @@
       "description": "Đề thi chính thức. Thời gian: 50 phút.",
       "subject": "Tiếng Anh",
       "durationMinutes": 50,
-      "mode": "test",
+      "mode": "practice_test",
       "showResultsImmediately": false,
       "totalQuestions": 40,
       "totalPoints": 10,
@@ -66,7 +120,7 @@
       "description": "Đề thi thử tốt nghiệp. Thời gian: 120 phút (không kể thời gian giao đề).",
       "subject": "Ngữ Văn",
       "durationMinutes": 120,
-      "mode": "test",
+      "mode": "practice_global",
       "shuffleQuestions": false,
       "showResultsImmediately": false,
       "isPublished": true,
@@ -3043,46 +3097,4 @@
       "updatedAt": "2025-12-14T08:00:00Z"
     }
   ],
-  "submissions": [
-    {
-      "id": "6abc",
-      "examId": "exam-002",
-      "studentId": "student-01",
-      "contestId": null,
-      "status": "graded",
-      "startedAt": "2025-12-16T12:38:12.391Z",
-      "submittedAt": "2025-12-16T13:38:12.391Z",
-      "totalScore": 0,
-      "maxScore": 10,
-      "attemptNumber": 1,
-      "answers": []
-    },
-    {
-      "id": "1b8c",
-      "examId": "exam-001",
-      "studentId": "student-01",
-      "contestId": null,
-      "status": "graded",
-      "startedAt": "2025-12-16T12:38:38.285Z",
-      "submittedAt": "2025-12-16T13:38:38.285Z",
-      "totalScore": 0,
-      "maxScore": 10,
-      "attemptNumber": 1,
-      "answers": []
-    },
-    {
-      "id": "c221",
-      "examId": "exam-003",
-      "studentId": "student-01",
-      "contestId": null,
-      "status": "graded",
-      "startedAt": "2025-12-16T12:38:45.111Z",
-      "submittedAt": "2025-12-16T13:38:45.111Z",
-      "totalScore": 0,
-      "maxScore": 10,
-      "attemptNumber": 1,
-      "answers": []
-    }
-  ],
-
 }

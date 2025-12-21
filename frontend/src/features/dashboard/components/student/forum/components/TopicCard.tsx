@@ -1,76 +1,73 @@
 "use client";
 
 import React from "react";
-// Thay đổi import này:
-// import { Link } from "react-router-dom"; 
-import Link from "next/link"; // Sửa thành này
-import { TrendingUp, MessageCircle, ThumbsUp } from "lucide-react";
+import { ForumArticle } from "@/features/dashboard/types/forum";
+import { TrendingUp, MessageCircle, ThumbsUp, Eye } from "lucide-react";
 
-interface TopicCardProps {
-  id: number;
-  headline: string;
-  excerpt: string;
-  source: string;
-  timeAgo: string;
-  likes: number;
-  comments: number;
-  category: string;
-  categoryColor: string;
-  isTrending: boolean;
-  onClick?: (id: number) => void;
+interface ForumTopicCardProps {
+  topic: ForumArticle;
+  onClick?: () => void;
 }
 
-export const TopicCard: React.FC<TopicCardProps> = ({
-  id,
-  headline,
-  excerpt,
-  source,
-  timeAgo,
-  likes,
-  comments,
-  category,
-  categoryColor,
-  isTrending,
+export const ForumTopicCard: React.FC<ForumTopicCardProps> = ({
+  topic,
   onClick,
 }) => {
-  const handleClick = () => {
-    if (onClick) {
-      onClick(id);
-    }
-  };
-
   return (
     <div
-      onClick={handleClick}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group"
+      onClick={onClick}
+      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md hover:border-gray-300 transition-all group cursor-pointer"
     >
-      <div className="flex items-start gap-4">
-        <div className="flex-1 min-w-0">
-          {/* Header */}
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex-1">
           <div className="flex items-center gap-2 mb-3">
             <span
               className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-white"
-              style={{ backgroundColor: categoryColor }}
+              style={{ backgroundColor: topic.categoryColor }}
             >
-              {category}
+              {topic.category}
             </span>
-            {isTrending && (
+            {topic.isTrending && (
               <span className="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-medium">
                 <TrendingUp className="w-3 h-3" />
                 Trending
               </span>
             )}
-            <span className="text-sm text-gray-500">{timeAgo}</span>
           </div>
-
-          {/* Title */}
-          <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors line-clamp-2">
-            {headline}
+          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+            {topic.title}
           </h3>
+        </div>
+      </div>
 
-          {/* Excerpt */}
-          <p className="text-gray-600 mb-4 line-clamp-2">{excerpt}</p>
+      {/* Excerpt */}
+      <p className="text-gray-600 text-sm line-clamp-2 mb-4">{topic.excerpt}</p>
 
+      {/* Meta */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium">
+            {topic.source}
+          </span>
+          <span>•</span>
+          <span>{topic.timeAgo}</span>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <ThumbsUp className="w-4 h-4" />
+          <span className="text-sm font-medium">
+            {topic.likes.toLocaleString()}
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <MessageCircle className="w-4 h-4" />
+          <span className="text-sm font-medium">
+            {topic.commentsCount.toLocaleString()}
+          </span>
         </div>
       </div>
     </div>
