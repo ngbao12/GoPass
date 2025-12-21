@@ -51,6 +51,42 @@ class GradingController {
   }
 
   /**
+   * Get all submissions for grading (teacher only)
+   * GET /api/grading/submissions?subject=X&status=Y
+   */
+  async getAllSubmissions(req, res) {
+    try {
+      const { subject, status, classId } = req.query;
+      const filters = {};
+      if (subject) filters.subject = subject;
+      if (status) filters.status = status;
+      if (classId) filters.classId = classId;
+
+      const submissions = await GradingService.getAllSubmissions(filters);
+      res.status(200).json({ success: true, data: submissions });
+    } catch (error) {
+      console.error("[GradingController] Get all submissions error:", error);
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * Get submission detail with answers
+   * GET /api/grading/submissions/:submissionId
+   */
+  async getSubmissionDetail(req, res) {
+    try {
+      const detail = await GradingService.getSubmissionDetailWithAnswers(
+        req.params.submissionId
+      );
+      res.status(200).json({ success: true, data: detail });
+    } catch (error) {
+      console.error("[GradingController] Get submission detail error:", error);
+      res.status(404).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
    * Auto-grade Ngữ Văn submission
    * POST /api/grading/submissions/:submissionId/auto-grade-ngu-van
    */

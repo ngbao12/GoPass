@@ -8,12 +8,22 @@ class BaseRepository {
     return await this.model.create(data);
   }
 
-  async findById(id) {
-    return await this.model.findById(id);
+  async findById(id, options = {}) {
+    const { populate } = options;
+    let query = this.model.findById(id);
+    
+    if (populate) query = query.populate(populate);
+    
+    return await query;
   }
 
-  async findOne(filter) {
-    return await this.model.findOne(filter);
+  async findOne(filter, options = {}) {
+    const { populate } = options;
+    let query = this.model.findOne(filter);
+    
+    if (populate) query = query.populate(populate);
+    
+    return await query;
   }
 
   async find(filter = {}, options = {}) {

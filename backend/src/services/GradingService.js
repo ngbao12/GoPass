@@ -4,8 +4,69 @@ const ManualGradingRepository = require("../repositories/ManualGradingRepository
 const AiScoringProvider = require("../providers/AiScoringProvider");
 const QuestionRepository = require("../repositories/QuestionRepository");
 const vnSmartBotProvider = require("../providers/VnSmartBotProvider");
+const ExamRepository = require("../repositories/ExamRepository");
 
 class GradingService {
+  /**
+   * Get all submissions for grading with filters
+   */
+  async getAllSubmissions(filters = {}) {
+    const query = {};
+
+    // Filter by status
+    if (filters.status) {
+      query.status = filters.status;
+    }
+
+    // Get all submissions
+    const submissions = await ExamSubmissionRepository.find(query, {
+      populate: [
+        { path: 'studentUserId', select: 'name email' },
+        { path: 'examId', select: 'title subject' },
+      ],
+      sort: { submittedAt: -1 },
+    });
+
+    // Filter by subject if needed (from exam)
+    let filtered = submissions;
+    if (filters.subject) {
+      filtered = submissions.filter(
+        (s) => s.examId && s.examId.subject === filters.subject
+      );
+    }
+
+    return filtered;
+  }
+
+  /**
+   * Get submission detail with all answers
+   */
+  async getSubmissionDetailWithAnswers(submissionId) {
+    const submission = await ExamSubmissionRepository.findById(submissionId, {
+      populate: [
+        { path: 'studentUserId', select: 'name email' },
+        { path: 'examId', select: 'title subject' },
+      ],
+    });
+
+    if (!submission) {
+      throw new Error('Submission not found');
+    }
+
+    // Get all answers with question details
+    const answers = await ExamAnswerRepository.findBySubmission(submissionId, {
+      populate: {
+        path: 'questionId',
+        select: 'content type explanation options maxScore',
+      },
+    });
+
+    return {
+      ...submission.toObject(),
+      answers,
+    };
+  }
+
   // Auto-grade submission
   async gradeSubmissionAuto(submissionId, actorId) {
     const submission = await ExamSubmissionRepository.findById(submissionId);

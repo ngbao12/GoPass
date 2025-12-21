@@ -6,6 +6,19 @@ const { authenticate, authorize } = require("../middleware");
 // All routes require authentication
 router.use(authenticate);
 
+// Teacher routes - Get all submissions for grading
+router.get(
+  "/submissions",
+  authorize("teacher"),
+  GradingController.getAllSubmissions
+);
+
+// Get submission detail with answers
+router.get(
+  "/submissions/:submissionId",
+  GradingController.getSubmissionDetail
+);
+
 // Teacher routes
 router.post(
   "/submissions/:submissionId/grade-auto",
