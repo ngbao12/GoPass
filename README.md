@@ -149,12 +149,12 @@ role: "admin" – Admin Dashboard
 When using MongoDB backend (after npm run seed):
 
 Role | Email | Password
-Admin | admin@gopass.com | 123456
-Teacher | teacher1@gopass.com | 123456
-Teacher | teacher2@gopass.com | 123456
-Student | student1@gopass.com | 123456
-Student | student2@gopass.com | 123456
-Student | student3@gopass.com | 123456
+Admin | admin@gopass.vn | 123456
+Teacher | teacher1@gopass.vn | 123456
+Teacher | teacher2@gopass.vn | 123456
+Student | student1@gopass.vn | 123456
+Student | student2@gopass.vn | 123456
+Student | student3@gopass.vn | 123456
 
 ## 🔍 API Endpoints
 
