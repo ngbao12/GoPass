@@ -23,14 +23,14 @@ export default function ForumPage() {
   switch (userRole) {
     case "admin":
       return <AdminForumView />;
-    
+
     case "teacher":
       // Teachers can use the same view as students for now
       return <StudentForumView />;
-    
+
     case "student":
       return <StudentForumView />;
-    
+
     default:
       return (
         <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
@@ -39,4 +39,3 @@ export default function ForumPage() {
       );
   }
 }
-

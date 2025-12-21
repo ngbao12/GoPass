@@ -16,7 +16,8 @@ interface DashboardLayoutProps {
 const DashboardLayoutContent: React.FC<DashboardLayoutProps> = ({
   children,
 }) => {
-  const { userRole, userName, activeTab, setActiveTab, isLoading } = useDashboard();
+  const { userRole, userName, activeTab, setActiveTab, isLoading } =
+    useDashboard();
   const searchParams = useSearchParams();
 
   // Allow deep links to specific tabs, e.g. /dashboard?tab=practice
