@@ -49,12 +49,14 @@ YÊU CẦU CHI TIẾT
 (C) forum topics
 - Sinh đúng {{numberOfTopics}} forum topics
 - Mỗi topicTitle:
-  - Là một nhận định hoặc vấn đề rút ra từ nội dung bài viết
+  - Là một nhận định hoặc vấn đề rút ra từ nội dung bài viết, nhưng phải đầy đủ về ý nghĩa không được nói chung chung như (Ví dụ sai: Vai trò của cha mẹ).
+  - Nhận định cần rõ ràng, cụ thể và có thể tranh luận.
+  - Mang tính mới lạ và thu hút học sinh bàn luận.
   - Phù hợp để làm đề nghị luận THPT
   - Có thể khai thác nhiều chiều
-  - Tối đa 20 chữ
+  - Độ dài từL 10-20 chữ.
   - Không trùng nhau
-  - Không trùng packageTitle
+  - Không được trùng với các cụm từ trong packageTitle
 
 (D) seedComment  ❗ RẤT QUAN TRỌNG
 - Với MỖI forum topic, tạo 01 seedComment
