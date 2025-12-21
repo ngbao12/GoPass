@@ -28,7 +28,7 @@ export interface ForumPackage {
         lastName: string;
         email: string;
     };
-    forumTopics: any[];
+    forumTopics: ForumTopic[]; // Properly typed as ForumTopic array
     status: string;
     tags?: string[];
     createdAt: string;
@@ -37,7 +37,7 @@ export interface ForumPackage {
 
 // Forum Article from VnSocial
 export interface ForumArticle {
-    id: number;
+    id: string; // Changed from number to string to match _id
     title: string;
     content: string[];
     excerpt: string;
@@ -55,6 +55,7 @@ export interface ForumArticle {
     updatedAt: string;
     tags?: string[];
     relatedExamId?: string;
+    forumTopics: ForumTopic[]; // Include forum topics for data access
 }
 
 // ForumTopic from backend

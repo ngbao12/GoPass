@@ -31,8 +31,17 @@ const getTimeAgo = (date: string): string => {
 
 // Transform ForumPackage to ForumArticle
 const transformPackageToArticle = (pkg: ForumPackage): ForumArticle => {
+    // Calculate aggregated stats from all forum topics
+    const forumTopics = pkg.forumTopics || [];
+    const totalLikes = forumTopics.reduce((sum, topic) => sum + (topic.stats?.totalLikes || 0), 0);
+    const totalComments = forumTopics.reduce((sum, topic) => sum + (topic.stats?.totalComments || 0), 0);
+    const totalViews = forumTopics.reduce((sum, topic) => sum + (topic.stats?.totalViews || 0), 0);
+    
+    // Determine if trending based on engagement
+    const isTrending = totalLikes > 10 || totalComments > 20 || totalViews > 100;
+    
     return {
-        id: pkg._id as any, // Convert string to number for compatibility
+        id: pkg._id, // Keep as string
         title: pkg.packageTitle,
         content: [pkg.packageSummary],
         excerpt: pkg.packageSummary.substring(0, 200) + '...',
@@ -41,15 +50,16 @@ const transformPackageToArticle = (pkg: ForumPackage): ForumArticle => {
         source: 'VnSocial',
         sourceUrl: pkg.sourceArticle?.url || '',
         timeAgo: getTimeAgo(pkg.createdAt),
-        views: 0, // Default, can be added to backend later
-        likes: 0, // Default, can be added to backend later
-        discussionPostsCount: pkg.forumTopics?.length || 0,
-        commentsCount: 0, // Default, can be calculated from topics
-        isTrending: false, // Can be determined by backend logic
+        views: totalViews,
+        likes: totalLikes,
+        discussionPostsCount: forumTopics.length,
+        commentsCount: totalComments,
+        isTrending: isTrending,
         createdAt: pkg.createdAt,
         updatedAt: pkg.updatedAt,
         tags: pkg.tags,
         relatedExamId: undefined,
+        forumTopics: forumTopics,
     };
 };
 

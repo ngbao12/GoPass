@@ -84,7 +84,7 @@ export default function ExamDetailClient({ exam }: Props) {
   };
 
   const handleCancel = () => {
-    router.back();
+    router.push("/dashboard/practice");
   };
 
   return (
