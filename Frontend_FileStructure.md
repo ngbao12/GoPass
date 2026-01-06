@@ -172,7 +172,7 @@ GOPASS/
 ## Architecture Design Decisions
 
 ### **1. Subfolder Organization for Services & Types**
-
+ 
 ```
 ✅ CURRENT APPROACH (Scalable):
 services/
