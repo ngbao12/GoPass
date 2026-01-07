@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui";
+import { classApi } from "@/services/teacher";
 import type { ClassDetail } from "@/services/teacher/types";
 
 interface ClassDetailHeaderProps {
@@ -13,8 +15,12 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
   classDetail, 
   onGoBack 
 }) => {
+  const router = useRouter();
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const handleCopyCode = async () => {
     try {
@@ -28,6 +34,27 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
 
   const handleShareClassCode = () => {
     setShowShareModal(true);
+  };
+
+  const handleDeleteClass = async () => {
+    try {
+      setIsDeleting(true);
+      setDeleteError(null);
+      
+      const response = await classApi.deleteClass(classDetail.id);
+      
+      if (response.success) {
+        // Redirect to classes list after successful deletion
+        router.push("/dashboard/teacher/classes");
+      } else {
+        setDeleteError(response.error || "Không thể xóa lớp học");
+      }
+    } catch (err) {
+      console.error("Error deleting class:", err);
+      setDeleteError("Đã xảy ra lỗi khi xóa lớp học");
+    } finally {
+      setIsDeleting(false);
+    }
   };
   return (
     <div className="bg-white border border-gray-200 rounded-lg">
@@ -124,8 +151,12 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
             >
               {copied ? "Đã sao chép!" : "Chia sẻ mã lớp"}
             </Button>
-            <Button variant="primary" className="text-sm bg-teal-600 hover:bg-teal-700">
-              Giao bài tập
+            <Button 
+              variant="primary" 
+              className="text-sm bg-red-600 hover:bg-red-700"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              Xóa lớp học
             </Button>
           </div>
         </div>
@@ -162,6 +193,57 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Class Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
+            <div className="mb-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">Xóa lớp học?</h3>
+              <p className="text-sm text-gray-600 text-center">
+                Bạn có chắc muốn xóa lớp học <span className="font-semibold">{classDetail.className}</span>? Hành động này không thể hoàn tác.
+              </p>
+            </div>
+
+            {deleteError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700">{deleteError}</p>
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={handleDeleteClass}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isDeleting ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    </svg>
+                    Đang xóa...
+                  </>
+                ) : (
+                  "Xóa"
+                )}
               </button>
             </div>
           </div>
