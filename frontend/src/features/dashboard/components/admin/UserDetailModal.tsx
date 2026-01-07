@@ -37,14 +37,27 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose }) => {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    if (!dateString) return 'N/A';
+    
+    try {
+      const date = new Date(dateString);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return 'Invalid date';
+      }
+      
+      return date.toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
+    } catch (error) {
+      return 'Invalid date';
+    }
   };
 
   const getUserAvatar = () => {
@@ -157,29 +170,6 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose }) => {
               <div className="flex-1">
                 <p className="text-sm text-gray-500 font-medium">Email</p>
                 <p className="text-gray-900">{user.email}</p>
-              </div>
-            </div>
-
-            {/* User ID */}
-            <div className="flex items-start gap-3">
-              <div className="bg-purple-50 p-2 rounded-lg">
-                <svg
-                  className="w-5 h-5 text-purple-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-500 font-medium">User ID</p>
-                <p className="text-gray-900 font-mono text-sm">{user._id}</p>
               </div>
             </div>
 
