@@ -315,7 +315,7 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
                   type="text"
                   value={editData.className}
                   onChange={(e) => setEditData({ ...editData, className: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
                   placeholder="Nhập tên lớp học"
                 />
               </div>
@@ -327,7 +327,7 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
                 <textarea
                   value={editData.description}
                   onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
                   rows={3}
                   placeholder="Nhập mô tả lớp học"
                 />
