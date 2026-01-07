@@ -3,7 +3,6 @@ const router = express.Router();
 const GradingController = require("../controllers/GradingController");
 const { authenticate, authorize } = require("../middleware");
 
-// All routes require authentication
 router.use(authenticate);
 
 // Teacher routes - Get all submissions for grading
