@@ -1,4 +1,3 @@
-// src/services/student/studentPracticeApi.ts
 import { httpClient } from '@/lib/http';
 import { PracticeExam } from '@/features/dashboard/types/student';
 
@@ -18,12 +17,12 @@ export const fetchPracticeExams = async (
   subject?: string
 ): Promise<PracticeExam[]> => {
   try {
-    const queryParams = subject && subject !== 'all' 
-      ? `?subject=${encodeURIComponent(subject)}` 
+    const queryParams = subject && subject !== 'all'
+      ? `?subject=${encodeURIComponent(subject)}`
       : '';
-    
+
     const response = await httpClient.get<PracticeExamsResponse>(
-      `/students/practice${queryParams}`, 
+      `/students/practice${queryParams}`,
       { requiresAuth: true }
     );
 
