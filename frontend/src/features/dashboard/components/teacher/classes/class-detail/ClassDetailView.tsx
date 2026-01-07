@@ -40,15 +40,19 @@ const ClassDetailView: React.FC = () => {
       
       if (classResponse.success) {
         // Enrich the class detail with actual data
+        const membersData = membersResponse.success ? ((membersResponse.data as any)?.members || []) : [];
+        const requestsData = requestsResponse.success ? ((requestsResponse.data as any)?.requests || []) : [];
+        const assignmentsData = assignmentsResponse.success ? (Array.isArray(assignmentsResponse.data) ? assignmentsResponse.data : []) : [];
+        
         const enrichedDetail: ClassDetail = {
           ...classResponse.data,
-          members: membersResponse.success ? membersResponse.data : [],
-          joinRequests: requestsResponse.success ? requestsResponse.data : [],
-          assignments: assignmentsResponse.success ? assignmentsResponse.data : [],
+          members: membersData,
+          joinRequests: requestsData,
+          assignments: assignmentsData,
           stats: {
-            totalMembers: membersResponse.success ? membersResponse.data.length : 0,
-            pendingRequests: requestsResponse.success ? requestsResponse.data.length : 0,
-            activeAssignments: assignmentsResponse.success ? assignmentsResponse.data.length : 0,
+            totalMembers: membersData.length,
+            pendingRequests: requestsData.length,
+            activeAssignments: assignmentsData.length,
             averageScore: 0, // TODO: Calculate from submissions
           }
         };
