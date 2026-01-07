@@ -31,19 +31,19 @@ class GradingService {
     // Filter submissions by teacher's created exams and subject
     let filtered = submissions.filter((s) => {
       if (!s.examId) return false;
-      
+
       // Filter by teacher (exams created by the teacher)
       if (teacherId && s.examId.createdBy) {
         if (s.examId.createdBy.toString() !== teacherId.toString()) {
           return false;
         }
       }
-      
+
       // Filter by subject
       if (filters.subject && s.examId.subject !== filters.subject) {
         return false;
       }
-      
+
       return true;
     });
 
@@ -140,8 +140,8 @@ class GradingService {
         feedback = validation.isCorrect
           ? "Correct"
           : `Incorrect (Similarity: ${(validation.similarity * 100).toFixed(
-              0
-            )}%)`;
+            0
+          )}%)`;
 
         await ExamAnswerRepository.gradeAnswer(
           answer._id,
@@ -318,7 +318,7 @@ class GradingService {
     );
 
     try {
-      // 1. Lấy submission info
+      // 1. Get submission info
       const submission = await ExamSubmissionRepository.findById(submissionId, {
         populate: "examId",
       });
@@ -327,7 +327,7 @@ class GradingService {
         throw new Error("Submission not found");
       }
 
-      // 2. Kiểm tra subject
+      // 2. Check subject
       const exam = submission.examId;
       if (!exam || exam.subject !== "Ngữ Văn") {
         console.log("⏭️  Not Ngữ Văn subject, skipping auto-grading");
@@ -336,7 +336,7 @@ class GradingService {
 
       console.log("✅ Subject confirmed: Ngữ Văn");
 
-      // 3. Lấy tất cả examAnswers của submission này
+      // 3. Get all examAnswers of this submission
       const examAnswers = await ExamAnswerRepository.findBySubmission(
         submissionId,
         {
@@ -350,7 +350,7 @@ class GradingService {
 
       console.log(`📝 Found ${examAnswers.length} answers to grade`);
 
-      // 4. Lọc các câu cần chấm (có answerText và chưa chấm)
+      // 4. Filter answers that need grading (have answerText and not graded)
       const answersToGrade = examAnswers.filter((answer) => {
         return (
           answer.answerText &&
@@ -371,7 +371,7 @@ class GradingService {
 
       console.log(`🎯 Need to grade ${answersToGrade.length} answers`);
 
-      // 5. Chuẩn bị payload cho chatbot
+      // 5. Prepare payload for chatbot
       const items = answersToGrade.map((answer) => ({
         examAnswerId: answer._id.toString(),
         questionId: answer.questionId._id.toString(),
@@ -380,7 +380,7 @@ class GradingService {
         answerText: answer.answerText,
       }));
 
-      // 6. Gọi chatbot để chấm
+      // 6. Call chatbot
       console.log("🤖 Calling SmartBot for grading...");
       const gradingResults = await this._callSmartBotGrading({
         metadata: {
@@ -392,7 +392,7 @@ class GradingService {
 
       console.log("✅ Received grading results");
 
-      // 7. Cập nhật kết quả vào DB
+      // 7. Update results in DB
       let gradedCount = 0;
       let totalScore = 0;
 
@@ -419,7 +419,7 @@ class GradingService {
         }
       }
 
-      // 8. Cập nhật tổng điểm submission
+      // 8. Update total score of submission
       await ExamSubmissionRepository.update(submissionId, {
         totalScore,
         gradedAt: new Date(),
@@ -441,10 +441,10 @@ class GradingService {
   }
 
   /**
-   * Gọi SmartBot API để chấm bài
+   * Call SmartBot API for grading
    * @private
    */
-async _callSmartBotGrading(payload) {
+  async _callSmartBotGrading(payload) {
     const prompt = this._buildGradingPrompt(payload);
     const cleanedPrompt = prompt.trim();
     console.log('🤖 [Grading] Using grading bot ID:', vnSmartBotProvider.gradingBotId);
@@ -457,13 +457,13 @@ async _callSmartBotGrading(payload) {
         .toString(36)
         .substr(2, 9)}`,
       metadata: payload.metadata,
-      bot_id: vnSmartBotProvider.gradingBotId, // Sử dụng bot riêng cho chấm điểm
+      bot_id: vnSmartBotProvider.gradingBotId, // Use a dedicated bot for grading
     });
 
-    // Parse response từ SmartBot
+    // Parse response from SmartBot
     let parsedResponse = response;
 
-    // Xử lý SSE format nếu cần
+    // Handle SSE format if needed
     if (typeof response === "string" && response.startsWith("data:")) {
       try {
         const jsonStr = response.substring(5).trim();
@@ -473,7 +473,7 @@ async _callSmartBotGrading(payload) {
       }
     }
 
-    // Extract text từ response
+    // Extract text from response
     const cardData = parsedResponse?.object?.sb?.card_data;
     if (!cardData || cardData.length === 0) {
       throw new Error("No card_data in SmartBot response");
@@ -520,7 +520,7 @@ async _callSmartBotGrading(payload) {
       console.log("=".repeat(80));
 
       gradingResults = JSON.parse(cleanedText);
-      
+
       console.log("📋 [Parsed Results]:");
       console.log(JSON.stringify(gradingResults, null, 2));
       console.log("=".repeat(80));
@@ -608,7 +608,7 @@ async _callSmartBotGrading(payload) {
     // Recalculate total score for submission
     const allAnswers = await ExamAnswerRepository.findBySubmission(submissionId);
     const totalScore = allAnswers.reduce((sum, ans) => sum + (ans.score || 0), 0);
-    
+
     submission.totalScore = totalScore;
     await submission.save();
 
