@@ -40,6 +40,20 @@ router.post(
   GradingController.aiSuggestScore
 );
 
+// Update submission status
+router.patch(
+  "/submissions/:submissionId/status",
+  authorize("teacher"),
+  GradingController.updateSubmissionStatus
+);
+
+// Grade individual answer
+router.post(
+  "/submissions/:submissionId/answers/:answerId/grade",
+  authorize("teacher"),
+  GradingController.gradeAnswer
+);
+
 // Shared routes
 router.get(
   "/submissions/:submissionId/grade",
