@@ -1,0 +1,1808 @@
+{
+  "success": true,
+  "data": {
+    "exam": {
+      "title": "Đề Thi Thử Tiếng Anh THPT 2026",
+      "description": "Đề thi thử môn Tiếng Anh theo cấu trúc mới nhất",
+      "subject": "Tiếng Anh",
+      "durationMinutes": 50,
+      "mode": "practice_test",
+      "shuffleQuestions": false,
+      "showResultsImmediately": false,
+      "createdBy": "u_teacher_01",
+      "isPublished": true,
+      "readingPassages": [
+        {
+          "id": "passage_1",
+          "title": "Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option  that best fits each of the numbered blanks.",
+          "content": "<p class=\"mb-4 text-justify\"><b>How to Choose a Career ! </b></p>\n<p class=\"mb-4 text-justify\">Discover an array of tools and questions to help you determine what careers might suit you best.</p>\n<p class=\"mb-4 text-justify\">Working <b>(6) </b>_______ around one-third of the average person’s life, so it’s no surprise that many people want to find a career that will be a good fit for them. Use the list below to help you begin that process.</p>\n<p class=\"mb-4 text-justify\"><b> 1.Examine yourself:</b> What you enjoy doing and what you value can be helpful indicators of how you’d like to <b>(7)</b> _______ your working time.</p>\n<p class=\"mb-4 text-justify\"><b> 2.Take different self-assessment tests: </b>There are a <b>(8)</b> _______ of tests you can take to evaluate everything from your personality to your strengths, and even what career might be a good fit.</p>\n<p class=\"mb-4 text-justify\"><b> 3.Explore sectors:</b> Learning more about each sector and its respective <b>(9)</b> _______ may help you decide where you’d be a strong fit.</p>\n<p class=\"mb-4 text-justify\"><b> 4.Seek out professional resources: (10)</b> _______ thinking through the areas mentioned above on your own, you can also turn to <b>(11)</b> _______ career resources for more guided help.</p>"
+        },
+        {
+          "id": "passage_2",
+          "title": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best  answer to each of the following questions.",
+          "content": "<p class=\"mb-4 text-justify\">Artificial intelligence (AI) is transforming industries, from healthcare to education. However, as AI technologies advance, the risk of AI abuse also increases. AI abuse refers to the misuse of AI systems to harm individuals or manipulate society. Common forms include deep fake videos, where faces and voices are digitally altered to create fake content, and data manipulation, which involves AI algorithms influencing public opinion through misleading information. <b>AI abuse is a growing concern as these systems become  more accessible, raising ethical and safety issues for individuals and societies alike. </b></p>\n<p class=\"mb-4 text-justify\"><b>[I]</b> One example of AI abuse is in social media, where AI-driven bots spread false information.<b> [II] </b> These bots, designed to imitate real users, can post, comment, and interact with others, making it difficult to distinguish between genuine and fake content. <b>[III]</b> As a result, <b>they</b> can change opinions on political and social issues, sometimes with harmful consequences. The speed at which these bots operate allows misinformation to spread rapidly, posing challenges for fact-checkers and social media platforms in controlling false narratives. <b>[IV] </b></p>\n<p class=\"mb-4 text-justify\">Another area where AI abuse has gained attention is privacy invasion. Facial recognition technology, for example, is often used by authorities for security. However, some private organisations use it without consent, tracking individuals in public spaces and selling the information to advertisers. This practice violates personal privacy and has <b>sparked a debate about</b> the ethical use of AI.</p>\n<p class=\"mb-4 text-justify\">To combat AI abuse, experts suggest stricter regulations and improved awareness. Laws need to address emerging technologies and prevent the misuse of AI systems. Additionally, educating the public on identifying AI-generated content can <b>empower</b> individuals to navigate the digital world safely. As AI continues to evolve, establishing clear ethical guidelines will be essential to prevent its harmful uses and to ensure that AI remains a tool for positive change.</p>"
+        },
+        {
+          "id": "passage_3",
+          "title": "Read the following advertisement and mark the letter A, B, C or D on your answer sheet to indicate the  option that best fits each of the numbered blanks.",
+          "content": "<p class=\"mb-4 text-justify\"><b>Solo Travelers - Exploring the world with Global Hospitality Hub! </b></p>\n<p class=\"mb-4 text-justify\">Are you a solo traveler seeking to explore new places while immersing yourself <b>(22)</b> _______ local culture? Join the Global Hospitality Hub, a service <b>(23)</b> _______ travelers with friendly locals excited to show you hidden gems and must-visit spots.</p>\n<p class=\"mb-4 text-justify\">Why Choose Us?</p>\n<p class=\"mb-4 text-justify\">✓ We aim to provide you with<b> (24)</b> _______;</p>\n<p class=\"mb-4 text-justify\">✓ The tours are led by passionate locals, offering unique insights;</p>\n<p class=\"mb-4 text-justify\">✓ You can freely explore without worrying about <b>(25)</b> _______;</p>\n<p class=\"mb-4 text-justify\">✓ You can meet like-minded explorers and <b>(26)</b> _______ lifelong friends.</p>\n<p class=\"mb-4 text-justify\">Don’t miss out! Sign up today <b>(27)</b> _______ the world in a safe, comfortable, and enriching way.</p>"
+        },
+        {
+          "id": "passage_4",
+          "title": "Read the following passage about and mark the letter A, B, C or D on your answer sheet to indicate the  best answer to each of the following questions.",
+          "content": "<p class=\"mb-4 text-justify\"><b>Early Warning Systems ! </b></p>\n<p class=\"mb-4 text-justify\">People may take steps to reduce the impact of a natural hazard when they are aware that it is likely to occur. But how can people recognize they are in danger? Scientists use many methods to help predict when natural hazards are likely to happen.</p>\n<p class=\"mb-4 text-justify\">Seismometers measure earthquake activity. An increase in small earthquakes can mean a larger earthquake is about to happen or a volcano is becoming more active. If a volcanic eruption is predicted, people can <b>evacuate</b>, or move to safer areas. Governments can prepare emergency supplies, such as food and water. Emergency workers can be ready to help with injuries. All of these steps reduce the impact and help save lives.</p>\n<p class=\"mb-4 text-justify\">Scientists use several devices and methods to constantly collect information about a volcano’s activity. Radio transmissions allow the data to be sent instantly to a monitoring system. Scientists can tell what is happening with a volcano almost as soon as it happens. They can also use that information to predict what is likely to happen next.</p>\n<p class=\"mb-4 text-justify\">Besides tracking seismic activity, scientists also monitor gases, temperature and water at a volcano site. A change in the amount of carbon dioxide and others given off by the volcano can be measured to comprehensive analysis of these factors help scientists improve eruption predictions and enhance public safety.</p>"
+        },
+        {
+          "id": "passage_5",
+          "title": "Read the following passage and mark the letter A, B, Cor D on your answer sheet to indicate the option  that best fits each of the numbered blanks.",
+          "content": "<p class=\"mb-4 text-justify\">In general, artists are creative people who want their work to have an effect on those who see it. Great art can definitely inspire positive feelings. However, people’s ideas about what “great art” is <b>(36)</b> _______. For example, Impressionist art is now widely considered to be great. However, it was controversial for many years. People said that the style of painting and the use of color were too different from traditional art.</p>\n<p class=\"mb-4 text-justify\">Modern art can be controversial, too. Take Andy Warhol’s Campbell’s Soup Cans. As the name suggests, it was 32 pictures of cans of soup. <b>(37)</b> _______ in Los Angeles in 1962, some experts liked it, but many people said that it was not art. Carl Andre created another controversial piece of art, Equivalent</p>\n<p class=\"mb-4 text-justify\">VIII, an installation <b>(38)</b> _______. The Tate, <b>(39)</b> _______ England, bought the unique work in 1976. It was not expensive, but public reaction to the exhibition was negative. People expected to see portraits on the wall, not bricks on the floor. How will people feel about Campbell’s Soup Cans and Equivalent VIII in the future? Will people think they are works of genius, <b>(40)</b> _______? Only time will tell.</p>"
+        }
+      ],
+      "totalQuestions": 40,
+      "totalPoints": 10.0
+    },
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "content": "<br>a - The population of New Orleans had some fluctuation between 1950 and 2010. It had a slight growth between 1950 and 1970.<br>b - During this time, Atlanta had the most significant change in population. The population of Atlanta in 1950 was around 500 thousand, and it rose significantly to 2.2 million by 1990.<br>c - Similarly, Charlotte’s population went up over the 60-year period. It grew steadily from 100 thousand to 500 thousand between 1950 and 1990.<br>d - The chart shows how the populations of three major cities in the USA changed from 1950 to 2010. These cities are Atlanta, Charlotte, and New Orleans.<br>e - In general, the population in each city increased over the 60-year period.",
+        "options": [
+          {
+            "id": "A",
+            "content": "d - a - e - b – c",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "d - c - a - b – e",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "d - b - c - e – a",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "d - e - b - c – a",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": null,
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": []
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Dear Gordon,<br>a - The menu you suggested represents an ideal combination of healthy and exciting food.<br>b - We are delighted to inform you that you have won first prize in our Masterchef Teens’ Competition.<br>c - For more information, please contact Christine at h_christine@finedining.com and include details of any cookery experience you may have so that we can place you in the correct group.<br>d - Your prize is a place on one of our weekend cookery classes for teenagers at the Fine Dining Culinary School. Yours sincerely, Christine Harper",
+        "options": [
+          {
+            "id": "A",
+            "content": "a - c - b – d",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "a - b - d – c",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "b - a - c – d",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "b - a - d – c",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": null,
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": []
+      },
+      {
+        "type": "multiple_choice",
+        "content": "<br>a - Chris: We should definitely try to use energy-saving devices.<br>b - Bob: I’m supposed you’re right. Shall we write down our proposals for the project?<br>c - Chris: I’m not sure about that. They are expensive. Perhaps we could plant trees.<br>d - Bob: Chris, we need to come up with some ideas about how to protect our ecosystems. What do you suggest we do?<br>e - Bob: Ok. We could also use electric cars.",
+        "options": [
+          {
+            "id": "A",
+            "content": "d - c - b - a – e",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "a - c - b - d – e",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "d - a - e - c – b",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "a - b - c - d – e",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": null,
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": []
+      },
+      {
+        "type": "multiple_choice",
+        "content": "<br>a - Mark: Hi. This is the first time I’ve ever met a talking robot like you.<br>b - Jessica: Good morning, everybody. I’m a human-like robot and will be your guide today.<br>c - Jessica: I’m glad to meet you, too. Let’s have a photo taken together!",
+        "options": [
+          {
+            "id": "A",
+            "content": "c - b – a",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "c - a – b",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "b - c – a",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "b - a – c",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": null,
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": []
+      },
+      {
+        "type": "multiple_choice",
+        "content": "<br>a - Additionally, your smart home will be monitoring your children and pets, letting you know via text messages if anything is wrong.<br>b - It will be controlled by a computer system that monitors everything going on.<br>c - In 2035, you will be living in a smart home.<br>d - While you are away, it will be switching lights on and off, controlling the temperature in each room, and even opening windows to allow air in.<br>e - With these advanced features, smart homes will provide convenience, security, and peace of mind for homeowners.",
+        "options": [
+          {
+            "id": "A",
+            "content": "d - b - c - a – e",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "c - e - a - b – d",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "a - b - c - d – e",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "c - b - d - a – e",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": null,
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": []
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Working <b>(6) </b>_______ around one-third of the average person’s life",
+        "options": [
+          {
+            "id": "A",
+            "content": "makes up",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "gives in",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "puts down",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "takes out",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_1",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "What you enjoy doing and what you value can be helpful indicators of how you’d like to <b>(7)</b> _______ your working time.",
+        "options": [
+          {
+            "id": "A",
+            "content": "cancel",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "maintain",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "spend",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "waste",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_1",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "There are a <b>(8)</b> _______ of tests you can take to evaluate everything from your personality to your strengths",
+        "options": [
+          {
+            "id": "A",
+            "content": "number",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "portion",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "level",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "quality",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_1",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Learning more about each sector and its respective <b>(9)</b> _______ may help you decide where you’d be a strong fit.",
+        "options": [
+          {
+            "id": "A",
+            "content": "goals",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "successes",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "achievements",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "results",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_1",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "<b>(10)</b> _______ thinking through the areas mentioned above on your own",
+        "options": [
+          {
+            "id": "A",
+            "content": "Regardless of",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "In addition to",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "Due to",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "On account of",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_1",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "you can also turn to <b>(11)</b> _______ career resources for more guided help.",
+        "options": [
+          {
+            "id": "A",
+            "content": "another",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "other",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "others",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "the others",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_1",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following best paraphrases the underlined sentence in paragraph 1?",
+        "options": [
+          {
+            "id": "A",
+            "content": "As AI becomes more available, its misuse is becoming a bigger issue, leading to ethical and safety\nconcerns for people and communities.",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "AI systems are now more advanced, making them completely safe and free from ethical problems.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "AI abuse is decreasing as these systems become more accessible, leading to fewer concerns about\nethics and safety.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "The increasing use of AI has eliminated many ethical and safety issues for individuals and society.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Where in paragraph 2 does the following sentence best fit? <b>In other words, their ability to closely mimic human behaviour makes them highly effective at  blending into online discussions. </b>",
+        "options": [
+          {
+            "id": "A",
+            "content": "[IV]",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "[III]",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "[I]",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "[II]",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The word <b>they</b> in paragraph 2 refers to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "opinions",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "real users",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "political issues",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "bots",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The phrase <b>sparked a debate about</b> in paragraph 3 could be best replaced by _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "avoided controversy about",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "put an end to an argument on",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "started a discussion on",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "settled disagreement over",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "According to the passage, which of the following is NOT mentioned as a use of facial recognition technology?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Assisting law enforcement in maintaining security",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Selling the users’ personal data to advertisers",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Monitoring people at public places without consent",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Gaining attention towards the application of AI",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following best summarises paragraph 3?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Laws are in place to control AI abuse effectively.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "AI misuse in the private sector raises privacy concerns.",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "AI can be used responsibly to benefit society.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "AI abuse only affects specific industries.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The word <b>empower</b> in paragraph 4 is OPPOSITE in meaning to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "permit",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "force",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "encourage",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "restrict",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following is NOT true according to the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Educating the public can help them recognise AI-generated content.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Some private organisations use facial recognition technology without consent.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Facial recognition technology is only used by authorities for security.",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Social media bots can spread misinformation quickly.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following can be inferred from the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "AI bots are rarely able to impact political discussions.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Not all uses of AI are harmful, but misuse can lead to serious issues.",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "Regulating AI will completely stop AI abuse.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Facial recognition is only a concern when used in public spaces.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following best summarises the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Social media bots and facial recognition technology are two common forms of AI abuse with serious\nconsequences.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "The rapid advancement of AI makes it harder to regulate, increasing the risk of misuse in society.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "AI abuse, including misinformation and privacy invasion, is a growing issue but can be reduced\nthrough regulations and awareness.",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "AI offers many benefits, but its misuse in spreading false information and violating privacy raises\nconcerns.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_2",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Are you a solo traveler seeking to explore new places while immersing yourself <b>(22)</b> _______ local culture?",
+        "options": [
+          {
+            "id": "A",
+            "content": "on",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "in",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "out",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "off",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_3",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Join the Global Hospitality Hub, a service <b>(23)</b> _______ travelers with friendly locals excited to show you hidden gems and must-visit spots.",
+        "options": [
+          {
+            "id": "A",
+            "content": "which connect",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "is connected",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "connecting",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "connected",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_3",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "We aim to provide you with<b> (24)</b> _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "authentic cultural experiences",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "experience authentic culture",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "cultural experience authenticity",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "cultural authentic experiences",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_3",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "You can freely explore without worrying about <b>(25)</b> _______ .",
+        "options": [
+          {
+            "id": "A",
+            "content": "transportation",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "transportable",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "transporter",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "transported",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_3",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "You can meet like-minded explorers and <b>(26)</b> _______ lifelong friends.",
+        "options": [
+          {
+            "id": "A",
+            "content": "take",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "make",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "put",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "do",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_3",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Sign up today <b>(27)</b> _______ the world in a safe, comfortable, and enriching way.",
+        "options": [
+          {
+            "id": "A",
+            "content": "to experience",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "experienced",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "experiencing",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "experience",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_3",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following is NOT mentioned as a method scientists use to predict natural hazards?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Observing temperature changes in rocks",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Measuring earthquake activity",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Monitoring gases released by a volcano",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Studying animal behavior before an eruption",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The word <b>evacuate</b> in paragraph 2 is OPPOSITE in meaning to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "relocate",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "return",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "rebuild",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "remain",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The word They in paragraph 3 refers to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "radio transmission",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "scientists",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "monitoring systems",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "emergency workers",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following best paraphrases the underlined sentence in paragraph 3?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Scientists can predict exactly when and where a volcano will erupt.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Scientists can foretell volcanic activity by staying near the volcano.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Scientists are able to predict volcanic activity long before it occurs.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Scientists can quickly detect and analyze volcanic activity in real time.",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The word <b>comprehensive</b> in paragraph 4 could best be replaced by _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "detailed",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "inaccurate",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "simple",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "limited",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Which of the following is TRUE according to the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Seismometers not only measure earthquake activity but also have the ability to stop earthquakes and\nvolcanic eruptions from happening.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Even with warning signs of a volcanic eruption, evacuation is unnecessary since volcanic activity\nrarely threatens human lives.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "If a volcanic eruption is predicted, governments can prepare emergency supplies like food and water\nto reduce the disaster’s impact.",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Scientists are unable to predict natural hazards, so people and governments always face disasters\nwithout any warning.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "In which paragraph does the writer discuss monitoring various natural factors to predict a volcanic eruption?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Paragraph 1",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Paragraph 2",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Paragraph 4",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Paragraph 3",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "In which paragraph does the writer mention a conditional relationship?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Paragraph 1",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Paragraph 2",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "Paragraph 4",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Paragraph 3",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_4",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "However, people’s ideas about what “great art” is <b>(36)</b> _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "is something that history and political perception continuously alter",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "can gradually change over time due to shifting public opinions",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "remain the same as artistic movements and societal values develop",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "capable of changing significantly as time and artistic trends evolve",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_5",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "<b>(37)</b> _______ in Los Angeles in 1962, some experts liked it, but many people said that it was not art.",
+        "options": [
+          {
+            "id": "A",
+            "content": "At the moment it is exhibited at the Ferus Gallery",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Having been displayed at the time of the Ferus Gallery",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "When it was displayed at the Ferus Gallery",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Displayed for the first time at the Ferus Gallery",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_5",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Carl Andre created another controversial piece of art, Equivalent VIII, an installation <b>(38)</b> _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "that is just an ordinary pile of bricks",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "of which made entirely out of basic bricks",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "appears as nothing but a formation of bricks",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "consists only of basic bricks stacked together",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_5",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "The Tate, <b>(39)</b> _______ England, bought the unique work in 1976.",
+        "options": [
+          {
+            "id": "A",
+            "content": "one of the most famous gallery in London",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "which a famous gallery in London",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "a famous gallery in London",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "where is a famous gallery in London",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_5",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "content": "Will people think they are works of genius, <b>(40)</b> _______?",
+        "options": [
+          {
+            "id": "A",
+            "content": "or will their opinion change in a less favorable way",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "or will people be unable to impress with artistic expression",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "or maybe they won’t think of it so highly with admiration",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "or future generations may not appreciate critics in that way",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage_5",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "tags": [
+          "cloze"
+        ]
+      }
+    ],
+    "examQuestions": [
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 1,
+        "section": "Sentence/Utterance Arrangement",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 2,
+        "section": "Sentence/Utterance Arrangement",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 3,
+        "section": "Sentence/Utterance Arrangement",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 4,
+        "section": "Sentence/Utterance Arrangement",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 5,
+        "section": "Sentence/Utterance Arrangement",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 6,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 7,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 8,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 9,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 10,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 11,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 12,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 13,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 14,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 15,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 16,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 17,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 18,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 19,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 20,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 21,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 22,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 23,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 24,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 25,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 26,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 27,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 28,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 29,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 30,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 31,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 32,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 33,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 34,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 35,
+        "section": "Reading Comprehension",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 36,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 37,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 38,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 39,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      },
+      {
+        "examId": null,
+        "questionId": null,
+        "order": 40,
+        "section": "Cloze Test",
+        "maxScore": 0.25
+      }
+    ]
+  },
+  "stats": {
+    "totalQuestions": 40,
+    "totalPassages": 5,
+    "totalPoints": 10.0,
+    "questionsWithPassage": 35,
+    "questionsWithoutPassage": 5,
+    "clozeQuestions": 17,
+    "readingQuestions": 18
+  }
+}

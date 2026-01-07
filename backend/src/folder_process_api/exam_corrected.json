@@ -2,510 +2,620 @@
     "passages": [
         {
             "passage_id": "passage_1",
-            "instruction": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer  to each of the following questions.",
-            "content": "<p class=\"mb-4 text-justify\"><b>URBANISATION: A GROWING PHENOMENON </b></p>\n<p class=\"mb-4 text-justify\">Urbanisation is the process through which cities grow, and higher populations begin to inhabit urban areas. <b>This phenomenon </b>has <b>accelerated </b>significantly over the past few decades due to various factors. One of the primary drivers is the search for better employment opportunities. In rural areas, job prospects are often limited to agriculture and small-scale industries, which might not provide sufficient income. Consequently, people migrate to cities seeking better livelihoods and living standards.</p>\n<p class=\"mb-4 text-justify\">Additionally, urban areas offer more <b>advanced </b>educational facilities and healthcare services compared to rural regions. Many families move to cities to provide their children with higher-quality education and greater future opportunities. <b>Access to hospitals and specialized medical services also attracts people to urban centers,  especially in countries where rural healthcare is underdeveloped. </b></p>\n<p class=\"mb-4 text-justify\">However, rapid urbanisation brings about several challenges. Overcrowding in cities can lead to inadequate housing, strained infrastructure, and increased pollution. The expansion of urban areas often results in the loss of green spaces and agricultural land, impacting food production and the environment. Governments and city planners must address these issues to ensure sustainable urban growth.</p>\n<p class=\"mb-4 text-justify\">Despite these challenges, urbanisation has several positive aspects. Cities are often cultural melting pots, where diverse groups of people interact, leading to vibrant communities and innovation. The concentration of resources and talents in urban areas can drive economic growth and technological advancements.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://copilot.microsoft.com)</p>"
+            "instruction": "Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option  that best fits each of the numbered blanks.",
+            "content": "<p class=\"mb-4 text-justify\"><b>How to Choose a Career ! </b></p>\n<p class=\"mb-4 text-justify\">Discover an array of tools and questions to help you determine what careers might suit you best.</p>\n<p class=\"mb-4 text-justify\">Working <b>(6) </b>_______ around one-third of the average person’s life, so it’s no surprise that many people want to find a career that will be a good fit for them. Use the list below to help you begin that process.</p>\n<p class=\"mb-4 text-justify\"><b> 1.Examine yourself:</b> What you enjoy doing and what you value can be helpful indicators of how you’d like to <b>(7)</b> _______ your working time.</p>\n<p class=\"mb-4 text-justify\"><b> 2.Take different self-assessment tests: </b>There are a <b>(8)</b> _______ of tests you can take to evaluate everything from your personality to your strengths, and even what career might be a good fit.</p>\n<p class=\"mb-4 text-justify\"><b> 3.Explore sectors:</b> Learning more about each sector and its respective <b>(9)</b> _______ may help you decide where you’d be a strong fit.</p>\n<p class=\"mb-4 text-justify\"><b> 4.Seek out professional resources: (10)</b> _______ thinking through the areas mentioned above on your own, you can also turn to <b>(11)</b> _______ career resources for more guided help.</p>"
         },
         {
             "passage_id": "passage_2",
-            "instruction": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer  to each of the following questions.",
-            "content": "<p class=\"mb-4 text-justify\">ChihiraAico is an advanced humanoid robot designed by Toshiba, <b>(9)</b> _______. She made her debut at the CEATEC electronics show in Japan in 2014, showcasing her ability to communicate and interact in ways that closely mimic human behavior. Her design combines cutting-edge robotics and artificial intelligence (AI) technology <b>(10)</b> _______. ChihiraAico is capable of speaking multiple languages, engaging with people at exhibitions, and even providing directions at shopping malls and tourist centers.</p>\n<p class=\"mb-4 text-justify\"><b>(11)</b> _______, ChihiraAico and robots like her are intended to bridge the gap between humans and machines, offering personalized services and enhancing customer experiences. She is equipped with sensors, voice recognition software, and realistic facial expressions <b>(12)</b> _______. This enables her to respond naturally to questions, recognize emotional cues, and perform practical tasks like delivering information to visitors.</p>\n<p class=\"mb-4 text-justify\">As AI technology continues to evolve, <b>(13) </b>_______. In the future, humanoid robots may become indispensable helpers in various public and private sectors, bringing unprecedented levels of convenience and interaction to our lives.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://www.therobotreport.com/)</p>"
+            "instruction": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best  answer to each of the following questions.",
+            "content": "<p class=\"mb-4 text-justify\">Artificial intelligence (AI) is transforming industries, from healthcare to education. However, as AI technologies advance, the risk of AI abuse also increases. AI abuse refers to the misuse of AI systems to harm individuals or manipulate society. Common forms include deep fake videos, where faces and voices are digitally altered to create fake content, and data manipulation, which involves AI algorithms influencing public opinion through misleading information. <b>AI abuse is a growing concern as these systems become  more accessible, raising ethical and safety issues for individuals and societies alike. </b></p>\n<p class=\"mb-4 text-justify\"><b>[I]</b> One example of AI abuse is in social media, where AI-driven bots spread false information.<b> [II] </b> These bots, designed to imitate real users, can post, comment, and interact with others, making it difficult to distinguish between genuine and fake content. <b>[III]</b> As a result, <b>they</b> can change opinions on political and social issues, sometimes with harmful consequences. The speed at which these bots operate allows misinformation to spread rapidly, posing challenges for fact-checkers and social media platforms in controlling false narratives. <b>[IV] </b></p>\n<p class=\"mb-4 text-justify\">Another area where AI abuse has gained attention is privacy invasion. Facial recognition technology, for example, is often used by authorities for security. However, some private organisations use it without consent, tracking individuals in public spaces and selling the information to advertisers. This practice violates personal privacy and has <b>sparked a debate about</b> the ethical use of AI.</p>\n<p class=\"mb-4 text-justify\">To combat AI abuse, experts suggest stricter regulations and improved awareness. Laws need to address emerging technologies and prevent the misuse of AI systems. Additionally, educating the public on identifying AI-generated content can <b>empower</b> individuals to navigate the digital world safely. As AI continues to evolve, establishing clear ethical guidelines will be essential to prevent its harmful uses and to ensure that AI remains a tool for positive change.</p>"
         },
         {
             "passage_id": "passage_3",
-            "instruction": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer  to each of the following questions.",
-            "content": "<p class=\"mb-4 text-justify\"><b>[I] </b>As the world grapples with the finite nature of fossil fuel reserves and the detrimental impact of climate change, the future of energy undeniably lies in renewable sources. <b>[II] </b>Scientists and engineers are making substantial advancements in the development of technologies that more efficiently <b>harness </b>solar, wind, hydro, and geothermal energy. <b>[III] </b>Although the transition to these renewable sources presents significant challenges, it is also regarded as a pivotal step towards establishing a sustainable and resilient energy system. <b>[IV] </b></p>\n<p class=\"mb-4 text-justify\">One of the most promising advancements in renewable energy is the enhancement of solar panel efficiency. Progress in photovoltaic technology has led to the creation of panels that convert a higher proportion of sunlight into electricity. Likewise, wind turbines are becoming more and more efficient. <b>They </b>are capable of generating power even under low-wind conditions. These innovations are essential for making renewable energy more feasible and accessible to a broader population.</p>\n<p class=\"mb-4 text-justify\">However, the transition to renewable energy is fraught with obstacles. The <b>intermittent </b>nature of sources like solar and wind necessitates reliable storage solutions to ensure a consistent power supply. Although battery technology has seen significant improvements, further advancements are imperative to meet growing demand. Moreover, the infrastructure for distributing renewable energy requires expansion and upgrading to accommodate these new power sources.</p>\n<p class=\"mb-4 text-justify\">The economic impact of transitioning to renewable energy is another critical consideration. <b>While the initial  investment in renewable energy infrastructure can be substantial, the long-term benefits include reduced  energy costs and job creation in the green energy sector</b>. Governments and private enterprises are increasingly acknowledging the necessity of investing in renewable energy projects, which is crucial for fostering innovation and diminishing reliance on fossil fuels.</p>\n<p class=\"mb-4 text-justify\">Ultimately, the future of energy hinges on our capacity to innovate and adapt. By continuing to invest in research and development, improving infrastructure, and addressing economic and technical challenges, we can transition towards a more sustainable and environmentally friendly energy system.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from the Ha Nam Provincial Gifted Student Exam, 2023-2024)</p>"
+            "instruction": "Read the following advertisement and mark the letter A, B, C or D on your answer sheet to indicate the  option that best fits each of the numbered blanks.",
+            "content": "<p class=\"mb-4 text-justify\"><b>Solo Travelers - Exploring the world with Global Hospitality Hub! </b></p>\n<p class=\"mb-4 text-justify\">Are you a solo traveler seeking to explore new places while immersing yourself <b>(22)</b> _______ local culture? Join the Global Hospitality Hub, a service <b>(23)</b> _______ travelers with friendly locals excited to show you hidden gems and must-visit spots.</p>\n<p class=\"mb-4 text-justify\">Why Choose Us?</p>\n<p class=\"mb-4 text-justify\">✓ We aim to provide you with<b> (24)</b> _______;</p>\n<p class=\"mb-4 text-justify\">✓ The tours are led by passionate locals, offering unique insights;</p>\n<p class=\"mb-4 text-justify\">✓ You can freely explore without worrying about <b>(25)</b> _______;</p>\n<p class=\"mb-4 text-justify\">✓ You can meet like-minded explorers and <b>(26)</b> _______ lifelong friends.</p>\n<p class=\"mb-4 text-justify\">Don’t miss out! Sign up today <b>(27)</b> _______ the world in a safe, comfortable, and enriching way.</p>"
         },
         {
             "passage_id": "passage_4",
-            "instruction": "Read the following advertisement and mark the letter A, B, C and D on your answer sheet to indicate the option  that best fits each of the numbered blanks.",
-            "content": "<p class=\"mb-4 text-justify\"><b>LET’S JOIN MULTICULTURAL CAMP </b></p>\n<p class=\"mb-4 text-justify\">Are you eager to join the upcoming multicultural camp? Residing in a multicultural camp significantly enhances our existence in myriad ways. It provides us with the opportunity to engage with (<b>24</b>) _______ traditions, cuisines, languages, and perspectives. Interactions with individuals from (<b>25</b>) _______ facilitate a more comprehensive understanding of the world around us. For example, celebrations (<b>26</b>) _______ Diwali, Chinese New Year, and Thanksgiving serve not only to unite different cultures but also to impart knowledge regarding one another’s customs.</p>\n<p class=\"mb-4 text-justify\">In educational institutions and professional environments, multicultural settings foster creativity and innovation through the amalgamation of varied viewpoints. Nevertheless, it is paramount to approach others’ cultures (<b>27</b>) _______ open-mindedness and respect, as this attitude is essential for (<b>28</b>) _______ harmony and unity within our communities. Embracing multiculturalism not only cultivates an appreciation for the distinctiveness of each culture but also contributes to the development of a more inclusive and vibrant community for all individuals (<b>29</b>) _______.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://copilot.microsoft.com)</p>"
+            "instruction": "Read the following passage about and mark the letter A, B, C or D on your answer sheet to indicate the  best answer to each of the following questions.",
+            "content": "<p class=\"mb-4 text-justify\"><b>Early Warning Systems ! </b></p>\n<p class=\"mb-4 text-justify\">People may take steps to reduce the impact of a natural hazard when they are aware that it is likely to occur. But how can people recognize they are in danger? Scientists use many methods to help predict when natural hazards are likely to happen.</p>\n<p class=\"mb-4 text-justify\">Seismometers measure earthquake activity. An increase in small earthquakes can mean a larger earthquake is about to happen or a volcano is becoming more active. If a volcanic eruption is predicted, people can <b>evacuate</b>, or move to safer areas. Governments can prepare emergency supplies, such as food and water. Emergency workers can be ready to help with injuries. All of these steps reduce the impact and help save lives.</p>\n<p class=\"mb-4 text-justify\">Scientists use several devices and methods to constantly collect information about a volcano’s activity. Radio transmissions allow the data to be sent instantly to a monitoring system. Scientists can tell what is happening with a volcano almost as soon as it happens. They can also use that information to predict what is likely to happen next.</p>\n<p class=\"mb-4 text-justify\">Besides tracking seismic activity, scientists also monitor gases, temperature and water at a volcano site. A change in the amount of carbon dioxide and others given off by the volcano can be measured to comprehensive analysis of these factors help scientists improve eruption predictions and enhance public safety.</p>"
         },
         {
             "passage_id": "passage_5",
-            "instruction": "Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option that  best fits each of the numbered blanks.",
-            "content": "<p class=\"mb-4 text-justify\"><b>STAY ACTIVE AND HEALTHY </b></p>\n<p class=\"mb-4 text-justify\">Staying active is essential for maintaining a healthy lifestyle. It helps prevent (<b>35</b>) _______ chronic diseases, boosts mental health, and improves overall well-being.</p>\n<p class=\"mb-4 text-justify\">1. Regular Exercise: Aim for at least 30 minutes of moderate activity daily. This could be a brisk walk, cycling, or yoga.</p>\n<p class=\"mb-4 text-justify\">2. Join a Class: Find a local fitness class, such as dance, aerobics, or martial arts. It’s a fun way to stay fit and (<b>36</b>) _______ new people.</p>\n<p class=\"mb-4 text-justify\">3. Stay Hydrated: Drink (<b>37</b>) _______ water throughout the day to keep your body functioning properly.</p>\n<p class=\"mb-4 text-justify\">4. Diet: Eat a variety of fruits, vegetables, whole grains, and lean proteins to maintain a (<b>38</b>) _______ diet. Get Started Today!</p>\n<p class=\"mb-4 text-justify\">Small changes can lead to big results. Start (<b>39</b>) _______ these tips into your routine to see improvements in your health and energy levels. Staying active (<b>40</b>) _______ mental health and improves physical health.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://copilot.microsoft.com/)</p>"
+            "instruction": "Read the following passage and mark the letter A, B, Cor D on your answer sheet to indicate the option  that best fits each of the numbered blanks.",
+            "content": "<p class=\"mb-4 text-justify\">In general, artists are creative people who want their work to have an effect on those who see it. Great art can definitely inspire positive feelings. However, people’s ideas about what “great art” is <b>(36)</b> _______. For example, Impressionist art is now widely considered to be great. However, it was controversial for many years. People said that the style of painting and the use of color were too different from traditional art.</p>\n<p class=\"mb-4 text-justify\">Modern art can be controversial, too. Take Andy Warhol’s Campbell’s Soup Cans. As the name suggests, it was 32 pictures of cans of soup. <b>(37)</b> _______ in Los Angeles in 1962, some experts liked it, but many people said that it was not art. Carl Andre created another controversial piece of art, Equivalent</p>\n<p class=\"mb-4 text-justify\">VIII, an installation <b>(38)</b> _______. The Tate, <b>(39)</b> _______ England, bought the unique work in 1976. It was not expensive, but public reaction to the exhibition was negative. People expected to see portraits on the wall, not bricks on the floor. How will people feel about Campbell’s Soup Cans and Equivalent VIII in the future? Will people think they are works of genius, <b>(40)</b> _______? Only time will tell.</p>"
         }
     ],
     "questions": [
         {
             "question_number": 1,
-            "question_text": "Which of the following is NOT mentioned as a reason for urbanisation?",
+            "question_text": "<br>a - The population of New Orleans had some fluctuation between 1950 and 2010. It had a slight growth between 1950 and 1970.<br>b - During this time, Atlanta had the most significant change in population. The population of Atlanta in 1950 was around 500 thousand, and it rose significantly to 2.2 million by 1990.<br>c - Similarly, Charlotte’s population went up over the 60-year period. It grew steadily from 100 thousand to 500 thousand between 1950 and 1990.<br>d - The chart shows how the populations of three major cities in the USA changed from 1950 to 2010. These cities are Atlanta, Charlotte, and New Orleans.<br>e - In general, the population in each city increased over the 60-year period.",
             "options": {
-                "A": "better employment opportunities",
-                "B": "improved transportation systems",
-                "C": "superior healthcare services",
-                "D": "advanced educational facilities"
+                "A": "d - a - e - b – c",
+                "B": "d - c - a - b – e",
+                "C": "d - b - c - e – a",
+                "D": "d - e - b - c – a"
             },
-            "answer": "B",
-            "PassageRelated": "passage_1"
+            "answer": "D",
+            "PassageRelated": null,
+            "tags": []
         },
         {
             "question_number": 2,
-            "question_text": "The word <b>accelerated</b> in paragraph 1 is OPPOSITE in meaning to _______.",
+            "question_text": "Dear Gordon,<br>a - The menu you suggested represents an ideal combination of healthy and exciting food.<br>b - We are delighted to inform you that you have won first prize in our Masterchef Teens’ Competition.<br>c - For more information, please contact Christine at h_christine@finedining.com and include details of any cookery experience you may have so that we can place you in the correct group.<br>d - Your prize is a place on one of our weekend cookery classes for teenagers at the Fine Dining Culinary School. Yours sincerely, Christine Harper",
             "options": {
-                "A": "decelerated",
-                "B": "increased",
-                "C": "progressed",
-                "D": "hastened"
+                "A": "a - c - b – d",
+                "B": "a - b - d – c",
+                "C": "b - a - c – d",
+                "D": "b - a - d – c"
             },
-            "answer": "A",
-            "PassageRelated": "passage_1"
+            "answer": "D",
+            "PassageRelated": null,
+            "tags": []
         },
         {
             "question_number": 3,
-            "question_text": "The word <b>This phenomenon</b> in paragraph 1 refers to _______.",
+            "question_text": "<br>a - Chris: We should definitely try to use energy-saving devices.<br>b - Bob: I’m supposed you’re right. Shall we write down our proposals for the project?<br>c - Chris: I’m not sure about that. They are expensive. Perhaps we could plant trees.<br>d - Bob: Chris, we need to come up with some ideas about how to protect our ecosystems. What do you suggest we do?<br>e - Bob: Ok. We could also use electric cars.",
             "options": {
-                "A": "higher populations",
-                "B": "agriculture",
-                "C": "process",
-                "D": "urbanisation"
+                "A": "d - c - b - a – e",
+                "B": "a - c - b - d – e",
+                "C": "d - a - e - c – b",
+                "D": "a - b - c - d – e"
             },
-            "answer": "D",
-            "PassageRelated": "passage_1"
+            "answer": "C",
+            "PassageRelated": null,
+            "tags": []
         },
         {
             "question_number": 4,
-            "question_text": "The word <b>advanced</b> in paragraph 2 could be best replaced by _______.",
+            "question_text": "<br>a - Mark: Hi. This is the first time I’ve ever met a talking robot like you.<br>b - Jessica: Good morning, everybody. I’m a human-like robot and will be your guide today.<br>c - Jessica: I’m glad to meet you, too. Let’s have a photo taken together!",
             "options": {
-                "A": "simple",
-                "B": "basic",
-                "C": "developed",
-                "D": "outdated"
+                "A": "c - b – a",
+                "B": "c - a – b",
+                "C": "b - c – a",
+                "D": "b - a – c"
             },
-            "answer": "C",
-            "PassageRelated": "passage_1"
+            "answer": "D",
+            "PassageRelated": null,
+            "tags": []
         },
         {
             "question_number": 5,
-            "question_text": "Which of the following best paraphrases the underlined sentence in paragraph 2? <b>Access to hospitals and specialized medical services also attracts people to urban centers, especially in  countries where rural healthcare is underdeveloped. </b>",
+            "question_text": "<br>a - Additionally, your smart home will be monitoring your children and pets, letting you know via text messages if anything is wrong.<br>b - It will be controlled by a computer system that monitors everything going on.<br>c - In 2035, you will be living in a smart home.<br>d - While you are away, it will be switching lights on and off, controlling the temperature in each room, and even opening windows to allow air in.<br>e - With these advanced features, smart homes will provide convenience, security, and peace of mind for homeowners.",
             "options": {
-                "A": "People suppose that rural areas have better healthcare facilities than urban centers",
-                "B": "People move to cities to find specialized medical services that are not available in rural areas.",
-                "C": "People think that urban centers lack specialized medical services compared to rural areas.",
-                "D": "People find that the main reason for migrating to urban areas is to access education."
+                "A": "d - b - c - a – e",
+                "B": "c - e - a - b – d",
+                "C": "a - b - c - d – e",
+                "D": "c - b - d - a – e"
             },
-            "answer": "B",
-            "PassageRelated": "passage_1"
+            "answer": "D",
+            "PassageRelated": null,
+            "tags": []
         },
         {
             "question_number": 6,
-            "question_text": "Which of the following is TRUE according to the passage?",
+            "question_text": "Working <b>(6) </b>_______ around one-third of the average person’s life",
             "options": {
-                "A": "Urbanisation has few positive aspects in economic growth.",
-                "B": "Rural areas have better infrastructure than urban areas.",
-                "C": "Urbanisation creates employment opportunities in cities.",
-                "D": "Overcrowding can lead to inadequate housing in urban areas."
+                "A": "makes up",
+                "B": "gives in",
+                "C": "puts down",
+                "D": "takes out"
             },
-            "answer": "D",
-            "PassageRelated": "passage_1"
+            "answer": "A",
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 7,
-            "question_text": "In which paragraph does the writer mention the impact of urbanisation on the environment?",
+            "question_text": "What you enjoy doing and what you value can be helpful indicators of how you’d like to <b>(7)</b> _______ your working time.",
             "options": {
-                "A": "Paragraph 1",
-                "B": "Paragraph 2",
-                "C": "Paragraph 3",
-                "D": "Paragraph 4"
+                "A": "cancel",
+                "B": "maintain",
+                "C": "spend",
+                "D": "waste"
             },
             "answer": "C",
-            "PassageRelated": "passage_1"
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 8,
-            "question_text": "In which paragraph does the writer discuss the benefits of urbanisation?",
+            "question_text": "There are a <b>(8)</b> _______ of tests you can take to evaluate everything from your personality to your strengths",
             "options": {
-                "A": "Paragraph 1",
-                "B": "Paragraph 3",
-                "C": "Paragraph 4",
-                "D": "Paragraph 2"
+                "A": "number",
+                "B": "portion",
+                "C": "level",
+                "D": "quality"
             },
-            "answer": "C",
-            "PassageRelated": "passage_1"
+            "answer": "A",
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 9,
-            "question_text": "ChihiraAico is an advanced humanoid robot designed by Toshiba, <b>(9)</b> _______.",
+            "question_text": "Learning more about each sector and its respective <b>(9)</b> _______ may help you decide where you’d be a strong fit.",
             "options": {
-                "A": "making its primary debut in commercial software development",
-                "B": "that replaces industrial robots in manufacturing facilities",
-                "C": "developed as a project aimed at healthcare and service industries",
-                "D": "which was built specifically for factory automation"
+                "A": "goals",
+                "B": "successes",
+                "C": "achievements",
+                "D": "results"
             },
-            "answer": "C",
-            "PassageRelated": "passage_2"
+            "answer": "A",
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 10,
-            "question_text": "Her design combines cutting-edge robotics and artificial intelligence (AI) technology <b>(10)</b> _______.",
+            "question_text": "<b>(10)</b> _______ thinking through the areas mentioned above on your own",
             "options": {
-                "A": "allowing her to perform repetitive tasks without fatigue",
-                "B": "meant to increase efficiency in industrial production lines",
-                "C": "designed for wide-scale manufacturing improvements",
-                "D": "enabling her to communicate and display human-like emotions"
+                "A": "Regardless of",
+                "B": "In addition to",
+                "C": "Due to",
+                "D": "On account of"
             },
-            "answer": "D",
-            "PassageRelated": "passage_2"
+            "answer": "B",
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 11,
-            "question_text": "<b>(11)</b> _______, ChihiraAico and robots like her are intended to bridge the gap between humans and machines, offering personalized services and enhancing customer experiences.",
+            "question_text": "you can also turn to <b>(11)</b> _______ career resources for more guided help.",
             "options": {
-                "A": "Unlike other industrial models",
-                "B": "Though initially limited in usage",
-                "C": "Beyond simple programmed responses",
-                "D": "Built to provide manual labor solutions"
+                "A": "another",
+                "B": "other",
+                "C": "others",
+                "D": "the others"
             },
-            "answer": "C",
-            "PassageRelated": "passage_2"
+            "answer": "B",
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 12,
-            "question_text": "She is equipped with sensors, voice recognition software, and realistic facial expressions <b>(12)</b> _______.",
+            "question_text": "Which of the following best paraphrases the underlined sentence in paragraph 1?",
             "options": {
-                "A": "to enhance user comfort and interaction with artificial systems",
-                "B": "contributing to machine learning through repetitive tasks",
-                "C": "for recognizing patterns in industrial environments",
-                "D": "thus eliminating all forms of human interaction from daily life"
+                "A": "As AI becomes more available, its misuse is becoming a bigger issue, leading to ethical and safety\nconcerns for people and communities.",
+                "B": "AI systems are now more advanced, making them completely safe and free from ethical problems.",
+                "C": "AI abuse is decreasing as these systems become more accessible, leading to fewer concerns about\nethics and safety.",
+                "D": "The increasing use of AI has eliminated many ethical and safety issues for individuals and society."
             },
             "answer": "A",
-            "PassageRelated": "passage_2"
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 13,
-            "question_text": "As AI technology continues to evolve, <b>(13) </b>_______.",
+            "question_text": "Where in paragraph 2 does the following sentence best fit? <b>In other words, their ability to closely mimic human behaviour makes them highly effective at  blending into online discussions. </b>",
             "options": {
-                "A": "humans can expect to be obsolete in various roles",
-                "B": "humanoid robots will be commonplace in daily life activities",
-                "C": "society will abandon personal interactions altogether",
-                "D": "more jobs will be automated than ever before"
+                "A": "[IV]",
+                "B": "[III]",
+                "C": "[I]",
+                "D": "[II]"
             },
             "answer": "B",
-            "PassageRelated": "passage_2"
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 14,
-            "question_text": "Where in paragraph 1 does the following sentence best fit? <b>The shift towards renewable energy is seen as a necessary response to the global energy crisis. </b>",
+            "question_text": "The word <b>they</b> in paragraph 2 refers to _______.",
             "options": {
-                "A": "[I]",
-                "B": "[IV]",
-                "C": "[III]",
-                "D": "[II]"
+                "A": "opinions",
+                "B": "real users",
+                "C": "political issues",
+                "D": "bots"
             },
-            "answer": "C",
-            "PassageRelated": "passage_3"
+            "answer": "D",
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 15,
-            "question_text": "The phrase <b>harness</b> in paragraph 1 could be best replaced by _______.",
+            "question_text": "The phrase <b>sparked a debate about</b> in paragraph 3 could be best replaced by _______.",
             "options": {
-                "A": "create",
-                "B": "capture",
-                "C": "release",
-                "D": "control"
+                "A": "avoided controversy about",
+                "B": "put an end to an argument on",
+                "C": "started a discussion on",
+                "D": "settled disagreement over"
             },
-            "answer": "B",
-            "PassageRelated": "passage_3"
+            "answer": "C",
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 16,
-            "question_text": "According to paragraph 2, which of the following is NOT mentioned as an advancement in renewable energy technology?",
+            "question_text": "According to the passage, which of the following is NOT mentioned as a use of facial recognition technology?",
             "options": {
-                "A": "wind turbine capability",
-                "B": "geothermal energy",
-                "C": "hydroelectric power",
-                "D": "solar panel efficiency"
+                "A": "Assisting law enforcement in maintaining security",
+                "B": "Selling the users’ personal data to advertisers",
+                "C": "Monitoring people at public places without consent",
+                "D": "Gaining attention towards the application of AI"
             },
-            "answer": "B",
-            "PassageRelated": "passage_3"
+            "answer": "D",
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 17,
-            "question_text": "The word <b>They</b> in paragraph 2 refers to _______.",
+            "question_text": "Which of the following best summarises paragraph 3?",
             "options": {
-                "A": "solar panel",
-                "B": "wind turbines",
-                "C": "photovoltaic technology",
-                "D": "renewable energy"
+                "A": "Laws are in place to control AI abuse effectively.",
+                "B": "AI misuse in the private sector raises privacy concerns.",
+                "C": "AI can be used responsibly to benefit society.",
+                "D": "AI abuse only affects specific industries."
             },
             "answer": "B",
-            "PassageRelated": "passage_3"
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 18,
-            "question_text": "Which of the following best summarises paragraph 3?",
+            "question_text": "The word <b>empower</b> in paragraph 4 is OPPOSITE in meaning to _______.",
             "options": {
-                "A": "Challenges in renewable energy include storage solutions and infrastructure expansion.",
-                "B": "The intermittent nature of renewable energy sources requires improved storage solutions.",
-                "C": "Infrastructure must be upgraded to accommodate renewable energy sources.",
-                "D": "Battery technology needs significant improvements to support renewable energy."
+                "A": "permit",
+                "B": "force",
+                "C": "encourage",
+                "D": "restrict"
             },
-            "answer": "A",
-            "PassageRelated": "passage_3"
+            "answer": "D",
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 19,
-            "question_text": "The word <b>intermittent</b> in paragraph 3 is OPPOSITE in meaning to _______.",
+            "question_text": "Which of the following is NOT true according to the passage?",
             "options": {
-                "A": "infrequent",
-                "B": "broken",
-                "C": "constant",
-                "D": "irregular"
+                "A": "Educating the public can help them recognise AI-generated content.",
+                "B": "Some private organisations use facial recognition technology without consent.",
+                "C": "Facial recognition technology is only used by authorities for security.",
+                "D": "Social media bots can spread misinformation quickly."
             },
             "answer": "C",
-            "PassageRelated": "passage_3"
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 20,
-            "question_text": "Which of the following is TRUE according to the passage?",
+            "question_text": "Which of the following can be inferred from the passage?",
             "options": {
-                "A": "Fossil fuel resources are abundant and not a concern.",
-                "B": "Renewable energy technology is not yet viable for widespread use.",
-                "C": "Investment in renewable energy can reduce long-term energy costs.",
-                "D": "The transition to renewable energy is without challenges."
+                "A": "AI bots are rarely able to impact political discussions.",
+                "B": "Not all uses of AI are harmful, but misuse can lead to serious issues.",
+                "C": "Regulating AI will completely stop AI abuse.",
+                "D": "Facial recognition is only a concern when used in public spaces."
             },
-            "answer": "C",
-            "PassageRelated": "passage_3"
+            "answer": "B",
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 21,
-            "question_text": "Which of the following best paraphrases the underlined sentence in paragraph 4? <b>While the initial investment in renewable energy infrastructure can be substantial, the long-term benefits  include reduced energy costs and job creation in the green energy sector. </b>",
+            "question_text": "Which of the following best summarises the passage?",
             "options": {
-                "A": "The economic benefits of renewable energy are difficult to measure.",
-                "B": "Governments are hesitant to invest in renewable energy projects.",
-                "C": "Investing in renewable energy leads to lower costs and new jobs.",
-                "D": "The initial cost of renewable energy projects is prohibitive."
+                "A": "Social media bots and facial recognition technology are two common forms of AI abuse with serious\nconsequences.",
+                "B": "The rapid advancement of AI makes it harder to regulate, increasing the risk of misuse in society.",
+                "C": "AI abuse, including misinformation and privacy invasion, is a growing issue but can be reduced\nthrough regulations and awareness.",
+                "D": "AI offers many benefits, but its misuse in spreading false information and violating privacy raises\nconcerns."
             },
             "answer": "C",
-            "PassageRelated": "passage_3"
+            "PassageRelated": "passage_2",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 22,
-            "question_text": "Which of the following can be inferred from the passage?",
+            "question_text": "Are you a solo traveler seeking to explore new places while immersing yourself <b>(22)</b> _______ local culture?",
             "options": {
-                "A": "Solar and wind energy are the only viable renewable energy sources.",
-                "B": "Innovation and investment are key to the future of renewable energy.",
-                "C": "The economic impact of renewable energy is purely negative.",
-                "D": "Renewable energy will completely replace fossil fuels in the near future."
+                "A": "on",
+                "B": "in",
+                "C": "out",
+                "D": "off"
             },
             "answer": "B",
-            "PassageRelated": "passage_3"
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 23,
-            "question_text": "Which of the following best summarises the passage?",
+            "question_text": "Join the Global Hospitality Hub, a service <b>(23)</b> _______ travelers with friendly locals excited to show you hidden gems and must-visit spots.",
             "options": {
-                "A": "Fossil fuels will remain the primary energy source despite advancements in renewable energy.",
-                "B": "The transition to renewable energy has no economic benefits and is not sustainable.",
-                "C": "Renewable energy sources like solar and wind are unreliable and too costly to develop.",
-                "D": "Addressing renewable energy challenges requires ongoing innovation and investment."
+                "A": "which connect",
+                "B": "is connected",
+                "C": "connecting",
+                "D": "connected"
             },
-            "answer": "D",
-            "PassageRelated": "passage_3"
+            "answer": "C",
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 24,
-            "question_text": "It provides us with the opportunity to engage with (<b>24</b>) _______ traditions, cuisines, languages, and perspectives.",
+            "question_text": "We aim to provide you with<b> (24)</b> _______.",
             "options": {
-                "A": "diverse",
-                "B": "diversely",
-                "C": "diversify",
-                "D": "diversity"
+                "A": "authentic cultural experiences",
+                "B": "experience authentic culture",
+                "C": "cultural experience authenticity",
+                "D": "cultural authentic experiences"
             },
             "answer": "A",
-            "PassageRelated": "passage_4"
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 25,
-            "question_text": "Interactions with individuals from (<b>25</b>) _______ facilitate a more comprehensive understanding of the world around us.",
+            "question_text": "You can freely explore without worrying about <b>(25)</b> _______ .",
             "options": {
-                "A": "backgrounds various cultural",
-                "B": "various cultural backgrounds",
-                "C": "cultural backgrounds various",
-                "D": "cultural various backgrounds"
+                "A": "transportation",
+                "B": "transportable",
+                "C": "transporter",
+                "D": "transported"
             },
-            "answer": "B",
-            "PassageRelated": "passage_4"
+            "answer": "A",
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 26,
-            "question_text": "For example, celebrations (<b>26</b>) _______ Diwali, Chinese New Year, and Thanksgiving serve not only to unite different cultures but also to impart knowledge regarding one another’s customs.",
+            "question_text": "You can meet like-minded explorers and <b>(26)</b> _______ lifelong friends.",
             "options": {
-                "A": "to include",
-                "B": "included",
-                "C": "which included",
-                "D": "including"
+                "A": "take",
+                "B": "make",
+                "C": "put",
+                "D": "do"
             },
-            "answer": "D",
-            "PassageRelated": "passage_4"
+            "answer": "B",
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 27,
-            "question_text": "Nevertheless, it is paramount to approach others’ cultures (<b>27</b>) _______ open-mindedness and respect.",
+            "question_text": "Sign up today <b>(27)</b> _______ the world in a safe, comfortable, and enriching way.",
             "options": {
-                "A": "by\nwith",
-                "B": "from",
-                "C": "for",
-                "D": ""
+                "A": "to experience",
+                "B": "experienced",
+                "C": "experiencing",
+                "D": "experience"
             },
-            "answer": "B",
-            "PassageRelated": "passage_4"
+            "answer": "A",
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 28,
-            "question_text": "as this attitude is essential for (<b>28</b>) _______ harmony and unity within our communities.",
+            "question_text": "Which of the following is NOT mentioned as a method scientists use to predict natural hazards?",
             "options": {
-                "A": "developing",
-                "B": "creating",
-                "C": "fostering",
-                "D": "nurturing"
+                "A": "Observing temperature changes in rocks",
+                "B": "Measuring earthquake activity",
+                "C": "Monitoring gases released by a volcano",
+                "D": "Studying animal behavior before an eruption"
             },
             "answer": "D",
-            "PassageRelated": "passage_4"
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 29,
-            "question_text": "Embracing multiculturalism not only cultivates an appreciation for the distinctiveness of each culture but also contributes to the development of a more inclusive and vibrant community for all individuals (<b>29</b>) _______.",
+            "question_text": "The word <b>evacuate</b> in paragraph 2 is OPPOSITE in meaning to _______.",
             "options": {
-                "A": "participating",
-                "B": "to participating",
-                "C": "to participate",
-                "D": "participate"
+                "A": "relocate",
+                "B": "return",
+                "C": "rebuild",
+                "D": "remain"
             },
-            "answer": "C",
-            "PassageRelated": "passage_4"
+            "answer": "D",
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 30,
-            "question_text": "Hi Taylor,<br>a - I also appreciate you recommending those support groups - they turned out to be more helpful than I expected.<br>b - Your advice and encouragement really helped when I needed it.<br>c - I just wanted to say thank you for being there for me during such a tough time.<br>d - Let’s catch up soon - maybe over coffee?<br>e - I’m still taking things day by day, but having your support made a big difference. Thanks again for everything. Alex",
+            "question_text": "The word They in paragraph 3 refers to _______.",
             "options": {
-                "A": "c - e - b - a – d",
-                "B": "c - a - b - e – d",
-                "C": "c - b - a - e – d",
-                "D": "e - c - b - a – d\n<b> </b>"
+                "A": "radio transmission",
+                "B": "scientists",
+                "C": "monitoring systems",
+                "D": "emergency workers"
             },
-            "answer": "A",
-            "PassageRelated": "passage_4"
+            "answer": "B",
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 31,
-            "question_text": "<br>a - Alex: It starts at 5 PM. Hope you can make it!<br>b - Alex: Hey, Jamie, do you want to come to my birthday party this Saturday?<br>c - Jamie: Sure, that sounds fun! What time does it start?",
+            "question_text": "Which of the following best paraphrases the underlined sentence in paragraph 3?",
             "options": {
-                "A": "b - a – c",
-                "B": "b - c – a",
-                "C": "c - b – a",
-                "D": "a - b – c"
+                "A": "Scientists can predict exactly when and where a volcano will erupt.",
+                "B": "Scientists can foretell volcanic activity by staying near the volcano.",
+                "C": "Scientists are able to predict volcanic activity long before it occurs.",
+                "D": "Scientists can quickly detect and analyze volcanic activity in real time."
             },
-            "answer": "B",
-            "PassageRelated": "passage_4"
+            "answer": "D",
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 32,
-            "question_text": "<br>a - It often starts with the excitement of being in a new place, followed by feelings of confusion and frustration as differences become more apparent.<br>b - As time passes, adapting becomes easier, and many even learn to appreciate or blend the new culture with their own.<br>c - Culture shock is a common experience when moving to a different country or culture, as it involves adjusting to unfamiliar norms and practices.<br>d - For instance, language barriers, customs, and different social norms can make even everyday tasks challenging.<br>e - Eventually, a sense of balance is found as people grow more accustomed to their surroundings, resulting in personal growth and a broader perspective.",
+            "question_text": "The word <b>comprehensive</b> in paragraph 4 could best be replaced by _______.",
             "options": {
-                "A": "c - a - d - b – e",
-                "B": "a - c - d - e – b",
-                "C": "b - a - e - c – d",
-                "D": "c - d - a - b – e\n<b> </b>"
+                "A": "detailed",
+                "B": "inaccurate",
+                "C": "simple",
+                "D": "limited"
             },
             "answer": "A",
-            "PassageRelated": "passage_4"
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 33,
-            "question_text": "<br>a - This includes reducing waste by recycling, conserving water through careful usage, and switching to renewable energy sources like solar and wind, all of which help to protect the planet for future generations.<br>b - Green living emphasizes a lifestyle focused on sustainability, encouraging people to make environmentally conscious choices that minimize harm to the Earth.<br>c - Small everyday actions, such as using reusable bags, turning off lights when not in use, and choosing energy- efficient appliances, can have a big impact on reducing your carbon footprint.<br>d - Many individuals are now embracing green practices in their daily routines, such as reducing plastic use, supporting eco-friendly businesses, and conserving energy at home.<br>e - By incorporating these habits into daily life, people can collectively help reduce pollution and conserve natural resources, contributing to a cleaner and healthier environment.",
+            "question_text": "Which of the following is TRUE according to the passage?",
             "options": {
-                "A": "e - a - c - d – b",
-                "B": "a - b - c - e – d",
-                "C": "b - d - a - c – e",
-                "D": "d - c - b - e – a\n<b> </b>"
+                "A": "Seismometers not only measure earthquake activity but also have the ability to stop earthquakes and\nvolcanic eruptions from happening.",
+                "B": "Even with warning signs of a volcanic eruption, evacuation is unnecessary since volcanic activity\nrarely threatens human lives.",
+                "C": "If a volcanic eruption is predicted, governments can prepare emergency supplies like food and water\nto reduce the disaster’s impact.",
+                "D": "Scientists are unable to predict natural hazards, so people and governments always face disasters\nwithout any warning."
             },
             "answer": "C",
-            "PassageRelated": "passage_4"
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 34,
-            "question_text": "<br>a - An: True! But I think it’s important to verify the information. Still, when used right, it saves a lot of time and makes things more efficient.<br>b - Binh: Not exactly, but it’s a powerful support tool. I mean, it’s great to have something ready to respond whenever you need it, right?<br>c - An: Hey Binh, have you been using ChatGPT lately?<br>d - An: I quite agree with you. Sometimes, when I’m stuck on a report or need a clear explanation of a tough topic, ChatGPT really helps. Do you think it can completely replace human interaction?<br>e - Binh: Yeah, I use it a lot! It’s really helpful when I need quick information or brainstorming ideas.",
+            "question_text": "In which paragraph does the writer discuss monitoring various natural factors to predict a volcanic eruption?",
             "options": {
-                "A": "c - d - e - b – a",
-                "B": "c - d - b - a – e",
-                "C": "c - e - d - b – a",
-                "D": "c - e - b - a – d"
+                "A": "Paragraph 1",
+                "B": "Paragraph 2",
+                "C": "Paragraph 4",
+                "D": "Paragraph 3"
             },
             "answer": "C",
-            "PassageRelated": "passage_4"
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 35,
-            "question_text": "It helps prevent (<b>35</b>) _______ chronic diseases, boosts mental health, and improves overall well- being.",
+            "question_text": "In which paragraph does the writer mention a conditional relationship?",
             "options": {
-                "A": "others",
-                "B": "another",
-                "C": "many",
-                "D": "much"
+                "A": "Paragraph 1",
+                "B": "Paragraph 2",
+                "C": "Paragraph 4",
+                "D": "Paragraph 3"
             },
-            "answer": "C",
-            "PassageRelated": "passage_5"
+            "answer": "B",
+            "PassageRelated": "passage_4",
+            "tags": [
+                "reading"
+            ]
         },
         {
             "question_number": 36,
-            "question_text": "It’s a fun way to stay fit and (<b>36</b>) _______ new people.",
+            "question_text": "However, people’s ideas about what “great art” is <b>(36)</b> _______.",
             "options": {
-                "A": "join in",
-                "B": "meet up",
-                "C": "run into",
-                "D": "hang out"
+                "A": "is something that history and political perception continuously alter",
+                "B": "can gradually change over time due to shifting public opinions",
+                "C": "remain the same as artistic movements and societal values develop",
+                "D": "capable of changing significantly as time and artistic trends evolve"
             },
             "answer": "B",
-            "PassageRelated": "passage_5"
+            "PassageRelated": "passage_5",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 37,
-            "question_text": "Drink (<b>37</b>) _______ water throughout the day to keep your body functioning properly.",
+            "question_text": "<b>(37)</b> _______ in Los Angeles in 1962, some experts liked it, but many people said that it was not art.",
             "options": {
-                "A": "due to",
-                "B": "across from",
-                "C": "plenty of",
-                "D": "instead of"
+                "A": "At the moment it is exhibited at the Ferus Gallery",
+                "B": "Having been displayed at the time of the Ferus Gallery",
+                "C": "When it was displayed at the Ferus Gallery",
+                "D": "Displayed for the first time at the Ferus Gallery"
             },
             "answer": "C",
-            "PassageRelated": "passage_5"
+            "PassageRelated": "passage_5",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 38,
-            "question_text": "Eat a variety of fruits, vegetables, whole grains, and lean proteins to maintain a (<b>38</b>) _______ diet.",
+            "question_text": "Carl Andre created another controversial piece of art, Equivalent VIII, an installation <b>(38)</b> _______.",
             "options": {
-                "A": "ample",
-                "B": "strict",
-                "C": "balanced",
-                "D": "heavy"
+                "A": "that is just an ordinary pile of bricks",
+                "B": "of which made entirely out of basic bricks",
+                "C": "appears as nothing but a formation of bricks",
+                "D": "consists only of basic bricks stacked together"
             },
-            "answer": "C",
-            "PassageRelated": "passage_5"
+            "answer": "A",
+            "PassageRelated": "passage_5",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 39,
-            "question_text": "Start (<b>39</b>) _______ these tips into your routine to see improvements in your health and energy levels.",
+            "question_text": "The Tate, <b>(39)</b> _______ England, bought the unique work in 1976.",
             "options": {
-                "A": "incorporating",
-                "B": "isolating",
-                "C": "ignoring",
-                "D": "removing"
+                "A": "one of the most famous gallery in London",
+                "B": "which a famous gallery in London",
+                "C": "a famous gallery in London",
+                "D": "where is a famous gallery in London"
             },
-            "answer": "A",
-            "PassageRelated": "passage_5"
+            "answer": "C",
+            "PassageRelated": "passage_5",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 40,
-            "question_text": "Staying active (<b>40</b>) _______ mental health and improves physical health.",
+            "question_text": "Will people think they are works of genius, <b>(40)</b> _______?",
             "options": {
-                "A": "enhances",
-                "B": "decreases",
-                "C": "reduces",
-                "D": "maintains"
+                "A": "or will their opinion change in a less favorable way",
+                "B": "or will people be unable to impress with artistic expression",
+                "C": "or maybe they won’t think of it so highly with admiration",
+                "D": "or future generations may not appreciate critics in that way"
             },
             "answer": "A",
-            "PassageRelated": "passage_5"
+            "PassageRelated": "passage_5",
+            "tags": [
+                "cloze"
+            ]
         }
     ]
 }

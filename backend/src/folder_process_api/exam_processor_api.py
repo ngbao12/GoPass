@@ -22,6 +22,7 @@ CURRENT_USER_ID = "u_teacher_01"  # Default teacher user ID
 SUBJECT = "Tiếng Anh"
 POINTS_PER_QUESTION = 0.25
 QUESTION_TYPE = "multiple_choice"
+DURATION_MINUTES = 50  # Duration for English exam
 
 
 def generate_id(prefix=""):
@@ -39,36 +40,54 @@ def determine_tags(question, passage_id):
     Determine tags for question based on passage and content
     
     Rules:
-    - If has passage: ["reading"]
-    - If passage contains cloze markers (9), (10), etc: ["cloze", "reading"]
-    - If no passage: []
+    - Use tags from exam_corrected.json if available
+    - If no tags, fall back to old logic
     """
-    tags = []
+    # Use tags from JSON if available
+    if question.get('tags'):
+        return question['tags']
     
+    # Fallback logic
+    tags = []
     if passage_id:
-        # Check if it's a cloze passage (contains fill-in-the-blank markers)
-        # Questions 9-13 typically are cloze questions
-        question_num = question.get('questionNumber', 0)
+        question_num = question.get('question_number', 0)
         if 9 <= question_num <= 13:
             tags.append("cloze")
-        
         tags.append("reading")
     
     return tags
 
 
-def map_passage_to_db_format(passage, exam_id, order):
-    """Map passage from exam_corrected.json to GoPass format"""
-    passage_id = generate_id("passage-eng-")
+def determine_section(question, passage_id):
+    """
+    Determine section based on tags and question type
+    
+    Returns:
+    - "Cloze Test" for cloze questions
+    - "Reading Comprehension" for reading questions
+    - "Sentence/Utterance Arrangement" for arrangement questions without passage
+    """
+    tags = question.get('tags', [])
+    
+    # Check if it's a cloze question
+    if 'cloze' in tags:
+        return "Cloze Test"
+    
+    # Check if it has passage (reading comprehension)
+    if passage_id:
+        return "Reading Comprehension"
+    
+    # Default to arrangement for questions without passage
+    return "Sentence/Utterance Arrangement"
+
+
+def map_passage_to_db_format(passage, order):
+    """Map passage from exam_corrected.json to GoPass readingPassage format (embedded in Exam)"""
     
     return {
-        "id": passage_id,
-        "examId": exam_id,
-        "order": order,
-        "title": passage.get("title", ""),
-        "content": passage.get("content", ""),
-        "createdAt": get_current_timestamp(),
-        "updatedAt": get_current_timestamp()
+        "id": passage.get("passage_id", generate_id("passage-eng-")),
+        "title": passage.get("instruction", ""),
+        "content": passage.get("content", "")
     }
 
 
@@ -76,70 +95,73 @@ def map_question_to_db_format(question, passage_id=None):
     """Map question from exam_corrected.json to GoPass Question format"""
     question_id = generate_id("q-eng-")
     
-    # Map options
+    # Map options - handle both dict and array formats
     options = []
-    for opt in question.get("options", []):
-        options.append({
-            "id": opt.get("key", ""),
-            "content": opt.get("text", ""),
-            "isCorrect": opt.get("key", "") == question.get("answer", "")
-        })
+    question_options = question.get("options", {})
     
-    # Determine tags
+    if isinstance(question_options, dict):
+        # Options are in format: {"A": "text", "B": "text", ...}
+        for key, text in question_options.items():
+            options.append({
+                "id": key,
+                "content": text,
+                "isCorrect": key == question.get("answer", "")
+            })
+    elif isinstance(question_options, list):
+        # Options are in format: [{"key": "A", "text": "..."}, ...]
+        for opt in question_options:
+            options.append({
+                "id": opt.get("key", ""),
+                "content": opt.get("text", ""),
+                "isCorrect": opt.get("key", "") == question.get("answer", "")
+            })
+    
+    # Determine tags - use from JSON if available
     tags = determine_tags(question, passage_id)
     
     return {
-        "id": question_id,
         "type": QUESTION_TYPE,
-        "content": question.get("question", ""),
+        "content": question.get("question_text", question.get("question", "")),
         "options": options,
         "correctAnswer": question.get("answer", ""),
         "explanation": question.get("explanation", ""),
-        "difficulty": "medium",  # Default difficulty
+        "difficulty": "medium",
         "linkedPassageId": passage_id,
         "subject": SUBJECT,
         "points": POINTS_PER_QUESTION,
         "isPublic": True,
         "createdBy": CURRENT_USER_ID,
-        "createdAt": get_current_timestamp(),
-        "updatedAt": get_current_timestamp(),
         "tags": tags
     }
 
 
-def map_exam_to_db_format(title, description, duration_minutes):
+def map_exam_to_db_format(title, description, duration_minutes, reading_passages):
     """Map exam metadata to GoPass Exam format"""
-    exam_id = generate_id("exam-eng-")
     
     return {
-        "id": exam_id,
         "title": title,
         "description": description,
         "subject": SUBJECT,
-        "gradeLevel": "12",  # Default for high school
-        "duration": duration_minutes,
-        "totalPoints": 10,  # Will be calculated based on questions
-        "passingScore": 5,
-        "instructions": "Đọc kỹ đề bài và chọn đáp án đúng nhất cho mỗi câu hỏi.",
-        "isPublic": True,
-        "isActive": True,
+        "durationMinutes": duration_minutes,
+        "mode": "practice_test",
+        "shuffleQuestions": False,
+        "showResultsImmediately": False,
         "createdBy": CURRENT_USER_ID,
-        "createdAt": get_current_timestamp(),
-        "updatedAt": get_current_timestamp()
+        "isPublished": True,
+        "readingPassages": reading_passages,  # Embedded passages
+        "totalQuestions": 0,  # Will be updated later
+        "totalPoints": 0  # Will be updated later
     }
 
 
 def map_exam_question_to_db_format(exam_id, question_id, order, section, max_score):
     """Map ExamQuestion relationship"""
     return {
-        "id": generate_id("eq-eng-"),
         "examId": exam_id,
         "questionId": question_id,
         "order": order,
         "section": section,
-        "maxScore": max_score,
-        "createdAt": get_current_timestamp(),
-        "updatedAt": get_current_timestamp()
+        "maxScore": max_score
     }
 
 
@@ -149,32 +171,39 @@ def process_exam_file(file_path):
     
     Returns:
         dict: {
-            "exam": Exam object,
-            "passages": List of Passage objects,
+            "exam": Exam object with embedded readingPassages,
             "questions": List of Question objects,
             "examQuestions": List of ExamQuestion relationships
         }
     """
     try:
+        # Get absolute path relative to this script's directory
+        if not os.path.isabs(file_path):
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(script_dir, file_path)
+        
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Create exam
+        # Process passages (will be embedded in exam)
+        reading_passages = []
+        passage_map = {}  # Map passage_id (e.g., "passage_1") to passage id
+        
+        for idx, passage_data in enumerate(data.get("passages", [])):
+            passage = map_passage_to_db_format(passage_data, idx + 1)
+            reading_passages.append(passage)
+            # Map the original passage_id to the passage id
+            original_passage_id = passage_data.get("passage_id", "")
+            if original_passage_id:
+                passage_map[original_passage_id] = passage["id"]
+        
+        # Create exam with embedded passages
         exam = map_exam_to_db_format(
             title="Đề Thi Thử Tiếng Anh THPT 2026",
             description="Đề thi thử môn Tiếng Anh theo cấu trúc mới nhất",
-            duration_minutes=90
+            duration_minutes=DURATION_MINUTES,
+            reading_passages=reading_passages
         )
-        exam_id = exam["id"]
-        
-        # Process passages
-        passages = []
-        passage_map = {}  # Map passage index to passage_id
-        
-        for idx, passage_data in enumerate(data.get("passages", [])):
-            passage = map_passage_to_db_format(passage_data, exam_id, idx + 1)
-            passages.append(passage)
-            passage_map[idx] = passage["id"]
         
         # Process questions
         questions = []
@@ -184,20 +213,22 @@ def process_exam_file(file_path):
         for question_data in data.get("questions", []):
             # Determine which passage this question belongs to
             passage_id = None
-            passage_related = question_data.get("passageRelated")
+            passage_related = question_data.get("PassageRelated")  # Note: capital P
             
-            if passage_related is not None and passage_related in passage_map:
+            if passage_related and passage_related in passage_map:
                 passage_id = passage_map[passage_related]
             
             # Map question
             question = map_question_to_db_format(question_data, passage_id)
             questions.append(question)
             
+            # Determine section based on question tags and passage
+            section = determine_section(question_data, passage_id)
+            
             # Create ExamQuestion relationship
-            section = f"Câu {question_order}"
             exam_question = map_exam_question_to_db_format(
-                exam_id,
-                question["id"],
+                exam.get("_id"),  # Will be set by MongoDB
+                question.get("_id"),  # Will be set by MongoDB
                 question_order,
                 section,
                 POINTS_PER_QUESTION
@@ -206,20 +237,20 @@ def process_exam_file(file_path):
             
             question_order += 1
         
-        # Update exam totalPoints
+        # Update exam totalQuestions and totalPoints
+        exam["totalQuestions"] = len(questions)
         exam["totalPoints"] = len(questions) * POINTS_PER_QUESTION
         
         return {
             "success": True,
             "data": {
                 "exam": exam,
-                "passages": passages,
                 "questions": questions,
                 "examQuestions": exam_questions
             },
             "stats": {
                 "totalQuestions": len(questions),
-                "totalPassages": len(passages),
+                "totalPassages": len(reading_passages),
                 "totalPoints": exam["totalPoints"],
                 "questionsWithPassage": len([q for q in questions if q["linkedPassageId"]]),
                 "questionsWithoutPassage": len([q for q in questions if not q["linkedPassageId"]]),
@@ -356,17 +387,15 @@ def save_to_mock_db():
             db["exams"] = []
         db["exams"].append(processed_data["exam"])
         
-        # Add passages (create array if doesn't exist)
-        if "passages" not in db:
-            db["passages"] = []
-        db["passages"].extend(processed_data["passages"])
-        
         # Add questions
         if "questions" not in db:
             db["questions"] = []
         db["questions"].extend(processed_data["questions"])
         
         # Add examQuestions
+        if "examquestions" not in db:
+            db["examquestions"] = []
+        db["examquestions"].extend(processed_data["examQuestions"])
         if "examquestions" not in db:
             db["examquestions"] = []
         db["examquestions"].extend(processed_data["examQuestions"])

@@ -1,7 +1,6 @@
-const AuthService = require('../services/AuthService');
+const AuthService = require("../services/AuthService");
 
 class AuthController {
-  
   // POST /auth/register
   async register(req, res) {
     try {
@@ -102,7 +101,33 @@ class AuthController {
     }
   }
 
-  
+  // GET /auth/me
+  async getMe(req, res) {
+    try {
+      const UserRepository = require("../repositories/UserRepository");
+      const user = await UserRepository.findById(req.user.userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      // Return user without password
+      const { passwordHash, ...userWithoutPassword } = user.toObject();
+
+      res.status(200).json({
+        success: true,
+        data: userWithoutPassword,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
 }
 
 module.exports = new AuthController();
