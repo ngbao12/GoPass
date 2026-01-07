@@ -2,25 +2,10 @@
 
 import React from "react";
 import { Button } from "@/components/ui";
+import type { ClassDetail } from "@/services/teacher/types";
 
 interface ClassDetailHeaderProps {
-  classDetail: {
-    id: string;
-    class_name: string;
-    description: string;
-    class_code: string;
-    teacher: {
-      id: string;
-      full_name: string;
-      email: string;
-    };
-    stats: {
-      totalMembers: number;
-      pendingRequests: number;
-      activeAssignments: number;
-      averageScore: number;
-    };
-  };
+  classDetail: ClassDetail;
   onGoBack: () => void;
 }
 
@@ -42,7 +27,7 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
             </svg>
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">{classDetail.class_name}</h1>
+            <h1 className="text-2xl font-bold">{classDetail.className}</h1>
             <p className="text-teal-100 mt-1">{classDetail.description}</p>
           </div>
         </div>
@@ -106,7 +91,7 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
             <div>
               <p className="text-sm text-gray-600">Mã lớp học</p>
               <code className="text-lg font-mono bg-gray-100 px-3 py-1 rounded-lg text-gray-800">
-                {classDetail.class_code}
+                {classDetail.classCode}
               </code>
             </div>
             <div>

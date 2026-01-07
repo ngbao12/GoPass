@@ -65,7 +65,24 @@ export const classApi = {
     try {
       const response = await httpClient.get<{
         success: boolean;
-        data: ClassDetailResponse;
+        data: {
+          _id: string;
+          className: string;
+          classCode: string;
+          teacherUserId: string;
+          teacher: {
+            _id: string;
+            name: string;
+            email: string;
+            avatar?: string;
+          };
+          description?: string;
+          requireApproval: boolean;
+          isActive: boolean;
+          studentCount: number;
+          createdAt: string;
+          updatedAt: string;
+        };
       }>(`/classes/${classId}`, { requiresAuth: true });
       
       if (!response.success) {
@@ -76,8 +93,10 @@ export const classApi = {
         };
       }
 
-      const { class: classData, teacher, members, joinRequests, assignments } = response.data;
+      const classData = response.data;
       
+      // For now, we only have basic class info from backend
+      // Members, joinRequests, and assignments would need separate API calls
       const transformedDetail: ClassDetail = {
         id: classData._id,
         className: classData.className,
@@ -85,41 +104,18 @@ export const classApi = {
         classCode: classData.classCode,
         createdAt: classData.createdAt,
         teacher: {
-          id: teacher._id,
-          full_name: teacher.full_name,
-          email: teacher.email,
+          id: classData.teacher._id,
+          full_name: classData.teacher.name,
+          email: classData.teacher.email,
         },
-        members: members.map(member => ({
-          id: member._id,
-          class_id: member.class_id,
-          student_user_id: member.student_user_id,
-          joined_date: member.joined_date,
-          status: member.status,
-          student: {
-            id: member.student._id,
-            full_name: member.student.full_name,
-            email: member.student.email,
-          },
-        })),
-        joinRequests: joinRequests.map(request => ({
-          id: request._id,
-          class_id: request.class_id,
-          student_user_id: request.student_user_id,
-          status: request.status,
-          requested_at: request.requested_at,
-          processed_at: request.processed_at,
-          student: {
-            id: request.student._id,
-            full_name: request.student.full_name,
-            email: request.student.email,
-          },
-        })),
-        assignments: assignments || [],
+        members: [], // TODO: Fetch from separate endpoint
+        joinRequests: [], // TODO: Fetch from separate endpoint
+        assignments: [], // TODO: Fetch from separate endpoint
         stats: {
-          totalMembers: members.filter(m => m.status === 'approved').length,
-          pendingRequests: joinRequests.filter(r => r.status === 'pending').length,
-          activeAssignments: assignments?.length || 0,
-          averageScore: 8.5, // TODO: Calculate from submissions
+          totalMembers: classData.studentCount || 0,
+          pendingRequests: 0, // TODO: Calculate when we have join requests
+          activeAssignments: 0, // TODO: Calculate when we have assignments
+          averageScore: 0, // TODO: Calculate from submissions
         },
       };
       
@@ -243,7 +239,7 @@ export const classApi = {
     try {
       const response = await httpClient.put<{
         success: boolean;
-      }>(`/classes/${classId}/join-requests/${requestId}`, { status: 'accepted' }, { requiresAuth: true });
+      }>(`/classes/${classId}/join-requests/${requestId}`, { action: 'approve' }, { requiresAuth: true });
       
       if (!response.success) {
         return {
@@ -272,7 +268,7 @@ export const classApi = {
     try {
       const response = await httpClient.put<{
         success: boolean;
-      }>(`/classes/${classId}/join-requests/${requestId}`, { status: 'rejected' }, { requiresAuth: true });
+      }>(`/classes/${classId}/join-requests/${requestId}`, { action: 'reject' }, { requiresAuth: true });
       
       if (!response.success) {
         return {
@@ -321,6 +317,96 @@ export const classApi = {
         success: false,
         data: undefined,
         error: error.message || 'Failed to remove member'
+      };
+    }
+  },
+
+  // GET /classes/:id/members - Get class members
+  getClassMembers: async (classId: string): Promise<ApiResponse<any[]>> => {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: any[];
+      }>(`/classes/${classId}/members`, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: [],
+          error: 'Failed to fetch members'
+        };
+      }
+      
+      return {
+        success: true,
+        data: response.data || []
+      };
+    } catch (error: any) {
+      console.error('Error fetching members:', error);
+      return {
+        success: false,
+        data: [],
+        error: error.message || 'Failed to fetch members'
+      };
+    }
+  },
+
+  // GET /classes/:id/join-requests - Get pending join requests
+  getJoinRequests: async (classId: string): Promise<ApiResponse<any[]>> => {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: any[];
+      }>(`/classes/${classId}/join-requests?status=pending`, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: [],
+          error: 'Failed to fetch join requests'
+        };
+      }
+      
+      return {
+        success: true,
+        data: response.data || []
+      };
+    } catch (error: any) {
+      console.error('Error fetching join requests:', error);
+      return {
+        success: false,
+        data: [],
+        error: error.message || 'Failed to fetch join requests'
+      };
+    }
+  },
+
+  // GET /classes/:id/assignments - Get class assignments
+  getClassAssignments: async (classId: string): Promise<ApiResponse<any[]>> => {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: any[];
+      }>(`/classes/${classId}/assignments`, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: [],
+          error: 'Failed to fetch assignments'
+        };
+      }
+      
+      return {
+        success: true,
+        data: response.data || []
+      };
+    } catch (error: any) {
+      console.error('Error fetching assignments:', error);
+      return {
+        success: false,
+        data: [],
+        error: error.message || 'Failed to fetch assignments'
       };
     }
   },

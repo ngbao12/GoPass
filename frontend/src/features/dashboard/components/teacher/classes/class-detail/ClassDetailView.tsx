@@ -3,85 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { classApi } from "@/services/teacher";
+import type { ClassDetail } from "@/services/teacher/types";
 import ClassDetailHeader from "./ClassDetailHeader";
 import ClassDetailTabs from "./ClassDetailTabs";
 import ClassMembersView from "./members/ClassMembersView";
 import ClassProgressView from "./progress/ClassProgressView";
-
-// Types matching database models
-interface ClassDetail {
-  id: string;
-  class_name: string;
-  description: string;
-  class_code: string;
-  teacher_user_id: string;
-  created_at: string;
-  // Joined data
-  teacher: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-  members: ClassMember[];
-  joinRequests: ClassJoinRequest[];
-  assignments: ExamAssignment[];
-  stats: ClassStats;
-}
-
-interface ClassMember {
-  id: string;
-  class_id: string;
-  student_user_id: string;
-  joined_date: string;
-  status: 'pending' | 'approved';
-  // Student details
-  student: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-}
-
-interface ClassJoinRequest {
-  id: string;
-  class_id: string;
-  student_user_id: string;
-  status: 'pending' | 'accepted' | 'rejected';
-  requested_at: string;
-  processed_at?: string;
-  // Student details
-  student: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-}
-
-interface ExamAssignment {
-  id: string;
-  exam_id: string;
-  class_id: string;
-  start_time: string;
-  end_time: string;
-  attempt_limit: number;
-  created_at: string;
-  // Exam details
-  exam: {
-    id: string;
-    title: string;
-    description: string;
-    subject: string;
-    duration_min: number;
-    total_score: number;
-  };
-}
-
-interface ClassStats {
-  totalMembers: number;
-  pendingRequests: number;
-  activeAssignments: number;
-  averageScore: number;
-}
 
 type TabType = "members" | "progress";
 
@@ -102,85 +28,37 @@ const ClassDetailView: React.FC = () => {
   const loadClassDetail = async () => {
     try {
       setLoading(true);
+      setError(null);
       
-      // For now, use mock data that matches database structure
-      const mockClassDetail: ClassDetail = {
-        id: classId,
-        class_name: "Lớp 12A1 - THPT Nguyễn Huệ",
-        description: "Lớp chuyên Toán - Lý, chuẩn bị thi THPT Quốc Gia 2025",
-        class_code: "12A1-NH-2025",
-        teacher_user_id: "teacher-1",
-        created_at: "2025-09-01T00:00:00Z",
-        teacher: {
-          id: "teacher-1",
-          full_name: "Thầy Nguyễn Văn A",
-          email: "teacher@gopass.com"
-        },
-        members: [
-          {
-            id: "member-1",
-            class_id: classId,
-            student_user_id: "student-1",
-            joined_date: "2025-09-02T00:00:00Z",
-            status: 'approved',
-            student: {
-              id: "student-1",
-              full_name: "Nguyễn Văn B",
-              email: "student1@gopass.com"
-            }
-          }
-        ],
-        joinRequests: [
-          {
-            id: "request-1",
-            class_id: classId,
-            student_user_id: "student-2",
-            status: 'pending',
-            requested_at: "2025-12-15T10:00:00Z",
-            student: {
-              id: "student-2",
-              full_name: "Trần Thị C",
-              email: "student2@gopass.com"
-            }
-          }
-        ],
-        assignments: [
-          {
-            id: "assignment-1",
-            exam_id: "exam-1",
-            class_id: classId,
-            start_time: "2025-12-20T09:00:00Z",
-            end_time: "2025-12-20T10:30:00Z",
-            attempt_limit: 1,
-            created_at: "2025-12-15T00:00:00Z",
-            exam: {
-              id: "exam-1",
-              title: "Đề thi thử THPT QG lần 1 - Toán",
-              description: "Đề thi thử theo cấu trúc mới",
-              subject: "Toán",
-              duration_min: 90,
-              total_score: 10.0
-            }
-          }
-        ],
-        stats: {
-          totalMembers: 45,
-          pendingRequests: 2,
-          activeAssignments: 12,
-          averageScore: 8.5
-        }
-      };
-
-      setClassDetail(mockClassDetail);
+      // Fetch all data in parallel
+      const [classResponse, membersResponse, requestsResponse, assignmentsResponse] = await Promise.all([
+        classApi.getClassDetail(classId),
+        classApi.getClassMembers(classId),
+        classApi.getJoinRequests(classId),
+        classApi.getClassAssignments(classId)
+      ]);
       
-      // TODO: Replace with actual API call
-      // const response = await classApi.getClassDetail(classId);
-      // if (response.success) {
-      //   setClassDetail(response.data);
-      // } else {
-      //   setError(response.error || "Không thể tải thông tin lớp học");
-      // }
+      if (classResponse.success) {
+        // Enrich the class detail with actual data
+        const enrichedDetail: ClassDetail = {
+          ...classResponse.data,
+          members: membersResponse.success ? membersResponse.data : [],
+          joinRequests: requestsResponse.success ? requestsResponse.data : [],
+          assignments: assignmentsResponse.success ? assignmentsResponse.data : [],
+          stats: {
+            totalMembers: membersResponse.success ? membersResponse.data.length : 0,
+            pendingRequests: requestsResponse.success ? requestsResponse.data.length : 0,
+            activeAssignments: assignmentsResponse.success ? assignmentsResponse.data.length : 0,
+            averageScore: 0, // TODO: Calculate from submissions
+          }
+        };
+        
+        setClassDetail(enrichedDetail);
+      } else {
+        setError(classResponse.error || "Không thể tải thông tin lớp học");
+      }
     } catch (err) {
+      console.error("Error loading class detail:", err);
       setError("Đã xảy ra lỗi khi tải dữ liệu");
     } finally {
       setLoading(false);
