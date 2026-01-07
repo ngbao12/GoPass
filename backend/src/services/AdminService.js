@@ -60,34 +60,22 @@ class AdminService {
   }
 
   // Reset user password
-  async resetUserPassword(userId) {
+  async resetUserPassword(userId, newPassword) {
     const user = await UserRepository.findById(userId);
     if (!user) {
       throw new Error('User not found');
     }
 
-    // Generate temporary password
-    const tempPassword = PasswordHasher.generateRandomPassword();
+    // Validate password
+    if (!newPassword || newPassword.length < 6) {
+      throw new Error('Password must be at least 6 characters long');
+    }
 
     // Hash and update password
-    const passwordHash = await PasswordHasher.hash(tempPassword);
+    const passwordHash = await PasswordHasher.hash(newPassword);
     await UserRepository.update(userId, { passwordHash });
 
-    // Send email with temporary password
-    await MailProvider.sendMail(
-      user.email,
-      'Password Reset - GoPass',
-      `
-        <h1>Password Reset</h1>
-        <p>Hi ${user.name},</p>
-        <p>Your password has been reset by an administrator.</p>
-        <p>Your temporary password is: <strong>${tempPassword}</strong></p>
-        <p>Please change your password after logging in.</p>
-        <p>Best regards,<br>GoPass Team</p>
-      `
-    );
-
-    return { message: 'Password reset successfully. Email sent to user.' };
+    return { message: 'Password reset successfully' };
   }
 
   // Get system metrics
