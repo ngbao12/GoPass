@@ -5,7 +5,6 @@
 
 // ============================================
 // Generic API Response Type
-// ============================================
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
@@ -15,7 +14,6 @@ export interface ApiResponse<T> {
 
 // ============================================
 // Backend Model Interfaces (from MongoDB)
-// ============================================
 export interface ClassModel {
   _id: string;
   className: string;
@@ -58,7 +56,6 @@ export interface UserModel {
 
 // ============================================
 // API Request/Response Types
-// ============================================
 export interface ClassDetailResponse {
   class: ClassModel;
   teacher: UserModel;
@@ -90,7 +87,6 @@ export interface CreateClassData {
 
 // ============================================
 // Frontend Display Types
-// ============================================
 export interface TeacherClass {
   id: string;
   name: string;
