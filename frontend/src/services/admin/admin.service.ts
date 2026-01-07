@@ -109,10 +109,10 @@ export const adminService = {
    * API: POST /api/admin/users/:userId/reset-password
    * Auth: Required (Admin only)
    */
-  resetUserPassword: async (userId: string): Promise<{ message: string }> => {
+  resetUserPassword: async (userId: string, newPassword: string): Promise<{ message: string }> => {
     const response = await httpClient.post<{ success: boolean; message: string }>(
       `/admin/users/${userId}/reset-password`,
-      {},
+      { newPassword },
       { requiresAuth: true }
     );
 
