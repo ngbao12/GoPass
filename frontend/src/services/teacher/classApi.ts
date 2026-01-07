@@ -24,7 +24,7 @@ export const classApi = {
       const response = await httpClient.get<{ 
         success: boolean; 
         data: { classes: ClassModel[]; pagination: any } 
-      }>('/classes/my-classes', { requiresAuth: true });
+      }>('/classes/my-classes?isActive=true', { requiresAuth: true });
       
       if (!response.success) {
         return {
@@ -137,10 +137,11 @@ export const classApi = {
   createClass: async (classData: CreateClassData): Promise<ApiResponse<ClassModel>> => {
     try {
       const payload = {
-        className: classData.class_name,
+        className: classData.className,
         description: classData.description,
-        classCode: `${classData.grade.replace('Lớp ', '')}-${Date.now()}`, // Auto generate
-        // teacherUserId will be set from auth token in backend
+        classCode: classData.classCode,
+        requireApproval: Boolean(classData.requireApproval),
+        // teacherUserId is inferred from auth token in backend
       };
       
       const response = await httpClient.post<{
@@ -175,8 +176,10 @@ export const classApi = {
     try {
       const payload: any = {};
       
-      if (updateData.class_name) payload.className = updateData.class_name;
+      if (updateData.className) payload.className = updateData.className;
       if (updateData.description) payload.description = updateData.description;
+      if (updateData.classCode) payload.classCode = updateData.classCode;
+      if (typeof updateData.requireApproval === 'boolean') payload.requireApproval = updateData.requireApproval;
       
       const response = await httpClient.put<{
         success: boolean;
