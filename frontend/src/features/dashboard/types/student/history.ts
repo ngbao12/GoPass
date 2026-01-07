@@ -5,6 +5,8 @@ export type HistoryType = 'contest' | 'practice_class' | 'practice_global';
 
 export interface HistoryItem {
   id: number | string;
+  submissionId: string;
+  contestId?: string;
   title: string;
   subject: string;
   duration: number;        // phút

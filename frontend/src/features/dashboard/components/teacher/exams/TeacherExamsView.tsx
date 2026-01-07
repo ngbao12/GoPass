@@ -98,12 +98,22 @@ const TeacherExamsView: React.FC = () => {
   const handleAssignExamSubmit = async (assignmentData: any) => {
     try {
       if (selectedExam) {
-        await examApi.assignExamToClass(selectedExam._id, assignmentData);
-        setShowAssignModal(false);
-        setSelectedExam(null);
+        const result = await examApi.assignExamToClass(
+          selectedExam._id,
+          assignmentData
+        );
+
+        if (result.success) {
+          alert(result.message || "Gán đề thi thành công!");
+          setShowAssignModal(false);
+          setSelectedExam(null);
+        } else {
+          alert("Có lỗi xảy ra: " + (result.message || "Không thể gán đề thi"));
+        }
       }
     } catch (error) {
       console.error("Error assigning exam:", error);
+      alert("Đã xảy ra lỗi khi gán đề thi. Vui lòng thử lại.");
     }
   };
 
