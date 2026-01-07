@@ -9,32 +9,76 @@ interface CreateClassModalProps {
   onSubmit: (classData: any) => void;
 }
 
+// Generate a random class code: 10 chars, uppercase, alphanumeric
+const generateClassCode = (): string => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for (let i = 0; i < 10; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+};
+
 const CreateClassModal: React.FC<CreateClassModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
 }) => {
   const [formData, setFormData] = useState({
-    class_name: "",
+    className: "",
     description: "",
-    subject: "",
-    grade: "",
+    classCode: generateClassCode(),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.className.trim()) {
+      newErrors.className = "Tên lớp học là bắt buộc";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      await onSubmit(formData);
-      setFormData({ class_name: "", description: "", subject: "", grade: "" });
+      // Transform field names to match API expectations
+      const classDataToSubmit = {
+        className: formData.className,
+        description: formData.description,
+        classCode: formData.classCode,
+        requireApproval: true, // Default value
+      };
+
+      await onSubmit(classDataToSubmit);
+      // Reset form after successful submission
+      setFormData({
+        className: "",
+        description: "",
+        classCode: generateClassCode(),
+      });
+      setErrors({});
     } catch (error) {
       console.error("Error creating class:", error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleRegenerateCode = () => {
+    setFormData({ ...formData, classCode: generateClassCode() });
   };
 
   if (!isOpen) return null;
@@ -75,54 +119,46 @@ const CreateClassModal: React.FC<CreateClassModalProps> = ({
               <input
                 type="text"
                 required
-                value={formData.class_name}
-                onChange={(e) => setFormData({ ...formData, class_name: e.target.value })}
+                value={formData.className}
+                onChange={(e) => {
+                  setFormData({ ...formData, className: e.target.value });
+                  if (errors.className) setErrors({ ...errors, className: "" });
+                }}
                 placeholder="VD: Lớp 12A1 - THPT Nguyễn Huệ"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 ${
+                  errors.className ? "border-red-500" : "border-gray-300"
+                }`}
               />
+              {errors.className && (
+                <p className="text-red-500 text-sm mt-1">{errors.className}</p>
+              )}
             </div>
 
-            {/* Subject and Grade */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Môn học <span className="text-red-500">*</span>
-                </label>
-                <select
-                  required
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-gray-900"
+            {/* Class Code */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mã lớp học <span className="text-gray-500">(Tự động)</span>
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  disabled
+                  value={formData.classCode}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 font-mono font-semibold"
+                />
+                <button
+                  type="button"
+                  onClick={handleRegenerateCode}
+                  disabled={isSubmitting}
+                  className="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Tạo mã mới"
                 >
-                  <option value="" className="text-gray-500">Chọn môn học</option>
-                  <option value="Toán" className="text-gray-900">Toán</option>
-                  <option value="Ngữ Văn" className="text-gray-900">Ngữ Văn</option>
-                  <option value="Tiếng Anh" className="text-gray-900">Tiếng Anh</option>
-                  <option value="Vật Lý" className="text-gray-900">Vật Lý</option>
-                  <option value="Hóa Học" className="text-gray-900">Hóa Học</option>
-                  <option value="Sinh Học" className="text-gray-900">Sinh Học</option>
-                  <option value="Lịch Sử" className="text-gray-900">Lịch Sử</option>
-                  <option value="Địa Lý" className="text-gray-900">Địa Lý</option>
-                  <option value="GDCD" className="text-gray-900">GDCD</option>
-                </select>
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Khối lớp <span className="text-red-500">*</span>
-                </label>
-                <select
-                  required
-                  value={formData.grade}
-                  onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all text-gray-900"
-                >
-                  <option value="" className="text-gray-500">Chọn khối</option>
-                  <option value="Lớp 10" className="text-gray-900">Lớp 10</option>
-                  <option value="Lớp 11" className="text-gray-900">Lớp 11</option>
-                  <option value="Lớp 12" className="text-gray-900">Lớp 12</option>
-                </select>
-              </div>
+              <p className="text-xs text-gray-500 mt-1">Mã lớp dùng để học sinh tham gia. Bạn có thể tạo mã mới nếu cần.</p>
             </div>
 
             {/* Description */}
