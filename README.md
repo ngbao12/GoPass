@@ -1,8 +1,24 @@
-# GoPass – Full Stack Learning Management System
+<div align="center">
 
-A comprehensive learning management system built with Next.js (Frontend) and Node.js / Express / MongoDB (Backend).
+# 🎓 GoPass
 
-## ✨ Main Features
+### Full-Stack Learning Management System
+
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=flat&logo=node.js)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-5+-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+A modern, feature-rich Learning Management System designed for teachers and students to manage classes, assignments, and exams seamlessly.
+
+[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Demo](#-demo-accounts)
+
+</div>
+
+---
+
+## ✨ Features
 
 ### 👨‍🏫 For Teachers
 - 📚 **Class Management** - Create and manage multiple classes
@@ -23,18 +39,38 @@ A comprehensive learning management system built with Next.js (Frontend) and Nod
 - 📊 **System Analytics** - Overall platform statistics
 - ⚙️ **Configuration** - System-wide settings and controls
 
-## 🔧 Prerequisites
-Before you begin, ensure you have installed:
-- Node.js (v18 or higher)
-- npm or yarn
-- MongoDB (v5 or higher) – for production backend
-- Git
+## 🛠️ Tech Stack
+
+**Frontend:**
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS
+- React Context API
+- Axios
+
+**Backend:**
+- Node.js & Express
+- MongoDB & Mongoose
+- JWT Authentication
+- Bcrypt for password hashing
+- Nodemailer for emails
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have:
+
+- **Node.js** v18 or higher ([Download](https://nodejs.org/))
+- **MongoDB** v5 or higher ([Download](https://www.mongodb.com/try/download/community))
+- **npm** or **yarn** (comes with Node.js)
+- **Git** ([Download](https://git-scm.com/))
+
+## 🚀 Quick Start
 
 ### 1️⃣ Clone & Install
 
 ```bash
 # Clone the repository
-git clone https://github.com/ngbao12/GoPass.git
+git clone <repository-url>
 cd GoPass
 
 # Install backend dependencies
@@ -47,6 +83,7 @@ npm install
 ```
 
 ### 2️⃣ Environment Setup
+
 **Backend** - Create `backend/.env`:
 
 ```env
@@ -93,184 +130,210 @@ cd backend
 npm run seed
 ```
 
+### 4️⃣ Start Development Servers
 
-# Server
-PORT=5000
-NODE_ENV=development
-
-# Database
-MONGODB_URI=mongodb://localhost:27017/gopass
-
-# JWT
-JWT_ACCESS_SECRET=your-access-secret-key
-JWT_REFRESH_SECRET=your-refresh-secret-key
-JWT_ACCESS_EXPIRES_IN=15m
-JWT_REFRESH_EXPIRES_IN=7d
-
-# Email (optional for development)
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USER=your-email@gmail.com
-MAIL_PASS=your-app-password
-MAIL_FROM=noreply@gopass.com
-
-# Frontend URL
-CLIENT_URL=http://localhost:3000
-
-### 3. Frontend Setup
-cd ../frontend
-npm install
-
-Create a .env.local file in the frontend directory:
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
-
-## 🚀 Running the Application
-
-### Option A: With MongoDB (Full Backend)
-
-#### 1. Start MongoDB
-macOS (Homebrew):
-brew services start mongodb-community@7.0
-
-Docker:
-docker run -d -p 27017:27017 --name mongodb mongo:latest
-
-#### 2. Seed the Database
-This creates sample data including:
-- 1 Admin, 2 Teachers, 3 Students
-- 4 Classes
-- Sample Questions and Exams
-
-cd backend
-npm run seed
-
-#### 3. Start Backend Server
+```bash
+# Terminal 1 - Backend
 cd backend
 npm run dev
+# 🚀 Backend running at http://localhost:5000
 
-Backend will run at: http://localhost:5000
-
-#### 4. Start Frontend Server
+# Terminal 2 - Frontend
 cd frontend
 npm run dev
+# 🚀 Frontend running at http://localhost:3000
+```
 
-Frontend will run at: http://localhost:3000
+### 5️⃣ Access the Application
 
-#### 5. Login
-Use these test accounts (password: 123456):
+Open [http://localhost:3000](http://localhost:3000) and login with test accounts below.
 
-Role | Email
-Admin | admin@gopass.com
-Teacher | teacher1@gopass.com
-Teacher | teacher2@gopass.com
-Student | student1@gopass.com
-Student | student2@gopass.com
+## 🧪 Demo Accounts
 
-### Option B: With JSON Server (No MongoDB Required)
+| Role | Email | Password |
+|------|-------|----------|
+| 👨‍💼 Admin | admin@gopass.vn | 123456 |
+| 👨‍🏫 Teacher | teacher1@gopass.vn | 123456 |
+| 👨‍🏫 Teacher | teacher2@gopass.vn | 123456 |
+| 👨‍🎓 Student | student1@gopass.vn | 123456 |
+| 👨‍🎓 Student | student2@gopass.vn | 123456 |
 
-Note: Since the MongoDB database is private, you can test the application using JSON Server as a mock backend. This is ideal for frontend development and testing.
+## 🧰 Alternative: JSON Server (No MongoDB)
 
-#### 1. Start JSON Server
-cd frontend/mock
+Perfect for frontend development without setting up MongoDB.
+
+```bash
+# Install JSON Server globally
 npm install -g json-server
+
+# Start mock backend
+cd frontend/mock
 json-server --watch db.json --port 5000
 
-JSON Server will run at: http://localhost:5000
-
-#### 2. Update Frontend API URL
-Edit frontend/.env.local:
+# Update frontend/.env.local
 NEXT_PUBLIC_API_URL=http://localhost:5000
 
-#### 3. Start Frontend Server
+# Start frontend
 cd frontend
 npm run dev
+```
 
-Frontend will run at: http://localhost:3000
+**Note:** Authentication is bypassed. Navigate directly to `/dashboard`. Change user role in `frontend/src/features/dashboard/context/DashboardContext.tsx` (line 37):
 
-#### 4. Important
-For JSON Server you cannot perform login and register. You need to change the URL manually to test each page.
-
-#### 5. Access the Application
-Navigate to:
-http://localhost:3000/dashboard
-
-Authentication will be bypassed.
-
-To test different roles, change the fallback role in:
-frontend/src/features/dashboard/context/DashboardContext.tsx
-
-Line 37:
-const userRole = (user?.role as UserRole) || "student";
-
-role: "student" – Student Dashboard
-role: "teacher" – Teacher Dashboard
-role: "admin" – Admin Dashboard
+```typescript
+const userRole = (user?.role as UserRole) || "student"; // Change to "teacher" or "admin"
+```
 
 ## 📁 Project Structure
-(See repository for details)
 
-## 👤 Test Accounts
-When using MongoDB backend (after npm run seed):
+```
+GoPass/
+├── backend/
+│   ├── src/
+│   │   ├── config/          # Configuration files
+│   │   ├── controllers/     # Route controllers
+│   │   ├── middleware/      # Custom middleware
+│   │   ├── models/          # Mongoose models
+│   │   ├── routes/          # API routes
+│   │   ├── services/        # Business logic
+│   │   └── utils/           # Helper functions
+│   ├── .env                 # Environment variables
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── app/             # Next.js App Router
+│   │   ├── components/      # Reusable components
+│   │   ├── features/        # Feature modules
+│   │   │   ├── auth/        # Authentication
+│   │   │   ├── dashboard/   # Dashboard views
+│   │   │   ├── classes/     # Class management
+│   │   │   └── exams/       # Exam system
+│   │   ├── lib/             # Utilities & API client
+│   │   └── types/           # TypeScript types
+│   ├── mock/                # JSON Server mock data
+│   ├── .env.local           # Environment variables
+│   └── package.json
+│
+└── README.md
+```
 
-Role | Email | Password
-Admin | admin@gopass.vn | 123456
-Teacher | teacher1@gopass.vn | 123456
-Teacher | teacher2@gopass.vn | 123456
-Student | student1@gopass.vn | 123456
-Student | student2@gopass.vn | 123456
-Student | student3@gopass.vn | 123456
-
-## 🔍 API Endpoints
+## 🔌 API Endpoints
 
 ### Authentication
-POST /api/auth/register – Register new account
-POST /api/auth/login – Login
-POST /api/auth/logout – Logout
+```http
+POST   /api/auth/register      # Register new user
+POST   /api/auth/login         # Login
+POST   /api/auth/logout        # Logout
+GET    /api/auth/me            # Get current user
+```
 
 ### Classes
-GET /api/classes – Get all classes
-POST /api/classes – Create class (Teacher)
-GET /api/classes/:classId – Get class details
-POST /api/classes/join-by-code – Join class (Student)
+```http
+GET    /api/classes            # Get all classes
+POST   /api/classes            # Create class (Teacher)
+GET    /api/classes/:id        # Get class details
+PUT    /api/classes/:id        # Update class
+DELETE /api/classes/:id        # Delete class
+POST   /api/classes/join       # Join class by code (Student)
+```
 
 ### Exams
-GET /api/exams/:examId – Get exam details
-POST /api/exams – Create exam (Teacher)
-POST /api/exams/:examId/assign-to-class – Assign exam
+```http
+GET    /api/exams              # Get all exams
+POST   /api/exams              # Create exam (Teacher)
+GET    /api/exams/:id          # Get exam details
+PUT    /api/exams/:id          # Update exam
+DELETE /api/exams/:id          # Delete exam
+POST   /api/exams/:id/assign   # Assign to class
+```
 
 ### Submissions
-POST /api/submissions/assignments/:assignmentId/start – Start exam
-POST /api/submissions/:submissionId/submit – Submit exam
+```http
+POST   /api/submissions/:assignmentId/start    # Start exam
+POST   /api/submissions/:id/submit             # Submit exam
+GET    /api/submissions/:id                    # Get submission
+GET    /api/submissions/assignment/:id         # Get all submissions
+```
 
-See API_ENDPOINTS.md for complete API documentation.
+📖 See [API_ENDPOINTS.md](./docs/API_ENDPOINTS.md) for complete documentation.
 
 ## 🐛 Troubleshooting
-- Port already in use
-- MongoDB connection error
-- Frontend build errors
-- JSON Server not found
-- CORS errors
 
-Ensure correct ports:
-Backend: http://localhost:5000
-Frontend: http://localhost:3000
+<details>
+<summary><strong>Port 3000/5000 already in use</strong></summary>
 
-## 📚 Additional Documentation
-- Frontend Structure Guide
-- Backend API Documentation
-- Database Schema
-- Exam System Guide
-- Dashboard Developer Guide
+```bash
+# Find and kill process on port
+lsof -ti:3000 | xargs kill -9
+lsof -ti:5000 | xargs kill -9
+```
+</details>
+
+<details>
+<summary><strong>MongoDB connection failed</strong></summary>
+
+- Ensure MongoDB is running: `brew services list` or `docker ps`
+- Check MONGODB_URI in `.env`
+- Verify MongoDB is listening on port 27017
+</details>
+
+<details>
+<summary><strong>CORS errors</strong></summary>
+
+- Verify CLIENT_URL in backend `.env` matches frontend URL
+- Check NEXT_PUBLIC_API_URL in frontend `.env.local`
+</details>
+
+<details>
+<summary><strong>Frontend build errors</strong></summary>
+
+```bash
+# Clear cache and reinstall
+rm -rf node_modules .next
+npm install
+npm run dev
+```
+</details>
+
+## 📚 Documentation
+
+- [Frontend Architecture Guide](./docs/FRONTEND.md)
+- [Backend API Documentation](./docs/BACKEND.md)
+- [Database Schema](./docs/DATABASE.md)
+- [Exam System Guide](./docs/EXAM_SYSTEM.md)
+- [Dashboard Developer Guide](./docs/DASHBOARD.md)
 
 ## 🤝 Contributing
-Fork the repository
-Create your feature branch (git checkout -b feature/AmazingFeature)
-Commit your changes (git commit -m 'Add some AmazingFeature')
-Push to the branch (git push origin feature/AmazingFeature)
-Open a Pull Request
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
-This project is licensed under the MIT License.
 
-Last Updated: December 2025
-Built with: Next.js 15, Express, MongoDB, TypeScript, Tailwind CSS
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👏 Acknowledgments
+
+Built with ❤️ using:
+- [Next.js](https://nextjs.org/)
+- [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+<div align="center">
+
+**GoPass** - Empowering Education Through Technology
+
+Last Updated: January 2026
+
+[Report Bug](../../issues) • [Request Feature](../../issues) • [Documentation](./docs)
+
+</div>
