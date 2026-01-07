@@ -9,6 +9,7 @@ import UserFilterToolbar from "./UserFilterToolbar";
 import UserManagementTable from "./UserManagementTable";
 import Pagination from "./Pagination";
 import UserDetailModal from "./UserDetailModal";
+import ResetPasswordModal from "./ResetPasswordModal";
 
 const UserManagementView: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -25,8 +26,10 @@ const UserManagementView: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userToResetPassword, setUserToResetPassword] = useState<User | null>(null);
+  const [isResetting, setIsResetting] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState<{
-    type: 'status' | 'password';
+    type: 'status';
     user: User | null;
     newStatus?: 'active' | 'locked';
   } | null>(null);
@@ -107,10 +110,7 @@ const UserManagementView: React.FC = () => {
     const user = users.find(u => u._id === userId);
     if (!user) return;
 
-    setShowConfirmDialog({
-      type: 'password',
-      user,
-    });
+    setUserToResetPassword(user);
   };
 
   const confirmUpdateStatus = async () => {
@@ -143,19 +143,21 @@ const UserManagementView: React.FC = () => {
     }
   };
 
-  const confirmResetPassword = async () => {
-    if (!showConfirmDialog || showConfirmDialog.type !== 'password' || !showConfirmDialog.user) return;
+  const confirmResetPassword = async (newPassword: string) => {
+    if (!userToResetPassword) return;
 
+    setIsResetting(true);
     try {
-      const result = await adminService.resetUserPassword(showConfirmDialog.user._id);
+      const result = await adminService.resetUserPassword(userToResetPassword._id, newPassword);
       toast.success(result.message, {
-        description: 'Email đã được gửi đến người dùng.',
+        description: `Mật khẩu mới đã được cập nhật cho ${userToResetPassword.name}.`,
       });
+      setUserToResetPassword(null);
     } catch (error) {
       console.error('Error resetting password:', error);
       toast.error('Không thể reset mật khẩu. Vui lòng thử lại.');
     } finally {
-      setShowConfirmDialog(null);
+      setIsResetting(false);
     }
   };
 
@@ -206,32 +208,32 @@ const UserManagementView: React.FC = () => {
         />
       )}
 
-      {/* Confirmation Dialog */}
-      {showConfirmDialog && (
+      {/* Reset Password Modal */}
+      {userToResetPassword && (
+        <ResetPasswordModal
+          user={userToResetPassword}
+          onConfirm={confirmResetPassword}
+          onCancel={() => setUserToResetPassword(null)}
+          isLoading={isResetting}
+        />
+      )}
+
+      {/* Status Confirmation Dialog */}
+      {showConfirmDialog && showConfirmDialog.type === 'status' && (
         <div 
           className="fixed inset-0 flex items-center justify-center z-50"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         >
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {showConfirmDialog.type === 'status' ? 'Xác nhận thay đổi trạng thái' : 'Xác nhận reset mật khẩu'}
+              Xác nhận thay đổi trạng thái
             </h3>
             
             <div className="mb-6">
-              {showConfirmDialog.type === 'status' ? (
-                <p className="text-gray-600">
-                  Bạn có chắc chắn muốn {showConfirmDialog.newStatus === 'active' ? 'mở khóa' : 'khóa'} tài khoản{' '}
-                  <strong>{showConfirmDialog.user?.name}</strong>?
-                </p>
-              ) : (
-                <p className="text-gray-600">
-                  Bạn có chắc chắn muốn reset mật khẩu cho tài khoản{' '}
-                  <strong>{showConfirmDialog.user?.name}</strong>?
-                  <br />
-                  <br />
-                  Mật khẩu mới sẽ được gửi qua email <strong>{showConfirmDialog.user?.email}</strong>.
-                </p>
-              )}
+              <p className="text-gray-600">
+                Bạn có chắc chắn muốn {showConfirmDialog.newStatus === 'active' ? 'mở khóa' : 'khóa'} tài khoản{' '}
+                <strong>{showConfirmDialog.user?.name}</strong>?
+              </p>
             </div>
 
             <div className="flex gap-3 justify-end">
@@ -242,7 +244,7 @@ const UserManagementView: React.FC = () => {
                 Hủy
               </button>
               <button
-                onClick={showConfirmDialog.type === 'status' ? confirmUpdateStatus : confirmResetPassword}
+                onClick={confirmUpdateStatus}
                 className="px-4 py-2 text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors"
               >
                 Xác nhận
