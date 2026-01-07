@@ -38,7 +38,7 @@ const DashboardPage: React.FC = () => {
               Unknown User Role
             </h2>
             <p className="text-gray-600">
-              Please contact administrator for assistance.
+              Vui lòng liên hệ với quản trị viên nêu cần hỗ trợ.
             </p>
           </div>
         );
