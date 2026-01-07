@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui";
-import { TeacherClass } from "../../types/teacher";
+import type { TeacherClass } from "@/services/teacher/types";
 
 interface ClassCardProps {
   classData: TeacherClass;
