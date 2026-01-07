@@ -32,7 +32,6 @@ const ReviewContent = ({ submission }: { submission: ExamSubmission }) => {
     goToPreviousQuestion,
   } = useExam();
 
-  // useExamUI sẽ tự động kiểm tra linkedPassageId để quyết định hiển thị Layout nào
   const { uiLayout, navStatus, sectionsData } = useExamUI();
 
   // 1. Hydrate State
@@ -97,7 +96,7 @@ const ReviewContent = ({ submission }: { submission: ExamSubmission }) => {
       return result;
     }
 
-    // Fallback nếu không có section data
+    // Fallback (if no section data)
     return { "DANH SÁCH": mappedQuestions };
   }, [exam.questions, examState.answers, currentQuestion, sectionsData]);
 
@@ -134,8 +133,8 @@ const ReviewContent = ({ submission }: { submission: ExamSubmission }) => {
             correctAnswer={questionDetail?.correctAnswer}
             feedback={userAnswerData?.feedback}
             explanation={questionDetail?.explanation}
-            onAnswerChange={() => {}}
-            onToggleFlag={() => {}}
+            onAnswerChange={() => { }}
+            onToggleFlag={() => { }}
             isFlagged={false}
           />
         </div>
