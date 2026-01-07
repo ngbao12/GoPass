@@ -62,7 +62,9 @@ class GradingController {
       if (status) filters.status = status;
       if (classId) filters.classId = classId;
 
-      const submissions = await GradingService.getAllSubmissions(filters);
+      // Pass teacherId to filter submissions by exams created by this teacher
+      const teacherId = req.user?.userId;
+      const submissions = await GradingService.getAllSubmissions(filters, teacherId);
       res.status(200).json({ success: true, data: submissions });
     } catch (error) {
       console.error("[GradingController] Get all submissions error:", error);
@@ -98,6 +100,43 @@ class GradingController {
       res.status(200).json({ success: true, data: result });
     } catch (error) {
       console.error("[GradingController] Auto-grade Ngữ Văn error:", error);
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * Update submission status
+   * PATCH /api/grading/submissions/:submissionId/status
+   */
+  async updateSubmissionStatus(req, res) {
+    try {
+      const { status } = req.body;
+      const submission = await GradingService.updateSubmissionStatus(
+        req.params.submissionId,
+        status
+      );
+      res.status(200).json({ success: true, data: submission });
+    } catch (error) {
+      console.error("[GradingController] Update status error:", error);
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  /**
+   * Grade a single answer manually
+   * POST /api/grading/submissions/:submissionId/answers/:answerId/grade
+   */
+  async gradeAnswer(req, res) {
+    try {
+      const { score, feedback } = req.body;
+      const answer = await GradingService.gradeAnswerManually(
+        req.params.submissionId,
+        req.params.answerId,
+        { score, feedback }
+      );
+      res.status(200).json({ success: true, data: answer });
+    } catch (error) {
+      console.error("[GradingController] Grade answer error:", error);
       res.status(400).json({ success: false, message: error.message });
     }
   }

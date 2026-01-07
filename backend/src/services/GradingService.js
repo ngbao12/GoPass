@@ -9,8 +9,9 @@ const ExamRepository = require("../repositories/ExamRepository");
 class GradingService {
   /**
    * Get all submissions for grading with filters
+   * Only returns submissions for exams created by the teacher
    */
-  async getAllSubmissions(filters = {}) {
+  async getAllSubmissions(filters = {}, teacherId = null) {
     const query = {};
 
     // Filter by status
@@ -22,18 +23,29 @@ class GradingService {
     const submissions = await ExamSubmissionRepository.find(query, {
       populate: [
         { path: 'studentUserId', select: 'name email' },
-        { path: 'examId', select: 'title subject' },
+        { path: 'examId', select: 'title subject createdBy' },
       ],
       sort: { submittedAt: -1 },
     });
 
-    // Filter by subject if needed (from exam)
-    let filtered = submissions;
-    if (filters.subject) {
-      filtered = submissions.filter(
-        (s) => s.examId && s.examId.subject === filters.subject
-      );
-    }
+    // Filter submissions by teacher's created exams and subject
+    let filtered = submissions.filter((s) => {
+      if (!s.examId) return false;
+      
+      // Filter by teacher (exams created by the teacher)
+      if (teacherId && s.examId.createdBy) {
+        if (s.examId.createdBy.toString() !== teacherId.toString()) {
+          return false;
+        }
+      }
+      
+      // Filter by subject
+      if (filters.subject && s.examId.subject !== filters.subject) {
+        return false;
+      }
+      
+      return true;
+    });
 
     return filtered;
   }
@@ -533,6 +545,80 @@ async _callSmartBotGrading(payload) {
     console.log(`✅ Parsed ${gradingResults.results.length} grading results successfully`);
 
     return gradingResults;
+  }
+
+  /**
+   * Update submission status
+   */
+  async updateSubmissionStatus(submissionId, status) {
+    const submission = await ExamSubmissionRepository.findById(submissionId);
+    if (!submission) {
+      throw new Error('Submission not found');
+    }
+
+    // Validate status
+    const validStatuses = ['in_progress', 'submitted', 'graded'];
+    if (!validStatuses.includes(status)) {
+      throw new Error(`Invalid status. Must be one of: ${validStatuses.join(', ')}`);
+    }
+
+    // Update status
+    submission.status = status;
+    if (status === 'graded') {
+      submission.gradedAt = new Date();
+    }
+    await submission.save();
+
+    // Return with populated fields
+    return await ExamSubmissionRepository.findById(submissionId, {
+      populate: [
+        { path: 'studentUserId', select: 'name email' },
+        { path: 'examId', select: 'title subject' },
+      ],
+    });
+  }
+
+  /**
+   * Grade a single answer manually
+   */
+  async gradeAnswerManually(submissionId, answerId, { score, feedback }) {
+    // Verify submission exists
+    const submission = await ExamSubmissionRepository.findById(submissionId);
+    if (!submission) {
+      throw new Error('Submission not found');
+    }
+
+    // Find and update the answer
+    const answer = await ExamAnswerRepository.findById(answerId);
+    if (!answer) {
+      throw new Error('Answer not found');
+    }
+
+    if (answer.submissionId.toString() !== submissionId) {
+      throw new Error('Answer does not belong to this submission');
+    }
+
+    // Update answer with manual grading
+    answer.score = score;
+    answer.feedback = feedback || '';
+    answer.isAutoGraded = false;
+    answer.gradedAt = new Date();
+    await answer.save();
+
+    // Recalculate total score for submission
+    const allAnswers = await ExamAnswerRepository.findBySubmission(submissionId);
+    const totalScore = allAnswers.reduce((sum, ans) => sum + (ans.score || 0), 0);
+    
+    submission.totalScore = totalScore;
+    await submission.save();
+
+    // Return updated answer with populated question
+    return await ExamAnswerRepository.findById(answerId, {
+      populate: {
+        path: 'questionId',
+        select: 'content type explanation options maxScore',
+      },
+    });
   }
 
   /**
