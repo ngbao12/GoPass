@@ -8,6 +8,7 @@ import { Button, Badge, Input } from "@/components/ui";
 import CreateExamModal from "./CreateExamModal";
 import AssignExamModal from "./AssignExamModal";
 import DeleteExamModal from "./DeleteExamModal";
+import { useTeacherData } from "@/features/dashboard/context/TeacherDataContext";
 import { examApi } from "@/services/teacher";
 
 interface Exam {
@@ -33,6 +34,7 @@ const TeacherExamsView: React.FC = () => {
   const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const { teacherData, deleteExam } = useTeacherData();
   const [subjectFilter, setSubjectFilter] = useState("all");
   const [pagination, setPagination] = useState({
     page: 1,
@@ -111,7 +113,7 @@ const TeacherExamsView: React.FC = () => {
       const response = await examApi.deleteExam(examId);
       if (response.success) {
         // Remove from local state
-        setExams(exams.filter((e) => e.id !== examId));
+        setExams(exams.filter((e) => e._id !== examId));
         // Also update context
         deleteExam(examId);
         setShowDeleteModal(false);
