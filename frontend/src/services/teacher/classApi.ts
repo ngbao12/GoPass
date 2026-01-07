@@ -1,186 +1,89 @@
-import { apiClient } from '../api';
+/**
+ * Teacher Class API Service
+ * Handles all class-related API calls for teachers
+ */
 
-// Exact database model interfaces
-export interface ClassModel {
-  _id: string;
-  teacher_user_id: string;
-  class_name: string;
-  description: string;
-  class_code: string;
-  created_at: string;
-  updated_at?: string;
-}
+import { httpClient } from '@/lib/http';
+import type {
+  ApiResponse,
+  TeacherClass,
+  ClassModel,
+  ClassDetail,
+  ClassDetailResponse,
+  CreateClassData,
+} from './types';
 
-export interface ClassMemberModel {
-  _id: string;
-  class_id: string;
-  student_user_id: string;
-  joined_date: string;
-  status: 'pending' | 'approved';
-}
-
-export interface ClassJoinRequestModel {
-  _id: string;
-  class_id: string;
-  student_user_id: string;
-  status: 'pending' | 'accepted' | 'rejected';
-  requested_at: string;
-  processed_at?: string;
-}
-
-export interface UserModel {
-  _id: string;
-  full_name: string;
-  email: string;
-  password_hash: string;
-  role: 'admin' | 'teacher' | 'student';
-  status: 'active' | 'inactive';
-  created_at: string;
-  updated_at?: string;
-}
-
-// API Response Types
-export interface ClassDetailResponse {
-  class: ClassModel;
-  teacher: UserModel;
-  members: (ClassMemberModel & { student: UserModel })[];
-  joinRequests: (ClassJoinRequestModel & { student: UserModel })[];
-  assignments: any[]; // Will be populated with exam assignments
-}
-
-export interface CreateClassData {
-  class_name: string;
-  description: string;
-  subject: string; // This will be added to class model later
-  grade: string;   // This will be added to class model later
-}
-
-// Frontend display types
-export interface TeacherClass {
-  id: string;
-  name: string;
-  description: string;
-  classCode: string;
-  subject: string;
-  grade: string;
-  studentCount: number;
-  examCount: number;
-  createdAt: string;
-}
-
-export interface ClassDetail {
-  id: string;
-  class_name: string;
-  description: string;
-  class_code: string;
-  created_at: string;
-  teacher: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-  members: ClassMember[];
-  joinRequests: ClassJoinRequest[];
-  assignments: ExamAssignment[];
-  stats: ClassStats;
-}
-
-export interface ClassMember {
-  id: string;
-  class_id: string;
-  student_user_id: string;
-  joined_date: string;
-  status: 'pending' | 'approved';
-  student: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-}
-
-export interface ClassJoinRequest {
-  id: string;
-  class_id: string;
-  student_user_id: string;
-  status: 'pending' | 'accepted' | 'rejected';
-  requested_at: string;
-  processed_at?: string;
-  student: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-}
-
-export interface ExamAssignment {
-  id: string;
-  exam_id: string;
-  class_id: string;
-  start_time: string;
-  end_time: string;
-  attempt_limit: number;
-  created_at: string;
-  exam: {
-    id: string;
-    title: string;
-    description: string;
-    subject: string;
-    duration_min: number;
-    total_score: number;
-  };
-}
-
-export interface ClassStats {
-  totalMembers: number;
-  pendingRequests: number;
-  activeAssignments: number;
-  averageScore: number;
-}
-
+/**
+ * Class API Service
+ * All endpoints require authentication
+ */
 export const classApi = {
-  // GET /api/classes?teacher_user_id=:teacherId
-  getClasses: async (teacherId?: string): Promise<ApiResponse<TeacherClass[]>> => {
-    const endpoint = teacherId 
-      ? `/api/classes?teacher_user_id=${teacherId}`
-      : '/api/classes';
-    
-    const response = await apiClient.get<ClassModel[]>(endpoint);
-    
-    if (response.success) {
-      const transformedData: TeacherClass[] = response.data.map(cls => ({
+  // GET /classes/my-classes - Get teacher's classes
+  getClasses: async (): Promise<ApiResponse<TeacherClass[]>> => {
+    try {
+      const response = await httpClient.get<{ 
+        success: boolean; 
+        data: { classes: ClassModel[]; pagination: any } 
+      }>('/classes/my-classes', { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: [],
+          error: 'Failed to fetch classes'
+        };
+      }
+
+      const transformedData: TeacherClass[] = response.data.classes.map(cls => ({
         id: cls._id,
-        name: cls.class_name,
-        description: cls.description,
-        classCode: cls.class_code,
+        name: cls.className,
+        description: cls.description || '',
+        classCode: cls.classCode,
         subject: "Toán", // TODO: Add to backend model
         grade: "Lớp 12", // TODO: Add to backend model
-        studentCount: 0, // TODO: Calculate from members
+        studentCount: cls.studentCount || 0,
         examCount: 0, // TODO: Calculate from assignments
-        createdAt: cls.created_at,
+        createdAt: cls.createdAt,
       }));
       
       return {
         success: true,
         data: transformedData,
       };
+    } catch (error: any) {
+      console.error('Error fetching classes:', error);
+      return {
+        success: false,
+        data: [],
+        error: error.message || 'Failed to fetch classes'
+      };
     }
-    
-    return response as ApiResponse<TeacherClass[]>;
   },
 
-  // GET /api/classes/:id/detail
+  // GET /classes/:id - Get class detail
   getClassDetail: async (classId: string): Promise<ApiResponse<ClassDetail>> => {
-    const response = await apiClient.get<ClassDetailResponse>(`/api/classes/${classId}/detail`);
-    
-    if (response.success) {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: ClassDetailResponse;
+      }>(`/classes/${classId}`, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: null as any,
+          error: 'Failed to fetch class detail'
+        };
+      }
+
       const { class: classData, teacher, members, joinRequests, assignments } = response.data;
       
       const transformedDetail: ClassDetail = {
         id: classData._id,
-        class_name: classData.class_name,
+        className: classData.className,
         description: classData.description,
-        class_code: classData.class_code,
-        created_at: classData.created_at,
+        classCode: classData.classCode,
+        createdAt: classData.createdAt,
         teacher: {
           id: teacher._id,
           full_name: teacher.full_name,
@@ -224,50 +127,201 @@ export const classApi = {
         success: true,
         data: transformedDetail,
       };
+    } catch (error: any) {
+      console.error('Error fetching class detail:', error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || 'Failed to fetch class detail'
+      };
     }
-    
-    return response as ApiResponse<ClassDetail>;
   },
 
-  // POST /api/classes
+  // POST /classes - Create new class
   createClass: async (classData: CreateClassData): Promise<ApiResponse<ClassModel>> => {
-    const payload = {
-      class_name: classData.class_name,
-      description: classData.description,
-      class_code: `${classData.grade.replace('Lớp ', '')}-${Date.now()}`, // Auto generate
-      // teacher_user_id will be set from auth token in backend
-    };
-    
-    return await apiClient.post<ClassModel>('/api/classes', payload);
+    try {
+      const payload = {
+        className: classData.class_name,
+        description: classData.description,
+        classCode: `${classData.grade.replace('Lớp ', '')}-${Date.now()}`, // Auto generate
+        // teacherUserId will be set from auth token in backend
+      };
+      
+      const response = await httpClient.post<{
+        success: boolean;
+        data: ClassModel;
+      }>('/classes', payload, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: null as any,
+          error: 'Failed to create class'
+        };
+      }
+      
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error creating class:', error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || 'Failed to create class'
+      };
+    }
   },
 
-  // PUT /api/classes/:id
+  // PUT /classes/:id - Update class
   updateClass: async (classId: string, updateData: Partial<CreateClassData>): Promise<ApiResponse<ClassModel>> => {
-    const payload: any = {};
-    
-    if (updateData.class_name) payload.class_name = updateData.class_name;
-    if (updateData.description) payload.description = updateData.description;
-    
-    return await apiClient.put<ClassModel>(`/api/classes/${classId}`, payload);
+    try {
+      const payload: any = {};
+      
+      if (updateData.class_name) payload.className = updateData.class_name;
+      if (updateData.description) payload.description = updateData.description;
+      
+      const response = await httpClient.put<{
+        success: boolean;
+        data: ClassModel;
+      }>(`/classes/${classId}`, payload, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: null as any,
+          error: 'Failed to update class'
+        };
+      }
+      
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error updating class:', error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || 'Failed to update class'
+      };
+    }
   },
 
-  // DELETE /api/classes/:id
+  // DELETE /classes/:id - Delete class
   deleteClass: async (classId: string): Promise<ApiResponse<void>> => {
-    return await apiClient.delete<void>(`/api/classes/${classId}`);
+    try {
+      const response = await httpClient.delete<{
+        success: boolean;
+      }>(`/classes/${classId}`, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: 'Failed to delete class'
+        };
+      }
+      
+      return {
+        success: true,
+        data: undefined
+      };
+    } catch (error: any) {
+      console.error('Error deleting class:', error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || 'Failed to delete class'
+      };
+    }
   },
 
-  // POST /api/classes/:id/join-requests/:requestId/approve
+  // PUT /classes/:id/join-requests/:requestId - Approve join request
   approveJoinRequest: async (classId: string, requestId: string): Promise<ApiResponse<void>> => {
-    return await apiClient.post<void>(`/api/classes/${classId}/join-requests/${requestId}/approve`, {});
+    try {
+      const response = await httpClient.put<{
+        success: boolean;
+      }>(`/classes/${classId}/join-requests/${requestId}`, { status: 'accepted' }, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: 'Failed to approve join request'
+        };
+      }
+      
+      return {
+        success: true,
+        data: undefined
+      };
+    } catch (error: any) {
+      console.error('Error approving join request:', error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || 'Failed to approve join request'
+      };
+    }
   },
 
-  // POST /api/classes/:id/join-requests/:requestId/reject
+  // PUT /classes/:id/join-requests/:requestId - Reject join request
   rejectJoinRequest: async (classId: string, requestId: string): Promise<ApiResponse<void>> => {
-    return await apiClient.post<void>(`/api/classes/${classId}/join-requests/${requestId}/reject`, {});
+    try {
+      const response = await httpClient.put<{
+        success: boolean;
+      }>(`/classes/${classId}/join-requests/${requestId}`, { status: 'rejected' }, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: 'Failed to reject join request'
+        };
+      }
+      
+      return {
+        success: true,
+        data: undefined
+      };
+    } catch (error: any) {
+      console.error('Error rejecting join request:', error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || 'Failed to reject join request'
+      };
+    }
   },
 
-  // DELETE /api/classes/:id/members/:memberId
+  // DELETE /classes/:id/members/:memberId - Remove class member
   removeMember: async (classId: string, memberId: string): Promise<ApiResponse<void>> => {
-    return await apiClient.delete<void>(`/api/classes/${classId}/members/${memberId}`);
+    try {
+      const response = await httpClient.delete<{
+        success: boolean;
+      }>(`/classes/${classId}/members/${memberId}`, { requiresAuth: true });
+      
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: 'Failed to remove member'
+        };
+      }
+      
+      return {
+        success: true,
+        data: undefined
+      };
+    } catch (error: any) {
+      console.error('Error removing member:', error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || 'Failed to remove member'
+      };
+    }
   },
 };

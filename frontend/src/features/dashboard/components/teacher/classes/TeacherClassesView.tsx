@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { Button, Badge, Input } from "@/components/ui";
-import { mockTeacherData } from "@/features/dashboard/data/mock-teacher";
+import { classApi, TeacherClass, CreateClassData } from "@/services/teacher";
 import ClassCard from "./ClassCard";
 import CreateClassModal from "./CreateClassModal";
 
@@ -13,8 +13,33 @@ const TeacherClassesView: React.FC = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedFilter, setSelectedFilter] = useState("all");
+    const [classes, setClasses] = useState<TeacherClass[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const classes = mockTeacherData.classes;
+    // Fetch classes on component mount
+    useEffect(() => {
+        loadClasses();
+    }, []);
+
+    const loadClasses = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await classApi.getClasses();
+            
+            if (response.success) {
+                setClasses(response.data);
+            } else {
+                setError(response.error || "Không thể tải danh sách lớp học");
+            }
+        } catch (err) {
+            console.error("Error loading classes:", err);
+            setError("Đã xảy ra lỗi khi tải dữ liệu");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const filteredClasses = classes.filter(cls => {
         const matchesSearch = cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -23,10 +48,24 @@ const TeacherClassesView: React.FC = () => {
         return matchesSearch && matchesFilter;
     });
 
-    const handleCreateClass = (classData: any) => {
-        console.log("Creating class:", classData);
-        // TODO: API call to create class
-        setShowCreateModal(false);
+    const handleCreateClass = async (classData: CreateClassData) => {
+        try {
+            console.log("Creating class:", classData);
+            const response = await classApi.createClass(classData);
+            
+            if (response.success) {
+                // Reload classes after successful creation
+                await loadClasses();
+                setShowCreateModal(false);
+            } else {
+                // Handle error - could show a toast notification here
+                console.error("Failed to create class:", response.error);
+                alert(response.error || "Không thể tạo lớp học");
+            }
+        } catch (err) {
+            console.error("Error creating class:", err);
+            alert("Đã xảy ra lỗi khi tạo lớp học");
+        }
     };
 
     return (
@@ -34,12 +73,13 @@ const TeacherClassesView: React.FC = () => {
             {/* Header */}
             <SectionHeader
                 title="Quản lý lớp học"
-                subtitle={`Tổng cộng ${classes.length} lớp học`}
+                subtitle={loading ? "Đang tải..." : `Tổng cộng ${classes.length} lớp học`}
                 action={
                     <Button
                         variant="primary"
                         onClick={() => setShowCreateModal(true)}
                         className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600"
+                        disabled={loading}
                     >
                         <span>+</span>
                         Tạo lớp học mới
@@ -47,8 +87,34 @@ const TeacherClassesView: React.FC = () => {
                 }
             />
 
-            {/* Search and Filter Row */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
+            {/* Loading State */}
+            {loading && (
+                <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+                        <p className="text-gray-500">Đang tải danh sách lớp học...</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Error State */}
+            {error && !loading && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                    <svg className="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p className="text-red-700 mb-4">{error}</p>
+                    <Button onClick={loadClasses} variant="primary" className="bg-teal-500 hover:bg-teal-600">
+                        Thử lại
+                    </Button>
+                </div>
+            )}
+
+            {/* Main Content - Only show when not loading and no error */}
+            {!loading && !error && (
+                <>
+                    {/* Search and Filter Row */}
+                    <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <div className="flex-1">
                     <Input
                         type="text"
@@ -56,12 +122,6 @@ const TeacherClassesView: React.FC = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full text-gray-900 placeholder-gray-500"
-                        style={{
-                            color: '#111827',
-                            '::placeholder': {
-                                color: '#6B7280'
-                            }
-                        }}
                     />
                 </div>
 
@@ -98,7 +158,7 @@ const TeacherClassesView: React.FC = () => {
                 {/* Featured Classes */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     {filteredClasses.slice(0, 2).map((classItem) => (
-                        <ClassCard key={classItem.id} classData={classItem} featured={true} />
+                        <ClassCard key={classItem.id} classData={classItem} />
                     ))}
                 </div>
             </div>
@@ -126,6 +186,8 @@ const TeacherClassesView: React.FC = () => {
                     </div>
                 )}
             </div>
+                </>
+            )}
 
             {/* Create Class Modal */}
             {showCreateModal && (
