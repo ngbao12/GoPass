@@ -1,0 +1,2086 @@
+{
+  "success": true,
+  "data": {
+    "exam": {
+      "id": "exam-eng-6e6d7ff59a0d",
+      "title": "Đề Thi Thử Tiếng Anh THPT 2026",
+      "description": "Đề thi thử môn Tiếng Anh theo cấu trúc mới nhất",
+      "subject": "Tiếng Anh",
+      "gradeLevel": "12",
+      "duration": 90,
+      "totalPoints": 10.0,
+      "passingScore": 5,
+      "instructions": "Đọc kỹ đề bài và chọn đáp án đúng nhất cho mỗi câu hỏi.",
+      "isPublic": true,
+      "isActive": true,
+      "createdBy": "u_teacher_01",
+      "createdAt": "2026-01-07T17:39:19.466153Z",
+      "updatedAt": "2026-01-07T17:39:19.466165Z"
+    },
+    "passages": [
+      {
+        "id": "passage-eng-92af3a7d9a1f",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "order": 1,
+        "title": "",
+        "content": "<p class=\"mb-4 text-justify\"><b>URBANISATION: A GROWING PHENOMENON </b></p>\n<p class=\"mb-4 text-justify\">Urbanisation is the process through which cities grow, and higher populations begin to inhabit urban areas. <b>This phenomenon </b>has <b>accelerated </b>significantly over the past few decades due to various factors. One of the primary drivers is the search for better employment opportunities. In rural areas, job prospects are often limited to agriculture and small-scale industries, which might not provide sufficient income. Consequently, people migrate to cities seeking better livelihoods and living standards.</p>\n<p class=\"mb-4 text-justify\">Additionally, urban areas offer more <b>advanced </b>educational facilities and healthcare services compared to rural regions. Many families move to cities to provide their children with higher-quality education and greater future opportunities. <b>Access to hospitals and specialized medical services also attracts people to urban centers,  especially in countries where rural healthcare is underdeveloped. </b></p>\n<p class=\"mb-4 text-justify\">However, rapid urbanisation brings about several challenges. Overcrowding in cities can lead to inadequate housing, strained infrastructure, and increased pollution. The expansion of urban areas often results in the loss of green spaces and agricultural land, impacting food production and the environment. Governments and city planners must address these issues to ensure sustainable urban growth.</p>\n<p class=\"mb-4 text-justify\">Despite these challenges, urbanisation has several positive aspects. Cities are often cultural melting pots, where diverse groups of people interact, leading to vibrant communities and innovation. The concentration of resources and talents in urban areas can drive economic growth and technological advancements.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://copilot.microsoft.com)</p>",
+        "createdAt": "2026-01-07T17:39:19.466200Z",
+        "updatedAt": "2026-01-07T17:39:19.466204Z"
+      },
+      {
+        "id": "passage-eng-2fe22d45121d",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "order": 2,
+        "title": "",
+        "content": "<p class=\"mb-4 text-justify\">ChihiraAico is an advanced humanoid robot designed by Toshiba, <b>(9)</b> _______. She made her debut at the CEATEC electronics show in Japan in 2014, showcasing her ability to communicate and interact in ways that closely mimic human behavior. Her design combines cutting-edge robotics and artificial intelligence (AI) technology <b>(10)</b> _______. ChihiraAico is capable of speaking multiple languages, engaging with people at exhibitions, and even providing directions at shopping malls and tourist centers.</p>\n<p class=\"mb-4 text-justify\"><b>(11)</b> _______, ChihiraAico and robots like her are intended to bridge the gap between humans and machines, offering personalized services and enhancing customer experiences. She is equipped with sensors, voice recognition software, and realistic facial expressions <b>(12)</b> _______. This enables her to respond naturally to questions, recognize emotional cues, and perform practical tasks like delivering information to visitors.</p>\n<p class=\"mb-4 text-justify\">As AI technology continues to evolve, <b>(13) </b>_______. In the future, humanoid robots may become indispensable helpers in various public and private sectors, bringing unprecedented levels of convenience and interaction to our lives.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://www.therobotreport.com/)</p>",
+        "createdAt": "2026-01-07T17:39:19.466218Z",
+        "updatedAt": "2026-01-07T17:39:19.466221Z"
+      },
+      {
+        "id": "passage-eng-5288aff5f64e",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "order": 3,
+        "title": "",
+        "content": "<p class=\"mb-4 text-justify\"><b>[I] </b>As the world grapples with the finite nature of fossil fuel reserves and the detrimental impact of climate change, the future of energy undeniably lies in renewable sources. <b>[II] </b>Scientists and engineers are making substantial advancements in the development of technologies that more efficiently <b>harness </b>solar, wind, hydro, and geothermal energy. <b>[III] </b>Although the transition to these renewable sources presents significant challenges, it is also regarded as a pivotal step towards establishing a sustainable and resilient energy system. <b>[IV] </b></p>\n<p class=\"mb-4 text-justify\">One of the most promising advancements in renewable energy is the enhancement of solar panel efficiency. Progress in photovoltaic technology has led to the creation of panels that convert a higher proportion of sunlight into electricity. Likewise, wind turbines are becoming more and more efficient. <b>They </b>are capable of generating power even under low-wind conditions. These innovations are essential for making renewable energy more feasible and accessible to a broader population.</p>\n<p class=\"mb-4 text-justify\">However, the transition to renewable energy is fraught with obstacles. The <b>intermittent </b>nature of sources like solar and wind necessitates reliable storage solutions to ensure a consistent power supply. Although battery technology has seen significant improvements, further advancements are imperative to meet growing demand. Moreover, the infrastructure for distributing renewable energy requires expansion and upgrading to accommodate these new power sources.</p>\n<p class=\"mb-4 text-justify\">The economic impact of transitioning to renewable energy is another critical consideration. <b>While the initial  investment in renewable energy infrastructure can be substantial, the long-term benefits include reduced  energy costs and job creation in the green energy sector</b>. Governments and private enterprises are increasingly acknowledging the necessity of investing in renewable energy projects, which is crucial for fostering innovation and diminishing reliance on fossil fuels.</p>\n<p class=\"mb-4 text-justify\">Ultimately, the future of energy hinges on our capacity to innovate and adapt. By continuing to invest in research and development, improving infrastructure, and addressing economic and technical challenges, we can transition towards a more sustainable and environmentally friendly energy system.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from the Ha Nam Provincial Gifted Student Exam, 2023-2024)</p>",
+        "createdAt": "2026-01-07T17:39:19.466231Z",
+        "updatedAt": "2026-01-07T17:39:19.466235Z"
+      },
+      {
+        "id": "passage-eng-101403109c75",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "order": 4,
+        "title": "",
+        "content": "<p class=\"mb-4 text-justify\"><b>LET’S JOIN MULTICULTURAL CAMP </b></p>\n<p class=\"mb-4 text-justify\">Are you eager to join the upcoming multicultural camp? Residing in a multicultural camp significantly enhances our existence in myriad ways. It provides us with the opportunity to engage with (<b>24</b>) _______ traditions, cuisines, languages, and perspectives. Interactions with individuals from (<b>25</b>) _______ facilitate a more comprehensive understanding of the world around us. For example, celebrations (<b>26</b>) _______ Diwali, Chinese New Year, and Thanksgiving serve not only to unite different cultures but also to impart knowledge regarding one another’s customs.</p>\n<p class=\"mb-4 text-justify\">In educational institutions and professional environments, multicultural settings foster creativity and innovation through the amalgamation of varied viewpoints. Nevertheless, it is paramount to approach others’ cultures (<b>27</b>) _______ open-mindedness and respect, as this attitude is essential for (<b>28</b>) _______ harmony and unity within our communities. Embracing multiculturalism not only cultivates an appreciation for the distinctiveness of each culture but also contributes to the development of a more inclusive and vibrant community for all individuals (<b>29</b>) _______.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://copilot.microsoft.com)</p>",
+        "createdAt": "2026-01-07T17:39:19.466243Z",
+        "updatedAt": "2026-01-07T17:39:19.466246Z"
+      },
+      {
+        "id": "passage-eng-33823957508b",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "order": 5,
+        "title": "",
+        "content": "<p class=\"mb-4 text-justify\"><b>STAY ACTIVE AND HEALTHY </b></p>\n<p class=\"mb-4 text-justify\">Staying active is essential for maintaining a healthy lifestyle. It helps prevent (<b>35</b>) _______ chronic diseases, boosts mental health, and improves overall well-being.</p>\n<p class=\"mb-4 text-justify\">1. Regular Exercise: Aim for at least 30 minutes of moderate activity daily. This could be a brisk walk, cycling, or yoga.</p>\n<p class=\"mb-4 text-justify\">2. Join a Class: Find a local fitness class, such as dance, aerobics, or martial arts. It’s a fun way to stay fit and (<b>36</b>) _______ new people.</p>\n<p class=\"mb-4 text-justify\">3. Stay Hydrated: Drink (<b>37</b>) _______ water throughout the day to keep your body functioning properly.</p>\n<p class=\"mb-4 text-justify\">4. Diet: Eat a variety of fruits, vegetables, whole grains, and lean proteins to maintain a (<b>38</b>) _______ diet. Get Started Today!</p>\n<p class=\"mb-4 text-justify\">Small changes can lead to big results. Start (<b>39</b>) _______ these tips into your routine to see improvements in your health and energy levels. Staying active (<b>40</b>) _______ mental health and improves physical health.</p>\n<p class=\"text-right italic text-sm text-gray-500\">(Adapted from https://copilot.microsoft.com/)</p>",
+        "createdAt": "2026-01-07T17:39:19.466255Z",
+        "updatedAt": "2026-01-07T17:39:19.466258Z"
+      }
+    ],
+    "questions": [
+      {
+        "id": "q-eng-ac9094690132",
+        "type": "multiple_choice",
+        "content": "Which of the following is NOT mentioned as a reason for urbanisation?",
+        "options": [
+          {
+            "id": "A",
+            "content": "better employment opportunities",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "improved transportation systems",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "superior healthcare services",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "advanced educational facilities",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466334Z",
+        "updatedAt": "2026-01-07T17:39:19.466339Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-575fdf40e150",
+        "type": "multiple_choice",
+        "content": "The word <b>accelerated</b> in paragraph 1 is OPPOSITE in meaning to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "decelerated",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "increased",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "progressed",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "hastened",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466376Z",
+        "updatedAt": "2026-01-07T17:39:19.466378Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-f45568f3659e",
+        "type": "multiple_choice",
+        "content": "The word <b>This phenomenon</b> in paragraph 1 refers to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "higher populations",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "agriculture",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "process",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "urbanisation",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466403Z",
+        "updatedAt": "2026-01-07T17:39:19.466406Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-d5313e982275",
+        "type": "multiple_choice",
+        "content": "The word <b>advanced</b> in paragraph 2 could be best replaced by _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "simple",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "basic",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "developed",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "outdated",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466434Z",
+        "updatedAt": "2026-01-07T17:39:19.466438Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-44fa55e35103",
+        "type": "multiple_choice",
+        "content": "Which of the following best paraphrases the underlined sentence in paragraph 2? <b>Access to hospitals and specialized medical services also attracts people to urban centers, especially in  countries where rural healthcare is underdeveloped. </b>",
+        "options": [
+          {
+            "id": "A",
+            "content": "People suppose that rural areas have better healthcare facilities than urban centers",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "People move to cities to find specialized medical services that are not available in rural areas.",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "People think that urban centers lack specialized medical services compared to rural areas.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "People find that the main reason for migrating to urban areas is to access education.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466456Z",
+        "updatedAt": "2026-01-07T17:39:19.466457Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-8d4fb7b933b3",
+        "type": "multiple_choice",
+        "content": "Which of the following is TRUE according to the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Urbanisation has few positive aspects in economic growth.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Rural areas have better infrastructure than urban areas.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Urbanisation creates employment opportunities in cities.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Overcrowding can lead to inadequate housing in urban areas.",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466470Z",
+        "updatedAt": "2026-01-07T17:39:19.466472Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-c586764b2f8f",
+        "type": "multiple_choice",
+        "content": "In which paragraph does the writer mention the impact of urbanisation on the environment?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Paragraph 1",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Paragraph 2",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Paragraph 3",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Paragraph 4",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466485Z",
+        "updatedAt": "2026-01-07T17:39:19.466486Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-5ee3c052c146",
+        "type": "multiple_choice",
+        "content": "In which paragraph does the writer discuss the benefits of urbanisation?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Paragraph 1",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Paragraph 3",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Paragraph 4",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Paragraph 2",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-92af3a7d9a1f",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466500Z",
+        "updatedAt": "2026-01-07T17:39:19.466501Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-f8abf547354c",
+        "type": "multiple_choice",
+        "content": "ChihiraAico is an advanced humanoid robot designed by Toshiba, <b>(9)</b> _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "making its primary debut in commercial software development",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "that replaces industrial robots in manufacturing facilities",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "developed as a project aimed at healthcare and service industries",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "which was built specifically for factory automation",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-2fe22d45121d",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466514Z",
+        "updatedAt": "2026-01-07T17:39:19.466516Z",
+        "tags": [
+          "cloze",
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-41ff52f4bbf9",
+        "type": "multiple_choice",
+        "content": "Her design combines cutting-edge robotics and artificial intelligence (AI) technology <b>(10)</b> _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "allowing her to perform repetitive tasks without fatigue",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "meant to increase efficiency in industrial production lines",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "designed for wide-scale manufacturing improvements",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "enabling her to communicate and display human-like emotions",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-2fe22d45121d",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466530Z",
+        "updatedAt": "2026-01-07T17:39:19.466531Z",
+        "tags": [
+          "cloze",
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-ec9541a82e4e",
+        "type": "multiple_choice",
+        "content": "<b>(11)</b> _______, ChihiraAico and robots like her are intended to bridge the gap between humans and machines, offering personalized services and enhancing customer experiences.",
+        "options": [
+          {
+            "id": "A",
+            "content": "Unlike other industrial models",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Though initially limited in usage",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Beyond simple programmed responses",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "Built to provide manual labor solutions",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-2fe22d45121d",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466545Z",
+        "updatedAt": "2026-01-07T17:39:19.466546Z",
+        "tags": [
+          "cloze",
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-fb7540416d02",
+        "type": "multiple_choice",
+        "content": "She is equipped with sensors, voice recognition software, and realistic facial expressions <b>(12)</b> _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "to enhance user comfort and interaction with artificial systems",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "contributing to machine learning through repetitive tasks",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "for recognizing patterns in industrial environments",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "thus eliminating all forms of human interaction from daily life",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-2fe22d45121d",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466559Z",
+        "updatedAt": "2026-01-07T17:39:19.466561Z",
+        "tags": [
+          "cloze",
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-592af3236041",
+        "type": "multiple_choice",
+        "content": "As AI technology continues to evolve, <b>(13) </b>_______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "humans can expect to be obsolete in various roles",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "humanoid robots will be commonplace in daily life activities",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "society will abandon personal interactions altogether",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "more jobs will be automated than ever before",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-2fe22d45121d",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466573Z",
+        "updatedAt": "2026-01-07T17:39:19.466575Z",
+        "tags": [
+          "cloze",
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-b3108fe9f548",
+        "type": "multiple_choice",
+        "content": "Where in paragraph 1 does the following sentence best fit? <b>The shift towards renewable energy is seen as a necessary response to the global energy crisis. </b>",
+        "options": [
+          {
+            "id": "A",
+            "content": "[I]",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "[IV]",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "[III]",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "[II]",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466587Z",
+        "updatedAt": "2026-01-07T17:39:19.466589Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-88bcc4a4fe5a",
+        "type": "multiple_choice",
+        "content": "The phrase <b>harness</b> in paragraph 1 could be best replaced by _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "create",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "capture",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "release",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "control",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466604Z",
+        "updatedAt": "2026-01-07T17:39:19.466767Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-391b56e4abc1",
+        "type": "multiple_choice",
+        "content": "According to paragraph 2, which of the following is NOT mentioned as an advancement in renewable energy technology?",
+        "options": [
+          {
+            "id": "A",
+            "content": "wind turbine capability",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "geothermal energy",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "hydroelectric power",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "solar panel efficiency",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466792Z",
+        "updatedAt": "2026-01-07T17:39:19.466794Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-6ee34f4cc604",
+        "type": "multiple_choice",
+        "content": "The word <b>They</b> in paragraph 2 refers to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "solar panel",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "wind turbines",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "photovoltaic technology",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "renewable energy",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466817Z",
+        "updatedAt": "2026-01-07T17:39:19.466818Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-8bc484d23960",
+        "type": "multiple_choice",
+        "content": "Which of the following best summarises paragraph 3?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Challenges in renewable energy include storage solutions and infrastructure expansion.",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "The intermittent nature of renewable energy sources requires improved storage solutions.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Infrastructure must be upgraded to accommodate renewable energy sources.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Battery technology needs significant improvements to support renewable energy.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466833Z",
+        "updatedAt": "2026-01-07T17:39:19.466834Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-4e19c7403a72",
+        "type": "multiple_choice",
+        "content": "The word <b>intermittent</b> in paragraph 3 is OPPOSITE in meaning to _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "infrequent",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "broken",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "constant",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "irregular",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466847Z",
+        "updatedAt": "2026-01-07T17:39:19.466849Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-99955354d814",
+        "type": "multiple_choice",
+        "content": "Which of the following is TRUE according to the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Fossil fuel resources are abundant and not a concern.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Renewable energy technology is not yet viable for widespread use.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Investment in renewable energy can reduce long-term energy costs.",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "The transition to renewable energy is without challenges.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466861Z",
+        "updatedAt": "2026-01-07T17:39:19.466863Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-658e8e815a9f",
+        "type": "multiple_choice",
+        "content": "Which of the following best paraphrases the underlined sentence in paragraph 4? <b>While the initial investment in renewable energy infrastructure can be substantial, the long-term benefits  include reduced energy costs and job creation in the green energy sector. </b>",
+        "options": [
+          {
+            "id": "A",
+            "content": "The economic benefits of renewable energy are difficult to measure.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Governments are hesitant to invest in renewable energy projects.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Investing in renewable energy leads to lower costs and new jobs.",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "The initial cost of renewable energy projects is prohibitive.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466875Z",
+        "updatedAt": "2026-01-07T17:39:19.466877Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-84b1b5688a9d",
+        "type": "multiple_choice",
+        "content": "Which of the following can be inferred from the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Solar and wind energy are the only viable renewable energy sources.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "Innovation and investment are key to the future of renewable energy.",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "The economic impact of renewable energy is purely negative.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Renewable energy will completely replace fossil fuels in the near future.",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466889Z",
+        "updatedAt": "2026-01-07T17:39:19.466891Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-95c9150b3bad",
+        "type": "multiple_choice",
+        "content": "Which of the following best summarises the passage?",
+        "options": [
+          {
+            "id": "A",
+            "content": "Fossil fuels will remain the primary energy source despite advancements in renewable energy.",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "The transition to renewable energy has no economic benefits and is not sustainable.",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "Renewable energy sources like solar and wind are unreliable and too costly to develop.",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "Addressing renewable energy challenges requires ongoing innovation and investment.",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-5288aff5f64e",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466902Z",
+        "updatedAt": "2026-01-07T17:39:19.466904Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-3528ae6a6448",
+        "type": "multiple_choice",
+        "content": "It provides us with the opportunity to engage with (<b>24</b>) _______ traditions, cuisines, languages, and perspectives.",
+        "options": [
+          {
+            "id": "A",
+            "content": "diverse",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "diversely",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "diversify",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "diversity",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466919Z",
+        "updatedAt": "2026-01-07T17:39:19.466921Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-319f8408dd3e",
+        "type": "multiple_choice",
+        "content": "Interactions with individuals from (<b>25</b>) _______ facilitate a more comprehensive understanding of the world around us.",
+        "options": [
+          {
+            "id": "A",
+            "content": "backgrounds various cultural",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "various cultural backgrounds",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "cultural backgrounds various",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "cultural various backgrounds",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466935Z",
+        "updatedAt": "2026-01-07T17:39:19.466937Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-d286cff148a0",
+        "type": "multiple_choice",
+        "content": "For example, celebrations (<b>26</b>) _______ Diwali, Chinese New Year, and Thanksgiving serve not only to unite different cultures but also to impart knowledge regarding one another’s customs.",
+        "options": [
+          {
+            "id": "A",
+            "content": "to include",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "included",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "which included",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "including",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466950Z",
+        "updatedAt": "2026-01-07T17:39:19.466951Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-9469a02dc777",
+        "type": "multiple_choice",
+        "content": "Nevertheless, it is paramount to approach others’ cultures (<b>27</b>) _______ open-mindedness and respect.",
+        "options": [
+          {
+            "id": "A",
+            "content": "by\nwith",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "from",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "for",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466964Z",
+        "updatedAt": "2026-01-07T17:39:19.466966Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-2a8185e44d62",
+        "type": "multiple_choice",
+        "content": "as this attitude is essential for (<b>28</b>) _______ harmony and unity within our communities.",
+        "options": [
+          {
+            "id": "A",
+            "content": "developing",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "creating",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "fostering",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "nurturing",
+            "isCorrect": true
+          }
+        ],
+        "correctAnswer": "D",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466979Z",
+        "updatedAt": "2026-01-07T17:39:19.466980Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-5dc53802e198",
+        "type": "multiple_choice",
+        "content": "Embracing multiculturalism not only cultivates an appreciation for the distinctiveness of each culture but also contributes to the development of a more inclusive and vibrant community for all individuals (<b>29</b>) _______.",
+        "options": [
+          {
+            "id": "A",
+            "content": "participating",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "to participating",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "to participate",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "participate",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.466994Z",
+        "updatedAt": "2026-01-07T17:39:19.466995Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-ef23bf0561b5",
+        "type": "multiple_choice",
+        "content": "Hi Taylor,<br>a - I also appreciate you recommending those support groups - they turned out to be more helpful than I expected.<br>b - Your advice and encouragement really helped when I needed it.<br>c - I just wanted to say thank you for being there for me during such a tough time.<br>d - Let’s catch up soon - maybe over coffee?<br>e - I’m still taking things day by day, but having your support made a big difference. Thanks again for everything. Alex",
+        "options": [
+          {
+            "id": "A",
+            "content": "c - e - b - a – d",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "c - a - b - e – d",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "c - b - a - e – d",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "e - c - b - a – d\n<b> </b>",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467008Z",
+        "updatedAt": "2026-01-07T17:39:19.467009Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-14f5a8dba8e8",
+        "type": "multiple_choice",
+        "content": "<br>a - Alex: It starts at 5 PM. Hope you can make it!<br>b - Alex: Hey, Jamie, do you want to come to my birthday party this Saturday?<br>c - Jamie: Sure, that sounds fun! What time does it start?",
+        "options": [
+          {
+            "id": "A",
+            "content": "b - a – c",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "b - c – a",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "c - b – a",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "a - b – c",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467021Z",
+        "updatedAt": "2026-01-07T17:39:19.467023Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-3024fdc782e9",
+        "type": "multiple_choice",
+        "content": "<br>a - It often starts with the excitement of being in a new place, followed by feelings of confusion and frustration as differences become more apparent.<br>b - As time passes, adapting becomes easier, and many even learn to appreciate or blend the new culture with their own.<br>c - Culture shock is a common experience when moving to a different country or culture, as it involves adjusting to unfamiliar norms and practices.<br>d - For instance, language barriers, customs, and different social norms can make even everyday tasks challenging.<br>e - Eventually, a sense of balance is found as people grow more accustomed to their surroundings, resulting in personal growth and a broader perspective.",
+        "options": [
+          {
+            "id": "A",
+            "content": "c - a - d - b – e",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "a - c - d - e – b",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "b - a - e - c – d",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "c - d - a - b – e\n<b> </b>",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467035Z",
+        "updatedAt": "2026-01-07T17:39:19.467037Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-a162a527c367",
+        "type": "multiple_choice",
+        "content": "<br>a - This includes reducing waste by recycling, conserving water through careful usage, and switching to renewable energy sources like solar and wind, all of which help to protect the planet for future generations.<br>b - Green living emphasizes a lifestyle focused on sustainability, encouraging people to make environmentally conscious choices that minimize harm to the Earth.<br>c - Small everyday actions, such as using reusable bags, turning off lights when not in use, and choosing energy- efficient appliances, can have a big impact on reducing your carbon footprint.<br>d - Many individuals are now embracing green practices in their daily routines, such as reducing plastic use, supporting eco-friendly businesses, and conserving energy at home.<br>e - By incorporating these habits into daily life, people can collectively help reduce pollution and conserve natural resources, contributing to a cleaner and healthier environment.",
+        "options": [
+          {
+            "id": "A",
+            "content": "e - a - c - d – b",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "a - b - c - e – d",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "b - d - a - c – e",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "d - c - b - e – a\n<b> </b>",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467052Z",
+        "updatedAt": "2026-01-07T17:39:19.467053Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-161479be1f0b",
+        "type": "multiple_choice",
+        "content": "<br>a - An: True! But I think it’s important to verify the information. Still, when used right, it saves a lot of time and makes things more efficient.<br>b - Binh: Not exactly, but it’s a powerful support tool. I mean, it’s great to have something ready to respond whenever you need it, right?<br>c - An: Hey Binh, have you been using ChatGPT lately?<br>d - An: I quite agree with you. Sometimes, when I’m stuck on a report or need a clear explanation of a tough topic, ChatGPT really helps. Do you think it can completely replace human interaction?<br>e - Binh: Yeah, I use it a lot! It’s really helpful when I need quick information or brainstorming ideas.",
+        "options": [
+          {
+            "id": "A",
+            "content": "c - d - e - b – a",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "c - d - b - a – e",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "c - e - d - b – a",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "c - e - b - a – d",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-101403109c75",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467066Z",
+        "updatedAt": "2026-01-07T17:39:19.467068Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-db02bb8c0bce",
+        "type": "multiple_choice",
+        "content": "It helps prevent (<b>35</b>) _______ chronic diseases, boosts mental health, and improves overall well- being.",
+        "options": [
+          {
+            "id": "A",
+            "content": "others",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "another",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "many",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "much",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-33823957508b",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467080Z",
+        "updatedAt": "2026-01-07T17:39:19.467082Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-0053d3c8493b",
+        "type": "multiple_choice",
+        "content": "It’s a fun way to stay fit and (<b>36</b>) _______ new people.",
+        "options": [
+          {
+            "id": "A",
+            "content": "join in",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "meet up",
+            "isCorrect": true
+          },
+          {
+            "id": "C",
+            "content": "run into",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "hang out",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "B",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-33823957508b",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467094Z",
+        "updatedAt": "2026-01-07T17:39:19.467095Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-22ef39d94a48",
+        "type": "multiple_choice",
+        "content": "Drink (<b>37</b>) _______ water throughout the day to keep your body functioning properly.",
+        "options": [
+          {
+            "id": "A",
+            "content": "due to",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "across from",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "plenty of",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "instead of",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-33823957508b",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467108Z",
+        "updatedAt": "2026-01-07T17:39:19.467109Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-4db0b620d522",
+        "type": "multiple_choice",
+        "content": "Eat a variety of fruits, vegetables, whole grains, and lean proteins to maintain a (<b>38</b>) _______ diet.",
+        "options": [
+          {
+            "id": "A",
+            "content": "ample",
+            "isCorrect": false
+          },
+          {
+            "id": "B",
+            "content": "strict",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "balanced",
+            "isCorrect": true
+          },
+          {
+            "id": "D",
+            "content": "heavy",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "C",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-33823957508b",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467121Z",
+        "updatedAt": "2026-01-07T17:39:19.467122Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-cf5a757768d6",
+        "type": "multiple_choice",
+        "content": "Start (<b>39</b>) _______ these tips into your routine to see improvements in your health and energy levels.",
+        "options": [
+          {
+            "id": "A",
+            "content": "incorporating",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "isolating",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "ignoring",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "removing",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-33823957508b",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467136Z",
+        "updatedAt": "2026-01-07T17:39:19.467137Z",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "id": "q-eng-0773e3218b11",
+        "type": "multiple_choice",
+        "content": "Staying active (<b>40</b>) _______ mental health and improves physical health.",
+        "options": [
+          {
+            "id": "A",
+            "content": "enhances",
+            "isCorrect": true
+          },
+          {
+            "id": "B",
+            "content": "decreases",
+            "isCorrect": false
+          },
+          {
+            "id": "C",
+            "content": "reduces",
+            "isCorrect": false
+          },
+          {
+            "id": "D",
+            "content": "maintains",
+            "isCorrect": false
+          }
+        ],
+        "correctAnswer": "A",
+        "explanation": "",
+        "difficulty": "medium",
+        "linkedPassageId": "passage-eng-33823957508b",
+        "subject": "Tiếng Anh",
+        "points": 0.25,
+        "isPublic": true,
+        "createdBy": "u_teacher_01",
+        "createdAt": "2026-01-07T17:39:19.467149Z",
+        "updatedAt": "2026-01-07T17:39:19.467150Z",
+        "tags": [
+          "reading"
+        ]
+      }
+    ],
+    "examQuestions": [
+      {
+        "id": "eq-eng-fb028357a035",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-ac9094690132",
+        "order": 1,
+        "section": "Câu 1",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466356Z",
+        "updatedAt": "2026-01-07T17:39:19.466359Z"
+      },
+      {
+        "id": "eq-eng-08031541e0a2",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-575fdf40e150",
+        "order": 2,
+        "section": "Câu 2",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466387Z",
+        "updatedAt": "2026-01-07T17:39:19.466389Z"
+      },
+      {
+        "id": "eq-eng-d2f4fad53e42",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-f45568f3659e",
+        "order": 3,
+        "section": "Câu 3",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466415Z",
+        "updatedAt": "2026-01-07T17:39:19.466418Z"
+      },
+      {
+        "id": "eq-eng-4b6dd1954de5",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-d5313e982275",
+        "order": 4,
+        "section": "Câu 4",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466446Z",
+        "updatedAt": "2026-01-07T17:39:19.466447Z"
+      },
+      {
+        "id": "eq-eng-36e47f5780cf",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-44fa55e35103",
+        "order": 5,
+        "section": "Câu 5",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466462Z",
+        "updatedAt": "2026-01-07T17:39:19.466463Z"
+      },
+      {
+        "id": "eq-eng-a6055cd4b001",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-8d4fb7b933b3",
+        "order": 6,
+        "section": "Câu 6",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466476Z",
+        "updatedAt": "2026-01-07T17:39:19.466478Z"
+      },
+      {
+        "id": "eq-eng-11c36b5ebf84",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-c586764b2f8f",
+        "order": 7,
+        "section": "Câu 7",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466491Z",
+        "updatedAt": "2026-01-07T17:39:19.466493Z"
+      },
+      {
+        "id": "eq-eng-2e7b7b9c1cc5",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-5ee3c052c146",
+        "order": 8,
+        "section": "Câu 8",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466506Z",
+        "updatedAt": "2026-01-07T17:39:19.466507Z"
+      },
+      {
+        "id": "eq-eng-3af272caf8fd",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-f8abf547354c",
+        "order": 9,
+        "section": "Câu 9",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466520Z",
+        "updatedAt": "2026-01-07T17:39:19.466522Z"
+      },
+      {
+        "id": "eq-eng-bf15d83e32c8",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-41ff52f4bbf9",
+        "order": 10,
+        "section": "Câu 10",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466536Z",
+        "updatedAt": "2026-01-07T17:39:19.466538Z"
+      },
+      {
+        "id": "eq-eng-ceb786ff32b4",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-ec9541a82e4e",
+        "order": 11,
+        "section": "Câu 11",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466551Z",
+        "updatedAt": "2026-01-07T17:39:19.466552Z"
+      },
+      {
+        "id": "eq-eng-8a0639169115",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-fb7540416d02",
+        "order": 12,
+        "section": "Câu 12",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466565Z",
+        "updatedAt": "2026-01-07T17:39:19.466567Z"
+      },
+      {
+        "id": "eq-eng-794ecc17e0e4",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-592af3236041",
+        "order": 13,
+        "section": "Câu 13",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466579Z",
+        "updatedAt": "2026-01-07T17:39:19.466581Z"
+      },
+      {
+        "id": "eq-eng-134d78f4675e",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-b3108fe9f548",
+        "order": 14,
+        "section": "Câu 14",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466593Z",
+        "updatedAt": "2026-01-07T17:39:19.466595Z"
+      },
+      {
+        "id": "eq-eng-b167122de783",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-88bcc4a4fe5a",
+        "order": 15,
+        "section": "Câu 15",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466779Z",
+        "updatedAt": "2026-01-07T17:39:19.466781Z"
+      },
+      {
+        "id": "eq-eng-b689d09097ef",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-391b56e4abc1",
+        "order": 16,
+        "section": "Câu 16",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466800Z",
+        "updatedAt": "2026-01-07T17:39:19.466801Z"
+      },
+      {
+        "id": "eq-eng-d647e3c93553",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-6ee34f4cc604",
+        "order": 17,
+        "section": "Câu 17",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466824Z",
+        "updatedAt": "2026-01-07T17:39:19.466825Z"
+      },
+      {
+        "id": "eq-eng-ff31dc3af4c5",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-8bc484d23960",
+        "order": 18,
+        "section": "Câu 18",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466839Z",
+        "updatedAt": "2026-01-07T17:39:19.466841Z"
+      },
+      {
+        "id": "eq-eng-b82a07436d5f",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-4e19c7403a72",
+        "order": 19,
+        "section": "Câu 19",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466853Z",
+        "updatedAt": "2026-01-07T17:39:19.466855Z"
+      },
+      {
+        "id": "eq-eng-37317698e43b",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-99955354d814",
+        "order": 20,
+        "section": "Câu 20",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466867Z",
+        "updatedAt": "2026-01-07T17:39:19.466869Z"
+      },
+      {
+        "id": "eq-eng-894e82b8d5cf",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-658e8e815a9f",
+        "order": 21,
+        "section": "Câu 21",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466881Z",
+        "updatedAt": "2026-01-07T17:39:19.466883Z"
+      },
+      {
+        "id": "eq-eng-d4edbbc986a1",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-84b1b5688a9d",
+        "order": 22,
+        "section": "Câu 22",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466895Z",
+        "updatedAt": "2026-01-07T17:39:19.466896Z"
+      },
+      {
+        "id": "eq-eng-faa62d80730f",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-95c9150b3bad",
+        "order": 23,
+        "section": "Câu 23",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466908Z",
+        "updatedAt": "2026-01-07T17:39:19.466910Z"
+      },
+      {
+        "id": "eq-eng-2f83f68d77e7",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-3528ae6a6448",
+        "order": 24,
+        "section": "Câu 24",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466925Z",
+        "updatedAt": "2026-01-07T17:39:19.466927Z"
+      },
+      {
+        "id": "eq-eng-1668b6c70229",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-319f8408dd3e",
+        "order": 25,
+        "section": "Câu 25",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466941Z",
+        "updatedAt": "2026-01-07T17:39:19.466943Z"
+      },
+      {
+        "id": "eq-eng-049110192dd4",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-d286cff148a0",
+        "order": 26,
+        "section": "Câu 26",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466955Z",
+        "updatedAt": "2026-01-07T17:39:19.466957Z"
+      },
+      {
+        "id": "eq-eng-05dc2b43f113",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-9469a02dc777",
+        "order": 27,
+        "section": "Câu 27",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466970Z",
+        "updatedAt": "2026-01-07T17:39:19.466972Z"
+      },
+      {
+        "id": "eq-eng-b820c466de73",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-2a8185e44d62",
+        "order": 28,
+        "section": "Câu 28",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.466985Z",
+        "updatedAt": "2026-01-07T17:39:19.466986Z"
+      },
+      {
+        "id": "eq-eng-4dbaf7579ecf",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-5dc53802e198",
+        "order": 29,
+        "section": "Câu 29",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467000Z",
+        "updatedAt": "2026-01-07T17:39:19.467001Z"
+      },
+      {
+        "id": "eq-eng-7b72cd68297c",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-ef23bf0561b5",
+        "order": 30,
+        "section": "Câu 30",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467013Z",
+        "updatedAt": "2026-01-07T17:39:19.467015Z"
+      },
+      {
+        "id": "eq-eng-ea65d00b5654",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-14f5a8dba8e8",
+        "order": 31,
+        "section": "Câu 31",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467027Z",
+        "updatedAt": "2026-01-07T17:39:19.467029Z"
+      },
+      {
+        "id": "eq-eng-c6c0d60b6318",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-3024fdc782e9",
+        "order": 32,
+        "section": "Câu 32",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467041Z",
+        "updatedAt": "2026-01-07T17:39:19.467043Z"
+      },
+      {
+        "id": "eq-eng-d492205b4cf0",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-a162a527c367",
+        "order": 33,
+        "section": "Câu 33",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467058Z",
+        "updatedAt": "2026-01-07T17:39:19.467060Z"
+      },
+      {
+        "id": "eq-eng-27fe95216b91",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-161479be1f0b",
+        "order": 34,
+        "section": "Câu 34",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467072Z",
+        "updatedAt": "2026-01-07T17:39:19.467074Z"
+      },
+      {
+        "id": "eq-eng-3884b26ae194",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-db02bb8c0bce",
+        "order": 35,
+        "section": "Câu 35",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467086Z",
+        "updatedAt": "2026-01-07T17:39:19.467088Z"
+      },
+      {
+        "id": "eq-eng-6c6b9a6b771f",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-0053d3c8493b",
+        "order": 36,
+        "section": "Câu 36",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467100Z",
+        "updatedAt": "2026-01-07T17:39:19.467101Z"
+      },
+      {
+        "id": "eq-eng-5d6bb306d4df",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-22ef39d94a48",
+        "order": 37,
+        "section": "Câu 37",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467113Z",
+        "updatedAt": "2026-01-07T17:39:19.467115Z"
+      },
+      {
+        "id": "eq-eng-a18bd60339d1",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-4db0b620d522",
+        "order": 38,
+        "section": "Câu 38",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467127Z",
+        "updatedAt": "2026-01-07T17:39:19.467128Z"
+      },
+      {
+        "id": "eq-eng-9e34e235e9d9",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-cf5a757768d6",
+        "order": 39,
+        "section": "Câu 39",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467142Z",
+        "updatedAt": "2026-01-07T17:39:19.467143Z"
+      },
+      {
+        "id": "eq-eng-0812a9ba6a3f",
+        "examId": "exam-eng-6e6d7ff59a0d",
+        "questionId": "q-eng-0773e3218b11",
+        "order": 40,
+        "section": "Câu 40",
+        "maxScore": 0.25,
+        "createdAt": "2026-01-07T17:39:19.467155Z",
+        "updatedAt": "2026-01-07T17:39:19.467157Z"
+      }
+    ]
+  },
+  "stats": {
+    "totalQuestions": 40,
+    "totalPassages": 5,
+    "totalPoints": 10.0,
+    "questionsWithPassage": 40,
+    "questionsWithoutPassage": 0,
+    "clozeQuestions": 5,
+    "readingQuestions": 40
+  }
+}
