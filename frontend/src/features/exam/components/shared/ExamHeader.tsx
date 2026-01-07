@@ -11,6 +11,7 @@ interface ExamHeaderProps {
   onSubmit: () => void;
   onExit: () => void;
   isSubmitting?: boolean;
+  isPreviewMode?: boolean; // Teacher preview mode
 }
 
 const ExamHeader: React.FC<ExamHeaderProps> = ({
@@ -20,6 +21,7 @@ const ExamHeader: React.FC<ExamHeaderProps> = ({
   onSubmit,
   onExit,
   isSubmitting = false,
+  isPreviewMode = false,
 }) => {
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
@@ -70,48 +72,90 @@ const ExamHeader: React.FC<ExamHeaderProps> = ({
 
         {/* Right: Timer & Actions */}
         <div className="flex items-center gap-3">
-          {/* Timer Badge */}
-          <div
-            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl border ${getTimerColor()} transition-colors`}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {/* Timer Badge - Hidden in preview mode */}
+          {!isPreviewMode && (
+            <div
+              className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl border ${getTimerColor()} transition-colors`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span className="font-mono text-lg font-bold tracking-wider">
-              {formatTime(timeRemaining)}
-            </span>
-          </div>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span className="font-mono text-lg font-bold tracking-wider">
+                {formatTime(timeRemaining)}
+              </span>
+            </div>
+          )}
+
+          {/* Preview Mode Badge */}
+          {isPreviewMode && (
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl border bg-blue-50 border-blue-200 text-blue-700">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+              <span className="text-sm font-semibold">Chế độ xem trước</span>
+            </div>
+          )}
 
           <div className="h-8 w-px bg-gray-200 mx-1 hidden md:block"></div>
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              onClick={onExit}
-              className="px-4 py-2 h-10 text-sm font-medium border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl"
-            >
-              Thoát
-            </Button>
+            {isPreviewMode ? (
+              // Preview mode: Only back button
+              <Button
+                variant="outline"
+                onClick={onExit}
+                className="px-6 py-2 h-10 text-sm font-medium border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl"
+              >
+                ← Quay lại Dashboard
+              </Button>
+            ) : (
+              // Normal mode: Exit and Submit buttons
+              <>
+                <Button
+                  variant="outline"
+                  onClick={onExit}
+                  className="px-4 py-2 h-10 text-sm font-medium border-gray-300 text-gray-700 hover:bg-gray-50 rounded-xl"
+                >
+                  Thoát
+                </Button>
 
-            <Button
-              variant="primary"
-              onClick={onSubmit}
-              disabled={isSubmitting}
-              className="px-6 py-2 h-10 text-sm font-bold bg-[#00747F] hover:bg-[#005f68] text-white rounded-xl shadow-md shadow-teal-200"
-            >
-              {isSubmitting ? "Đang nộp..." : "Nộp bài"}
-            </Button>
+                <Button
+                  variant="primary"
+                  onClick={onSubmit}
+                  disabled={isSubmitting}
+                  className="px-6 py-2 h-10 text-sm font-bold bg-[#00747F] hover:bg-[#005f68] text-white rounded-xl shadow-md shadow-teal-200"
+                >
+                  {isSubmitting ? "Đang nộp..." : "Nộp bài"}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

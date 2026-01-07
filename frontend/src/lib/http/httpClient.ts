@@ -3,8 +3,14 @@
  * Centralized HTTP client with automatic token handling, error handling, and retries
  */
 
-import { API_CONFIG, HttpMethod, HttpStatus, ApiError, RequestConfig } from './apiConfig';
-import { STORAGE_KEYS } from '@/services/auth/constants';
+import {
+  API_CONFIG,
+  HttpMethod,
+  HttpStatus,
+  ApiError,
+  RequestConfig,
+} from "./apiConfig";
+import { STORAGE_KEYS } from "@/services/auth/constants";
 
 class HttpClient {
   private baseURL: string;
@@ -19,7 +25,7 @@ class HttpClient {
    * Get access token from localStorage
    */
   private getAccessToken(): string | null {
-    if (typeof window === 'undefined') return null;
+    if (typeof window === "undefined") return null;
     return localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
   }
 
@@ -27,23 +33,29 @@ class HttpClient {
    * Get refresh token from localStorage
    */
   private getRefreshToken(): string | null {
-    if (typeof window === 'undefined') return null;
+    if (typeof window === "undefined") return null;
     return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
   }
 
   /**
    * Build headers for request
    */
-  private buildHeaders(requiresAuth: boolean = false, customHeaders?: HeadersInit): Headers {
-    const headers = new Headers({
-      'Content-Type': 'application/json',
-      ...customHeaders,
-    });
+  private buildHeaders(
+    requiresAuth: boolean = false,
+    customHeaders?: HeadersInit,
+    body?: any
+  ): Headers {
+    const headers = new Headers(customHeaders);
+
+    // Don't set Content-Type for FormData - browser will set it with boundary
+    if (!(body instanceof FormData)) {
+      headers.set("Content-Type", "application/json");
+    }
 
     if (requiresAuth) {
       const token = this.getAccessToken();
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set("Authorization", `Bearer ${token}`);
       }
     }
 
@@ -56,9 +68,9 @@ class HttpClient {
   private async handleResponse<T>(response: Response): Promise<T> {
     // Parse response body
     let data: any;
-    const contentType = response.headers.get('content-type');
-    
-    if (contentType && contentType.includes('application/json')) {
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
       data = await response.json();
     } else {
       data = await response.text();
@@ -66,7 +78,7 @@ class HttpClient {
 
     // Handle error responses
     if (!response.ok) {
-      const message = data?.message || data || 'An error occurred';
+      const message = data?.message || data || "An error occurred";
       throw new ApiError(response.status, message, data);
     }
 
@@ -82,8 +94,8 @@ class HttpClient {
       if (!refreshToken) return null;
 
       const response = await fetch(`${this.baseURL}/auth/refresh-token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken }),
       });
 
@@ -97,7 +109,7 @@ class HttpClient {
 
       return newAccessToken;
     } catch (error) {
-      console.error('Token refresh failed:', error);
+      console.error("Token refresh failed:", error);
       return null;
     }
   }
@@ -119,8 +131,10 @@ class HttpClient {
       ...restConfig
     } = config;
 
-    const url = endpoint.startsWith('http') ? endpoint : `${this.baseURL}${endpoint}`;
-    const headers = this.buildHeaders(requiresAuth, customHeaders);
+    const url = endpoint.startsWith("http")
+      ? endpoint
+      : `${this.baseURL}${endpoint}`;
+    const headers = this.buildHeaders(requiresAuth, customHeaders, body);
 
     console.log(`🌐 HTTP ${method} ${url}`, { requiresAuth, hasBody: !!body });
 
@@ -132,7 +146,12 @@ class HttpClient {
       const response = await fetch(url, {
         method,
         headers,
-        body: body ? JSON.stringify(body) : undefined,
+        body:
+          body instanceof FormData
+            ? body
+            : body
+            ? JSON.stringify(body)
+            : undefined,
         signal: controller.signal,
         ...restConfig,
       });
@@ -142,26 +161,31 @@ class HttpClient {
       // Handle 401 Unauthorized - try to refresh token
       if (response.status === HttpStatus.UNAUTHORIZED && requiresAuth) {
         const newToken = await this.refreshAccessToken();
-        
+
         if (newToken) {
           // Retry request with new token
-          headers.set('Authorization', `Bearer ${newToken}`);
+          headers.set("Authorization", `Bearer ${newToken}`);
           const retryResponse = await fetch(url, {
             method,
             headers,
-            body: body ? JSON.stringify(body) : undefined,
+            body:
+              body instanceof FormData
+                ? body
+                : body
+                ? JSON.stringify(body)
+                : undefined,
             ...restConfig,
           });
           return this.handleResponse<T>(retryResponse);
         } else {
           // Token refresh failed - clear only auth data and redirect to login
-          if (typeof window !== 'undefined') {
+          if (typeof window !== "undefined") {
             localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
             localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
             localStorage.removeItem(STORAGE_KEYS.USER_DATA);
-            window.location.href = '/login';
+            window.location.href = "/login";
           }
-          throw new ApiError(401, 'Session expired. Please login again.');
+          throw new ApiError(401, "Session expired. Please login again.");
         }
       }
 
@@ -170,13 +194,13 @@ class HttpClient {
       clearTimeout(timeoutId);
 
       // Handle timeout
-      if (error.name === 'AbortError') {
-        throw new ApiError(408, 'Request timeout');
+      if (error.name === "AbortError") {
+        throw new ApiError(408, "Request timeout");
       }
 
       // Handle network errors
       if (error instanceof TypeError) {
-        throw new ApiError(0, 'Network error. Please check your connection.');
+        throw new ApiError(0, "Network error. Please check your connection.");
       }
 
       // Retry logic for specific errors
@@ -207,7 +231,7 @@ class HttpClient {
    * Delay helper for retry logic
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -220,21 +244,33 @@ class HttpClient {
   /**
    * POST request
    */
-  public post<T = any>(endpoint: string, body?: any, config?: RequestConfig): Promise<T> {
+  public post<T = any>(
+    endpoint: string,
+    body?: any,
+    config?: RequestConfig
+  ): Promise<T> {
     return this.request<T>(endpoint, HttpMethod.POST, { ...config, body });
   }
 
   /**
    * PUT request
    */
-  public put<T = any>(endpoint: string, body?: any, config?: RequestConfig): Promise<T> {
+  public put<T = any>(
+    endpoint: string,
+    body?: any,
+    config?: RequestConfig
+  ): Promise<T> {
     return this.request<T>(endpoint, HttpMethod.PUT, { ...config, body });
   }
 
   /**
    * PATCH request
    */
-  public patch<T = any>(endpoint: string, body?: any, config?: RequestConfig): Promise<T> {
+  public patch<T = any>(
+    endpoint: string,
+    body?: any,
+    config?: RequestConfig
+  ): Promise<T> {
     return this.request<T>(endpoint, HttpMethod.PATCH, { ...config, body });
   }
 

@@ -2,12 +2,25 @@ const express = require("express");
 const router = express.Router();
 const ExamController = require("../controllers/ExamController");
 const { authenticate, authorize } = require("../middleware");
+const upload = require("../middleware/upload");
 
 // All routes require authentication
 router.use(authenticate);
 
 // Teacher routes
 router.post("/", authorize("teacher"), ExamController.createExam);
+router.post(
+  "/upload-file",
+  authorize("teacher"),
+  upload.single("file"),
+  ExamController.uploadExamFile
+);
+router.post(
+  "/process-pdf",
+  authorize("teacher"),
+  ExamController.processExamFromPdf
+);
+router.get("/my-exams", authorize("teacher"), ExamController.getMyExams);
 router.put("/:examId", authorize("teacher"), ExamController.updateExam);
 router.delete("/:examId", authorize("teacher"), ExamController.deleteExam);
 router.post(
@@ -52,7 +65,7 @@ router.post(
 router.get("/:examId", ExamController.getExamDetail);
 
 // NEW: Student routes for exam taking
-router.post('/:examId/submissions', ExamController.createSubmission);
-router.get('/:examId/my-submissions', ExamController.getMySubmissions);
+router.post("/:examId/submissions", ExamController.createSubmission);
+router.get("/:examId/my-submissions", ExamController.getMySubmissions);
 
 module.exports = router;

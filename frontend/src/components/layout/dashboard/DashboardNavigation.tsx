@@ -29,18 +29,29 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
     if (pathname) {
       const pathSegments = pathname.split("/").filter(Boolean);
       // pathSegments: ['dashboard', 'forum', 'article', '123']
+      // hoặc: ['dashboard', 'teacher', 'exams']
+      
       if (pathSegments.length >= 2) {
-        const section = pathSegments[1]; // 'forum', 'classes', 'exams', etc.
+        let section = pathSegments[1]; // 'forum', 'classes', 'exams', 'teacher', etc.
+        
+        // Nếu là teacher route (dashboard/teacher/exams)
+        if (section === "teacher" && pathSegments.length >= 3) {
+          section = pathSegments[2]; // 'exams', 'classes'
+        }
+        
         // Map URL segments to tab IDs
         const tabMapping: { [key: string]: string } = {
           forum: "forum",
           classes: "classes",
+          teacher: "classes", // Handle /dashboard/teacher/classes
           exams: "exams",
           "question-bank": "question-bank",
           contests: "contests",
           practice: "practice",
           history: "history",
           students: "students",
+          grading: "grading",
+          users: "users",
         };
         const mappedTab = tabMapping[section];
         if (mappedTab && mappedTab !== activeTab) {
@@ -62,8 +73,15 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
     // Navigate to the route
     if (tabId === "overview") {
       router.push("/dashboard");
+    } else if (tabId === "classes" && userRole === "teacher") {
+      router.push("/dashboard/teacher/classes");
     } else {
-      router.push(`/dashboard/${tabId}`);
+      // Teacher có route riêng cho exams và classes
+      if (userRole === "teacher" && (tabId === "exams" || tabId === "classes")) {
+        router.push(`/dashboard/teacher/${tabId}`);
+      } else {
+        router.push(`/dashboard/${tabId}`);
+      }
     }
   };
   const getTabsByRole = (): NavigationTab[] => {
@@ -124,6 +142,25 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
                 strokeLinejoin="round"
                 strokeWidth={2}
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          ),
+        },
+        {
+          id: "users",
+          label: "Người dùng",
+          icon: (
+            <svg
+              className={iconClasses}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
               />
             </svg>
           ),
@@ -227,26 +264,7 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
               />
             </svg>
           ),
-        },
-        {
-          id: "students",
-          label: "Học sinh",
-          icon: (
-            <svg
-              className={iconClasses}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
-          ),
-        },
+        }
       ];
     }
 
