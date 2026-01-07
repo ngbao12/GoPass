@@ -3,17 +3,22 @@
 import React from "react";
 import AdminDashboardView from "@/features/dashboard/components/admin/AdminDashboardView";
 import StudentDashboardView from "@/features/dashboard/components/student/overview/StudentDashboardView";
-
+import TeacherOverviewView from "@/features/dashboard/components/teacher/overview/TeacherOverviewView";
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 
 const DashboardPage: React.FC = () => {
   const { userRole, isLoading } = useDashboard();
-  };
 
   const renderDashboardByRole = () => {
-    // Wait for loading to complete and userRole to be available
     if (isLoading || !userRole) {
-      return null;
+      return (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Đang tải...</p>
+          </div>
+        </div>
+      );
     }
 
     switch (userRole) {
@@ -21,7 +26,7 @@ const DashboardPage: React.FC = () => {
         return <AdminDashboardView />;
 
       case "teacher":
-        return renderTeacherContent();
+        return <TeacherOverviewView />;
 
       case "student":
         return <StudentDashboardView />;
@@ -29,7 +34,12 @@ const DashboardPage: React.FC = () => {
       default:
         return (
           <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-            <p className="text-gray-600">Invalid user role</p>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Unknown User Role
+            </h2>
+            <p className="text-gray-600">
+              Please contact administrator for assistance.
+            </p>
           </div>
         );
     }
