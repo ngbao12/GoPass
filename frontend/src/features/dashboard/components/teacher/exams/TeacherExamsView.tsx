@@ -434,6 +434,7 @@ const TeacherExamsView: React.FC = () => {
       {/* Modals */}
       {showCreateModal && (
         <CreateExamModal
+          isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreateExam}
         />

@@ -15,6 +15,9 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
   onClose,
   onSubmit,
 }) => {
+  // Early return if modal is not open
+  if (!isOpen) return null;
+
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileInfo, setUploadedFileInfo] = useState<any>(null);
