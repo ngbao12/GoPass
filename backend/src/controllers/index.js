@@ -10,4 +10,5 @@ module.exports = {
   ContestController: require('./ContestController'),
   AdminController: require('./AdminController'),
   StudentController: require('./StudentController'),
+  TeacherController: require('./TeacherController'),
 };
