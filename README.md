@@ -2,14 +2,26 @@
 
 A comprehensive learning management system built with Next.js (Frontend) and Node.js / Express / MongoDB (Backend).
 
-## 📋 Table of Contents
-- Prerequisites
-- Installation
-- Running the Application
-- Testing with JSON Server
-- Project Structure
-- Test Accounts
-- Troubleshooting
+## ✨ Main Features
+
+### 👨‍🏫 For Teachers
+- 📚 **Class Management** - Create and manage multiple classes
+- 📝 **Exam Builder** - Create exams with multiple question types (Multiple Choice, True/False, Essay)
+- 📊 **Auto-Grading** - Automatic grading for objective questions
+- 📈 **Analytics Dashboard** - Track student performance and engagement
+- 👥 **Student Management** - View and manage class rosters
+
+### 👨‍🎓 For Students
+- 📖 **Class Enrollment** - Join classes using unique class codes
+- ✍️ **Take Exams** - Complete assignments with time tracking
+- 🎯 **Instant Feedback** - View grades and feedback immediately
+- 📊 **Performance Tracking** - Monitor your progress over time
+- 🔔 **Notifications** - Stay updated on new assignments
+
+### 🔐 For Admins
+- 👥 **User Management** - Manage teachers and students
+- 📊 **System Analytics** - Overall platform statistics
+- ⚙️ **Configuration** - System-wide settings and controls
 
 ## 🔧 Prerequisites
 Before you begin, ensure you have installed:
