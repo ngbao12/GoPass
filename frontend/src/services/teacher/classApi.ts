@@ -456,4 +456,35 @@ export const classApi = {
       };
     }
   },
+
+  // PUT /classes/:classId/assignments/:assignmentId - Update class assignment
+  updateAssignment: async (classId: string, assignmentId: string, updateData: any): Promise<ApiResponse<any>> => {
+    try {
+      const response = await httpClient.put<{ success: boolean; data: any; message?: string }>(
+        `/classes/${classId}/assignments/${assignmentId}`,
+        updateData,
+        { requiresAuth: true }
+      );
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: null,
+          error: response?.message || 'Failed to update assignment'
+        };
+      }
+
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error updating assignment:', error);
+      return {
+        success: false,
+        data: null,
+        error: error.message || 'Failed to update assignment'
+      };
+    }
+  },
 };

@@ -141,6 +141,25 @@ class ClassController {
     }
   }
 
+  // PUT /classes/:classId/assignments/:assignmentId
+  async updateAssignment(req, res) {
+    try {
+      const { classId, assignmentId } = req.params;
+      const teacherId = req.user.userId;
+      const result = await ClassService.updateAssignment(classId, teacherId, assignmentId, req.body);
+      res.status(200).json({
+        success: true,
+        data: result,
+        message: 'Assignment updated successfully',
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
   // PUT /classes/:classId
   async updateClass(req, res) {
     try {

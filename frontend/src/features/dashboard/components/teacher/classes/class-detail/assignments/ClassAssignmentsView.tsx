@@ -14,9 +14,18 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
   const assignments = classDetail.assignments || [];
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<any | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+  const [editData, setEditData] = useState({
+    startTime: '',
+    endTime: '',
+    attemptLimit: 1,
+    allowLateSubmission: false,
+  });
 
   console.log('📊 ClassAssignmentsView - Assignments:', assignments);
   console.log('📊 ClassAssignmentsView - Length:', assignments.length);
@@ -63,14 +72,12 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900">{assignment.title || 'Không có tiêu đề'}</h4>
-                        <p className="text-sm text-gray-600">
-                          {assignment.questionCount || 0} câu hỏi
-                        </p>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
-                      <div className="flex items-center gap-1">
+                    {/* First Row: Start, End, Duration, Questions */}
+                    <div className="flex items-center gap-4 mt-3 text-sm text-gray-600 overflow-x-auto">
+                      <div className="flex items-center gap-1 whitespace-nowrap">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -78,7 +85,7 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                           Bắt đầu: {assignment.startTime ? new Date(assignment.startTime).toLocaleDateString('vi-VN') : 'N/A'}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 whitespace-nowrap">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -86,17 +93,39 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                           Kết thúc: {assignment.endTime ? new Date(assignment.endTime).toLocaleDateString('vi-VN') : 'N/A'}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 whitespace-nowrap">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span>{assignment.duration || 0} phút</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 whitespace-nowrap">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>{assignment.questionCount || 0} câu hỏi</span>
+                      </div>
+                    </div>
+
+                    {/* Second Row: Submissions, Attempt Limit, Late Submission */}
+                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 overflow-x-auto">
+                      <div className="flex items-center gap-1 whitespace-nowrap">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span>{assignment.submittedCount || 0} bài nộp</span>
+                      </div>
+                      <div className="flex items-center gap-1 whitespace-nowrap border-l border-gray-300 pl-4">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span>{assignment.attemptLimit || 1} lần làm bài</span>
+                      </div>
+                      <div className="flex items-center gap-1 whitespace-nowrap">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{assignment.allowLateSubmission ? '✓ Cho phép nộp muộn' : 'Không cho phép nộp muộn'}</span>
                       </div>
                     </div>
                   </div>
@@ -111,7 +140,20 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                     }`}>
                       {assignment.status === 'ongoing' ? 'Đang diễn ra' : assignment.status === 'upcoming' ? 'Sắp tới' : 'Đã kết thúc'}
                     </span>
-                    <button className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
+                    <button
+                      className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                      onClick={() => {
+                        setSelectedAssignment(assignment);
+                        setEditData({
+                          startTime: assignment.startTime ? new Date(assignment.startTime).toISOString().slice(0, 16) : '',
+                          endTime: assignment.endTime ? new Date(assignment.endTime).toISOString().slice(0, 16) : '',
+                          attemptLimit: assignment.attemptLimit || 1,
+                          allowLateSubmission: assignment.allowLateSubmission || false,
+                        });
+                        setEditError(null);
+                        setShowEditModal(true);
+                      }}
+                    >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
@@ -209,6 +251,125 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                   </>
                 ) : (
                   'Xóa'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Assignment Modal */}
+      {showEditModal && selectedAssignment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Chỉnh sửa đề giao</h3>
+              <p className="text-sm text-gray-600">Cập nhật thời gian, số lần làm bài và chính sách nộp bài</p>
+            </div>
+
+            {editError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700">{editError}</p>
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Thời gian bắt đầu
+                </label>
+                <input
+                  type="datetime-local"
+                  value={editData.startTime}
+                  onChange={(e) => setEditData({ ...editData, startTime: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Thời gian kết thúc
+                </label>
+                <input
+                  type="datetime-local"
+                  value={editData.endTime}
+                  onChange={(e) => setEditData({ ...editData, endTime: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Số lần làm bài tối đa
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={editData.attemptLimit}
+                  onChange={(e) => setEditData({ ...editData, attemptLimit: parseInt(e.target.value) || 1 })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
+                />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="allowLate"
+                  checked={editData.allowLateSubmission}
+                  onChange={(e) => setEditData({ ...editData, allowLateSubmission: e.target.checked })}
+                  className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                />
+                <label htmlFor="allowLate" className="text-sm font-medium text-gray-700">
+                  Cho phép nộp bài muộn
+                </label>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowEditModal(false)}
+                disabled={isEditing}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    setIsEditing(true);
+                    setEditError(null);
+                    const payload = {
+                      startTime: editData.startTime ? new Date(editData.startTime).toISOString() : selectedAssignment.startTime,
+                      endTime: editData.endTime ? new Date(editData.endTime).toISOString() : selectedAssignment.endTime,
+                      attemptLimit: editData.attemptLimit,
+                      allowLateSubmission: editData.allowLateSubmission,
+                    };
+                    const resp = await classApi.updateAssignment(classDetail.id, selectedAssignment.assignmentId || selectedAssignment._id, payload);
+                    if (resp.success) {
+                      setShowEditModal(false);
+                      setSelectedAssignment(null);
+                      onUpdate();
+                    } else {
+                      setEditError(resp.error || 'Không thể cập nhật đề giao');
+                    }
+                  } catch (e) {
+                    setEditError('Đã xảy ra lỗi khi cập nhật');
+                  } finally {
+                    setIsEditing(false);
+                  }
+                }}
+                disabled={isEditing}
+                className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isEditing ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    </svg>
+                    Đang lưu...
+                  </>
+                ) : (
+                  'Lưu thay đổi'
                 )}
               </button>
             </div>

@@ -28,5 +28,7 @@ router.get('/:classId/assignments', ClassController.getClassAssignments);
 router.get('/:classId/members', ClassController.getClassMembers);
 // Delete a specific assignment from a class
 router.delete('/:classId/assignments/:assignmentId', authorize('teacher'), ClassController.deleteAssignment);
+// Update a specific assignment
+router.put('/:classId/assignments/:assignmentId', authorize('teacher'), ClassController.updateAssignment);
 
 module.exports = router;
