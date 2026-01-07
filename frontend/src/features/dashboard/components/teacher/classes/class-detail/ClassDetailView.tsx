@@ -8,8 +8,9 @@ import ClassDetailHeader from "./ClassDetailHeader";
 import ClassDetailTabs from "./ClassDetailTabs";
 import ClassMembersView from "./members/ClassMembersView";
 import ClassProgressView from "./progress/ClassProgressView";
+import ClassAssignmentsView from "./assignments/ClassAssignmentsView";
 
-type TabType = "members" | "progress";
+type TabType = "members" | "progress" | "exams";
 
 const ClassDetailView: React.FC = () => {
   const router = useRouter();
@@ -112,6 +113,8 @@ const ClassDetailView: React.FC = () => {
         return <ClassMembersView classDetail={classDetail} onUpdate={loadClassDetail} />;
       case "progress":
         return <ClassProgressView classDetail={classDetail} />;
+      case "exams":
+        return <ClassAssignmentsView classDetail={classDetail} onUpdate={loadClassDetail} />;
       default:
         return <ClassMembersView classDetail={classDetail} onUpdate={loadClassDetail} />;
     }
