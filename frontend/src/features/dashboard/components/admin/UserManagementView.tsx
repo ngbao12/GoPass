@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { adminService, User, SystemMetrics } from "@/services/admin";
 import UserStatsGrid from "./UserStatsGrid";
@@ -48,7 +49,7 @@ const UserManagementView: React.FC = () => {
       setTotalPages(response.totalPages);
     } catch (error) {
       console.error('Error fetching users:', error);
-      alert('Không thể tải danh sách người dùng. Vui lòng thử lại.');
+      toast.error('Không thể tải danh sách người dùng. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -131,10 +132,12 @@ const UserManagementView: React.FC = () => {
       // Refresh metrics
       fetchMetrics();
 
-      alert(`Đã ${showConfirmDialog.newStatus === 'active' ? 'mở khóa' : 'khóa'} tài khoản thành công!`);
+      toast.success(
+        `Đã ${showConfirmDialog.newStatus === 'active' ? 'mở khóa' : 'khóa'} tài khoản thành công!`
+      );
     } catch (error) {
       console.error('Error updating user status:', error);
-      alert('Không thể cập nhật trạng thái. Vui lòng thử lại.');
+      toast.error('Không thể cập nhật trạng thái. Vui lòng thử lại.');
     } finally {
       setShowConfirmDialog(null);
     }
@@ -145,10 +148,12 @@ const UserManagementView: React.FC = () => {
 
     try {
       const result = await adminService.resetUserPassword(showConfirmDialog.user._id);
-      alert(result.message + '\n\nEmail đã được gửi đến người dùng.');
+      toast.success(result.message, {
+        description: 'Email đã được gửi đến người dùng.',
+      });
     } catch (error) {
       console.error('Error resetting password:', error);
-      alert('Không thể reset mật khẩu. Vui lòng thử lại.');
+      toast.error('Không thể reset mật khẩu. Vui lòng thử lại.');
     } finally {
       setShowConfirmDialog(null);
     }
