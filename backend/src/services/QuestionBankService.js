@@ -1,22 +1,22 @@
-const QuestionRepository = require('../repositories/QuestionRepository');
+const QuestionRepository = require("../repositories/QuestionRepository");
 
 class QuestionBankService {
   // Create question
   async createQuestion(teacherId, dto) {
-    const { 
-      type, 
-      content, 
-      options, 
-      correctAnswer, 
+    const {
+      type,
+      content,
+      options,
+      correctAnswer,
       explanation,
       linkedPassageId,
       image,
       tableData,
-      difficulty, 
-      subject, 
-      tags, 
-      points, 
-      isPublic 
+      difficulty,
+      subject,
+      tags,
+      points,
+      isPublic,
     } = dto;
 
     const question = await QuestionRepository.create({
@@ -28,7 +28,7 @@ class QuestionBankService {
       linkedPassageId,
       image,
       tableData,
-      difficulty: difficulty || 'medium',
+      difficulty: difficulty || "medium",
       subject,
       tags: tags || [],
       points: points || 1,
@@ -43,7 +43,7 @@ class QuestionBankService {
   async getQuestionDetail(questionId) {
     const question = await QuestionRepository.findById(questionId);
     if (!question) {
-      throw new Error('Question not found');
+      throw new Error("Question not found");
     }
 
     return question;
@@ -53,30 +53,30 @@ class QuestionBankService {
   async updateQuestion(questionId, teacherId, dto) {
     const question = await QuestionRepository.findById(questionId);
     if (!question) {
-      throw new Error('Question not found');
+      throw new Error("Question not found");
     }
 
     if (question.createdBy.toString() !== teacherId.toString()) {
-      throw new Error('Unauthorized to update this question');
+      throw new Error("Unauthorized to update this question");
     }
 
     const allowedFields = [
-      'type', 
-      'content', 
-      'options', 
-      'correctAnswer', 
-      'explanation',
-      'linkedPassageId',
-      'image',
-      'tableData',
-      'difficulty', 
-      'subject', 
-      'tags', 
-      'points', 
-      'isPublic'
+      "type",
+      "content",
+      "options",
+      "correctAnswer",
+      "explanation",
+      "linkedPassageId",
+      "image",
+      "tableData",
+      "difficulty",
+      "subject",
+      "tags",
+      "points",
+      "isPublic",
     ];
     const updateData = {};
-    allowedFields.forEach(field => {
+    allowedFields.forEach((field) => {
       if (dto[field] !== undefined) updateData[field] = dto[field];
     });
 
@@ -87,20 +87,29 @@ class QuestionBankService {
   async deleteQuestion(questionId, teacherId) {
     const question = await QuestionRepository.findById(questionId);
     if (!question) {
-      throw new Error('Question not found');
+      throw new Error("Question not found");
     }
 
     if (question.createdBy.toString() !== teacherId.toString()) {
-      throw new Error('Unauthorized to delete this question');
+      throw new Error("Unauthorized to delete this question");
     }
 
     await QuestionRepository.delete(questionId);
-    return { message: 'Question deleted successfully' };
+    return { message: "Question deleted successfully" };
   }
 
   // Search questions
   async searchQuestions(filter) {
-    const { subject, difficulty, tags, type, createdBy, keyword, page = 1, limit = 20 } = filter;
+    const {
+      subject,
+      difficulty,
+      tags,
+      type,
+      createdBy,
+      keyword,
+      page = 1,
+      limit = 20,
+    } = filter;
 
     const searchFilter = {};
     if (subject) searchFilter.subject = subject;
@@ -111,7 +120,10 @@ class QuestionBankService {
 
     let questions;
     if (keyword) {
-      questions = await QuestionRepository.searchQuestions({ ...searchFilter, keyword });
+      questions = await QuestionRepository.searchQuestions({
+        ...searchFilter,
+        keyword,
+      });
     } else {
       questions = await QuestionRepository.find(searchFilter, {
         skip: (page - 1) * limit,
@@ -139,7 +151,10 @@ class QuestionBankService {
     if (difficulty) filter.difficulty = difficulty;
     if (type) filter.type = type;
 
-    const questions = await QuestionRepository.selectRandomQuestions(filter, count);
+    const questions = await QuestionRepository.selectRandomQuestions(
+      filter,
+      count
+    );
 
     return questions;
   }
@@ -148,13 +163,13 @@ class QuestionBankService {
   async getQuestionStats(userId) {
     const questions = await QuestionRepository.find(
       { createdBy: userId },
-      { select: 'subject difficulty' }
+      { select: "subject difficulty" }
     );
 
     // Group by subject
     const subjects = {};
-    questions.forEach(q => {
-      const subject = q.subject || 'Khác';
+    questions.forEach((q) => {
+      const subject = q.subject || "Khác";
       if (!subjects[subject]) {
         subjects[subject] = {
           subject,
@@ -165,7 +180,7 @@ class QuestionBankService {
         };
       }
       subjects[subject].total++;
-      subjects[subject][q.difficulty || 'medium']++;
+      subjects[subject][q.difficulty || "medium"]++;
     });
 
     return {
