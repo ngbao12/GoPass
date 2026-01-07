@@ -268,6 +268,8 @@ def extract_exam(pdf_path):
     
     # Fix PassageRelated - ensure last question of each passage is correctly assigned
     # Build correct mapping: questions between passage N and passage N+1 belong to passage N
+    # BUT: Only if the question has "cloze" or "reading" tags
+    # Ordering questions (empty tags) should have PassageRelated = None
     for idx, (pass_id, q_start, q_end) in enumerate(pass_ranges):
         # For last passage, include all remaining questions with options
         if idx == len(pass_ranges) - 1:
@@ -280,7 +282,11 @@ def extract_exam(pdf_path):
         for q in questions:
             if q_start <= q["question_number"] <= actual_end:
                 if q["options"]:  # Has options
-                    q["PassageRelated"] = pass_id
+                    # Only set PassageRelated if question has tags (not ordering)
+                    if q.get("tags"):
+                        q["PassageRelated"] = pass_id
+                    else:
+                        q["PassageRelated"] = None
     
     # Finalize passages
     for p in passages:
@@ -328,7 +334,7 @@ def parse_question(q_num, text, answers, pass_id):
         has_lowercase_before = bool(re.search(r'[a-e]\s*-', text[:first_upper]))
         
         if has_lowercase_before and len(all_uppercase) >= 3:
-            # This is an ordering question
+            # This is an ordering question - no passage relation
             # Question text = everything before first uppercase option
             q_text = text[:first_upper].strip()
             
@@ -369,7 +375,8 @@ def parse_question(q_num, text, answers, pass_id):
                 "question_text": to_br_lines(q_text),
                 "options": options,
                 "answer": answers.get(q_num, ""),
-                "PassageRelated": pass_id
+                "PassageRelated": None,  # Ordering questions have no passage
+                "tags": []  # Empty tags for ordering questions
             }
     
     # Regular question processing
@@ -402,11 +409,25 @@ def parse_question(q_num, text, answers, pass_id):
             "question_text": to_br_lines(text),
             "options": {},
             "answer": answers.get(q_num, ""),
-            "PassageRelated": pass_id
+            "PassageRelated": pass_id,
+            "tags": []
         }
     
     # Extract question text (before first option)
     q_text = text[:opts[0].start()].strip()
+    
+    # Determine question type by checking keywords
+    tags = []
+    
+    # Strip bold tags for pattern matching
+    q_text_plain = re.sub(r'</?b>', '', q_text)
+    
+    # Check for cloze test (fill in the blank with numbered blanks)
+    if re.search(r'\(\s*\d+\s*\)\s*_{2,}', q_text_plain):
+        tags.append("cloze")
+    # Check for reading comprehension keywords
+    elif re.search(r'(according to|which of the following|the word|the phrase|best summarises?|TRUE according|NOT mentioned|refers to|could be best replaced|best paraphrases?|in which paragraph|where in paragraph)', q_text_plain, re.I):
+        tags.append("reading")
     
     # Extract options
     options = {}
@@ -460,14 +481,15 @@ def parse_question(q_num, text, answers, pass_id):
         "question_text": to_br_lines(q_text),
         "options": options,
         "answer": answers.get(q_num, ""),
-        "PassageRelated": pass_id
+        "PassageRelated": pass_id,
+        "tags": tags
     }
 
 # Main
 if __name__ == "__main__":
     print("🚀 Starting PDF extraction...")
     
-    result = extract_exam("de_2.pdf")
+    result = extract_exam("de_tieng_anh.pdf")
     
     with open("exam_corrected.json", "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=4)
