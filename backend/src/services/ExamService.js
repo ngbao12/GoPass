@@ -1,11 +1,11 @@
 const ExamRepository = require("../repositories/ExamRepository");
 const ExamQuestionRepository = require("../repositories/ExamQuestionRepository");
 const ExamAssignmentRepository = require("../repositories/ExamAssignmentRepository");
-const ExamSubmissionRepository = require('../repositories/ExamSubmissionRepository');
+const ExamSubmissionRepository = require("../repositories/ExamSubmissionRepository");
 const QuestionRepository = require("../repositories/QuestionRepository");
-const ClassMemberRepository = require('../repositories/ClassMemberRepository');
-const ContestParticipationRepository = require('../repositories/ContestParticipationRepository');
-const ForumTopicRepository = require('../repositories/ForumTopicRepository');
+const ClassMemberRepository = require("../repositories/ClassMemberRepository");
+const ContestParticipationRepository = require("../repositories/ContestParticipationRepository");
+const ForumTopicRepository = require("../repositories/ForumTopicRepository");
 const vnSmartBotProvider = require("../providers/VnSmartBotProvider");
 const { ESSAY_EXPLANATION_GENERATION_PROMPT } = require("../config/prompts");
 
@@ -23,6 +23,8 @@ class ExamService {
       readingPassages,
       totalQuestions,
       totalPoints,
+      pdfFilePath,
+      pdfFileName,
     } = dto;
 
     const exam = await ExamRepository.create({
@@ -36,6 +38,8 @@ class ExamService {
       readingPassages: readingPassages || [],
       totalQuestions: totalQuestions || 0,
       totalPoints: totalPoints || 10,
+      pdfFilePath: pdfFilePath || null,
+      pdfFileName: pdfFileName || null,
       createdBy: teacherId,
       isPublished: false,
     });
@@ -44,7 +48,13 @@ class ExamService {
   }
 
   // Get exam detail
-  async getExamDetail(examId, userId, includeAnswers = false, assignmentId = null, contestId = null) {
+  async getExamDetail(
+    examId,
+    userId,
+    includeAnswers = false,
+    assignmentId = null,
+    contestId = null
+  ) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error("Exam not found");
@@ -52,13 +62,13 @@ class ExamService {
 
     // Get exam questions with populated question details
     const examQuestions = await ExamQuestionRepository.findByExam(examId, {
-      populate: 'questionId',
+      populate: "questionId",
     });
 
     // Map to frontend format
-    const questions = examQuestions.map(eq => {
+    const questions = examQuestions.map((eq) => {
       const question = eq.questionId;
-      
+
       return {
         _id: eq._id,
         examId: eq.examId,
@@ -84,7 +94,7 @@ class ExamService {
           createdBy: question.createdBy,
           createdAt: question.createdAt,
           updatedAt: question.updatedAt,
-        }
+        },
       };
     });
 
@@ -97,29 +107,43 @@ class ExamService {
     // Get user's latest in-progress submission for this exam
     let userSubmission = null;
     if (assignmentId) {
-      userSubmission = await ExamSubmissionRepository.findOne({
-        assignmentId,
-        studentUserId: userId,
-        status: 'in_progress', // Only get in-progress submissions
-      }, { sort: { createdAt: -1 } });
+      userSubmission = await ExamSubmissionRepository.findOne(
+        {
+          assignmentId,
+          studentUserId: userId,
+          status: "in_progress", // Only get in-progress submissions
+        },
+        { sort: { createdAt: -1 } }
+      );
     } else if (contestId) {
-      userSubmission = await ExamSubmissionRepository.findOne({
-        examId,
-        studentUserId: userId,
-        contestId,
-        status: 'in_progress', // Only get in-progress submissions
-      }, { sort: { createdAt: -1 } });
+      userSubmission = await ExamSubmissionRepository.findOne(
+        {
+          examId,
+          studentUserId: userId,
+          contestId,
+          status: "in_progress", // Only get in-progress submissions
+        },
+        { sort: { createdAt: -1 } }
+      );
     } else {
-      userSubmission = await ExamSubmissionRepository.findOne({
-        examId,
-        studentUserId: userId,
-        assignmentId: null,
-        contestId: null,
-        status: 'in_progress', // Only get in-progress submissions
-      }, { sort: { createdAt: -1 } });
+      userSubmission = await ExamSubmissionRepository.findOne(
+        {
+          examId,
+          studentUserId: userId,
+          assignmentId: null,
+          contestId: null,
+          status: "in_progress", // Only get in-progress submissions
+        },
+        { sort: { createdAt: -1 } }
+      );
     }
 
-    console.log('📋 User submission found:', userSubmission ? { id: userSubmission._id, status: userSubmission.status } : 'None');
+    console.log(
+      "📋 User submission found:",
+      userSubmission
+        ? { id: userSubmission._id, status: userSubmission.status }
+        : "None"
+    );
 
     // Link to forum topic if this exam was generated from forum
     const relatedForumTopic = await ForumTopicRepository.findOne({ examId });
@@ -186,6 +210,37 @@ class ExamService {
     await ExamRepository.delete(examId);
 
     return { message: "Exam deleted successfully" };
+  }
+
+  // Get teacher's exams with pagination
+  async getTeacherExams(teacherId, options = {}) {
+    const { page = 1, limit = 10, subject, isPublished } = options;
+    const skip = (page - 1) * limit;
+
+    const query = { createdBy: teacherId };
+    if (subject) query.subject = subject;
+    if (isPublished !== undefined) query.isPublished = isPublished === "true";
+
+    const [exams, total] = await Promise.all([
+      ExamRepository.find(query, {
+        skip,
+        limit,
+        sort: { createdAt: -1 },
+        select:
+          "_id title subject durationMinutes totalQuestions totalPoints isPublished createdAt updatedAt",
+      }),
+      ExamRepository.count(query),
+    ]);
+
+    return {
+      exams,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   // Add questions to exam
@@ -606,39 +661,47 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
   }
 
   // NEW: Create submission (start exam)
-  async createSubmission(examId, studentUserId, assignmentId = null, contestId = null) {
+  async createSubmission(
+    examId,
+    studentUserId,
+    assignmentId = null,
+    contestId = null
+  ) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
-      throw new Error('Exam not found');
+      throw new Error("Exam not found");
     }
 
     // Check if assignment-based exam
     if (assignmentId) {
       const assignment = await ExamAssignmentRepository.findById(assignmentId);
       if (!assignment) {
-        throw new Error('Assignment not found');
+        throw new Error("Assignment not found");
       }
 
       // Check time window
       const now = new Date();
       if (now < assignment.startTime) {
-        throw new Error('Exam has not started yet');
+        throw new Error("Exam has not started yet");
       }
       if (now > assignment.endTime && !assignment.allowLateSubmission) {
-        throw new Error('Exam assignment has ended');
+        throw new Error("Exam assignment has ended");
       }
 
       // Check class membership
-      const isMember = await ClassMemberRepository.isMember(assignment.classId, studentUserId);
+      const isMember = await ClassMemberRepository.isMember(
+        assignment.classId,
+        studentUserId
+      );
       if (!isMember) {
-        throw new Error('You don\'t have permission to access this exam');
+        throw new Error("You don't have permission to access this exam");
       }
 
       // Check for existing in-progress submission
       const existing = await ExamSubmissionRepository.findOne({
         assignmentId,
         studentUserId,
-        status: 'in_progress',
+        status: "in_progress",
       });
 
       if (existing) {
@@ -652,7 +715,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       });
 
       if (attempts >= assignment.maxAttempts) {
-        throw new Error('Maximum attempts exceeded');
+        throw new Error("Maximum attempts exceeded");
       }
 
       // Calculate max score
@@ -664,7 +727,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
         examId,
         studentUserId,
         contestId: null,
-        status: 'in_progress',
+        status: "in_progress",
         startedAt: new Date(),
         maxScore,
         attemptNumber: attempts + 1,
@@ -679,7 +742,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       studentUserId,
       contestId: contestId || null,
       assignmentId: null,
-      status: 'in_progress',
+      status: "in_progress",
     });
 
     if (existing) {
@@ -698,7 +761,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
       examId,
       studentUserId,
       contestId: contestId || null,
-      status: 'in_progress',
+      status: "in_progress",
       startedAt: new Date(),
       maxScore,
       attemptNumber: attempts + 1,
@@ -711,7 +774,7 @@ Hãy tạo hướng dẫn giải theo đúng format HTML đã chỉ định.`;
   async getMySubmissions(examId, studentUserId, assignmentId = null) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
-      throw new Error('Exam not found');
+      throw new Error("Exam not found");
     }
 
     const filter = {
