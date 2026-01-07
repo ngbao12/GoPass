@@ -42,6 +42,14 @@ export default function TakeExamPage() {
           isPreviewMode
         );
 
+        console.log("📊 Exam data loaded:", {
+          hasData: !!examData,
+          title: examData?.title,
+          questionsCount: examData?.questions?.length,
+          hasUserSubmission: !!examData?.userSubmission,
+          isPreviewMode,
+        });
+
         if (!examData) {
           setError(true);
           return;
@@ -49,22 +57,8 @@ export default function TakeExamPage() {
 
         // Skip submission creation for teacher preview mode
         if (isPreviewMode) {
-          console.log("👁️ Preview mode - skipping submission creation");
-          // Create a mock submission for preview (won't be saved)
-          examData.userSubmission = {
-            _id: "preview",
-            assignmentId: "",
-            examId: examId,
-            studentId: "preview",
-            status: "in_progress",
-            startedAt: new Date().toISOString(),
-            totalScore: 0,
-            maxScore: examData.totalPoints || 10,
-            attemptNumber: 1,
-            answers: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
+          console.log("👁️ Preview mode - no submission needed");
+          // Preview mode doesn't need submission - teacher just views questions
         } else {
           // Check if user has an active submission
           if (!examData.userSubmission) {

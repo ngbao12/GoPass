@@ -259,6 +259,15 @@ const ExamInterface = ({
 
   // Guard: Chờ dữ liệu load xong mới render
   if (!exam || !currentQuestion || !uiLayout) {
+    console.log("⏳ Waiting for data:", {
+      hasExam: !!exam,
+      hasCurrentQuestion: !!currentQuestion,
+      hasUiLayout: !!uiLayout,
+      examTitle: exam?.title,
+      questionsCount: exam?.questions?.length,
+      currentIndex: examState?.currentQuestionIndex,
+    });
+
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-3">

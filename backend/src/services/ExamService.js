@@ -66,6 +66,15 @@ class ExamService {
       populate: "questionId",
     });
 
+    console.log(
+      `📚 Exam questions found: ${examQuestions.length} for exam ${examId}`
+    );
+    if (examQuestions.length === 0) {
+      console.warn(
+        `⚠️ No questions linked to exam ${examId}. Check ExamQuestion collection.`
+      );
+    }
+
     // Map to frontend format
     const questions = examQuestions.map((eq) => {
       const question = eq.questionId;
