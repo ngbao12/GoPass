@@ -185,6 +185,7 @@ const seedExamAssignments = async () => {
               options: originalQuestion.options,
               correctAnswers: originalQuestion.correctAnswers,
               explanation: originalQuestion.explanation,
+              linkedPassageId: originalQuestion.linkedPassageId,
               image: originalQuestion.image,
               audio: originalQuestion.audio,
               maxScore: originalQuestion.maxScore,
