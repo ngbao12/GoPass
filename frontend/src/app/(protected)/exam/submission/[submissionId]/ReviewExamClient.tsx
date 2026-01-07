@@ -66,7 +66,6 @@ const ReviewContent = ({ submission }: { submission: ExamSubmission }) => {
         (Array.isArray(answerData?.answer) && answerData.answer.length > 0)
       );
 
-      // Logic tính đúng sai (chấp nhận sai số nhỏ do float)
       const isCorrect = isAnswered && Math.abs(userScore - maxScore) < 0.0001;
 
       return {
