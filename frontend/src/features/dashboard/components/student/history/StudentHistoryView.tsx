@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // ← THÊM IMPORT
 import HistoryItemCard from "./HistoryItemCard";
 import HistoryStatsOverview from "./HistoryStatsOverview";
 import { HistoryItem, HistoryStats } from "@/features/dashboard/types/student/";
 import { fetchStudentHistory } from "@/services/student/studentStatsApi";
 
 const StudentHistoryView = () => {
+  const router = useRouter(); // ← THÊM HOOK
+
   // State Data
   const [historyList, setHistoryList] = useState<HistoryItem[]>([]);
   const [stats, setStats] = useState<HistoryStats | null>(null);
@@ -14,7 +17,7 @@ const StudentHistoryView = () => {
 
   // State Filters
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [timeSort, setTimeSort] = useState<string>("newest"); // "newest" | "oldest"
+  const [timeSort, setTimeSort] = useState<string>("newest");
 
   // Fetch Data
   useEffect(() => {
@@ -31,14 +34,10 @@ const StudentHistoryView = () => {
   // --- LOGIC FILTER & SORT ---
   const processedHistory = historyList
     .filter((item) => {
-      // 1. Filter by Type
       if (typeFilter === "all") return true;
       return item.type === typeFilter;
     })
     .sort((a, b) => {
-      // 2. Sort by Time
-      // Chuyển đổi chuỗi ngày "DD/MM/YYYY" sang Date object để so sánh
-      // Lưu ý: data trả về đang là "dd/mm/yyyy"
       const parseDate = (dateStr: string) => {
         const [day, month, year] = dateStr.split('/');
         return new Date(`${year}-${month}-${day}`).getTime();
@@ -47,12 +46,35 @@ const StudentHistoryView = () => {
       const timeA = parseDate(a.completedDate);
       const timeB = parseDate(b.completedDate);
 
-      if (timeSort === "newest") return timeB - timeA; // Giảm dần
-      return timeA - timeB; // Tăng dần (oldest)
+      if (timeSort === "newest") return timeB - timeA;
+      return timeA - timeB;
     });
 
-  const handleReview = (id: number | string) => console.log(`Review: ${id}`);
-  const handleLeaderboard = (id: number | string) => console.log(`Leaderboard: ${id}`);
+  // ✅ FIX: Handler Navigate đến trang Review
+  const handleReview = (id: number | string) => {
+    // Tìm item để lấy submissionId
+    const item = historyList.find(h => h.id === id);
+    
+    if (!item) {
+      console.error("Item not found:", id);
+      return;
+    }
+
+    // Navigate đến trang review với submissionId
+    // Giả sử mỗi item có field submissionId
+    if (item.submissionId) {
+      router.push(`/exam/submission/${item.submissionId}`);
+    } else {
+      console.error("No submissionId found for item:", item);
+    }
+  };
+
+  const handleLeaderboard = (id: number | string) => {
+    const item = historyList.find(h => h.id === id);
+    if (item?.contestId) {
+      router.push(`/dashboard/contests/${item.contestId}/leaderboard`);
+    }
+  };
 
   if (loading || !stats) {
     return (
