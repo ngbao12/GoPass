@@ -112,11 +112,15 @@ const useAutoSubmit = (
   examId: string,
   timeRemaining: number,
   isSuccessDialogOpen: boolean,
-  onAutoSubmit: () => void
+  onAutoSubmit: () => void,
+  isPreview: boolean = false // Skip auto-submit in preview mode
 ) => {
   const isFirstLoad = useRef(true);
 
   useEffect(() => {
+    // Skip all auto-submit logic in preview mode
+    if (isPreview) return;
+
     // Logic chạy 1 lần duy nhất khi mount
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
@@ -135,7 +139,7 @@ const useAutoSubmit = (
       console.log("⏳ Hết giờ khi đang online -> Auto Submit");
       onAutoSubmit();
     }
-  }, [timeRemaining, isSuccessDialogOpen, onAutoSubmit, examId]);
+  }, [timeRemaining, isSuccessDialogOpen, onAutoSubmit, examId, isPreview]);
 };
 
 // ==========================================
@@ -216,7 +220,11 @@ const MainQuestionArea = () => {
 // 3. MAIN COMPONENT (Kết nối mọi thứ)
 // ==========================================
 
-const ExamInterface = () => {
+const ExamInterface = ({
+  isPreviewMode = false,
+}: {
+  isPreviewMode?: boolean;
+}) => {
   const {
     exam,
     currentQuestion,
@@ -227,7 +235,7 @@ const ExamInterface = () => {
   } = useExam();
   const { uiLayout, sectionsData, stats } = useExamUI();
 
-  console.log("🏁 Render Exam Interface", currentQuestion);
+  console.log("🏁 Render Exam Interface", currentQuestion, { isPreviewMode });
 
   // 1. Kết nối Navigation Hook
   const { contestId, handleNavigateBack, handleNavigateDashboard } =
@@ -245,11 +253,21 @@ const ExamInterface = () => {
     exam?._id || "",
     timeRemaining,
     dialogs.success,
-    handleFinishExam
+    handleFinishExam,
+    isPreviewMode // Disable auto-submit in preview mode
   );
 
   // Guard: Chờ dữ liệu load xong mới render
   if (!exam || !currentQuestion || !uiLayout) {
+    console.log("⏳ Waiting for data:", {
+      hasExam: !!exam,
+      hasCurrentQuestion: !!currentQuestion,
+      hasUiLayout: !!uiLayout,
+      examTitle: exam?.title,
+      questionsCount: exam?.questions?.length,
+      currentIndex: examState?.currentQuestionIndex,
+    });
+
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-3">
@@ -267,9 +285,16 @@ const ExamInterface = () => {
         examTitle={exam.title}
         examSubject={exam.subject || "Thi thử"}
         timeRemaining={timeRemaining}
-        onExit={() => setDialogs((prev) => ({ ...prev, exit: true }))}
+        onExit={() => {
+          if (isPreviewMode) {
+            handleNavigateBack(); // Direct navigation for preview
+          } else {
+            setDialogs((prev) => ({ ...prev, exit: true }));
+          }
+        }}
         onSubmit={() => setDialogs((prev) => ({ ...prev, submit: true }))}
         isSubmitting={examState.isSubmitting}
+        isPreviewMode={isPreviewMode}
       />
 
       <div className="flex-1 flex pt-16 overflow-hidden">
@@ -350,12 +375,16 @@ const ExamInterface = () => {
 
 interface TakeExamClientProps {
   exam: ExamWithDetails;
+  isPreviewMode?: boolean; // Teacher preview mode
 }
 
-export default function TakeExamClient({ exam }: TakeExamClientProps) {
+export default function TakeExamClient({
+  exam,
+  isPreviewMode = false,
+}: TakeExamClientProps) {
   return (
-    <ExamProvider initialExam={exam}>
-      <ExamInterface />
+    <ExamProvider initialExam={exam} isReviewMode={false}>
+      <ExamInterface isPreviewMode={isPreviewMode} />
     </ExamProvider>
   );
 }

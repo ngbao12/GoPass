@@ -267,6 +267,70 @@ class ClassService {
     return { members: formattedMembers };
   }
 
+  // Delete a class assignment (unassign exam from class)
+  async deleteAssignment(classId, teacherId, assignmentId) {
+    // Verify class exists and teacher owns it
+    const classData = await ClassRepository.findById(classId);
+    if (!classData) {
+      throw new Error('Class not found');
+    }
+    if (classData.teacherUserId?.toString() !== teacherId.toString()) {
+      throw new Error('Unauthorized to delete assignment in this class');
+    }
+
+    // Verify assignment exists and belongs to this class
+    const assignment = await ExamAssignmentRepository.findById(assignmentId);
+    if (!assignment) {
+      throw new Error('Assignment not found');
+    }
+    if (assignment.classId?.toString() !== classId.toString()) {
+      throw new Error('Assignment does not belong to this class');
+    }
+
+    // Optional: delete related submissions to avoid orphans
+    await ExamSubmissionRepository.deleteMany({ assignmentId });
+
+    // Delete the assignment
+    await ExamAssignmentRepository.delete(assignmentId);
+
+    return { message: 'Assignment deleted successfully' };
+  }
+
+  // Update a class assignment
+  async updateAssignment(classId, teacherId, assignmentId, updateData) {
+    // Verify class exists and teacher owns it
+    const classData = await ClassRepository.findById(classId);
+    if (!classData) {
+      throw new Error('Class not found');
+    }
+    if (classData.teacherUserId?.toString() !== teacherId.toString()) {
+      throw new Error('Unauthorized to update assignment in this class');
+    }
+
+    // Verify assignment exists and belongs to this class
+    const assignment = await ExamAssignmentRepository.findById(assignmentId);
+    if (!assignment) {
+      throw new Error('Assignment not found');
+    }
+    if (assignment.classId?.toString() !== classId.toString()) {
+      throw new Error('Assignment does not belong to this class');
+    }
+
+    // Extract allowed fields
+    const allowedFields = ['startTime', 'endTime', 'attemptLimit', 'allowLateSubmission', 'shuffleQuestions'];
+    const updatePayload = {};
+    allowedFields.forEach((field) => {
+      if (updateData[field] !== undefined) {
+        updatePayload[field] = updateData[field];
+      }
+    });
+
+    // Update the assignment
+    const updated = await ExamAssignmentRepository.update(assignmentId, updatePayload);
+
+    return updated;
+  }
+
   // Update class
   async updateClass(classId, teacherId, dto) {
     const classData = await ClassRepository.findById(classId);

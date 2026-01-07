@@ -8,6 +8,7 @@ interface DeleteExamModalProps {
     onClose: () => void;
     onConfirm: () => void;
     examTitle: string;
+    isLoading?: boolean;
 }
 
 const DeleteExamModal: React.FC<DeleteExamModalProps> = ({
@@ -15,6 +16,7 @@ const DeleteExamModal: React.FC<DeleteExamModalProps> = ({
     onClose,
     onConfirm,
     examTitle,
+    isLoading = false,
 }) => {
     if (!isOpen) return null;
 
@@ -42,6 +44,7 @@ const DeleteExamModal: React.FC<DeleteExamModalProps> = ({
                         type="button"
                         variant="secondary"
                         onClick={onClose}
+                        disabled={isLoading}
                         className="flex-1"
                     >
                         Hủy
@@ -49,9 +52,10 @@ const DeleteExamModal: React.FC<DeleteExamModalProps> = ({
                     <Button
                         type="button"
                         onClick={onConfirm}
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                        disabled={isLoading}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white disabled:bg-red-400"
                     >
-                        Xóa đề thi
+                        {isLoading ? "Đang xóa..." : "Xóa đề thi"}
                     </Button>
                 </div>
             </div>

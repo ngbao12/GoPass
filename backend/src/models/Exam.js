@@ -1,21 +1,23 @@
 const mongoose = require("mongoose");
 // 1. Tạo Sub-schema cho Bài đọc (Reading Passage)
 // Nhúng trực tiếp vào Exam vì nó gắn liền với đề thi cụ thể
-const readingPassageSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true
-  }, // ID thủ công (VD: "passage-eng-01") để khớp với linkedPassageId bên Question
-  title: {
-    type: String,
-    required: true
+const readingPassageSchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      required: true,
+    }, // ID thủ công (VD: "passage-eng-01") để khớp với linkedPassageId bên Question
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    }, // Nội dung HTML của bài đọc
   },
-  content: {
-    type: String,
-    required: true
-  }, // Nội dung HTML của bài đọc
-  }, { _id: false }); // Tắt _id tự động của Mongo để dùng id string cho dễ map
-
+  { _id: false }
+); // Tắt _id tự động của Mongo để dùng id string cho dễ map
 
 const examSchema = new mongoose.Schema({
   title: {
@@ -37,8 +39,8 @@ const examSchema = new mongoose.Schema({
   },
   mode: {
     type: String,
-    enum: ['practice_test', 'practice_global', 'contest'],
-    default: 'practice_test',
+    enum: ["practice_test", "practice_global", "contest"],
+    default: "practice_test",
   },
   shuffleQuestions: {
     type: Boolean,
@@ -50,32 +52,39 @@ const examSchema = new mongoose.Schema({
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   isPublished: {
     type: Boolean,
     default: true,
   },
- 
+
   // --- BỔ SUNG CÁC TRƯỜNG THIẾU ---
 
+  // PDF file path (optional)
+  pdfFilePath: {
+    type: String,
+    default: null,
+  },
+  pdfFileName: {
+    type: String,
+    default: null,
+  },
 
   // 2. Mảng chứa các bài đọc hiểu (Quan trọng cho môn Văn/Anh)
   readingPassages: [readingPassageSchema],
-
 
   // 3. Cache số lượng câu hỏi và tổng điểm
   // Giúp hiển thị nhanh ngoài danh sách mà không cần count lại từ bảng ExamQuestion
   totalQuestions: {
     type: Number,
-    default: 0
+    default: 0,
   },
   totalPoints: {
     type: Number,
-    default: 10
+    default: 10,
   },
-
 
   createdAt: {
     type: Date,
@@ -85,8 +94,7 @@ const examSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-}
-);
+});
 
 // Index for queries
 examSchema.index({ createdBy: 1 });
