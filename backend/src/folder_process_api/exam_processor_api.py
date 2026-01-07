@@ -48,7 +48,7 @@ def determine_tags(question, passage_id):
     if passage_id:
         # Check if it's a cloze passage (contains fill-in-the-blank markers)
         # Questions 9-13 typically are cloze questions
-        question_num = question.get('questionNumber', 0)
+        question_num = question.get('question_number', 0)
         if 9 <= question_num <= 13:
             tags.append("cloze")
         
@@ -76,14 +76,26 @@ def map_question_to_db_format(question, passage_id=None):
     """Map question from exam_corrected.json to GoPass Question format"""
     question_id = generate_id("q-eng-")
     
-    # Map options
+    # Map options - handle both dict and array formats
     options = []
-    for opt in question.get("options", []):
-        options.append({
-            "id": opt.get("key", ""),
-            "content": opt.get("text", ""),
-            "isCorrect": opt.get("key", "") == question.get("answer", "")
-        })
+    question_options = question.get("options", {})
+    
+    if isinstance(question_options, dict):
+        # Options are in format: {"A": "text", "B": "text", ...}
+        for key, text in question_options.items():
+            options.append({
+                "id": key,
+                "content": text,
+                "isCorrect": key == question.get("answer", "")
+            })
+    elif isinstance(question_options, list):
+        # Options are in format: [{"key": "A", "text": "..."}, ...]
+        for opt in question_options:
+            options.append({
+                "id": opt.get("key", ""),
+                "content": opt.get("text", ""),
+                "isCorrect": opt.get("key", "") == question.get("answer", "")
+            })
     
     # Determine tags
     tags = determine_tags(question, passage_id)
@@ -91,7 +103,7 @@ def map_question_to_db_format(question, passage_id=None):
     return {
         "id": question_id,
         "type": QUESTION_TYPE,
-        "content": question.get("question", ""),
+        "content": question.get("question_text", question.get("question", "")),
         "options": options,
         "correctAnswer": question.get("answer", ""),
         "explanation": question.get("explanation", ""),
@@ -156,6 +168,11 @@ def process_exam_file(file_path):
         }
     """
     try:
+        # Get absolute path relative to this script's directory
+        if not os.path.isabs(file_path):
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(script_dir, file_path)
+        
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -169,12 +186,15 @@ def process_exam_file(file_path):
         
         # Process passages
         passages = []
-        passage_map = {}  # Map passage index to passage_id
+        passage_map = {}  # Map passage_id (e.g., "passage_1") to generated ID
         
         for idx, passage_data in enumerate(data.get("passages", [])):
             passage = map_passage_to_db_format(passage_data, exam_id, idx + 1)
             passages.append(passage)
-            passage_map[idx] = passage["id"]
+            # Map the original passage_id to the new generated ID
+            original_passage_id = passage_data.get("passage_id", "")
+            if original_passage_id:
+                passage_map[original_passage_id] = passage["id"]
         
         # Process questions
         questions = []
@@ -184,9 +204,9 @@ def process_exam_file(file_path):
         for question_data in data.get("questions", []):
             # Determine which passage this question belongs to
             passage_id = None
-            passage_related = question_data.get("passageRelated")
+            passage_related = question_data.get("PassageRelated")  # Note: capital P
             
-            if passage_related is not None and passage_related in passage_map:
+            if passage_related and passage_related in passage_map:
                 passage_id = passage_map[passage_related]
             
             # Map question
