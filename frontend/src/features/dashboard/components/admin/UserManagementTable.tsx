@@ -258,7 +258,7 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                           </svg>
                         }
                       >
-                        Reset MK
+                        Đổi mật khẩu
                       </Button>
                     )}
                   </div>
