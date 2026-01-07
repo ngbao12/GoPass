@@ -82,10 +82,10 @@ export interface UpdateClassRequest {
 // Frontend Input Types
 // ============================================
 export interface CreateClassData {
-  class_name: string;
-  description: string;
-  subject: string;
-  grade: string;
+  className: string;
+  description?: string;
+  classCode: string;
+  requireApproval?: boolean;
 }
 
 // ============================================
