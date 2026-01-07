@@ -380,7 +380,7 @@ class GradingService {
         answerText: answer.answerText,
       }));
 
-      // 6. Gọi chatbot để chấm
+      // 6. Call chatbot
       console.log("🤖 Calling SmartBot for grading...");
       const gradingResults = await this._callSmartBotGrading({
         metadata: {
@@ -392,7 +392,7 @@ class GradingService {
 
       console.log("✅ Received grading results");
 
-      // 7. Cập nhật kết quả vào DB
+      // 7. Update results in DB
       let gradedCount = 0;
       let totalScore = 0;
 
@@ -419,7 +419,7 @@ class GradingService {
         }
       }
 
-      // 8. Cập nhật tổng điểm submission
+      // 8. Update total score of submission
       await ExamSubmissionRepository.update(submissionId, {
         totalScore,
         gradedAt: new Date(),
@@ -441,7 +441,7 @@ class GradingService {
   }
 
   /**
-   * Gọi SmartBot API để chấm bài
+   * Call SmartBot API for grading
    * @private
    */
   async _callSmartBotGrading(payload) {
@@ -457,13 +457,13 @@ class GradingService {
         .toString(36)
         .substr(2, 9)}`,
       metadata: payload.metadata,
-      bot_id: vnSmartBotProvider.gradingBotId, // Sử dụng bot riêng cho chấm điểm
+      bot_id: vnSmartBotProvider.gradingBotId, // Use a dedicated bot for grading
     });
 
-    // Parse response từ SmartBot
+    // Parse response from SmartBot
     let parsedResponse = response;
 
-    // Xử lý SSE format nếu cần
+    // Handle SSE format if needed
     if (typeof response === "string" && response.startsWith("data:")) {
       try {
         const jsonStr = response.substring(5).trim();
@@ -473,7 +473,7 @@ class GradingService {
       }
     }
 
-    // Extract text từ response
+    // Extract text from response
     const cardData = parsedResponse?.object?.sb?.card_data;
     if (!cardData || cardData.length === 0) {
       throw new Error("No card_data in SmartBot response");
