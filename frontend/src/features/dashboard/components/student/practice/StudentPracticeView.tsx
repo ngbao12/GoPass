@@ -27,7 +27,7 @@ const StudentPracticeView = () => {
           filterSubject === "all" ? undefined : filterSubject
         );
         setExams(data);
-        
+
         // Store all exams on first load to get all subjects
         if (filterSubject === "all") {
           setAllExams(data);
@@ -80,7 +80,25 @@ const StudentPracticeView = () => {
   const handleStartExam = (id: string) => {
     router.push(`/exam/${id}`);
   };
-  const handleReviewExam = (id: string) => console.log(`Reviewing: ${id}`);
+
+  const handleReviewExam = (id: string) => {
+    // Find exam to get submissionId
+    const exam = exams.find((e) => e.id === id);
+
+    if (!exam) {
+      console.error("Exam not found:", id);
+      return;
+    }
+
+    // Navigate to review page with submissionId
+    if (exam.submissionId) {
+      router.push(`/exam/review/${exam.submissionId}`);
+    } else {
+      console.error("No submissionId found for exam:", exam);
+      alert("Chưa có bài làm để xem lại.");
+    }
+  };
+
   const handleRetryExam = (id: string) => {
     router.push(`/exam/${id}`);
   };
@@ -179,7 +197,7 @@ const StudentPracticeView = () => {
           ) : filteredExams.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-600">
-                {searchTerm 
+                {searchTerm
                   ? `Không tìm thấy đề thi nào với từ khóa "${searchTerm}"`
                   : "Không có bài luyện tập nào"}
               </p>

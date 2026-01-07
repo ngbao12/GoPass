@@ -9,12 +9,12 @@ import { httpClient } from "@/lib/http";
 const formatDate = (isoString: string) => {
   if (!isoString) return "";
   const date = new Date(isoString);
-  return date.toLocaleDateString('vi-VN', { 
-    day: '2-digit', 
-    month: '2-digit', 
-    year: 'numeric', 
-    hour: '2-digit', 
-    minute: '2-digit' 
+  return date.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
@@ -29,13 +29,13 @@ export const getClassDetailById = async (
     );
 
     if (!response.success || !response.data) return null;
-    
+
     const classData = response.data;
 
     // Extract data from backend response
     const teacherName = classData.teacher?.name || "Giáo viên";
     const studentCount = classData.studentCount || 0;
-    
+
     // Fetch class assignments (student-facing)
     const assignmentsRes = await httpClient.get<{
       success: boolean;
@@ -68,8 +68,11 @@ export const getClassDetailById = async (
         score: typeof a.myScore === "number" ? a.myScore : null,
         maxScore: typeof a.maxScore === "number" ? a.maxScore : 0,
         attemptLimit: typeof a.attemptLimit === "number" ? a.attemptLimit : 1,
-        myAttemptCount: typeof a.myAttemptCount === "number" ? a.myAttemptCount : 0,
-        submittedCount: typeof a.submittedCount === "number" ? a.submittedCount : 0,
+        myAttemptCount:
+          typeof a.myAttemptCount === "number" ? a.myAttemptCount : 0,
+        mySubmissionId: a.mySubmissionId || null, // For review
+        submittedCount:
+          typeof a.submittedCount === "number" ? a.submittedCount : 0,
         totalStudents: studentCount,
       };
     });
@@ -103,7 +106,6 @@ export const getClassDetailById = async (
 
       assignments,
     };
-
   } catch (error) {
     console.error("Failed to fetch class details:", error);
     return null;

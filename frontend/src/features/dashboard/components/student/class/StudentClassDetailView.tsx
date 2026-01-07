@@ -111,8 +111,14 @@ const StudentClassDetailView: React.FC<StudentClassDetailViewProps> = ({
     }
   };
 
-  const handleViewResult = (id: string | number) =>
-    console.log(`Result: ${id}`);
+  const handleViewResult = (submissionId: string | number | null) => {
+    if (!submissionId) {
+      alert("Chưa có bài làm để xem lại.");
+      return;
+    }
+    // Navigate to review page
+    router.push(`/exam/review/${submissionId}`);
+  };
 
   return (
     <div className="space-y-6 pb-10">

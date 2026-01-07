@@ -22,9 +22,9 @@ export interface StudentContest {
   endDate: string;
   participants: number;
   status: "ongoing" | "upcoming" | "completed";
-  progress?: { completed: number; total: number }; 
-  rank?: string; 
-  score?: number; 
+  progress?: { completed: number; total: number };
+  rank?: string;
+  score?: number;
 }
 
 // Dùng cho UI danh sách Luyện tập
@@ -39,6 +39,7 @@ export interface PracticeExam {
   score?: number;
   maxScore?: number;
   completedDate?: string;
+  submissionId?: string; // For review
   forumTopicId?: string;
   forumPackageId?: string;
   forumTopicTitle?: string;
@@ -52,7 +53,7 @@ export interface ExamSubmission {
   class_id: string;
   started_at: string;
   submitted_at: string | null;
-  status: 'completed' | 'in_progress';
+  status: "completed" | "in_progress";
   objective_score?: number;
   final_score?: number | null;
 }

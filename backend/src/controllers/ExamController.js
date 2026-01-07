@@ -2,6 +2,22 @@ const ExamService = require("../services/ExamService");
 const path = require("path");
 
 class ExamController {
+  async getAllExams(req, res) {
+    try {
+      const { page = 1, limit = 50, subject, mode, search } = req.query;
+      const exams = await ExamService.getAllExams(req.user.userId, {
+        page: Number(page),
+        limit: Number(limit),
+        subject,
+        mode,
+        search,
+      });
+      res.status(200).json({ success: true, data: exams });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
   async createExam(req, res) {
     try {
       const exam = await ExamService.createExam(req.user.userId, req.body);

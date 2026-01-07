@@ -5,11 +5,13 @@ import { Button } from "@/components/ui";
 import { examApi } from "@/services/teacher";
 
 interface CreateExamModalProps {
+  isOpen: boolean;
   onClose: () => void;
   onSubmit: (examData: any) => void;
 }
 
 const CreateExamModal: React.FC<CreateExamModalProps> = ({
+  isOpen,
   onClose,
   onSubmit,
 }) => {
@@ -159,6 +161,8 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+  if (!isOpen) return null;
 
   return (
     <>

@@ -46,6 +46,16 @@ class QuestionBankController {
     }
   }
 
+  async getQuestionStats(req, res) {
+    try {
+      const userId = req.user.userId;
+      const stats = await QuestionBankService.getQuestionStats(userId);
+      res.status(200).json({ success: true, data: stats });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
   async selectQuestionsForExam(req, res) {
     try {
       const questions = await QuestionBankService.selectQuestions(req.body);

@@ -143,6 +143,36 @@ class QuestionBankService {
 
     return questions;
   }
+
+  // Get question statistics grouped by subject and difficulty
+  async getQuestionStats(userId) {
+    const questions = await QuestionRepository.find(
+      { createdBy: userId },
+      { select: 'subject difficulty' }
+    );
+
+    // Group by subject
+    const subjects = {};
+    questions.forEach(q => {
+      const subject = q.subject || 'Khác';
+      if (!subjects[subject]) {
+        subjects[subject] = {
+          subject,
+          total: 0,
+          easy: 0,
+          medium: 0,
+          hard: 0,
+        };
+      }
+      subjects[subject].total++;
+      subjects[subject][q.difficulty || 'medium']++;
+    });
+
+    return {
+      total: questions.length,
+      bySubject: Object.values(subjects),
+    };
+  }
 }
 
 module.exports = new QuestionBankService();
