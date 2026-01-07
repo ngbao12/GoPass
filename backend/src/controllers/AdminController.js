@@ -30,7 +30,16 @@ class AdminController {
 
   async resetUserPassword(req, res) {
     try {
-      const result = await AdminService.resetUserPassword(req.params.userId);
+      const { newPassword } = req.body;
+      
+      if (!newPassword) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'New password is required' 
+        });
+      }
+
+      const result = await AdminService.resetUserPassword(req.params.userId, newPassword);
       res.status(200).json({ success: true, message: result.message });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
