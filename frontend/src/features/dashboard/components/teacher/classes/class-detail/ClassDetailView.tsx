@@ -43,7 +43,11 @@ const ClassDetailView: React.FC = () => {
         // Enrich the class detail with actual data
         const membersData = membersResponse.success ? ((membersResponse.data as any)?.members || []) : [];
         const requestsData = requestsResponse.success ? ((requestsResponse.data as any)?.requests || []) : [];
-        const assignmentsData = assignmentsResponse.success ? (Array.isArray(assignmentsResponse.data) ? assignmentsResponse.data : []) : [];
+        const assignmentsData = assignmentsResponse.success 
+          ? (Array.isArray(assignmentsResponse.data) ? assignmentsResponse.data : ((assignmentsResponse.data as any)?.assignments || []))
+          : [];
+        
+        console.log('✅ Assignments Data:', assignmentsData);
         
         const enrichedDetail: ClassDetail = {
           ...classResponse.data,
