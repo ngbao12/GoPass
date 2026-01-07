@@ -1,22 +1,24 @@
+// Export all from service files
 export * from './classApi';
 export * from './examApi';
 
-// Re-export specific types for easier importing
+// Re-export types for easier importing
 export type {
+    ApiResponse,
     TeacherClass,
     ClassDetail,
     ClassMember,
     ClassJoinRequest,
-    ClassAssignment,
+    ExamAssignment,
     ClassStats,
     CreateClassData,
-    UpdateClassData
-} from './classApi';
+    ClassModel,
+    ClassDetailResponse,
+} from './types';
 
 export type {
     TeacherExam,
     ExamDetail,
-    ExamAssignment,
     ExamSubmissionSummary,
     ExamStatistics,
     CreateExamData,
