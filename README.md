@@ -30,17 +30,69 @@ Before you begin, ensure you have installed:
 - MongoDB (v5 or higher) – for production backend
 - Git
 
-## 📥 Installation
+### 1️⃣ Clone & Install
 
-### 1. Clone the Repository
-git clone <repository-url>
+```bash
+# Clone the repository
+git clone https://github.com/ngbao12/GoPass.git
 cd GoPass
 
-### 2. Backend Setup
+# Install backend dependencies
 cd backend
 npm install
 
-Create a .env file in the backend directory:
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+### 2️⃣ Environment Setup
+**Backend** - Create `backend/.env`:
+
+```env
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Database
+MONGODB_URI=mongodb://localhost:27017/gopass
+
+# JWT Secrets (Change these in production!)
+JWT_ACCESS_SECRET=your-super-secret-access-key-change-this
+JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-this
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Email Configuration (Optional for development)
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USER=your-email@gmail.com
+MAIL_PASS=your-app-password
+MAIL_FROM=noreply@gopass.com
+
+# Frontend URL
+CLIENT_URL=http://localhost:3000
+```
+
+**Frontend** - Create `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+### 3️⃣ Database Setup
+
+```bash
+# Start MongoDB
+brew services start mongodb-community@7.0  # macOS
+# or
+docker run -d -p 27017:27017 --name mongodb mongo:latest  # Docker
+
+# Seed sample data
+cd backend
+npm run seed
+```
+
 
 # Server
 PORT=5000
