@@ -429,4 +429,62 @@ export const classApi = {
       };
     }
   },
+
+  // DELETE /classes/:classId/assignments/:assignmentId - Delete class assignment
+  deleteAssignment: async (classId: string, assignmentId: string): Promise<ApiResponse<void>> => {
+    try {
+      const response = await httpClient.delete<{ success: boolean; message?: string }>(
+        `/classes/${classId}/assignments/${assignmentId}`,
+        { requiresAuth: true }
+      );
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: response?.message || 'Failed to delete assignment'
+        };
+      }
+
+      return { success: true, data: undefined };
+    } catch (error: any) {
+      console.error('Error deleting assignment:', error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || 'Failed to delete assignment'
+      };
+    }
+  },
+
+  // PUT /classes/:classId/assignments/:assignmentId - Update class assignment
+  updateAssignment: async (classId: string, assignmentId: string, updateData: any): Promise<ApiResponse<any>> => {
+    try {
+      const response = await httpClient.put<{ success: boolean; data: any; message?: string }>(
+        `/classes/${classId}/assignments/${assignmentId}`,
+        updateData,
+        { requiresAuth: true }
+      );
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: null,
+          error: response?.message || 'Failed to update assignment'
+        };
+      }
+
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error updating assignment:', error);
+      return {
+        success: false,
+        data: null,
+        error: error.message || 'Failed to update assignment'
+      };
+    }
+  },
 };

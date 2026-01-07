@@ -32,6 +32,7 @@ const TeacherExamsView: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const [subjectFilter, setSubjectFilter] = useState("all");
   const [pagination, setPagination] = useState({
     page: 1,
@@ -105,13 +106,27 @@ const TeacherExamsView: React.FC = () => {
   };
 
   const handleDeleteExam = async (examId: string) => {
+    setIsDeleting(true);
     try {
-      await examApi.deleteExam(examId);
-      setShowDeleteModal(false);
-      setSelectedExam(null);
-      fetchExams(); // Refresh list
-    } catch (error) {
+      const response = await examApi.deleteExam(examId);
+      if (response.success) {
+        // Remove from local state
+        setExams(exams.filter((e) => e.id !== examId));
+        // Also update context
+        deleteExam(examId);
+        setShowDeleteModal(false);
+        setSelectedExam(null);
+      } else {
+        console.error("Delete failed:", response.error);
+        alert(`Không thể xóa đề thi: ${response.error}`);
+      }
+    } catch (error: any) {
       console.error("Error deleting exam:", error);
+      alert(
+        `Lỗi: ${error.message || "Không thể xóa đề thi. Vui lòng thử lại."}`
+      );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -433,6 +448,7 @@ const TeacherExamsView: React.FC = () => {
             setSelectedExam(null);
           }}
           onConfirm={() => handleDeleteExam(selectedExam._id)}
+          isLoading={isDeleting}
         />
       )}
     </div>

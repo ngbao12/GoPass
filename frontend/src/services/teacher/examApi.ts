@@ -1,5 +1,10 @@
 import { httpClient } from "@/lib/http";
-import { ApiResponse } from "./types";
+import type {
+  ApiResponse,
+  ExamModel,
+  ExamAssignmentModel,
+  ExamSubmissionModel,
+} from "./types";
 
 // Backend Model Interfaces
 export interface ExamModel {
@@ -138,6 +143,9 @@ export interface AssignExamData {
   maxAttempts?: number;
 }
 
+// ============================================
+// API Service
+// ============================================
 export const examApi = {
   /**
    * Get teacher's exams with pagination
@@ -309,9 +317,31 @@ export const examApi = {
    * Auth: Required (Teacher)
    */
   deleteExam: async (examId: string): Promise<ApiResponse<void>> => {
-    return await httpClient.delete<ApiResponse<void>>(`/exams/${examId}`, {
-      requiresAuth: true,
-    });
+    try {
+      const response = await httpClient.delete<{
+        success: boolean;
+      }>(`/exams/${examId}`, { requiresAuth: true });
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: "Failed to delete exam",
+        };
+      }
+
+      return {
+        success: true,
+        data: undefined,
+      };
+    } catch (error: any) {
+      console.error("Error deleting exam:", error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || "Failed to delete exam",
+      };
+    }
   },
 
   /**

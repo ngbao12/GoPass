@@ -56,6 +56,43 @@ export interface UserModel {
   updated_at?: string;
 }
 
+export interface ExamModel {
+  _id: string;
+  title: string;
+  description: string;
+  subject: string;
+  duration_min: number;
+  total_score: number;
+  created_by: string;
+  totalQuestions: number;
+  readingPassages: any[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ExamAssignmentModel {
+  _id: string;
+  exam_id: string;
+  class_id: string;
+  start_time: string;
+  end_time: string;
+  attempt_limit: number;
+  created_at: string;
+}
+
+export interface ExamSubmissionModel {
+  _id: string;
+  exam_id: string;
+  student_user_id: string;
+  class_id?: string;
+  started_at: string;
+  submitted_at?: string;
+  status: 'in_progress' | 'submitted' | 'graded' | 'late';
+  objective_score: number;
+  final_score: number;
+  correctQuestionsCount: number;
+}
+
 // ============================================
 // API Request/Response Types
 // ============================================

@@ -18,6 +18,7 @@ require('dotenv').config();
 const Exam = require('../models/Exam');
 const ExamQuestion = require('../models/ExamQuestion');
 const ExamAssignment = require('../models/ExamAssignment');
+const Question = require('../models/Question');
 const Class = require('../models/Class');
 const User = require('../models/User');
 
@@ -65,161 +66,173 @@ const getRandomFutureDate = (daysFromNow = 30) => {
 };
 
 /**
+ * Cleanup: Delete all seeded data from previous runs
+ */
+const cleanupSeededData = async () => {
+  try {
+    console.log('\n🧹 Cleaning up previously seeded data for target teacher...');
+    
+    // Get all exams created by target teacher
+    const targetTeacherExams = await Exam.find({ createdBy: TARGET_TEACHER_ID });
+    const targetExamIds = targetTeacherExams.map(e => e._id);
+    
+    // Delete all exam assignments for these exams
+    const assignmentsResult = await ExamAssignment.deleteMany({ examId: { $in: targetExamIds } });
+    console.log(`   ✅ Deleted ${assignmentsResult.deletedCount} exam assignments`);
+    
+    // Delete exam questions linked to these exams
+    const examQuestionsResult = await ExamQuestion.deleteMany({ examId: { $in: targetExamIds } });
+    console.log(`   ✅ Deleted ${examQuestionsResult.deletedCount} exam questions`);
+    
+    // Delete questions created by target teacher
+    const questionsResult = await Question.deleteMany({ createdBy: TARGET_TEACHER_ID });
+    console.log(`   ✅ Deleted ${questionsResult.deletedCount} questions`);
+    
+    // Delete exams created by target teacher
+    const examsResult = await Exam.deleteMany({ createdBy: TARGET_TEACHER_ID });
+    console.log(`   ✅ Deleted ${examsResult.deletedCount} exams`);
+    
+    console.log('✅ Cleanup completed!\n');
+  } catch (error) {
+    console.error('❌ Error during cleanup:', error.message);
+    throw error;
+  }
+};
+
+/**
  * Main seed function
  */
 const seedExamAssignments = async () => {
   try {
-    // Step 1: Get all existing exams
-    console.log('\n📖 Fetching existing exams...');
-    const existingExams = await Exam.find({ isPublished: true }).populate('createdBy', 'role');
-    console.log(`✅ Found ${existingExams.length} existing exams`);
-
+    // Step 0: Cleanup previously seeded data
+    await cleanupSeededData();
+    
+    // Step 1: Find existing "Tiếng Anh" exams from other teachers
+    console.log('\n📖 Fetching existing "Tiếng Anh" exams...');
+    const existingExams = await Exam.find({ 
+      isPublished: true,
+      subject: 'Tiếng Anh',
+      createdBy: { $ne: TARGET_TEACHER_ID } // Exclude exams already created by target teacher
+    }).populate('createdBy', 'name role');
+    
+    console.log(`✅ Found ${existingExams.length} existing "Tiếng Anh" exams`);
+    
     if (existingExams.length === 0) {
-      console.log('⚠️  No exams to duplicate');
+      console.log('⚠️  No "Tiếng Anh" exams found to duplicate');
       return;
     }
-
-    // Step 2: Get all teachers with classes
-    console.log('\n👨‍🏫 Fetching teachers with classes...');
-    const teachers = await User.find({ role: 'teacher' });
-    const teachersWithClasses = await Promise.all(
-      teachers.map(async (teacher) => ({
-        teacher,
-        classes: await Class.find({ teacherUserId: teacher._id, isActive: true }),
-      }))
-    );
-
-    const teachersWithClassesFiltered = teachersWithClasses.filter(t => t.classes.length > 0);
-    console.log(`✅ Found ${teachersWithClassesFiltered.length} teachers with active classes`);
-
-    // Step 3: Highlight target teacher
-    const targetTeacher = teachersWithClassesFiltered.find(
-      t => t.teacher._id.toString() === TARGET_TEACHER_ID
-    );
-    if (targetTeacher) {
-      console.log(`🎯 Target teacher found: ${targetTeacher.teacher.name} with ${targetTeacher.classes.length} classes`);
+    
+    // Get target teacher
+    const targetTeacher = await User.findById(TARGET_TEACHER_ID);
+    if (!targetTeacher) {
+      console.log('❌ Target teacher not found');
+      return;
     }
-
-    // Step 4: Group exams by subject and created teacher
-    console.log('\n📚 Organizing exams by subject and teacher...');
-    const examsBySubjectAndTeacher = {};
-    existingExams.forEach(exam => {
-      const teacherId = exam.createdBy._id.toString();
-      const subject = exam.subject;
-      const key = `${teacherId}|${subject}`;
-
-      if (!examsBySubjectAndTeacher[key]) {
-        examsBySubjectAndTeacher[key] = {
-          teacherId,
-          subject,
-          exams: [],
-          teacher: exam.createdBy,
-        };
-      }
-      examsBySubjectAndTeacher[key].exams.push(exam);
+    
+    // Get all active classes of target teacher
+    const targetClasses = await Class.find({ 
+      teacherUserId: TARGET_TEACHER_ID, 
+      isActive: true
     });
-
-    console.log(`✅ Exams organized by ${Object.keys(examsBySubjectAndTeacher).length} subject-teacher combinations`);
-
-    // Step 5: Duplicate exams and create assignments
-    console.log('\n🔄 Duplicating exams and creating assignments...');
+    
+    console.log(`✅ Found ${targetClasses.length} classes for ${targetTeacher.name}`);
+    
+    if (targetClasses.length === 0) {
+      console.log('⚠️  No active classes found for target teacher');
+      return;
+    }
+    
+    // Step 2: Duplicate exams for target teacher
+    console.log('\n🔄 Duplicating "Tiếng Anh" exams for target teacher...');
     let duplicatedCount = 0;
     let assignmentCount = 0;
+    let duplicatedQuestions = 0;
+    
+    for (const originalExam of existingExams) {
+      // Create duplicate exam
+      const newExamData = {
+        title: originalExam.title,
+        description: originalExam.description,
+        subject: originalExam.subject,
+        durationMinutes: originalExam.durationMinutes,
+        mode: originalExam.mode,
+        shuffleQuestions: originalExam.shuffleQuestions,
+        showResultsImmediately: originalExam.showResultsImmediately,
+        createdBy: TARGET_TEACHER_ID,
+        isPublished: true,
+        readingPassages: originalExam.readingPassages || [],
+        totalQuestions: originalExam.totalQuestions,
+        totalPoints: originalExam.totalPoints,
+      };
 
-    for (const key of Object.keys(examsBySubjectAndTeacher)) {
-      const { teacherId, subject, exams: subjectExams, teacher } = examsBySubjectAndTeacher[key];
+      const newExam = await Exam.create(newExamData);
+      duplicatedCount++;
+      console.log(`   ✅ Duplicated: "${originalExam.title}" (from ${originalExam.createdBy?.name || 'Unknown'})`);
 
-      // Find teachers with the same subject (for duplication)
-      // Strategy: Match by exact subject, OR assign to all teachers if no match
-      const exactMatchTeachers = teachersWithClassesFiltered.filter(t => {
-        // Get all subjects this teacher has created exams for
-        const teacherExams = existingExams.filter(
-          e => e.createdBy._id.toString() === t.teacher._id.toString()
-        );
-        const teacherSubjects = new Set(teacherExams.map(e => e.subject));
-        return teacherSubjects.has(subject);
-      });
-
-      const compatibleTeachers = exactMatchTeachers.length > 0 
-        ? exactMatchTeachers 
-        : teachersWithClassesFiltered; // Fallback: assign to all teachers if no exact match
-
-      console.log(`\n📝 Subject "${subject}" (original teacher: ${teacher.name})`);
-      console.log(`   Compatible teachers: ${compatibleTeachers.length}`);
-      console.log(`   Exams to duplicate: ${subjectExams.length}`);
-
-      // For each exam in this subject
-      for (const originalExam of subjectExams) {
-        // Duplicate for each compatible teacher (except original)
-        for (const compatibleTeacher of compatibleTeachers) {
-          if (compatibleTeacher.teacher._id.toString() === teacherId) {
-            // Skip duplicating for the original creator
-            continue;
-          }
-
-          // Create duplicate exam
-          const newExamData = {
-            title: `${originalExam.title} [Bản sao]`,
-            description: originalExam.description,
-            subject: originalExam.subject,
-            durationMinutes: originalExam.durationMinutes,
-            mode: originalExam.mode,
-            shuffleQuestions: originalExam.shuffleQuestions,
-            showResultsImmediately: originalExam.showResultsImmediately,
-            createdBy: compatibleTeacher.teacher._id,
-            isPublished: true,
-            readingPassages: originalExam.readingPassages || [],
-            totalQuestions: originalExam.totalQuestions,
-            totalPoints: originalExam.totalPoints,
-          };
-
-          const newExam = await Exam.create(newExamData);
-          duplicatedCount++;
-          console.log(`   ✅ Duplicated: "${originalExam.title}" → ${compatibleTeacher.teacher.name}`);
-
-          // Duplicate exam questions
-          const originalQuestions = await ExamQuestion.find({ examId: originalExam._id });
-          if (originalQuestions.length > 0) {
-            const newQuestions = originalQuestions.map(q => ({
+      // Duplicate exam questions and questions
+      const originalExamQuestions = await ExamQuestion.find({ examId: originalExam._id });
+      if (originalExamQuestions.length > 0) {
+        for (const examQuestion of originalExamQuestions) {
+          const originalQuestion = await Question.findById(examQuestion.questionId);
+          
+          if (originalQuestion) {
+            // Create a duplicate of the question
+            const duplicateQuestionData = {
+              content: originalQuestion.content,
+              subject: originalQuestion.subject,
+              level: originalQuestion.level,
+              type: originalQuestion.type,
+              options: originalQuestion.options,
+              correctAnswers: originalQuestion.correctAnswers,
+              explanation: originalQuestion.explanation,
+              image: originalQuestion.image,
+              audio: originalQuestion.audio,
+              maxScore: originalQuestion.maxScore,
+              createdBy: TARGET_TEACHER_ID,
+            };
+            
+            const duplicateQuestion = await Question.create(duplicateQuestionData);
+            duplicatedQuestions++;
+            
+            // Create ExamQuestion linking the new exam to the new question
+            await ExamQuestion.create({
               examId: newExam._id,
-              questionId: q.questionId,
-              order: q.order,
-              maxScore: q.maxScore,
-              section: q.section || '',
-              points: q.points,
-            }));
-            await ExamQuestion.insertMany(newQuestions);
-          }
-
-          // Create assignments for this duplicated exam to the compatible teacher's classes
-          for (const teacherClass of compatibleTeacher.classes) {
-            // Random assignment time in next 30 days
-            const startTime = getRandomFutureDate(30);
-            const durationHours = Math.ceil(newExam.durationMinutes / 60);
-            const endTime = new Date(startTime.getTime() + durationHours * 60 * 60 * 1000);
-
-            const assignment = await ExamAssignment.create({
-              examId: newExam._id,
-              classId: teacherClass._id,
-              startTime,
-              endTime,
-              shuffleQuestions: newExam.shuffleQuestions,
-              allowLateSubmission: false,
-              attemptLimit: 1,
+              questionId: duplicateQuestion._id,
+              order: examQuestion.order,
+              maxScore: examQuestion.maxScore,
+              section: examQuestion.section || '',
+              points: examQuestion.points,
             });
-
-            assignmentCount++;
           }
-
-          console.log(
-            `   📌 Assigned to ${compatibleTeacher.classes.length} classes of ${compatibleTeacher.teacher.name}`
-          );
         }
+        console.log(`      → Duplicated ${originalExamQuestions.length} questions`);
       }
+
+      // Assign to all classes
+      for (const targetClass of targetClasses) {
+        const startTime = getRandomFutureDate(30);
+        const durationHours = Math.ceil(newExam.durationMinutes / 60);
+        const endTime = new Date(startTime.getTime() + durationHours * 60 * 60 * 1000);
+        
+        await ExamAssignment.create({
+          examId: newExam._id,
+          classId: targetClass._id,
+          startTime,
+          endTime,
+          shuffleQuestions: newExam.shuffleQuestions,
+          allowLateSubmission: false,
+          attemptLimit: 1,
+        });
+        
+        assignmentCount++;
+      }
+      
+      console.log(`      → Assigned to ${targetClasses.length} classes`);
     }
 
     console.log('\n✅ Seeding completed!');
     console.log(`   📖 Exams duplicated: ${duplicatedCount}`);
+    console.log(`   📝 Questions duplicated: ${duplicatedQuestions}`);
     console.log(`   📌 Assignments created: ${assignmentCount}`);
   } catch (error) {
     console.error('❌ Error during seeding:', error.message);
