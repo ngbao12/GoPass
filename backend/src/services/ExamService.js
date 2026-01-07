@@ -221,10 +221,43 @@ class ExamService {
       throw new Error("Unauthorized to delete this exam");
     }
 
+    // CASCADE DELETE: Remove all related data
+    const ExamSubmission = require("../models/ExamSubmission");
+    const ExamAnswer = require("../models/ExamAnswer");
+    const ExamAssignment = require("../models/ExamAssignment");
+
+    // 1. Find all submissions for this exam
+    const submissions = await ExamSubmission.find({ examId });
+    const submissionIds = submissions.map((s) => s._id);
+
+    // 2. Delete ExamAnswers (linked to submissions)
+    if (submissionIds.length > 0) {
+      await ExamAnswer.deleteMany({ submissionId: { $in: submissionIds } });
+      console.log(`🗑️ Deleted ${submissionIds.length} exam answers`);
+    }
+
+    // 3. Delete ExamSubmissions
+    await ExamSubmission.deleteMany({ examId });
+    console.log(`🗑️ Deleted ${submissions.length} exam submissions`);
+
+    // 4. Delete ExamAssignments
+    const assignments = await ExamAssignment.deleteMany({ examId });
+    console.log(`🗑️ Deleted ${assignments.deletedCount} exam assignments`);
+
+    // 5. Delete ExamQuestions (junction table)
     await ExamQuestionRepository.deleteByExam(examId);
+
+    // 6. Delete the Exam itself
     await ExamRepository.delete(examId);
 
-    return { message: "Exam deleted successfully" };
+    return {
+      message: "Exam deleted successfully",
+      deleted: {
+        submissions: submissions.length,
+        answers: submissionIds.length,
+        assignments: assignments.deletedCount,
+      },
+    };
   }
 
   // Get teacher's exams with pagination
