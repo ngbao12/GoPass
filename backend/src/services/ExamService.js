@@ -260,6 +260,64 @@ class ExamService {
     };
   }
 
+  // Get all exams (admin only) with pagination and filters
+  async getAllExams(adminId, options = {}) {
+    const { page = 1, limit = 50, subject, mode, search } = options;
+    const skip = (page - 1) * limit;
+
+    const query = { createdBy: adminId }; // Only get exams created by this admin
+    if (subject) query.subject = subject;
+    if (mode) query.mode = mode;
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { subject: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const [exams, total] = await Promise.all([
+      ExamRepository.find(query, {
+        skip,
+        limit,
+        sort: { createdAt: -1 },
+        populate: "createdBy",
+        select:
+          "_id title subject durationMinutes totalQuestions totalPoints mode isPublished createdBy createdAt updatedAt",
+      }),
+      ExamRepository.count(query),
+    ]);
+
+    // Format exams with creator info
+    const formattedExams = exams.map((exam) => ({
+      id: exam._id.toString(),
+      title: exam.title,
+      subject: exam.subject,
+      duration: exam.durationMinutes,
+      questionCount: exam.totalQuestions || 0,
+      totalPoints: exam.totalPoints || 10,
+      mode: exam.mode || "practice",
+      isPublished: exam.isPublished || false,
+      createdBy: exam.createdBy
+        ? {
+            id: exam.createdBy._id?.toString(),
+            name: exam.createdBy.name || exam.createdBy.email,
+          }
+        : null,
+      createdAt: exam.createdAt,
+      updatedAt: exam.updatedAt,
+    }));
+
+    return {
+      exams: formattedExams,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
   // Get teacher's exams with pagination
   async getTeacherExams(teacherId, options = {}) {
     const { page = 1, limit = 10, subject, isPublished } = options;
