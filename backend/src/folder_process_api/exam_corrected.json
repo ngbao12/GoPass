@@ -102,8 +102,10 @@
                 "D": "takes out"
             },
             "answer": "A",
-            "PassageRelated": null,
-            "tags": []
+            "PassageRelated": "passage_1",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 7,
@@ -400,8 +402,10 @@
                 "D": "do"
             },
             "answer": "B",
-            "PassageRelated": null,
-            "tags": []
+            "PassageRelated": "passage_3",
+            "tags": [
+                "cloze"
+            ]
         },
         {
             "question_number": 27,

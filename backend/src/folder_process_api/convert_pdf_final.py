@@ -330,8 +330,10 @@ def parse_question(q_num, text, answers, pass_id):
     # Filter uppercase options (should be near end of text)
     if all_uppercase:
         # Check if these are real options (appear after lowercase a-, b-, etc.)
+        # For ordering questions, we need at least 3 lowercase items (a-, b-, c-)
         first_upper = all_uppercase[0].start()
-        has_lowercase_before = bool(re.search(r'[a-e]\s*-', text[:first_upper]))
+        lowercase_items = re.findall(r'\b[a-e]\s*-', text[:first_upper])
+        has_lowercase_before = len(lowercase_items) >= 3
         
         if has_lowercase_before and len(all_uppercase) >= 3:
             # This is an ordering question - no passage relation
