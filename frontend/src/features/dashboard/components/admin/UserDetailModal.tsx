@@ -196,29 +196,6 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose }) => {
               </div>
             </div>
 
-            {/* Updated At */}
-            <div className="flex items-start gap-3">
-              <div className="bg-green-50 p-2 rounded-lg">
-                <svg
-                  className="w-5 h-5 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-sm text-gray-500 font-medium">Cập nhật lần cuối</p>
-                <p className="text-gray-900">{formatDate(user.updatedAt)}</p>
-              </div>
-            </div>
-
             {/* Role Description */}
             <div className="bg-gray-50 rounded-lg p-4 mt-6">
               <h5 className="font-semibold text-gray-900 mb-2">Mô tả vai trò</h5>
@@ -229,16 +206,6 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose }) => {
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="bg-gray-50 px-6 py-4 flex justify-end rounded-b-xl">
-          <button
-            onClick={onClose}
-            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
-          >
-            Đóng
-          </button>
         </div>
       </div>
     </div>
