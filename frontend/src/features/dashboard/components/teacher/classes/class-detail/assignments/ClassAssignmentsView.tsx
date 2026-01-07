@@ -12,6 +12,9 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
   // Use assignments data from classDetail (already fetched by parent)
   const assignments = classDetail.assignments || [];
 
+  console.log('📊 ClassAssignmentsView - Assignments:', assignments);
+  console.log('📊 ClassAssignmentsView - Length:', assignments.length);
+
   return (
     <div className="p-6">
       <div className="space-y-6">
@@ -53,9 +56,9 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                         </svg>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{assignment.title || assignment.examId?.title || 'Untitled'}</h4>
+                        <h4 className="font-semibold text-gray-900">{assignment.title || 'Không có tiêu đề'}</h4>
                         <p className="text-sm text-gray-600">
-                          {assignment.description || assignment.examId?.description || 'Không có mô tả'}
+                          {assignment.questionCount || 0} câu hỏi
                         </p>
                       </div>
                     </div>
@@ -66,33 +69,41 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         <span>
-                          Hạn: {assignment.dueDate ? new Date(assignment.dueDate).toLocaleDateString('vi-VN') : 'N/A'}
+                          Bắt đầu: {assignment.startTime ? new Date(assignment.startTime).toLocaleDateString('vi-VN') : 'N/A'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>
+                          Kết thúc: {assignment.endTime ? new Date(assignment.endTime).toLocaleDateString('vi-VN') : 'N/A'}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>{assignment.duration || assignment.examId?.duration || 0} phút</span>
+                        <span>{assignment.duration || 0} phút</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>{assignment.submissionCount || 0} bài nộp</span>
+                        <span>{assignment.submittedCount || 0} bài nộp</span>
                       </div>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      assignment.status === 'active'
+                      assignment.status === 'ongoing'
                         ? 'bg-green-100 text-green-700'
                         : assignment.status === 'upcoming'
                         ? 'bg-blue-100 text-blue-700'
                         : 'bg-gray-100 text-gray-700'
                     }`}>
-                      {assignment.status === 'active' ? 'Đang diễn ra' : assignment.status === 'upcoming' ? 'Sắp tới' : 'Đã kết thúc'}
+                      {assignment.status === 'ongoing' ? 'Đang diễn ra' : assignment.status === 'upcoming' ? 'Sắp tới' : 'Đã kết thúc'}
                     </span>
                     <button className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

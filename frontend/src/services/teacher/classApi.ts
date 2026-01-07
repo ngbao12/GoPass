@@ -34,21 +34,37 @@ export const classApi = {
         };
       }
 
-      const transformedData: TeacherClass[] = response.data.classes.map(cls => ({
-        id: cls._id,
-        name: cls.className,
-        description: cls.description || '',
-        classCode: cls.classCode,
-        subject: "Toán", // TODO: Add to backend model
-        grade: "Lớp 12", // TODO: Add to backend model
-        studentCount: cls.studentCount || 0,
-        examCount: 0, // TODO: Calculate from assignments
-        createdAt: cls.createdAt,
-      }));
+      // Fetch assignments for each class to get exam count
+      const transformedDataWithAssignments = await Promise.all(
+        response.data.classes.map(async (cls) => {
+          const assignmentsResponse = await httpClient.get<{
+            success: boolean;
+            data: { assignments: any[] };
+          }>(`/classes/${cls._id}/assignments`, { requiresAuth: true });
+          
+          const examCount = assignmentsResponse.success 
+            ? (Array.isArray(assignmentsResponse.data) 
+              ? assignmentsResponse.data.length 
+              : (assignmentsResponse.data?.assignments?.length || 0))
+            : 0;
+
+          return {
+            id: cls._id,
+            name: cls.className,
+            description: cls.description || '',
+            classCode: cls.classCode,
+            subject: "Toán", // TODO: Add to backend model
+            grade: "Lớp 12", // TODO: Add to backend model
+            studentCount: cls.studentCount || 0,
+            examCount,
+            createdAt: cls.createdAt,
+          } as TeacherClass;
+        })
+      );
       
       return {
         success: true,
-        data: transformedData,
+        data: transformedDataWithAssignments,
       };
     } catch (error: any) {
       console.error('Error fetching classes:', error);

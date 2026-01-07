@@ -18,9 +18,16 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
   const router = useRouter();
   const [showShareModal, setShowShareModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [editData, setEditData] = useState({
+    className: classDetail.className,
+    description: classDetail.description || '',
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
 
   const handleCopyCode = async () => {
     try {
@@ -56,23 +63,57 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
       setIsDeleting(false);
     }
   };
+
+  const handleUpdateClass = async () => {
+    try {
+      setIsEditing(true);
+      setEditError(null);
+
+      const response = await classApi.updateClass(classDetail.id, {
+        className: editData.className,
+        description: editData.description,
+      });
+
+      if (response.success) {
+        setShowEditModal(false);
+        // Reload page to see updated info
+        window.location.reload();
+      } else {
+        setEditError(response.error || "Không thể cập nhật lớp học");
+      }
+    } catch (err) {
+      console.error("Error updating class:", err);
+      setEditError("Đã xảy ra lỗi khi cập nhật lớp học");
+    } finally {
+      setIsEditing(false);
+    }
+  };
   return (
     <div className="bg-white border border-gray-200 rounded-lg">
       {/* Header with gradient background */}
       <div className="bg-gradient-to-r from-teal-500 to-blue-600 text-white rounded-t-lg p-6">
-        <div className="flex items-center gap-4 mb-4">
-          <button
-            onClick={onGoBack}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold">{classDetail.className}</h1>
-            <p className="text-teal-100 mt-1">{classDetail.description}</p>
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <div className="flex items-center gap-4 flex-1">
+            <button
+              onClick={onGoBack}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold">{classDetail.className}</h1>
+              <p className="text-teal-100 mt-1">{classDetail.description}</p>
+            </div>
           </div>
+
+          <button
+            onClick={() => setShowEditModal(true)}
+            className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors font-medium text-sm"
+          >
+            Chỉnh sửa
+          </button>
         </div>
 
         {/* Class Info */}
@@ -243,6 +284,78 @@ const ClassDetailHeader: React.FC<ClassDetailHeaderProps> = ({
                   </>
                 ) : (
                   "Xóa"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Class Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Chỉnh sửa thông tin lớp học</h3>
+              <p className="text-sm text-gray-600">Cập nhật tên và mô tả lớp học</p>
+            </div>
+
+            {editError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700">{editError}</p>
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tên lớp học
+                </label>
+                <input
+                  type="text"
+                  value={editData.className}
+                  onChange={(e) => setEditData({ ...editData, className: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
+                  placeholder="Nhập tên lớp học"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Mô tả
+                </label>
+                <textarea
+                  value={editData.description}
+                  onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
+                  rows={3}
+                  placeholder="Nhập mô tả lớp học"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowEditModal(false)}
+                disabled={isEditing}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={handleUpdateClass}
+                disabled={isEditing}
+                className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isEditing ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    </svg>
+                    Đang lưu...
+                  </>
+                ) : (
+                  "Lưu thay đổi"
                 )}
               </button>
             </div>
