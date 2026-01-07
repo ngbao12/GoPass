@@ -6,48 +6,6 @@ import type {
   ExamSubmissionModel,
 } from "./types";
 
-// Backend Model Interfaces
-export interface ExamModel {
-  _id: string;
-  title: string;
-  description: string;
-  subject: string;
-  durationMinutes: number;
-  totalPoints: number;
-  createdBy: string;
-  totalQuestions: number;
-  readingPassages: any[];
-  pdfFilePath?: string;
-  pdfFileName?: string;
-  isPublished: boolean;
-  mode: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ExamAssignmentModel {
-  _id: string;
-  exam_id: string;
-  class_id: string;
-  start_time: string;
-  end_time: string;
-  attempt_limit: number;
-  created_at: string;
-}
-
-export interface ExamSubmissionModel {
-  _id: string;
-  exam_id: string;
-  student_user_id: string;
-  class_id?: string;
-  started_at: string;
-  submitted_at?: string;
-  status: "in_progress" | "submitted" | "graded" | "late";
-  objective_score: number;
-  final_score: number;
-  correctQuestionsCount: number;
-}
-
 // Frontend Types
 export interface TeacherExam {
   id: string;
@@ -345,19 +303,63 @@ export const examApi = {
   },
 
   /**
-   * Assign exam to class
+   * Assign exam to class(es)
    * API: POST /api/exams/:examId/assign-to-class
    * Auth: Required (Teacher)
+   *
+   * Note: Backend accepts one classId at a time, so we call it multiple times for multiple classes
    */
   assignExamToClass: async (
     examId: string,
     assignmentData: any
   ): Promise<ApiResponse<any>> => {
-    return await httpClient.post<ApiResponse<any>>(
-      `/exams/${examId}/assign-to-class`,
-      assignmentData,
-      { requiresAuth: true }
-    );
+    try {
+      const { classIds, startDate, startTime, endDate, endTime, maxAttempts } =
+        assignmentData;
+
+      // Format datetime strings to ISO format
+      const startTimeISO = `${startDate}T${startTime}:00Z`;
+      const endTimeISO = `${endDate}T${endTime}:00Z`;
+
+      // Backend accepts single classId, so loop through classIds
+      const promises = classIds.map((classId: string) =>
+        httpClient.post<ApiResponse<any>>(
+          `/exams/${examId}/assign-to-class`,
+          {
+            classId,
+            startTime: startTimeISO,
+            endTime: endTimeISO,
+            maxAttempts: maxAttempts || 1,
+            shuffleQuestions: false,
+            allowLateSubmission: false,
+          },
+          { requiresAuth: true }
+        )
+      );
+
+      // Wait for all assignments to complete
+      const results = await Promise.all(promises);
+
+      // Return success if at least one succeeded
+      const successCount = results.filter((r) => r.success).length;
+      console.log(
+        `✅ Successfully assigned exam to ${successCount}/${classIds.length} classes`
+      );
+
+      return {
+        success: successCount > 0,
+        data: results,
+        message: `Assigned to ${successCount}/${classIds.length} classes`,
+      };
+    } catch (error) {
+      console.error("Error assigning exam to class:", error);
+      return {
+        success: false,
+        data: null,
+        message: "Failed to assign exam",
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
   },
 
   /**
