@@ -7,6 +7,7 @@ import UserStatsGrid from "./UserStatsGrid";
 import UserFilterToolbar from "./UserFilterToolbar";
 import UserManagementTable from "./UserManagementTable";
 import Pagination from "./Pagination";
+import UserDetailModal from "./UserDetailModal";
 
 const UserManagementView: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -22,6 +23,7 @@ const UserManagementView: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<'all' | User['status']>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState<{
     type: 'status' | 'password';
     user: User | null;
@@ -83,9 +85,10 @@ const UserManagementView: React.FC = () => {
   }, [searchQuery]);
 
   const handleViewDetail = (userId: string) => {
-    // TODO: Implement user detail modal or navigate to detail page
-    console.log('View user detail:', userId);
-    alert(`Xem chi tiết user: ${userId}\n(Chức năng này sẽ được implement sau)`);
+    const user = users.find(u => u._id === userId);
+    if (user) {
+      setSelectedUser(user);
+    }
   };
 
   const handleUpdateStatus = (userId: string, newStatus: 'active' | 'locked') => {
@@ -190,9 +193,20 @@ const UserManagementView: React.FC = () => {
         />
       )}
 
+      {/* User Detail Modal */}
+      {selectedUser && (
+        <UserDetailModal
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+        />
+      )}
+
       {/* Confirmation Dialog */}
       {showConfirmDialog && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div 
+          className="fixed inset-0 flex items-center justify-center z-50"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+        >
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {showConfirmDialog.type === 'status' ? 'Xác nhận thay đổi trạng thái' : 'Xác nhận reset mật khẩu'}

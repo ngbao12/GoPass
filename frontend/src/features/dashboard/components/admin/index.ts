@@ -10,3 +10,4 @@ export { default as UserManagementTable } from './UserManagementTable';
 export { default as UserFilterToolbar } from './UserFilterToolbar';
 export { default as UserStatsGrid } from './UserStatsGrid';
 export { default as Pagination } from './Pagination';
+export { default as UserDetailModal } from './UserDetailModal';
