@@ -29,8 +29,16 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
     if (pathname) {
       const pathSegments = pathname.split("/").filter(Boolean);
       // pathSegments: ['dashboard', 'forum', 'article', '123']
+      // hoặc: ['dashboard', 'teacher', 'exams']
+      
       if (pathSegments.length >= 2) {
-        const section = pathSegments[1]; // 'forum', 'classes', 'exams', etc.
+        let section = pathSegments[1]; // 'forum', 'classes', 'exams', 'teacher', etc.
+        
+        // Nếu là teacher route (dashboard/teacher/exams)
+        if (section === "teacher" && pathSegments.length >= 3) {
+          section = pathSegments[2]; // 'exams', 'classes'
+        }
+        
         // Map URL segments to tab IDs
         const tabMapping: { [key: string]: string } = {
           forum: "forum",
@@ -42,6 +50,7 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
           practice: "practice",
           history: "history",
           students: "students",
+          grading: "grading",
         };
         const mappedTab = tabMapping[section];
         if (mappedTab && mappedTab !== activeTab) {
@@ -66,7 +75,12 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
     } else if (tabId === "classes" && userRole === "teacher") {
       router.push("/dashboard/teacher/classes");
     } else {
-      router.push(`/dashboard/${tabId}`);
+      // Teacher có route riêng cho exams và classes
+      if (userRole === "teacher" && (tabId === "exams" || tabId === "classes")) {
+        router.push(`/dashboard/teacher/${tabId}`);
+      } else {
+        router.push(`/dashboard/${tabId}`);
+      }
     }
   };
   const getTabsByRole = (): NavigationTab[] => {
