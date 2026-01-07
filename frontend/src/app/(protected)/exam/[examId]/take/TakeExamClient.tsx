@@ -216,7 +216,11 @@ const MainQuestionArea = () => {
 // 3. MAIN COMPONENT (Kết nối mọi thứ)
 // ==========================================
 
-const ExamInterface = () => {
+const ExamInterface = ({
+  isPreviewMode = false,
+}: {
+  isPreviewMode?: boolean;
+}) => {
   const {
     exam,
     currentQuestion,
@@ -227,7 +231,7 @@ const ExamInterface = () => {
   } = useExam();
   const { uiLayout, sectionsData, stats } = useExamUI();
 
-  console.log("🏁 Render Exam Interface", currentQuestion);
+  console.log("🏁 Render Exam Interface", currentQuestion, { isPreviewMode });
 
   // 1. Kết nối Navigation Hook
   const { contestId, handleNavigateBack, handleNavigateDashboard } =
@@ -267,9 +271,16 @@ const ExamInterface = () => {
         examTitle={exam.title}
         examSubject={exam.subject || "Thi thử"}
         timeRemaining={timeRemaining}
-        onExit={() => setDialogs((prev) => ({ ...prev, exit: true }))}
+        onExit={() => {
+          if (isPreviewMode) {
+            handleNavigateBack(); // Direct navigation for preview
+          } else {
+            setDialogs((prev) => ({ ...prev, exit: true }));
+          }
+        }}
         onSubmit={() => setDialogs((prev) => ({ ...prev, submit: true }))}
         isSubmitting={examState.isSubmitting}
+        isPreviewMode={isPreviewMode}
       />
 
       <div className="flex-1 flex pt-16 overflow-hidden">
@@ -350,12 +361,16 @@ const ExamInterface = () => {
 
 interface TakeExamClientProps {
   exam: ExamWithDetails;
+  isPreviewMode?: boolean; // Teacher preview mode
 }
 
-export default function TakeExamClient({ exam }: TakeExamClientProps) {
+export default function TakeExamClient({
+  exam,
+  isPreviewMode = false,
+}: TakeExamClientProps) {
   return (
-    <ExamProvider initialExam={exam}>
-      <ExamInterface />
+    <ExamProvider initialExam={exam} isReviewMode={isPreviewMode}>
+      <ExamInterface isPreviewMode={isPreviewMode} />
     </ExamProvider>
   );
 }

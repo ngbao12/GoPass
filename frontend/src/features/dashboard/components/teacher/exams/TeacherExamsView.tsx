@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { Button, Badge, Input } from "@/components/ui";
 import CreateExamModal from "./CreateExamModal";
 import AssignExamModal from "./AssignExamModal";
 import DeleteExamModal from "./DeleteExamModal";
-import QuestionPreviewModal from "./QuestionPreviewModal";
 import { examApi } from "@/services/teacher";
 
 interface Exam {
@@ -23,13 +23,13 @@ interface Exam {
 }
 
 const TeacherExamsView: React.FC = () => {
+  const router = useRouter();
   const { userRole } = useDashboard();
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("all");
@@ -78,7 +78,8 @@ const TeacherExamsView: React.FC = () => {
 
   const handleCreateExam = async (examData: any) => {
     try {
-      await examApi.createExam(examData);
+      // Modal already handles the exam creation via processPdfToExam
+      // Just close modal and refresh list
       setShowCreateModal(false);
       fetchExams(); // Refresh list
     } catch (error) {
@@ -115,8 +116,8 @@ const TeacherExamsView: React.FC = () => {
   };
 
   const handlePreviewExam = (exam: Exam) => {
-    setSelectedExam(exam);
-    setShowPreviewModal(true);
+    // Navigate to exam with preview mode instead of opening modal
+    router.push(`/exam/${exam._id}/take?preview=true`);
   };
 
   const openDeleteModal = (exam: Exam) => {
@@ -432,17 +433,6 @@ const TeacherExamsView: React.FC = () => {
             setSelectedExam(null);
           }}
           onConfirm={() => handleDeleteExam(selectedExam._id)}
-        />
-      )}
-
-      {showPreviewModal && selectedExam && (
-        <QuestionPreviewModal
-          isOpen={showPreviewModal}
-          exam={selectedExam as any}
-          onClose={() => {
-            setShowPreviewModal(false);
-            setSelectedExam(null);
-          }}
         />
       )}
     </div>

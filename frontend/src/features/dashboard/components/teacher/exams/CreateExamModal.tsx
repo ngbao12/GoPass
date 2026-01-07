@@ -34,6 +34,16 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Only allow submission from step 4
+    if (currentStep !== 4) {
+      return;
+    }
+
+    // Prevent duplicate submissions
+    if (isSubmitting || isProcessing) {
+      return;
+    }
+
     // Step 4: Actually create the exam with PDF processing
     if (!uploadedFileInfo) {
       alert("Vui lòng upload file PDF trước");

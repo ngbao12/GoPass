@@ -23,15 +23,17 @@ export default function TakeExamPage() {
       }
 
       try {
-        // Get assignmentId and contestId from searchParams if present
+        // Get assignmentId, contestId, and preview mode from searchParams
         const assignmentId = searchParams?.get("assignmentId") || undefined;
         const contestId = searchParams?.get("contestId") || undefined;
+        const isPreviewMode = searchParams?.get("preview") === "true";
 
         // Fetch exam data with context
         console.log("📖 Fetching exam data...", {
           examId,
           assignmentId,
           contestId,
+          isPreviewMode,
         });
         const examData = await examService.getExamById(
           examId,
@@ -44,32 +46,48 @@ export default function TakeExamPage() {
           return;
         }
 
-        // Check if user has an active submission
-        if (!examData.userSubmission) {
-          console.log("⚠️ No submission found, creating one...");
-
-          // Create a new submission
-          const submission = await examService.createSubmission(
-            examId,
-            assignmentId,
-            contestId
-          );
-
-          if (!submission) {
-            console.error("❌ Failed to create submission");
-            setError(true);
-            return;
-          }
-
-          console.log("✅ Submission created:", submission._id);
-
-          // Attach submission to exam data
-          examData.userSubmission = submission;
+        // Skip submission creation for teacher preview mode
+        if (isPreviewMode) {
+          console.log("👁️ Preview mode - skipping submission creation");
+          // Create a mock submission for preview (won't be saved)
+          examData.userSubmission = {
+            _id: "preview",
+            examId: examId,
+            userId: "preview",
+            status: "in_progress",
+            answers: [],
+            startTime: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
         } else {
-          console.log(
-            "✅ Found existing submission:",
-            examData.userSubmission._id
-          );
+          // Check if user has an active submission
+          if (!examData.userSubmission) {
+            console.log("⚠️ No submission found, creating one...");
+
+            // Create a new submission
+            const submission = await examService.createSubmission(
+              examId,
+              assignmentId,
+              contestId
+            );
+
+            if (!submission) {
+              console.error("❌ Failed to create submission");
+              setError(true);
+              return;
+            }
+
+            console.log("✅ Submission created:", submission._id);
+
+            // Attach submission to exam data
+            examData.userSubmission = submission;
+          } else {
+            console.log(
+              "✅ Found existing submission:",
+              examData.userSubmission._id
+            );
+          }
         }
 
         setExam(examData);
@@ -110,5 +128,10 @@ export default function TakeExamPage() {
     );
   }
 
-  return <TakeExamClient exam={exam} />;
+  return (
+    <TakeExamClient
+      exam={exam}
+      isPreviewMode={searchParams?.get("preview") === "true"}
+    />
+  );
 }
