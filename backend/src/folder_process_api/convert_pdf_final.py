@@ -298,7 +298,7 @@ def extract_exam(pdf_path):
         if "q_start" in p:  # Safely remove q_start if exists
             del p["q_start"]
     
-    print(f"✅ Extracted {len(passages)} passages, {len(questions)} questions")
+    # Don't print anything - will output JSON to stdout later
     
     return {
         "passages": passages,

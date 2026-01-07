@@ -21,26 +21,43 @@ class PdfProcessorService {
       // Check if Python script exists
       fs.access(pythonScript)
         .then(() => {
-          // Spawn Python process
-          const pythonProcess = spawn("python", [pythonScript, pdfFilePath]);
+          console.log("🐍 Starting Python PDF processor...");
+          console.log("📄 PDF Path:", pdfFilePath);
+          console.log("📜 Script Path:", pythonScript);
+
+          // Spawn Python process with UTF-8 encoding
+          const pythonProcess = spawn("python", [pythonScript, pdfFilePath], {
+            env: {
+              ...process.env,
+              PYTHONIOENCODING: "utf-8", // Force UTF-8 encoding
+            },
+          });
 
           let stdoutData = "";
           let stderrData = "";
 
           pythonProcess.stdout.on("data", (data) => {
-            stdoutData += data.toString();
+            const chunk = data.toString("utf8");
+            stdoutData += chunk;
           });
 
           pythonProcess.stderr.on("data", (data) => {
-            stderrData += data.toString();
+            const chunk = data.toString("utf8");
+            stderrData += chunk;
+            // Log stderr for debugging but don't fail immediately
+            console.warn("Python stderr:", chunk);
           });
 
           pythonProcess.on("close", (code) => {
+            console.log(`Python process exited with code ${code}`);
+
             if (code !== 0) {
-              console.error("Python process error:", stderrData);
+              console.error("❌ Python process error:", stderrData);
               reject(
                 new Error(
-                  `PDF processing failed: ${stderrData || "Unknown error"}`
+                  `PDF processing failed with code ${code}: ${
+                    stderrData || "Unknown error"
+                  }`
                 )
               );
               return;
@@ -48,24 +65,34 @@ class PdfProcessorService {
 
             try {
               // Python script outputs JSON to stdout
+              console.log("📦 Parsing JSON output...");
               const examData = JSON.parse(stdoutData);
+              console.log(
+                `✅ Parsed ${examData.passages?.length || 0} passages, ${
+                  examData.questions?.length || 0
+                } questions`
+              );
 
               // Transform data to include userId and proper structure
               const transformedData = this.transformExamData(examData, userId);
 
               resolve(transformedData);
             } catch (error) {
+              console.error("❌ JSON parse error:", error.message);
+              console.error("Raw stdout:", stdoutData.substring(0, 200));
               reject(new Error(`Failed to parse exam data: ${error.message}`));
             }
           });
 
           pythonProcess.on("error", (error) => {
+            console.error("❌ Failed to start Python:", error);
             reject(
               new Error(`Failed to start Python process: ${error.message}`)
             );
           });
         })
         .catch((error) => {
+          console.error("❌ Python script not found:", pythonScript);
           reject(new Error(`Python script not found: ${pythonScript}`));
         });
     });
