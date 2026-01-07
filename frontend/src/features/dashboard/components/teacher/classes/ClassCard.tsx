@@ -76,9 +76,7 @@ const ClassCard: React.FC<ClassCardProps> = ({
           <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
             {classData.name}
           </h3>
-          <Badge className="bg-gray-100 text-gray-700 text-xs">
-            {classData.grade}
-          </Badge>
+          
         </div>
         <p className="text-sm text-gray-600 line-clamp-2 mb-3">
           {classData.description}

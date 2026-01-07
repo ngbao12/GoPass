@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import type { ClassDetail } from "@/services/teacher/types";
+import { classApi } from "@/services/teacher";
 
 interface ClassAssignmentsViewProps {
   classDetail: ClassDetail;
@@ -11,6 +12,11 @@ interface ClassAssignmentsViewProps {
 const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail, onUpdate }) => {
   // Use assignments data from classDetail (already fetched by parent)
   const assignments = classDetail.assignments || [];
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<any | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   console.log('📊 ClassAssignmentsView - Assignments:', assignments);
   console.log('📊 ClassAssignmentsView - Length:', assignments.length);
@@ -110,7 +116,14 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                    <button
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      onClick={() => {
+                        setSelectedAssignment(assignment);
+                        setDeleteError(null);
+                        setShowDeleteModal(true);
+                      }}
+                    >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
@@ -134,6 +147,74 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
           </div>
         )}
       </div>
+
+      {/* Delete Assignment Modal */}
+      {showDeleteModal && selectedAssignment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
+            <div className="mb-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">Xóa đề giao?</h3>
+              <p className="text-sm text-gray-600 text-center">
+                Bạn có chắc muốn xóa đề thi <span className="font-semibold">{selectedAssignment.title}</span> khỏi lớp <span className="font-semibold">{classDetail.className}</span>?
+              </p>
+            </div>
+
+            {deleteError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-700">{deleteError}</p>
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    setIsDeleting(true);
+                    setDeleteError(null);
+                    const resp = await classApi.deleteAssignment(classDetail.id, selectedAssignment.assignmentId || selectedAssignment._id);
+                    if (resp.success) {
+                      setShowDeleteModal(false);
+                      setSelectedAssignment(null);
+                      onUpdate();
+                    } else {
+                      setDeleteError(resp.error || 'Không thể xóa đề giao');
+                    }
+                  } catch (e) {
+                    setDeleteError('Đã xảy ra lỗi khi xóa');
+                  } finally {
+                    setIsDeleting(false);
+                  }
+                }}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isDeleting ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    </svg>
+                    Đang xóa...
+                  </>
+                ) : (
+                  'Xóa'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

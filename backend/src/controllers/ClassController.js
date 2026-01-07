@@ -123,6 +123,24 @@ class ClassController {
     }
   }
 
+  // DELETE /classes/:classId/assignments/:assignmentId
+  async deleteAssignment(req, res) {
+    try {
+      const { classId, assignmentId } = req.params;
+      const teacherId = req.user.userId;
+      const result = await ClassService.deleteAssignment(classId, teacherId, assignmentId);
+      res.status(200).json({
+        success: true,
+        message: result.message,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
   // PUT /classes/:classId
   async updateClass(req, res) {
     try {

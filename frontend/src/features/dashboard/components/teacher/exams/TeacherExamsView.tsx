@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 import { useTeacherData } from "@/features/dashboard/context/TeacherDataContext";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -9,6 +9,8 @@ import CreateExamModal from "./CreateExamModal";
 import AssignExamModal from "./AssignExamModal";
 import DeleteExamModal from "./DeleteExamModal";
 import QuestionPreviewModal from "./QuestionPreviewModal";
+import { examApi } from "@/services/teacher/examApi";
+import type { TeacherExam } from "@/services/teacher/examApi";
 
 const TeacherExamsView: React.FC = () => {
     const { userRole } = useDashboard();
@@ -20,8 +22,31 @@ const TeacherExamsView: React.FC = () => {
     const [selectedExam, setSelectedExam] = useState<any>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [exams, setExams] = useState<TeacherExam[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const exams = teacherData.exams;
+    // Fetch exams from backend on component mount
+    useEffect(() => {
+        const fetchExams = async () => {
+            try {
+                const response = await examApi.getExams();
+                if (response.success) {
+                    setExams(response.data);
+                } else {
+                    console.error('Failed to fetch exams:', response.error);
+                    setExams([]);
+                }
+            } catch (error) {
+                console.error('Error fetching exams:', error);
+                setExams([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchExams();
+    }, []);
 
     const filteredExams = exams.filter(exam => {
         const matchesSearch = exam.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -46,10 +71,27 @@ const TeacherExamsView: React.FC = () => {
         setSelectedExam(null);
     };
 
-    const handleDeleteExam = (examId: string) => {
-        deleteExam(examId);
-        setShowDeleteModal(false);
-        setSelectedExam(null);
+    const handleDeleteExam = async (examId: string) => {
+        setIsDeleting(true);
+        try {
+            const response = await examApi.deleteExam(examId);
+            if (response.success) {
+                // Remove from local state
+                setExams(exams.filter(e => e.id !== examId));
+                // Also update context
+                deleteExam(examId);
+                setShowDeleteModal(false);
+                setSelectedExam(null);
+            } else {
+                console.error("Delete failed:", response.error);
+                alert(`Không thể xóa đề thi: ${response.error}`);
+            }
+        } catch (error: any) {
+            console.error("Error deleting exam:", error);
+            alert(`Lỗi: ${error.message || "Không thể xóa đề thi. Vui lòng thử lại."}`);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     const handlePreviewExam = (exam: any) => {
@@ -117,10 +159,14 @@ const TeacherExamsView: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Table Body */}
-                <div className="divide-y divide-gray-200">
-                    {filteredExams.length > 0 ? (
-                        filteredExams.map((exam) => (
+                {/* Loading State */}
+                {loading ? (
+                    <div className="px-6 py-12 text-center">
+                        <div className="text-gray-500">Đang tải đề thi...</div>
+                    </div>
+                ) : filteredExams.length > 0 ? (
+                    <div className="divide-y divide-gray-200">
+                        {filteredExams.map((exam) => (
                             <div key={exam.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                                 <div className="grid grid-cols-12 gap-4 items-center">
                                     {/* Exam Title */}
@@ -194,16 +240,16 @@ const TeacherExamsView: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                        ))
-                    ) : (
-                        <div className="px-6 py-12 text-center">
-                            <div className="text-gray-500 mb-4">Không tìm thấy đề thi nào</div>
-                            <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-                                Tạo đề thi đầu tiên
-                            </Button>
-                        </div>
-                    )}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="px-6 py-12 text-center">
+                        <div className="text-gray-500 mb-4">Không tìm thấy đề thi nào</div>
+                        <Button variant="primary" onClick={() => setShowCreateModal(true)}>
+                            Tạo đề thi đầu tiên
+                        </Button>
+                    </div>
+                )}
             </div>
 
             {/* Modals */}
@@ -230,6 +276,7 @@ const TeacherExamsView: React.FC = () => {
                     onClose={() => setShowDeleteModal(false)}
                     onConfirm={() => handleDeleteExam(selectedExam.id)}
                     examTitle={selectedExam.title}
+                    isLoading={isDeleting}
                 />
             )}
 

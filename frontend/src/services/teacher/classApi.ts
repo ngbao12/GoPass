@@ -429,4 +429,31 @@ export const classApi = {
       };
     }
   },
+
+  // DELETE /classes/:classId/assignments/:assignmentId - Delete class assignment
+  deleteAssignment: async (classId: string, assignmentId: string): Promise<ApiResponse<void>> => {
+    try {
+      const response = await httpClient.delete<{ success: boolean; message?: string }>(
+        `/classes/${classId}/assignments/${assignmentId}`,
+        { requiresAuth: true }
+      );
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: undefined,
+          error: response?.message || 'Failed to delete assignment'
+        };
+      }
+
+      return { success: true, data: undefined };
+    } catch (error: any) {
+      console.error('Error deleting assignment:', error);
+      return {
+        success: false,
+        data: undefined,
+        error: error.message || 'Failed to delete assignment'
+      };
+    }
+  },
 };
