@@ -1,10 +1,39 @@
 const ExamService = require("../services/ExamService");
+const path = require("path");
 
 class ExamController {
   async createExam(req, res) {
     try {
       const exam = await ExamService.createExam(req.user.userId, req.body);
       res.status(201).json({ success: true, data: exam });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  async uploadExamFile(req, res) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "Không có file được upload",
+        });
+      }
+
+      // Return file information
+      const fileInfo = {
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        path: `/uploads/exams/${req.file.filename}`,
+        size: req.file.size,
+        mimetype: req.file.mimetype,
+      };
+
+      res.status(200).json({
+        success: true,
+        data: fileInfo,
+        message: "Upload file thành công",
+      });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
     }
@@ -19,6 +48,21 @@ class ExamController {
       res.status(200).json({ success: true, data: exam });
     } catch (error) {
       res.status(404).json({ success: false, message: error.message });
+    }
+  }
+
+  async getMyExams(req, res) {
+    try {
+      const { page = 1, limit = 10, subject, isPublished } = req.query;
+      const exams = await ExamService.getTeacherExams(req.user.userId, {
+        page: Number(page),
+        limit: Number(limit),
+        subject,
+        isPublished,
+      });
+      res.status(200).json({ success: true, data: exams });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
     }
   }
 
@@ -183,31 +227,36 @@ class ExamController {
   async createSubmission(req, res) {
     try {
       const { assignmentId, contestId } = req.body;
-      
-      console.log('🆕 Create Submission Request:', {
+
+      console.log("🆕 Create Submission Request:", {
         examId: req.params.examId,
         userId: req.user.userId,
         assignmentId,
-        contestId
+        contestId,
       });
-      
+
       const submission = await ExamService.createSubmission(
         req.params.examId,
         req.user.userId,
         assignmentId,
         contestId
       );
-      
-      console.log('✅ Submission created:', { 
-        id: submission._id, 
-        status: submission.status 
+
+      console.log("✅ Submission created:", {
+        id: submission._id,
+        status: submission.status,
       });
-      
+
       res.status(201).json({ success: true, data: submission });
     } catch (error) {
-      console.error('❌ Create submission error:', error.message);
-      const statusCode = error.message.includes('not found') ? 404 : 
-                        error.message.includes('permission') || error.message.includes('ended') || error.message.includes('exceeded') ? 403 : 400;
+      console.error("❌ Create submission error:", error.message);
+      const statusCode = error.message.includes("not found")
+        ? 404
+        : error.message.includes("permission") ||
+          error.message.includes("ended") ||
+          error.message.includes("exceeded")
+        ? 403
+        : 400;
       res.status(statusCode).json({ success: false, message: error.message });
     }
   }
