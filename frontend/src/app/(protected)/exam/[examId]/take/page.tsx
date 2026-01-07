@@ -38,7 +38,8 @@ export default function TakeExamPage() {
         const examData = await examService.getExamById(
           examId,
           assignmentId,
-          contestId
+          contestId,
+          isPreviewMode
         );
 
         if (!examData) {
@@ -52,11 +53,15 @@ export default function TakeExamPage() {
           // Create a mock submission for preview (won't be saved)
           examData.userSubmission = {
             _id: "preview",
+            assignmentId: "",
             examId: examId,
-            userId: "preview",
+            studentId: "preview",
             status: "in_progress",
+            startedAt: new Date().toISOString(),
+            totalScore: 0,
+            maxScore: examData.totalPoints || 10,
+            attemptNumber: 1,
             answers: [],
-            startTime: new Date().toISOString(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           };

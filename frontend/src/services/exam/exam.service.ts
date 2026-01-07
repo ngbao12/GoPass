@@ -15,16 +15,19 @@ export const examService = {
    * @param id - Exam ID
    * @param assignmentId - Optional assignment ID if taking via class assignment
    * @param contestId - Optional contest ID if taking via contest
+   * @param isPreview - Optional preview mode (teacher viewing exam without taking it)
    */
   getExamById: async (
     id: string,
     assignmentId?: string,
-    contestId?: string
+    contestId?: string,
+    isPreview?: boolean
   ): Promise<ExamWithDetails | null> => {
     try {
       const params = new URLSearchParams();
       if (assignmentId) params.append("assignmentId", assignmentId);
       if (contestId) params.append("contestId", contestId);
+      if (isPreview) params.append("preview", "true");
 
       const queryString = params.toString();
       const url = `/exams/${id}${queryString ? `?${queryString}` : ""}`;

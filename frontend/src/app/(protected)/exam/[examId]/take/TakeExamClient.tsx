@@ -112,11 +112,15 @@ const useAutoSubmit = (
   examId: string,
   timeRemaining: number,
   isSuccessDialogOpen: boolean,
-  onAutoSubmit: () => void
+  onAutoSubmit: () => void,
+  isPreview: boolean = false // Skip auto-submit in preview mode
 ) => {
   const isFirstLoad = useRef(true);
 
   useEffect(() => {
+    // Skip all auto-submit logic in preview mode
+    if (isPreview) return;
+
     // Logic chạy 1 lần duy nhất khi mount
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
@@ -135,7 +139,7 @@ const useAutoSubmit = (
       console.log("⏳ Hết giờ khi đang online -> Auto Submit");
       onAutoSubmit();
     }
-  }, [timeRemaining, isSuccessDialogOpen, onAutoSubmit, examId]);
+  }, [timeRemaining, isSuccessDialogOpen, onAutoSubmit, examId, isPreview]);
 };
 
 // ==========================================
@@ -249,7 +253,8 @@ const ExamInterface = ({
     exam?._id || "",
     timeRemaining,
     dialogs.success,
-    handleFinishExam
+    handleFinishExam,
+    isPreviewMode // Disable auto-submit in preview mode
   );
 
   // Guard: Chờ dữ liệu load xong mới render
@@ -369,7 +374,7 @@ export default function TakeExamClient({
   isPreviewMode = false,
 }: TakeExamClientProps) {
   return (
-    <ExamProvider initialExam={exam} isReviewMode={isPreviewMode}>
+    <ExamProvider initialExam={exam} isReviewMode={false}>
       <ExamInterface isPreviewMode={isPreviewMode} />
     </ExamProvider>
   );

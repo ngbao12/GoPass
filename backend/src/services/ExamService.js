@@ -53,7 +53,8 @@ class ExamService {
     userId,
     includeAnswers = false,
     assignmentId = null,
-    contestId = null
+    contestId = null,
+    isPreview = false // Skip submission lookup for teacher preview
   ) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
@@ -105,45 +106,50 @@ class ExamService {
     }
 
     // Get user's latest in-progress submission for this exam
+    // Skip submission lookup if preview mode (teacher viewing exam)
     let userSubmission = null;
-    if (assignmentId) {
-      userSubmission = await ExamSubmissionRepository.findOne(
-        {
-          assignmentId,
-          studentUserId: userId,
-          status: "in_progress", // Only get in-progress submissions
-        },
-        { sort: { createdAt: -1 } }
-      );
-    } else if (contestId) {
-      userSubmission = await ExamSubmissionRepository.findOne(
-        {
-          examId,
-          studentUserId: userId,
-          contestId,
-          status: "in_progress", // Only get in-progress submissions
-        },
-        { sort: { createdAt: -1 } }
+    if (!isPreview) {
+      if (assignmentId) {
+        userSubmission = await ExamSubmissionRepository.findOne(
+          {
+            assignmentId,
+            studentUserId: userId,
+            status: "in_progress", // Only get in-progress submissions
+          },
+          { sort: { createdAt: -1 } }
+        );
+      } else if (contestId) {
+        userSubmission = await ExamSubmissionRepository.findOne(
+          {
+            examId,
+            studentUserId: userId,
+            contestId,
+            status: "in_progress", // Only get in-progress submissions
+          },
+          { sort: { createdAt: -1 } }
+        );
+      } else {
+        userSubmission = await ExamSubmissionRepository.findOne(
+          {
+            examId,
+            studentUserId: userId,
+            assignmentId: null,
+            contestId: null,
+            status: "in_progress", // Only get in-progress submissions
+          },
+          { sort: { createdAt: -1 } }
+        );
+      }
+
+      console.log(
+        "📋 User submission found:",
+        userSubmission
+          ? { id: userSubmission._id, status: userSubmission.status }
+          : "None"
       );
     } else {
-      userSubmission = await ExamSubmissionRepository.findOne(
-        {
-          examId,
-          studentUserId: userId,
-          assignmentId: null,
-          contestId: null,
-          status: "in_progress", // Only get in-progress submissions
-        },
-        { sort: { createdAt: -1 } }
-      );
+      console.log("👁️ Preview mode - skipping submission lookup");
     }
-
-    console.log(
-      "📋 User submission found:",
-      userSubmission
-        ? { id: userSubmission._id, status: userSubmission.status }
-        : "None"
-    );
 
     // Link to forum topic if this exam was generated from forum
     const relatedForumTopic = await ForumTopicRepository.findOne({ examId });

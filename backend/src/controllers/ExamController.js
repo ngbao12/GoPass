@@ -41,9 +41,16 @@ class ExamController {
 
   async getExamDetail(req, res) {
     try {
+      const { assignmentId, contestId, preview } = req.query;
+      const isPreview = preview === "true";
+
       const exam = await ExamService.getExamDetail(
         req.params.examId,
-        req.user.userId
+        req.user.userId,
+        false, // includeAnswers
+        assignmentId || null,
+        contestId || null,
+        isPreview // skip submission lookup for preview
       );
       res.status(200).json({ success: true, data: exam });
     } catch (error) {
