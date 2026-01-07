@@ -35,6 +35,7 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
         const tabMapping: { [key: string]: string } = {
           forum: "forum",
           classes: "classes",
+          teacher: "classes", // Handle /dashboard/teacher/classes
           exams: "exams",
           "question-bank": "question-bank",
           contests: "contests",
@@ -62,6 +63,8 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
     // Navigate to the route
     if (tabId === "overview") {
       router.push("/dashboard");
+    } else if (tabId === "classes" && userRole === "teacher") {
+      router.push("/dashboard/teacher/classes");
     } else {
       router.push(`/dashboard/${tabId}`);
     }
