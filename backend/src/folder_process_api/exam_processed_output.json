@@ -245,12 +245,14 @@
         "correctAnswer": "A",
         "explanation": "",
         "difficulty": "medium",
-        "linkedPassageId": null,
+        "linkedPassageId": "passage_1",
         "subject": "Tiếng Anh",
         "points": 0.25,
         "isPublic": true,
         "createdBy": "u_teacher_01",
-        "tags": []
+        "tags": [
+          "cloze"
+        ]
       },
       {
         "type": "multiple_choice",
@@ -983,12 +985,14 @@
         "correctAnswer": "B",
         "explanation": "",
         "difficulty": "medium",
-        "linkedPassageId": null,
+        "linkedPassageId": "passage_3",
         "subject": "Tiếng Anh",
         "points": 0.25,
         "isPublic": true,
         "createdBy": "u_teacher_01",
-        "tags": []
+        "tags": [
+          "cloze"
+        ]
       },
       {
         "type": "multiple_choice",
@@ -1549,7 +1553,7 @@
         "examId": null,
         "questionId": null,
         "order": 6,
-        "section": "Sentence/Utterance Arrangement",
+        "section": "Cloze Test",
         "maxScore": 0.25
       },
       {
@@ -1689,7 +1693,7 @@
         "examId": null,
         "questionId": null,
         "order": 26,
-        "section": "Sentence/Utterance Arrangement",
+        "section": "Cloze Test",
         "maxScore": 0.25
       },
       {
@@ -1796,9 +1800,9 @@
     "totalQuestions": 40,
     "totalPassages": 5,
     "totalPoints": 10.0,
-    "questionsWithPassage": 33,
-    "questionsWithoutPassage": 7,
-    "clozeQuestions": 15,
+    "questionsWithPassage": 35,
+    "questionsWithoutPassage": 5,
+    "clozeQuestions": 17,
     "readingQuestions": 18
   }
 }
