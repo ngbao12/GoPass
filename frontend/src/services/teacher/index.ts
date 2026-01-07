@@ -1,6 +1,7 @@
 // Export all from service files
 export * from './classApi';
 export * from './examApi';
+export * from './statsApi';
 
 // Re-export types for easier importing
 export type {
@@ -24,3 +25,10 @@ export type {
     CreateExamData,
     AssignExamData
 } from './examApi';
+
+// Export stats types
+export type {
+    TeacherStats,
+    TeacherActivity,
+    QuickClassInfo
+} from './statsApi';
