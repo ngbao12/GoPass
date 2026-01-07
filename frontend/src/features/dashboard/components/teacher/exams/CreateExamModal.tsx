@@ -29,51 +29,71 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Step 4: Actually create the exam with PDF processing
+    if (!uploadedFileInfo) {
+      alert("Vui lòng upload file PDF trước");
+      return;
+    }
+
     setIsSubmitting(true);
+    setIsProcessing(true);
 
     try {
-      const examData: any = {
+      // Call the new PDF processing endpoint
+      const result = await examApi.processPdfToExam({
+        pdfFilePath: uploadedFileInfo.path,
+        pdfFileName: uploadedFileInfo.originalName,
         title: formData.title,
         description: formData.description,
         subject: formData.subject,
         durationMinutes: Number(formData.durationMinutes),
-        mode: formData.mode,
-        totalQuestions: Number(formData.totalQuestions) || 0,
-        totalPoints: 10,
-        shuffleQuestions: false,
-        showResultsImmediately: formData.showAnswers,
-        isPublished: false,
-      };
-
-      // Add file info if uploaded
-      if (uploadedFileInfo) {
-        examData.pdfFilePath = uploadedFileInfo.path;
-        examData.pdfFileName = uploadedFileInfo.originalName;
-      }
-
-      await onSubmit(examData);
-
-      // Reset form
-      setFormData({
-        title: "",
-        description: "",
-        subject: "",
-        totalQuestions: "",
-        durationMinutes: "",
-        difficulty: "medium",
-        showAnswers: false,
-        mode: "practice_test",
       });
-      setUploadedFile(null);
-      setUploadedFileInfo(null);
-      setCurrentStep(1);
-    } catch (error) {
-      console.error("Error creating exam:", error);
+
+      if (result.success) {
+        // Show success message with stats
+        alert(
+          `Đề thi đã được tạo thành công!\n\n` +
+            `📊 Thống kê:\n` +
+            `- Tổng số câu hỏi: ${result.data.stats.totalQuestions}\n` +
+            `- Số đoạn văn: ${result.data.stats.totalPassages}\n` +
+            `- Điểm tổng: ${result.data.stats.totalPoints}\n` +
+            `- Câu điền từ: ${result.data.stats.clozeQuestions}\n` +
+            `- Câu đọc hiểu: ${result.data.stats.readingQuestions}`
+        );
+
+        // Call parent callback with the created exam
+        await onSubmit(result.data.exam);
+
+        // Reset form
+        setFormData({
+          title: "",
+          description: "",
+          subject: "",
+          totalQuestions: "",
+          durationMinutes: "",
+          difficulty: "medium",
+          showAnswers: false,
+          mode: "practice_test",
+        });
+        setUploadedFile(null);
+        setUploadedFileInfo(null);
+        setCurrentStep(1);
+      } else {
+        alert("Lỗi khi xử lý đề thi: " + (result.message || "Unknown error"));
+      }
+    } catch (error: any) {
+      console.error("Error processing PDF exam:", error);
+      alert(
+        "Lỗi khi xử lý đề thi PDF: " + (error.message || "Vui lòng thử lại")
+      );
     } finally {
       setIsSubmitting(false);
+      setIsProcessing(false);
     }
   };
 
@@ -91,6 +111,17 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
       return;
     }
 
+    // Only allow single file upload - if replacing, clear previous
+    if (uploadedFile || uploadedFileInfo) {
+      const confirmReplace = confirm(
+        "Bạn đã upload file rồi. Bạn có muốn thay thế file hiện tại không?"
+      );
+      if (!confirmReplace) {
+        e.target.value = ""; // Reset input
+        return;
+      }
+    }
+
     setIsUploading(true);
     try {
       setUploadedFile(file);
@@ -103,13 +134,16 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
       } else {
         alert("Upload file thất bại");
         setUploadedFile(null);
+        setUploadedFileInfo(null);
       }
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Lỗi khi upload file");
       setUploadedFile(null);
+      setUploadedFileInfo(null);
     } finally {
       setIsUploading(false);
+      e.target.value = ""; // Reset input to allow re-selection
     }
   };
 
@@ -319,6 +353,8 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
                         className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg ${
                           isUploading
                             ? "bg-gray-400 cursor-not-allowed"
+                            : uploadedFileInfo
+                            ? "bg-blue-600 text-white hover:bg-blue-700"
                             : "bg-teal-600 text-white hover:bg-teal-700"
                         }`}
                       >
@@ -345,6 +381,23 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
                               ></path>
                             </svg>
                             Đang tải lên...
+                          </>
+                        ) : uploadedFileInfo ? (
+                          <>
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                              />
+                            </svg>
+                            Thay đổi file
                           </>
                         ) : (
                           <>
@@ -754,6 +807,7 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
                   disabled={
                     (currentStep === 1 &&
                       (!formData.title || !formData.subject)) ||
+                    (currentStep === 2 && !uploadedFileInfo) ||
                     (currentStep === 3 &&
                       (!formData.totalQuestions || !formData.durationMinutes))
                   }
@@ -764,10 +818,10 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
               ) : (
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isProcessing}
                   className="px-6 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:bg-teal-400 disabled:cursor-not-allowed transition-colors font-medium shadow-md hover:shadow-lg flex items-center gap-2"
                 >
-                  {isSubmitting ? (
+                  {isSubmitting || isProcessing ? (
                     <>
                       <svg
                         className="animate-spin h-4 w-4 text-white"
@@ -789,7 +843,7 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                       </svg>
-                      Đang tạo...
+                      {isProcessing ? "Đang xử lý PDF..." : "Đang tạo..."}
                     </>
                   ) : (
                     <>

@@ -275,6 +275,63 @@ class ExamController {
       res.status(400).json({ success: false, message: error.message });
     }
   }
+
+  // NEW: Process PDF and create exam with questions
+  async processExamFromPdf(req, res) {
+    try {
+      const {
+        pdfFilePath,
+        pdfFileName,
+        title,
+        description,
+        subject,
+        durationMinutes,
+      } = req.body;
+
+      if (!pdfFilePath) {
+        return res.status(400).json({
+          success: false,
+          message: "PDF file path is required",
+        });
+      }
+
+      const PdfProcessorService = require("../services/PdfProcessorService");
+      const path = require("path");
+
+      // Get absolute path to PDF file
+      const absolutePdfPath = path.join(__dirname, "..", "..", pdfFilePath);
+
+      // Process PDF and create exam with all questions
+      const result = await PdfProcessorService.processPdfAndCreateExam(
+        absolutePdfPath,
+        {
+          title: title || "Đề thi từ PDF",
+          description,
+          subject: subject || "Tiếng Anh",
+          durationMinutes: durationMinutes || 50,
+          mode: "practice_test",
+          shuffleQuestions: false,
+          showResultsImmediately: false,
+          isPublished: false,
+          pdfFilePath,
+          pdfFileName,
+        },
+        req.user.userId
+      );
+
+      res.status(201).json({
+        success: true,
+        data: result,
+        message: "Exam created successfully from PDF",
+      });
+    } catch (error) {
+      console.error("Error processing PDF exam:", error);
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to process PDF",
+      });
+    }
+  }
 }
 
 module.exports = new ExamController();

@@ -360,6 +360,44 @@ export const examApi = {
   },
 
   /**
+   * Process PDF and create exam with questions
+   * API: POST /api/exams/process-pdf
+   * Auth: Required (Teacher)
+   *
+   * This endpoint:
+   * 1. Takes the uploaded PDF file path
+   * 2. Runs Python script to extract questions
+   * 3. Creates exam with all questions in database
+   * 4. Returns the complete exam with questions
+   */
+  processPdfToExam: async (pdfData: {
+    pdfFilePath: string;
+    pdfFileName: string;
+    title: string;
+    description?: string;
+    subject?: string;
+    durationMinutes?: number;
+  }): Promise<
+    ApiResponse<{
+      exam: ExamModel;
+      questions: any[];
+      stats: {
+        totalQuestions: number;
+        totalPassages: number;
+        totalPoints: number;
+        clozeQuestions: number;
+        readingQuestions: number;
+      };
+    }>
+  > => {
+    return await httpClient.post<ApiResponse<any>>(
+      "/exams/process-pdf",
+      pdfData,
+      { requiresAuth: true }
+    );
+  },
+
+  /**
    * Add questions to exam
    * API: POST /api/exams/:examId/questions
    * Auth: Required (Teacher)

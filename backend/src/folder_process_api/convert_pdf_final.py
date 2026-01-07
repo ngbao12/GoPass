@@ -489,30 +489,16 @@ def parse_question(q_num, text, answers, pass_id):
 
 # Main
 if __name__ == "__main__":
-    print("🚀 Starting PDF extraction...")
+    import sys
     
-    result = extract_exam("de_tieng_anh.pdf")
+    # Check if PDF path is provided as command line argument
+    if len(sys.argv) > 1:
+        pdf_path = sys.argv[1]
+    else:
+        pdf_path = "de_tieng_anh.pdf"
     
-    with open("exam_corrected.json", "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=4)
+    # Extract exam from PDF
+    result = extract_exam(pdf_path)
     
-    print(f"\n💾 Saved: exam_corrected.json")
-    print(f"\n📊 Summary:")
-    print(f"   • Passages: {len(result['passages'])}")
-    print(f"   • Questions: {len(result['questions'])}")
-    print(f"   • Answers: {sum(1 for q in result['questions'] if q['answer'])}")
-    
-    # Sample
-    if result['passages']:
-        p = result['passages'][0]
-        print(f"\n📖 Sample Passage:")
-        print(f"   ID: {p['passage_id']}")
-        print(f"   Instruction: {p['instruction'][:60]}...")
-    
-    if result['questions']:
-        q = result['questions'][0]
-        print(f"\n❓ Sample Question:")
-        print(f"   #{q['question_number']}")
-        print(f"   Options: {len(q['options'])} ({', '.join(q['options'].keys())})")
-        print(f"   Answer: {q['answer']}")
-        print(f"   Passage: {q['PassageRelated'] or 'None'}")
+    # Output JSON to stdout for Node.js to capture
+    print(json.dumps(result, ensure_ascii=False))

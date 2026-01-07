@@ -15,6 +15,11 @@ router.post(
   upload.single("file"),
   ExamController.uploadExamFile
 );
+router.post(
+  "/process-pdf",
+  authorize("teacher"),
+  ExamController.processExamFromPdf
+);
 router.get("/my-exams", authorize("teacher"), ExamController.getMyExams);
 router.put("/:examId", authorize("teacher"), ExamController.updateExam);
 router.delete("/:examId", authorize("teacher"), ExamController.deleteExam);
