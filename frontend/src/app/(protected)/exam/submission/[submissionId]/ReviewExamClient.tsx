@@ -224,38 +224,27 @@ export default function ReviewExamClient({
   data: {
     submission: ExamSubmission;
     exam: any;
-    questions: any[];
+    questions?: any[]; // Optional, for backward compatibility
   };
 }) {
+  // Backend returns structure: { submission, exam: { questions: [...] } }
+  // Extract questions from exam.questions if not provided separately
+  const questions = data.questions || data.exam?.questions || [];
+
   // ✅ FIX: Chuẩn bị dữ liệu initialExam cẩn thận để giữ linkedPassageId
   const initialExam: ExamWithDetails = {
     ...data.exam, // 1. Giữ lại toàn bộ field gốc của exam (bao gồm readingPassages)
 
     questions: data.exam.questions.map((examQ: any) => {
-      // Tìm chi tiết câu hỏi từ mảng questions data
-      const detail = data.questions.find(
-        (q: any) => q._id === examQ.questionId
-      );
-
-      // Merge dữ liệu
+      // examQ already has full question data from backend
+      // Just ensure proper structure
       return {
-        ...examQ, // Giữ structure (order, maxScore, linkedPassageId ở level này nếu có)
-
-        // Merge detail vào, nhưng ưu tiên giữ linkedPassageId nếu examQ đã có
-        ...detail,
-
-        // Đảm bảo linkedPassageId không bị mất. Nó có thể nằm ở:
-        // 1. examQ (cấu trúc đề)
-        // 2. detail (object câu hỏi gốc)
-        // 3. detail.question (nếu lồng nhau)
-        linkedPassageId:
-          examQ.linkedPassageId ||
-          detail?.linkedPassageId ||
-          detail?.question?.linkedPassageId,
-
-        question: detail || examQ.question, // Nội dung câu hỏi
-        questionId: examQ.questionId, // ID chuẩn
+        ...examQ,
+        questionId: examQ.questionId || examQ._id,
         examId: data.exam._id,
+        // Preserve linkedPassageId from question data
+        linkedPassageId:
+          examQ.linkedPassageId || examQ.question?.linkedPassageId,
       };
     }),
 
