@@ -1,4 +1,3 @@
-// src/services/studentStatsApi.ts
 import { StudentStats, HistoryDataResponse, PerformanceDataPoint, SubjectPerformance } from "@/features/dashboard/types/student/";
 import { httpClient } from "@/lib/http";
 
@@ -8,13 +7,13 @@ import { httpClient } from "@/lib/http";
  */
 export const fetchStudentStats = async (): Promise<StudentStats> => {
   try {
-    const response = await httpClient.get<{ 
-      success: boolean; 
-      data: StudentStats 
+    const response = await httpClient.get<{
+      success: boolean;
+      data: StudentStats
     }>('/students/stats', { requiresAuth: true });
 
-    return response.success && response.data 
-      ? response.data 
+    return response.success && response.data
+      ? response.data
       : { joinedClasses: 0, examsTaken: 0, averageScore: 0, daysUntilExam: 0 };
 
   } catch (error) {
@@ -29,9 +28,9 @@ export const fetchStudentStats = async (): Promise<StudentStats> => {
  */
 export const fetchStudentHistory = async (): Promise<HistoryDataResponse> => {
   try {
-    const response = await httpClient.get<{ 
-      success: boolean; 
-      data: HistoryDataResponse 
+    const response = await httpClient.get<{
+      success: boolean;
+      data: HistoryDataResponse
     }>('/students/history', { requiresAuth: true });
 
     if (!response.success || !response.data) {
@@ -64,13 +63,13 @@ export const fetchStudentHistory = async (): Promise<HistoryDataResponse> => {
  */
 export const fetchStudentActivity = async (): Promise<PerformanceDataPoint[]> => {
   try {
-    const response = await httpClient.get<{ 
-      success: boolean; 
-      data: { activity: PerformanceDataPoint[] } 
+    const response = await httpClient.get<{
+      success: boolean;
+      data: { activity: PerformanceDataPoint[] }
     }>('/students/activity', { requiresAuth: true });
 
-    return response.success && response.data?.activity 
-      ? response.data.activity 
+    return response.success && response.data?.activity
+      ? response.data.activity
       : [];
 
   } catch (error) {
@@ -85,13 +84,13 @@ export const fetchStudentActivity = async (): Promise<PerformanceDataPoint[]> =>
  */
 export const fetchSubjectPerformance = async (): Promise<SubjectPerformance[]> => {
   try {
-    const response = await httpClient.get<{ 
-      success: boolean; 
-      data: SubjectPerformance[] 
+    const response = await httpClient.get<{
+      success: boolean;
+      data: SubjectPerformance[]
     }>('/students/subject-performance', { requiresAuth: true });
 
-    return response.success && response.data 
-      ? response.data 
+    return response.success && response.data
+      ? response.data
       : [];
 
   } catch (error) {

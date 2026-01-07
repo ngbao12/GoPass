@@ -15,10 +15,10 @@ const TeacherOverviewView: React.FC = () => {
         </p>
       </div>
 
-      {/* Stats Cards - Tự fetch data bên trong */}
+      { }
       <TeacherStatsGrid />
 
-      {/* Classes List - Full Width */}
+      { }
       <TeacherClassList />
     </div>
   );
