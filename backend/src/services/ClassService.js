@@ -210,14 +210,30 @@ class ClassService {
 
         const startMs = a.startTime ? new Date(a.startTime).getTime() : 0;
         const endMs = a.endTime ? new Date(a.endTime).getTime() : 0;
-        let status = "upcoming";
-        if (now >= startMs && now <= endMs) status = "ongoing";
-        else if (now > endMs) status = "completed";
 
         const mySubs = userSubmissions.filter(
           (s) => s.examId?.toString() === examId
         );
-        const myLatest = mySubs[mySubs.length - 1];
+
+        // Only count COMPLETED submissions as attempts (not in-progress)
+        const completedSubs = mySubs.filter(
+          (s) => s.status === "submitted" || s.status === "graded"
+        );
+
+        // Get latest COMPLETED submission for review
+        const myLatestCompleted = completedSubs[completedSubs.length - 1];
+
+        // Determine status: 'completed' only if student has completed submission
+        let status = "incomplete";
+        if (myLatestCompleted) {
+          status = "completed";
+        } else if (now >= startMs && now <= endMs) {
+          status = "ongoing";
+        } else if (now < startMs) {
+          status = "upcoming";
+        } else if (now > endMs) {
+          status = "ongoing"; // Still show as ongoing if not completed yet
+        }
 
         const submittedCount = await ExamSubmissionRepository.count({ examId });
 
@@ -234,10 +250,10 @@ class ClassService {
           duration: exam?.durationMinutes || 0,
           questionCount: exam?.totalQuestions || 0,
           status,
-          myScore: myLatest?.totalScore ?? null,
-          maxScore: myLatest?.maxScore ?? exam?.totalPoints ?? 0,
-          myAttemptCount: mySubs.length,
-          mySubmissionId: myLatest?._id?.toString() ?? null, // Add submissionId for review
+          myScore: myLatestCompleted?.totalScore ?? null,
+          maxScore: myLatestCompleted?.maxScore ?? exam?.totalPoints ?? 0,
+          myAttemptCount: completedSubs.length, // Only count completed attempts
+          mySubmissionId: myLatestCompleted?._id?.toString() ?? null, // Only completed submission for review
           submittedCount,
         };
       })
@@ -811,6 +827,84 @@ class ClassService {
     }
 
     return progress;
+  }
+
+  // Get stats for a specific student within a class
+  async getStudentStats(classId, currentUser, studentUserId) {
+    const classData = await ClassRepository.findById(classId, { populate: 'teacherUserId' });
+    if (!classData) {
+      throw new Error('Class not found');
+    }
+
+    const role = (currentUser.role || '').toLowerCase();
+    const currentUserId = currentUser.id || currentUser.userId || currentUser._id;
+    const teacherId = classData.teacherUserId?._id
+      ? classData.teacherUserId._id.toString()
+      : classData.teacherUserId?.toString();
+    const isTeacherOwner = teacherId === currentUserId?.toString();
+    const isAdmin = role === 'admin';
+    if (!isTeacherOwner && !isAdmin) {
+      console.warn('[getStudentStats] Unauthorized access attempt', {
+        classId: classData._id?.toString(),
+        classTeacherId: teacherId,
+        requesterId: currentUserId,
+        requesterRole: role,
+      });
+      throw new Error('Unauthorized: only class teacher (owner) or admin can view stats');
+    }
+
+    // Ensure the student belongs to this class
+    const membership = await ClassMemberRepository.findOne({ classId, studentUserId });
+    if (!membership) {
+      throw new Error('Student is not a member of this class');
+    }
+
+    const assignments = await ExamAssignmentRepository.findByClass(classId, {
+      populate: 'examId',
+      sort: { startTime: -1 },
+    });
+
+    const assignmentIds = assignments.map((a) => a._id);
+    const submissions = await ExamSubmissionRepository.find(
+      {
+        assignmentId: { $in: assignmentIds },
+        studentUserId,
+        status: { $in: ['submitted', 'graded', 'late'] },
+      },
+      { sort: { submittedAt: -1, updatedAt: -1 } }
+    );
+
+    const totalAssignments = assignments.length;
+    const completedAssignments = new Set(
+      submissions
+        .map((s) => (s.assignmentId ? s.assignmentId.toString() : null))
+        .filter(Boolean)
+    ).size;
+
+    const gradedSubs = submissions.filter((s) => s.status === 'graded');
+    const avgScoreRaw = gradedSubs.reduce((sum, s) => sum + (s.totalScore || 0), 0);
+    const averageScore = gradedSubs.length > 0 ? Number((avgScoreRaw / gradedSubs.length).toFixed(2)) : 0;
+
+    const assignmentTitleMap = assignments.reduce((acc, a) => {
+      acc[a._id.toString()] = a.examId?.title || 'Bài tập';
+      return acc;
+    }, {});
+
+    const recentResults = submissions.slice(0, 5).map((s) => ({
+      submissionId: s._id,
+      assignmentId: s.assignmentId,
+      examId: s.examId,
+      title: assignmentTitleMap[s.assignmentId?.toString()] || 'Bài tập',
+      score: s.totalScore || 0,
+      submittedAt: s.submittedAt || s.updatedAt || s.createdAt,
+    }));
+
+    return {
+      totalAssignments,
+      completedAssignments,
+      averageScore,
+      recentResults,
+    };
   }
 }
 

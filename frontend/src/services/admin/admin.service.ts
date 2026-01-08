@@ -197,6 +197,32 @@ export const adminService = {
   },
 
   /**
+   * Update user info (name, email, role)
+   * API: PUT /api/admin/users/:userId
+   * Auth: Required (Admin only)
+   */
+  updateUserInfo: async (
+    userId: string,
+    updates: {
+      name?: string;
+      email?: string;
+      role?: "admin" | "teacher" | "student";
+    }
+  ): Promise<User> => {
+    const response = await httpClient.put<{ success: boolean; data: User }>(
+      `/admin/users/${userId}`,
+      updates,
+      { requiresAuth: true }
+    );
+
+    if (!response.success || !response.data) {
+      throw new Error("Failed to update user info");
+    }
+
+    return response.data;
+  },
+
+  /**
    * Reset user password
    * API: POST /api/admin/users/:userId/reset-password
    * Auth: Required (Admin only)
@@ -234,6 +260,28 @@ export const adminService = {
 
     if (!response.success || !response.data) {
       throw new Error("Failed to fetch system metrics");
+    }
+
+    return response.data;
+  },
+
+  /**
+   * Update exam published status
+   * API: PUT /api/exams/:examId
+   * Auth: Required (Admin only)
+   */
+  updateExamStatus: async (
+    examId: string,
+    isPublished: boolean
+  ): Promise<AdminExam> => {
+    const response = await httpClient.put<{ success: boolean; data: any }>(
+      `/exams/${examId}`,
+      { isPublished },
+      { requiresAuth: true }
+    );
+
+    if (!response.success || !response.data) {
+      throw new Error("Failed to update exam status");
     }
 
     return response.data;

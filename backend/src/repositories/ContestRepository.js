@@ -1,9 +1,13 @@
-const BaseRepository = require('./BaseRepository');
-const Contest = require('../models/Contest');
+const BaseRepository = require("./BaseRepository");
+const Contest = require("../models/Contest");
 
 class ContestRepository extends BaseRepository {
   constructor() {
     super(Contest);
+  }
+
+  async findAll(options = {}) {
+    return await this.find({}, options);
   }
 
   async findByOwner(ownerId, options = {}) {
@@ -19,16 +23,19 @@ class ContestRepository extends BaseRepository {
     return await this.find({
       startTime: { $lte: now },
       endTime: { $gte: now },
-      status: 'ongoing',
+      status: "ongoing",
     });
   }
 
   async findUpcomingContests() {
     const now = new Date();
-    return await this.find({
-      startTime: { $gt: now },
-      status: 'upcoming',
-    }, { sort: { startTime: 1 } });
+    return await this.find(
+      {
+        startTime: { $gt: now },
+        status: "upcoming",
+      },
+      { sort: { startTime: 1 } }
+    );
   }
 
   async updateContestStatus(contestId, status) {
@@ -38,8 +45,8 @@ class ContestRepository extends BaseRepository {
   async updateExpiredContests() {
     const now = new Date();
     return await this.model.updateMany(
-      { endTime: { $lt: now }, status: { $ne: 'ended' } },
-      { status: 'ended' }
+      { endTime: { $lt: now }, status: { $ne: "ended" } },
+      { status: "ended" }
     );
   }
 }

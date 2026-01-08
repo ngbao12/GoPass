@@ -14,6 +14,8 @@ import {
   User,
 } from "lucide-react";
 import { ForumService } from "@/services/forum/forum.service";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface ArticleDetailModalProps {
   article: ForumArticle;
@@ -29,6 +31,17 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
   const [forumTopics, setForumTopics] = useState<ForumTopic[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   useEffect(() => {
     fetchForumTopics();
@@ -54,7 +67,11 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
     try {
       // TODO: Implement generate more topics for existing package
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      alert("Tính năng đang được phát triển!");
+      setNotification({
+        isOpen: true,
+        message: "Tính năng đang được phát triển!",
+        type: "info",
+      });
       fetchForumTopics();
     } catch (error) {
       console.error("Error generating discussions:", error);
@@ -64,22 +81,37 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
   };
 
   const handleDeleteTopic = async (topicId: string) => {
-    if (!confirm("Bạn có chắc chắn muốn xóa chủ đề thảo luận này?")) {
-      return;
-    }
-
-    try {
-      const success = await ForumService.deleteTopic(topicId);
-      if (success) {
-        setForumTopics(forumTopics.filter((t) => t._id !== topicId));
-        alert("Xóa chủ đề thành công!");
-      } else {
-        alert("Không thể xóa chủ đề. Vui lòng thử lại.");
-      }
-    } catch (error) {
-      console.error("Error deleting topic:", error);
-      alert("Đã có lỗi xảy ra khi xóa chủ đề.");
-    }
+    setConfirm({
+      isOpen: true,
+      message: "Bạn có chắc chắn muốn xóa chủ đề thảo luận này?",
+      type: "danger",
+      onConfirm: async () => {
+        try {
+          const success = await ForumService.deleteTopic(topicId);
+          if (success) {
+            setForumTopics(forumTopics.filter((t) => t._id !== topicId));
+            setNotification({
+              isOpen: true,
+              message: "Xóa chủ đề thành công!",
+              type: "success",
+            });
+          } else {
+            setNotification({
+              isOpen: true,
+              message: "Không thể xóa chủ đề. Vui lòng thử lại.",
+              type: "error",
+            });
+          }
+        } catch (error) {
+          console.error("Error deleting topic:", error);
+          setNotification({
+            isOpen: true,
+            message: "Đã có lỗi xảy ra khi xóa chủ đề.",
+            type: "error",
+          });
+        }
+      },
+    });
   };
 
   return (
@@ -282,6 +314,38 @@ const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
             </a>
           </div>
         </div>
+
+        {/* Notification and Confirm Modals */}
+        <NotificationModal
+          isOpen={notification.isOpen}
+          onClose={() =>
+            setNotification({ isOpen: false, message: "", type: "info" })
+          }
+          message={notification.message}
+          type={notification.type}
+        />
+        <ConfirmModal
+          isOpen={confirm.isOpen}
+          onClose={() =>
+            setConfirm({
+              isOpen: false,
+              message: "",
+              onConfirm: () => {},
+              type: "warning",
+            })
+          }
+          onConfirm={() => {
+            confirm.onConfirm();
+            setConfirm({
+              isOpen: false,
+              message: "",
+              onConfirm: () => {},
+              type: "warning",
+            });
+          }}
+          message={confirm.message}
+          type={confirm.type}
+        />
       </div>
     </div>
   );

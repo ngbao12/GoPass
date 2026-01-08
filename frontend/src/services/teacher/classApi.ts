@@ -11,6 +11,7 @@ import type {
   ClassDetail,
   ClassDetailResponse,
   CreateClassData,
+  StudentStats,
 } from './types';
 
 /**
@@ -405,7 +406,7 @@ export const classApi = {
     try {
       const response = await httpClient.get<{
         success: boolean;
-        data: any[];
+        data: any;
       }>(`/classes/${classId}/assignments`, { requiresAuth: true });
       
       if (!response.success) {
@@ -415,10 +416,15 @@ export const classApi = {
           error: 'Failed to fetch assignments'
         };
       }
-      
+
+      // Handle both response structures: { assignments: [...] } or [...]
+      const assignments = response.data?.assignments || response.data || [];
+      console.log("📦 getClassAssignments response:", response.data);
+      console.log("📦 Parsed assignments:", assignments);
+
       return {
         success: true,
-        data: response.data || []
+        data: assignments
       };
     } catch (error: any) {
       console.error('Error fetching assignments:', error);
@@ -426,6 +432,46 @@ export const classApi = {
         success: false,
         data: [],
         error: error.message || 'Failed to fetch assignments'
+      };
+    }
+  },
+
+  // GET /classes/:classId/students/:studentId/stats - Get student stats in class
+  getStudentStats: async (classId: string, studentId: string): Promise<ApiResponse<StudentStats>> => {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: StudentStats;
+      }>(`/classes/${classId}/students/${studentId}/stats`, { requiresAuth: true });
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: {
+            totalAssignments: 0,
+            completedAssignments: 0,
+            averageScore: 0,
+            recentResults: []
+          },
+          error: 'Failed to fetch student stats'
+        };
+      }
+
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching student stats:', error);
+      return {
+        success: false,
+        data: {
+          totalAssignments: 0,
+          completedAssignments: 0,
+          averageScore: 0,
+          recentResults: []
+        },
+        error: error.message || 'Failed to fetch student stats'
       };
     }
   },

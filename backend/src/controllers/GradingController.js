@@ -52,17 +52,19 @@ class GradingController {
 
   /**
    * Get all submissions for grading (teacher only)
-   * GET /api/grading/submissions?subject=X&status=Y
+   * GET /api/grading/submissions?subject=X&status=Y&classId=Z&examId=W
    */
   async getAllSubmissions(req, res) {
     try {
-      const { subject, status, classId } = req.query;
+      const { subject, status, classId, examId } = req.query;
       const filters = {};
       if (subject) filters.subject = subject;
       if (status) filters.status = status;
       if (classId) filters.classId = classId;
+      if (examId) filters.examId = examId;
 
       // Pass teacherId to filter submissions by exams created by this teacher
+      // (unless scoped to specific class/exam)
       const teacherId = req.user?.userId;
       const submissions = await GradingService.getAllSubmissions(filters, teacherId);
       res.status(200).json({ success: true, data: submissions });

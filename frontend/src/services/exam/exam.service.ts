@@ -2,11 +2,110 @@
 import { httpClient } from "@/lib/http";
 import { ExamWithDetails, ExamSubmission } from "@/features/exam/types";
 
+interface BasicExam {
+  _id: string;
+  title: string;
+  subject: string;
+  durationMinutes: number;
+  totalQuestions: number;
+  totalPoints: number;
+  isPublished: boolean;
+  mode: string;
+  createdBy: string;
+  createdAt: string;
+}
+
 /**
  * Exam Service - Handles all exam-related API calls
  * Uses httpClient for automatic JWT token handling
  */
 export const examService = {
+  /**
+   * Get all exams (for admin/teacher)
+   * API: GET /api/exams
+   * Auth: Required (Admin only typically)
+   * @param filters - Optional filters (subject, mode, search)
+   */
+  getAllExams: async (filters?: {
+    subject?: string;
+    mode?: string;
+    search?: string;
+  }): Promise<BasicExam[]> => {
+    try {
+      let url = "/exams";
+      const params = new URLSearchParams();
+
+      if (filters?.subject) params.append("subject", filters.subject);
+      if (filters?.mode) params.append("mode", filters.mode);
+      if (filters?.search) params.append("search", filters.search);
+
+      if (params.toString()) {
+        url += `?${params.toString()}`;
+      }
+
+      const response = await httpClient.get<{
+        success: boolean;
+        data: {
+          exams: BasicExam[];
+          pagination: any;
+        };
+      }>(url, { requiresAuth: true });
+
+      if (!response.success || !response.data) {
+        return [];
+      }
+
+      // Extract exams array from response
+      return response.data.exams || [];
+    } catch (error) {
+      console.error("Error fetching exams:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Get all PUBLISHED exams (for contest exam selection)
+   * API: GET /api/exams/published
+   * Auth: Required (Admin only)
+   * Returns only published exams created by the current admin
+   * @param filters - Optional filters (subject, mode, search)
+   */
+  getPublishedExams: async (filters?: {
+    subject?: string;
+    mode?: string;
+    search?: string;
+  }): Promise<BasicExam[]> => {
+    try {
+      let url = "/exams/published";
+      const params = new URLSearchParams();
+
+      if (filters?.subject) params.append("subject", filters.subject);
+      if (filters?.mode) params.append("mode", filters.mode);
+      if (filters?.search) params.append("search", filters.search);
+
+      if (params.toString()) {
+        url += `?${params.toString()}`;
+      }
+
+      const response = await httpClient.get<{
+        success: boolean;
+        data: {
+          exams: BasicExam[];
+          pagination: any;
+        };
+      }>(url, { requiresAuth: true });
+
+      if (!response.success || !response.data) {
+        return [];
+      }
+
+      // Extract exams array from response
+      return response.data.exams || [];
+    } catch (error) {
+      console.error("Error fetching all exams:", error);
+      return [];
+    }
+  },
   /**
    * Get exam by ID with full details
    * API: GET /api/exams/:examId
@@ -16,8 +115,7 @@ export const examService = {
    * @param assignmentId - Optional assignment ID if taking via class assignment
    * @param contestId - Optional contest ID if taking via contest
    * @param isPreview - Optional preview mode (teacher viewing exam without taking it)
-   */
-  getExamById: async (
+   */ getExamById: async (
     id: string,
     assignmentId?: string,
     contestId?: string,

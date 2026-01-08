@@ -198,6 +198,20 @@ export interface ExamAssignment {
   };
 }
 
+export interface StudentRecentResult {
+  assignmentId: string;
+  title: string;
+  score: number;
+  submittedAt?: string;
+}
+
+export interface StudentStats {
+  totalAssignments: number;
+  completedAssignments: number;
+  averageScore: number;
+  recentResults: StudentRecentResult[];
+}
+
 export interface ClassStats {
   totalMembers: number;
   pendingRequests: number;

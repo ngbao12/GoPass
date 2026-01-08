@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { examService } from "@/services/exam/exam.service";
 import TakeExamClient from "./TakeExamClient";
+import NotificationModal from "@/components/ui/NotificationModal";
 
 export default function TakeExamPage() {
   const params = useParams();
@@ -13,6 +14,11 @@ export default function TakeExamPage() {
   const [exam, setExam] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ show: false, type: "error", message: "" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,32 +66,40 @@ export default function TakeExamPage() {
           console.log("👁️ Preview mode - no submission needed");
           // Preview mode doesn't need submission - teacher just views questions
         } else {
-          // Check if user has an active submission
+          // Submission MUST exist at this point (created in Start Panel)
           if (!examData.userSubmission) {
-            console.log("⚠️ No submission found, creating one...");
-
-            // Create a new submission
-            const submission = await examService.createSubmission(
-              examId,
-              assignmentId,
-              contestId
+            console.error(
+              "❌ CRITICAL: No submission found! Should have been created in Start Panel."
             );
+            setNotification({
+              show: true,
+              type: "error",
+              message:
+                "Không tìm thấy bài làm. Vui lòng quay lại và bắt đầu lại.",
+            });
+            setError(true);
+            return;
+          }
 
-            if (!submission) {
-              console.error("❌ Failed to create submission");
-              setError(true);
-              return;
-            }
-
-            console.log("✅ Submission created:", submission._id);
-
-            // Attach submission to exam data
-            examData.userSubmission = submission;
-          } else {
+          if (examData.userSubmission.status === "in_progress") {
+            // Has in-progress submission - this is correct flow
             console.log(
-              "✅ Found existing submission:",
+              "✅ Found in-progress submission:",
               examData.userSubmission._id
             );
+          } else {
+            // Submission exists but already completed/graded - shouldn't be here
+            console.warn(
+              "⚠️ Submission already completed:",
+              examData.userSubmission.status
+            );
+            setNotification({
+              show: true,
+              type: "error",
+              message: "Bài thi này đã hoàn thành. Không thể làm lại.",
+            });
+            setError(true);
+            return;
           }
         }
 
@@ -114,23 +128,39 @@ export default function TakeExamPage() {
 
   if (error || !exam) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            Exam Not Found
-          </h1>
-          <p className="text-gray-600">
-            The exam you're looking for doesn't exist.
-          </p>
+      <>
+        <NotificationModal
+          isOpen={notification.show}
+          onClose={() => setNotification({ ...notification, show: false })}
+          type={notification.type}
+          message={notification.message}
+        />
+        <div className="h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">
+              Exam Not Found
+            </h1>
+            <p className="text-gray-600">
+              The exam you're looking for doesn't exist.
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <TakeExamClient
-      exam={exam}
-      isPreviewMode={searchParams?.get("preview") === "true"}
-    />
+    <>
+      <NotificationModal
+        isOpen={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+        type={notification.type}
+        message={notification.message}
+      />
+      <TakeExamClient
+        exam={exam}
+        isPreviewMode={searchParams?.get("preview") === "true"}
+      />
+    </>
   );
 }

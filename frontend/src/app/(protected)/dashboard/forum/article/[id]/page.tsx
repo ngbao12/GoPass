@@ -22,6 +22,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import NotificationModal from "@/components/ui/NotificationModal";
 
 interface PageProps {
   params: Promise<{
@@ -52,6 +53,11 @@ export default function ArticleDetailPage({ params }: PageProps) {
   }>({});
   const topicRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [targetTopicId, setTargetTopicId] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ show: false, type: "error", message: "" });
 
   // Resolve params
   useEffect(() => {
@@ -180,7 +186,11 @@ export default function ArticleDetailPage({ params }: PageProps) {
       setForumTopics(topics);
     } catch (error) {
       console.error("Error submitting comment:", error);
-      alert("Không thể gửi bình luận. Vui lòng thử lại.");
+      setNotification({
+        show: true,
+        type: "error",
+        message: "Không thể gữi bình luận. Vui lòng thử lại.",
+      });
     }
   };
 
@@ -653,6 +663,12 @@ export default function ArticleDetailPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+      <NotificationModal
+        isOpen={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+        type={notification.type}
+        message={notification.message}
+      />
     </div>
   );
 }

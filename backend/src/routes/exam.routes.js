@@ -9,23 +9,32 @@ router.use(authenticate);
 
 // Admin routes
 router.get("/", authorize("admin"), ExamController.getAllExams);
+router.get("/published", authorize("admin"), ExamController.getPublishedExams);
 
-// Teacher routes
-router.post("/", authorize("teacher"), ExamController.createExam);
+// Teacher routes (Admin can also create exams)
+router.post("/", authorize("teacher", "admin"), ExamController.createExam);
 router.post(
   "/upload-file",
-  authorize("teacher"),
+  authorize("teacher", "admin"),
   upload.single("file"),
   ExamController.uploadExamFile
 );
 router.post(
   "/process-pdf",
-  authorize("teacher"),
+  authorize("teacher", "admin"),
   ExamController.processExamFromPdf
 );
 router.get("/my-exams", authorize("teacher"), ExamController.getMyExams);
-router.put("/:examId", authorize("teacher"), ExamController.updateExam);
-router.delete("/:examId", authorize("teacher"), ExamController.deleteExam);
+router.put(
+  "/:examId",
+  authorize("teacher", "admin"),
+  ExamController.updateExam
+);
+router.delete(
+  "/:examId",
+  authorize("teacher", "admin"),
+  ExamController.deleteExam
+);
 router.post(
   "/:examId/questions",
   authorize("teacher"),

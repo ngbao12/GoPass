@@ -8,6 +8,7 @@ import {
   type Answer,
 } from "@/services/grading";
 import MathText from "@/components/ui/MathText";
+import NotificationModal from "@/components/ui/NotificationModal";
 
 export default function GradingDetailPage() {
   const router = useRouter();
@@ -27,6 +28,11 @@ export default function GradingDetailPage() {
   const [savingGrade, setSavingGrade] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ show: false, type: "success", message: "" });
 
   useEffect(() => {
     if (submissionId) {
@@ -96,12 +102,20 @@ export default function GradingDetailPage() {
     const feedback = manualFeedback[answerId] || "";
 
     if (score === undefined || score === null) {
-      alert("Vui lòng nhập điểm số");
+      setNotification({
+        show: true,
+        type: "error",
+        message: "Vui lòng nhập điểm số",
+      });
       return;
     }
 
     if (score < 0 || score > maxScore) {
-      alert(`Điểm phải từ 0 đến ${maxScore}`);
+      setNotification({
+        show: true,
+        type: "error",
+        message: `Điểm phải từ 0 đến ${maxScore}`,
+      });
       return;
     }
 
@@ -129,9 +143,17 @@ export default function GradingDetailPage() {
         return newState;
       });
 
-      alert("Đã lưu điểm thành công!");
+      setNotification({
+        show: true,
+        type: "success",
+        message: "Đã lưu điểm thành công!",
+      });
     } catch (err: any) {
-      alert(`Lỗi khi lưu điểm: ${err.message || "Unknown error"}`);
+      setNotification({
+        show: true,
+        type: "error",
+        message: `Lỗi khi lưu điểm: ${err.message || "Unknown error"}`,
+      });
       console.error("Error saving grade:", err);
     } finally {
       setSavingGrade((prev) => ({ ...prev, [answerId]: false }));
@@ -516,6 +538,12 @@ export default function GradingDetailPage() {
           ))}
         </div>
       </div>
+      <NotificationModal
+        isOpen={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+        type={notification.type}
+        message={notification.message}
+      />
     </div>
   );
 }

@@ -38,12 +38,12 @@ const LongAnswerForm: React.FC<LongAnswerFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<Partial<LongAnswerQuestion>>({
     type: "essay",
-    title: initialData?.title || "",
+    content: initialData?.content || "",
+    subject: initialData?.subject || "Toán Học",
     tags: initialData?.tags || [],
     difficulty: initialData?.difficulty || "medium",
     points: initialData?.points || 1,
     timeLimit: initialData?.timeLimit,
-    language: initialData?.language || "vi",
     prompt: initialData?.prompt || "",
     wordLimit: initialData?.wordLimit,
     gradingType: initialData?.gradingType || "manual",
@@ -86,6 +86,10 @@ const LongAnswerForm: React.FC<LongAnswerFormProps> = ({
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    if (!formData.content?.trim()) {
+      newErrors.content = "Nội dung câu hỏi không được để trống";
+    }
+
     if (!formData.prompt?.trim()) {
       newErrors.prompt = "Yêu cầu bài viết không được để trống";
     }
@@ -115,17 +119,18 @@ const LongAnswerForm: React.FC<LongAnswerFormProps> = ({
   const handleSave = () => {
     if (!validate()) return;
 
+    console.log("[LongAnswerForm] Saving question:", formData);
     onSave({
       ...formData,
-      passageId,
+      linkedPassageId: passageId,
     } as LongAnswerQuestion);
   };
 
   return (
     <div className="space-y-6">
       <CommonFields
-        title={formData.title || ""}
-        onTitleChange={(val) => setFormData({ ...formData, title: val })}
+        subject={formData.subject || "Toán Học"}
+        onSubjectChange={(val) => setFormData({ ...formData, subject: val })}
         tags={formData.tags || []}
         onTagsChange={(val) => setFormData({ ...formData, tags: val })}
         difficulty={formData.difficulty!}
@@ -138,11 +143,29 @@ const LongAnswerForm: React.FC<LongAnswerFormProps> = ({
         onTimeLimitChange={(val) =>
           setFormData({ ...formData, timeLimit: val })
         }
-        language={formData.language!}
-        onLanguageChange={(val) => setFormData({ ...formData, language: val })}
       />
 
       <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Nội dung câu hỏi <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            value={formData.content}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
+            rows={3}
+            placeholder="Nhập nội dung câu hỏi..."
+            className={`block w-full rounded-lg border ${
+              errors.content ? "border-red-500" : "border-gray-300"
+            } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none`}
+          />
+          {errors.content && (
+            <p className="text-red-500 text-sm mt-1">{errors.content}</p>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Yêu cầu bài viết <span className="text-red-500">*</span>

@@ -180,13 +180,21 @@ class ExamService {
   }
 
   // Update exam
-  async updateExam(examId, teacherId, dto) {
+  async updateExam(examId, userId, dto) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error("Exam not found");
     }
 
-    if (exam.createdBy.toString() !== teacherId.toString()) {
+    // Get user to check if admin
+    const User = require("../models/User");
+    const user = await User.findById(userId);
+
+    // Check ownership (skip for admin)
+    if (
+      user.role !== "admin" &&
+      exam.createdBy.toString() !== userId.toString()
+    ) {
       throw new Error("Unauthorized to update this exam");
     }
 
@@ -202,6 +210,7 @@ class ExamService {
       "readingPassages",
       "totalQuestions",
       "totalPoints",
+      "isPublished", // Allow updating published status
     ];
     allowedFields.forEach((field) => {
       if (dto[field] !== undefined) updateData[field] = dto[field];
@@ -211,13 +220,21 @@ class ExamService {
   }
 
   // Delete exam
-  async deleteExam(examId, teacherId) {
+  async deleteExam(examId, userId) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error("Exam not found");
     }
 
-    if (exam.createdBy.toString() !== teacherId.toString()) {
+    // Get user to check if admin
+    const User = require("../models/User");
+    const user = await User.findById(userId);
+
+    // Check ownership (skip for admin)
+    if (
+      user.role !== "admin" &&
+      exam.createdBy.toString() !== userId.toString()
+    ) {
       throw new Error("Unauthorized to delete this exam");
     }
 
@@ -265,7 +282,8 @@ class ExamService {
     const { page = 1, limit = 50, subject, mode, search } = options;
     const skip = (page - 1) * limit;
 
-    const query = { createdBy: adminId }; // Only get exams created by this admin
+    // Show only exams created by current admin
+    const query = { createdBy: adminId };
     if (subject) query.subject = subject;
     if (mode) query.mode = mode;
     if (search) {
@@ -287,13 +305,77 @@ class ExamService {
       ExamRepository.count(query),
     ]);
 
-    // Format exams with creator info
+    // Return array format for examService.getAllExams() used by ExamSelectionModal
+    // For adminService, wrap in object with pagination
     const formattedExams = exams.map((exam) => ({
       id: exam._id.toString(),
+      _id: exam._id.toString(), // Include both for compatibility
       title: exam.title,
       subject: exam.subject,
       duration: exam.durationMinutes,
+      durationMinutes: exam.durationMinutes, // Include both for compatibility
       questionCount: exam.totalQuestions || 0,
+      totalQuestions: exam.totalQuestions || 0, // Include both for compatibility
+      totalPoints: exam.totalPoints || 10,
+      mode: exam.mode || "practice",
+      isPublished: exam.isPublished || false,
+      createdBy: exam.createdBy
+        ? {
+            id: exam.createdBy._id?.toString(),
+            name: exam.createdBy.name || exam.createdBy.email,
+          }
+        : null,
+      createdAt: exam.createdAt,
+      updatedAt: exam.updatedAt,
+    }));
+
+    return {
+      exams: formattedExams,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  // Get all published exams (for contest exam selection) - filtered by admin
+  async getPublishedExams(userId, options = {}) {
+    const { page = 1, limit = 50, subject, search } = options;
+    const skip = (page - 1) * limit;
+
+    // Show only published exams created by this admin (ignore mode filter)
+    const query = { isPublished: true, createdBy: userId };
+    if (subject) query.subject = subject;
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { subject: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const [exams, total] = await Promise.all([
+      ExamRepository.find(query, {
+        skip,
+        limit,
+        sort: { createdAt: -1 },
+        populate: "createdBy",
+        select:
+          "_id title subject durationMinutes totalQuestions totalPoints mode isPublished createdBy createdAt updatedAt",
+      }),
+      ExamRepository.count(query),
+    ]);
+
+    const formattedExams = exams.map((exam) => ({
+      id: exam._id.toString(),
+      _id: exam._id.toString(),
+      title: exam.title,
+      subject: exam.subject,
+      duration: exam.durationMinutes,
+      durationMinutes: exam.durationMinutes,
+      questionCount: exam.totalQuestions || 0,
+      totalQuestions: exam.totalQuestions || 0,
       totalPoints: exam.totalPoints || 10,
       mode: exam.mode || "practice",
       isPublished: exam.isPublished || false,

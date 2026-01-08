@@ -48,3 +48,51 @@ export const updateExamStatus = (
     console.error("Error saving contest progress", error);
   }
 };
+
+// 3. Xóa status của một exam khỏi localStorage (khi admin xóa submission)
+export const clearExamStatus = (contestId: string, examId: string) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    const currentProgress = getContestProgress(contestId);
+    const newProgress = { ...currentProgress };
+    delete newProgress[examId];
+
+    localStorage.setItem(
+      STORAGE_KEY_PREFIX + contestId,
+      JSON.stringify(newProgress)
+    );
+  } catch (error) {
+    console.error("Error clearing exam status", error);
+  }
+};
+
+// 4. Sync localStorage với server data (xóa những status không còn đúng)
+export const syncContestProgress = (
+  contestId: string,
+  serverStatuses: { examId: string; status: string }[]
+) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    const currentProgress = getContestProgress(contestId);
+    const newProgress: ContestProgressMap = {};
+
+    // Chỉ giữ lại những status "ongoing" nếu server chưa completed
+    serverStatuses.forEach(({ examId, status }) => {
+      if (status === "completed") {
+        newProgress[examId] = "completed";
+      } else if (currentProgress[examId] === "ongoing") {
+        newProgress[examId] = "ongoing";
+      }
+      // Không lưu những status khác (ready, locked) vì sẽ tính từ server
+    });
+
+    localStorage.setItem(
+      STORAGE_KEY_PREFIX + contestId,
+      JSON.stringify(newProgress)
+    );
+  } catch (error) {
+    console.error("Error syncing contest progress", error);
+  }
+};

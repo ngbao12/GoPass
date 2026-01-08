@@ -13,6 +13,8 @@ import {
   Trophy,
   Loader2,
 } from "lucide-react";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface LandingProps {
   id: string;
@@ -34,6 +36,17 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
   const { user, isAuthenticated } = useAuth();
   const { userProgress } = data;
   const [isLoading, setIsLoading] = useState(false); // ✅ State xử lý loading khi bấm nút
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   // --- HÀM XỬ LÝ JOIN (GỌI API) ---
   const handleJoin = async () => {
@@ -53,11 +66,19 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
         // 2. Điều hướng đến trang hub cuộc thi sau khi tham gia thành công
         router.push(`/contest/${data.id}/hub`);
       } else {
-        alert("Có lỗi xảy ra: " + (res.message || "Không thể tham gia"));
+        setNotification({
+          isOpen: true,
+          message: "Có lỗi xảy ra: " + (res.message || "Không thể tham gia"),
+          type: "error",
+        });
       }
     } catch (error) {
       console.error("Join error:", error);
-      alert("Lỗi khi tham gia cuộc thi");
+      setNotification({
+        isOpen: true,
+        message: "Lỗi khi tham gia cuộc thi",
+        type: "error",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -216,6 +237,38 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
           {MainButton}
         </div>
       </div>
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 }

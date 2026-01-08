@@ -22,7 +22,7 @@ export const contestService = {
    * Lấy chi tiết Contest đầy đủ (Info + Subjects + Participation của User hiện tại)
    */
   getContestDetail: async (
-    contestId: string,
+    contestId: string
   ): Promise<ContestDetail | null> => {
     try {
       const response = await httpClient.get<{ success: boolean; data: any }>(
@@ -39,22 +39,35 @@ export const contestService = {
 
       const subjects: ContestSubjectUI[] = examsConfig.map(
         (cfg: any, index: number) => {
-          const examInfo: ExamLookup | undefined = cfg.examId || cfg.exam;
+          // Handle both populated object and string ID
+          const examInfo: ExamLookup | undefined =
+            typeof cfg.examId === "object" && cfg.examId !== null
+              ? cfg.examId
+              : cfg.exam;
+
+          // Extract exam ID string for comparison
+          const currentExamId =
+            typeof cfg.examId === "object" && cfg.examId !== null
+              ? cfg.examId._id
+              : cfg.examId;
 
           let status: "locked" | "ready" | "completed" = "locked";
-          if (completedExams.has(cfg.examId?._id || cfg.examId)) {
+          if (completedExams.has(currentExamId)) {
             status = "completed";
           } else if (index === 0) {
             status = "ready";
           } else {
             const prevExam = examsConfig[index - 1];
-            const prevId = prevExam.examId?._id || prevExam.examId;
+            const prevId =
+              typeof prevExam.examId === "object" && prevExam.examId !== null
+                ? prevExam.examId._id
+                : prevExam.examId;
             if (completedExams.has(prevId)) status = "ready";
           }
 
           return {
             contestExamId: cfg._id || cfg.id,
-            examId: cfg.examId?._id || cfg.examId,
+            examId: currentExamId,
             order: cfg.order,
             weight: cfg.weight,
             title: examInfo?.title || "Bài thi đang cập nhật",
@@ -125,11 +138,11 @@ export const contestService = {
    */
   joinContest: async (contestId: string, userId: string) => {
     try {
-      const res = await httpClient.post<{ success: boolean; data?: any; message?: string }>(
-        `/contests/${contestId}/join`,
-        { userId },
-        { requiresAuth: true }
-      );
+      const res = await httpClient.post<{
+        success: boolean;
+        data?: any;
+        message?: string;
+      }>(`/contests/${contestId}/join`, { userId }, { requiresAuth: true });
       console.log("Kết quả joinContest:", res);
 
       return {
@@ -142,5 +155,4 @@ export const contestService = {
       return { success: false };
     }
   },
-  
 };

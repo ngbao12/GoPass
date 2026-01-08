@@ -12,7 +12,8 @@
  */
 
 const mongoose = require('mongoose');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 // Import models
 const Exam = require('../models/Exam');
@@ -105,20 +106,20 @@ const cleanupSeededData = async () => {
 const seedExamAssignments = async () => {
   try {
     // Step 0: Cleanup previously seeded data
-    await cleanupSeededData();
+    // await cleanupSeededData();
     
-    // Step 1: Find existing "Tiếng Anh" exams from other teachers
-    console.log('\n📖 Fetching existing "Tiếng Anh" exams...');
+    // Step 1: Find existing "Ngữ Văn" exams from other teachers
+    console.log('\n📖 Fetching existing "Ngữ Văn" exams...');
     const existingExams = await Exam.find({ 
       isPublished: true,
-      subject: 'Tiếng Anh',
+      subject: 'Ngữ Văn',
       createdBy: { $ne: TARGET_TEACHER_ID } // Exclude exams already created by target teacher
     }).populate('createdBy', 'name role');
     
-    console.log(`✅ Found ${existingExams.length} existing "Tiếng Anh" exams`);
+    console.log(`✅ Found ${existingExams.length} existing "Ngữ Văn" exams`);
     
     if (existingExams.length === 0) {
-      console.log('⚠️  No "Tiếng Anh" exams found to duplicate');
+      console.log('⚠️  No "Ngữ Văn" exams found to duplicate');
       return;
     }
     
@@ -143,7 +144,7 @@ const seedExamAssignments = async () => {
     }
     
     // Step 2: Duplicate exams for target teacher
-    console.log('\n🔄 Duplicating "Tiếng Anh" exams for target teacher...');
+    console.log('\n🔄 Duplicating "Ngữ Văn" exams for target teacher...');
     let duplicatedCount = 0;
     let assignmentCount = 0;
     let duplicatedQuestions = 0;
@@ -185,6 +186,7 @@ const seedExamAssignments = async () => {
               options: originalQuestion.options,
               correctAnswers: originalQuestion.correctAnswers,
               explanation: originalQuestion.explanation,
+              linkedPassageId: originalQuestion.linkedPassageId,
               image: originalQuestion.image,
               audio: originalQuestion.audio,
               maxScore: originalQuestion.maxScore,

@@ -59,6 +59,54 @@ class AdminService {
     return this.sanitizeUser(user);
   }
 
+  // Update user info (name, email, role)
+  async updateUserInfo(userId, updates) {
+    const { name, email, role } = updates;
+
+    // Validate updates
+    const updateData = {};
+
+    if (name !== undefined) {
+      if (!name || name.trim().length === 0) {
+        throw new Error('Name cannot be empty');
+      }
+      updateData.name = name.trim();
+    }
+
+    if (email !== undefined) {
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new Error('Invalid email format');
+      }
+      
+      // Check if email already exists (excluding current user)
+      const existingUser = await UserRepository.findByEmail(email);
+      if (existingUser && existingUser._id.toString() !== userId) {
+        throw new Error('Email already exists');
+      }
+      
+      updateData.email = email.toLowerCase();
+    }
+
+    if (role !== undefined) {
+      if (!['admin', 'teacher', 'student'].includes(role)) {
+        throw new Error('Invalid role');
+      }
+      updateData.role = role;
+    }
+
+    // Check if there are any updates
+    if (Object.keys(updateData).length === 0) {
+      throw new Error('No valid updates provided');
+    }
+
+    const user = await UserRepository.update(userId, updateData);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return this.sanitizeUser(user);
+  }
+
   // Reset user password
   async resetUserPassword(userId, newPassword) {
     const user = await UserRepository.findById(userId);
@@ -99,12 +147,12 @@ class AdminService {
   async getExamStats(adminId) {
     const ExamRepository = require("../repositories/ExamRepository");
     const ExamSubmissionRepository = require("../repositories/ExamSubmissionRepository");
+    const ContestRepository = require("../repositories/ContestRepository");
 
     // Get exams created by this admin
-    const [allExams, contestExams, publicExams] = await Promise.all([
+    const [allExams, totalContests] = await Promise.all([
       ExamRepository.count({ createdBy: adminId }),
-      ExamRepository.count({ createdBy: adminId, mode: "contest" }),
-      ExamRepository.count({ createdBy: adminId, mode: "public" }),
+      ContestRepository.count({ ownerId: adminId }),
     ]);
 
     // Get all exam IDs created by this admin
@@ -125,8 +173,8 @@ class AdminService {
 
     return {
       totalExams: allExams,
-      contestExams,
-      publicExams,
+      contestExams: totalContests, // Now counting contests instead of contest-mode exams
+      publicExams: allExams, // All exams created by admin
       totalParticipants,
     };
   }

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useDashboard } from "@/features/dashboard/context/DashboardContext";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { Button, Badge, Input } from "@/components/ui";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import CreateExamModal from "./CreateExamModal";
 import AssignExamModal from "./AssignExamModal";
 import DeleteExamModal from "./DeleteExamModal";
@@ -42,6 +44,17 @@ const TeacherExamsView: React.FC = () => {
     total: 0,
     totalPages: 0,
   });
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   // Fetch exams from API
   useEffect(() => {
@@ -104,16 +117,29 @@ const TeacherExamsView: React.FC = () => {
         );
 
         if (result.success) {
-          alert(result.message || "Gán đề thi thành công!");
+          setNotification({
+            isOpen: true,
+            message: result.message || "Gán đề thi thành công!",
+            type: "success",
+          });
           setShowAssignModal(false);
           setSelectedExam(null);
         } else {
-          alert("Có lỗi xảy ra: " + (result.message || "Không thể gán đề thi"));
+          setNotification({
+            isOpen: true,
+            message:
+              "Có lỗi xảy ra: " + (result.message || "Không thể gán đề thi"),
+            type: "error",
+          });
         }
       }
     } catch (error) {
       console.error("Error assigning exam:", error);
-      alert("Đã xảy ra lỗi khi gán đề thi. Vui lòng thử lại.");
+      setNotification({
+        isOpen: true,
+        message: "Đã xảy ra lỗi khi gán đề thi. Vui lòng thử lại.",
+        type: "error",
+      });
     }
   };
 
@@ -130,21 +156,33 @@ const TeacherExamsView: React.FC = () => {
         setSelectedExam(null);
       } else {
         console.error("Delete failed:", response.error);
-        alert(`Không thể xóa đề thi: ${response.error}`);
+        setNotification({
+          isOpen: true,
+          message: `Không thể xóa đề thi: ${response.error}`,
+          type: "error",
+        });
       }
     } catch (error: any) {
       console.error("Error deleting exam:", error);
-      alert(
-        `Lỗi: ${error.message || "Không thể xóa đề thi. Vui lòng thử lại."}`
-      );
+      setNotification({
+        isOpen: true,
+        message: `Lỗi: ${
+          error.message || "Không thể xóa đề thi. Vui lòng thử lại."
+        }`,
+        type: "error",
+      });
     } finally {
       setIsDeleting(false);
     }
   };
 
   const handlePreviewExam = (exam: Exam) => {
-    // Navigate to exam with preview mode instead of opening modal
-    router.push(`/exam/${exam._id}/take?preview=true`);
+    // Navigate to exam with preview mode and return URL
+    router.push(
+      `/exam/${exam._id}/take?preview=true&returnUrl=${encodeURIComponent(
+        "/dashboard/teacher/exams"
+      )}`
+    );
   };
 
   const openDeleteModal = (exam: Exam) => {
@@ -434,6 +472,7 @@ const TeacherExamsView: React.FC = () => {
       {/* Modals */}
       {showCreateModal && (
         <CreateExamModal
+          isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreateExam}
         />
@@ -463,6 +502,38 @@ const TeacherExamsView: React.FC = () => {
           isLoading={isDeleting}
         />
       )}
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 };

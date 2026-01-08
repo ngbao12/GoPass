@@ -1,5 +1,5 @@
-const BaseRepository = require('./BaseRepository');
-const ExamSubmission = require('../models/ExamSubmission');
+const BaseRepository = require("./BaseRepository");
+const ExamSubmission = require("../models/ExamSubmission");
 
 class ExamSubmissionRepository extends BaseRepository {
   constructor() {
@@ -23,39 +23,44 @@ class ExamSubmissionRepository extends BaseRepository {
   }
 
   async findInProgressSubmission(assignmentId, studentUserId) {
-    return await this.findOne({ 
-      assignmentId, 
+    return await this.findOne({
+      assignmentId,
       studentUserId,
-      status: 'in_progress' 
+      status: "in_progress",
     });
   }
 
   async submitSubmission(submissionId) {
     return await this.update(submissionId, {
-      status: 'submitted',
+      status: "submitted",
       submittedAt: new Date(),
     });
   }
 
   async gradeSubmission(submissionId, totalScore) {
     return await this.update(submissionId, {
-      status: 'graded',
+      status: "graded",
       totalScore,
     });
   }
 
   async getStudentAttempts(assignmentId, studentUserId) {
-    return await this.count({ assignmentId, studentUserId });
+    // Only count COMPLETED attempts (submitted or graded), not in-progress
+    return await this.count({
+      assignmentId,
+      studentUserId,
+      status: { $in: ["submitted", "graded"] },
+    });
   }
 
   async calculateClassAverage(assignmentId) {
-    const submissions = await this.find({ 
-      assignmentId, 
-      status: 'graded' 
+    const submissions = await this.find({
+      assignmentId,
+      status: "graded",
     });
-    
+
     if (submissions.length === 0) return 0;
-    
+
     const total = submissions.reduce((sum, s) => sum + s.totalScore, 0);
     return total / submissions.length;
   }

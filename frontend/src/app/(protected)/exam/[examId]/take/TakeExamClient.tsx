@@ -42,21 +42,34 @@ const useExamNavigation = (examId: string, isPreviewMode: boolean = false) => {
   }, [contestId, examId, isPreviewMode]);
 
   const handleNavigateBack = useCallback(() => {
-    // Preview mode: Always go to teacher exams page
+    // Preview mode: Use returnUrl if provided, otherwise check current path
     if (isPreviewMode) {
-      router.push("/dashboard/teacher/exams");
+      if (returnUrl) {
+        router.push(decodeURIComponent(returnUrl));
+        return;
+      }
+      // Fallback: Check if user is admin or teacher
+      const currentPath = window.location.pathname;
+      if (currentPath.includes("teacher")) {
+        router.push("/dashboard/teacher/exams");
+      } else {
+        router.push("/dashboard/exams");
+      }
       return;
     }
 
-    // Normal mode: Check returnUrl or contestId
+    // Normal mode: Check returnUrl first (from class), then contestId, then default
     if (returnUrl) {
       router.push(decodeURIComponent(returnUrl));
+    } else if (contestId) {
+      router.push(`/contest/${contestId}/hub`);
     } else {
-      router.push(contestId ? `/contest/${contestId}/hub` : `/exam/${examId}`);
+      router.push(`/exam/${examId}`);
     }
   }, [returnUrl, router, contestId, examId, isPreviewMode]);
 
   const handleNavigateDashboard = useCallback(() => {
+    // If returnUrl exists (from class/contest), go back there
     if (returnUrl) {
       router.push(decodeURIComponent(returnUrl));
     } else {
@@ -248,6 +261,10 @@ const ExamInterface = ({
   const { contestId, handleNavigateBack, handleNavigateDashboard } =
     useExamNavigation(exam?._id || "", isPreviewMode);
 
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams?.get("returnUrl");
+  const assignmentId = searchParams?.get("assignmentId");
+
   // Handle preview mode exit - clear storage
   const handlePreviewExit = useCallback(() => {
     if (isPreviewMode && exam?._id) {
@@ -377,7 +394,11 @@ const ExamInterface = ({
         }}
         onGoToDashboard={handleNavigateDashboard}
         actionLabel={
-          contestId ? "Quay về Hub Cuộc thi" : "Về trang chủ Dashboard"
+          contestId
+            ? "Quay về Hub Cuộc thi"
+            : assignmentId
+            ? "Quay về Lớp học"
+            : "Về trang chủ Dashboard"
         }
         isContestMode={!!contestId}
       />

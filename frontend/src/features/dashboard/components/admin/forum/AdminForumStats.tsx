@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FileText, MessageCircle, Users, TrendingUp } from "lucide-react";
+import { formatNumber } from "@/utils/format-date";
 
 interface AdminForumStatsProps {
   stats: {
@@ -64,7 +65,7 @@ const AdminForumStats: React.FC<AdminForumStatsProps> = ({ stats }) => {
             </div>
             <div className="space-y-1">
               <p className="text-3xl font-bold text-gray-900">
-                {stat.value.toLocaleString()}
+                {formatNumber(stat.value)}
               </p>
               <p className="text-sm font-medium text-gray-600">{stat.label}</p>
             </div>

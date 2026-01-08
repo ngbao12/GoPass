@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { X, Sparkles, TrendingUp } from "lucide-react";
 import { ForumService } from "@/services/forum/forum.service";
 import { vnsocialTopic } from "@/features/dashboard/types/forum";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface GenerateArticleModalProps {
   onClose: () => void;
@@ -25,6 +27,17 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
     Array<{ id: string; name: string; color: string }>
   >([]);
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   // Color palette for categories
   const colors = [
@@ -119,7 +132,11 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
         errorMessage = error.message;
       }
 
-      alert(errorMessage);
+      setNotification({
+        isOpen: true,
+        message: errorMessage,
+        type: "error",
+      });
       setStep("configure");
     }
   };
@@ -341,6 +358,38 @@ const GenerateArticleModal: React.FC<GenerateArticleModalProps> = ({
           {step === "generating" && renderGeneratingStep()}
           {step === "success" && renderSuccessStep()}
         </div>
+
+        {/* Notification and Confirm Modals */}
+        <NotificationModal
+          isOpen={notification.isOpen}
+          onClose={() =>
+            setNotification({ isOpen: false, message: "", type: "info" })
+          }
+          message={notification.message}
+          type={notification.type}
+        />
+        <ConfirmModal
+          isOpen={confirm.isOpen}
+          onClose={() =>
+            setConfirm({
+              isOpen: false,
+              message: "",
+              onConfirm: () => {},
+              type: "warning",
+            })
+          }
+          onConfirm={() => {
+            confirm.onConfirm();
+            setConfirm({
+              isOpen: false,
+              message: "",
+              onConfirm: () => {},
+              type: "warning",
+            });
+          }}
+          message={confirm.message}
+          type={confirm.type}
+        />
       </div>
     </div>
   );

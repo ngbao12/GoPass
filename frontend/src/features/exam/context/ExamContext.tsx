@@ -28,6 +28,8 @@ interface ExamContextType {
   examState: ExamState;
   timeRemaining: number;
   isTimeUp: boolean;
+  submitError: string | null;
+  clearSubmitError: () => void;
   setExamState: (state: Partial<ExamState>) => void;
   goToQuestion: (index: number) => void;
   goToNextQuestion: () => void;
@@ -66,6 +68,9 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     initialExam.userSubmission || null
   );
   const [isTimeUp, setIsTimeUp] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const clearSubmitError = () => setSubmitError(null);
 
   // Log submission status on mount
   useEffect(() => {
@@ -289,7 +294,7 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
       console.log("✅ Cleared storage for", initialExam._id);
     } catch (error) {
       console.error("❌ Submit failed:", error);
-      alert("Nộp bài thất bại. Vui lòng thử lại.");
+      setSubmitError("Nộp bài thất bại. Vui lòng thử lại.");
       setExamState({ isSubmitting: false }); // Mở khóa nếu lỗi để user nộp lại
     }
   };
@@ -301,6 +306,8 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     examState,
     timeRemaining: examState.timeRemaining,
     isTimeUp,
+    submitError,
+    clearSubmitError,
     setExamState,
     goToQuestion,
     goToNextQuestion,

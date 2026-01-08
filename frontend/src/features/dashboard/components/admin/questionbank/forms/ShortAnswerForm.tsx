@@ -38,13 +38,12 @@ const ShortAnswerForm: React.FC<ShortAnswerFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<Partial<ShortAnswerQuestion>>({
     type: "short_answer",
-    title: initialData?.title || "",
+    content: initialData?.content || "",
+    subject: initialData?.subject || "Toán Học",
     tags: initialData?.tags || [],
     difficulty: initialData?.difficulty || "medium",
     points: initialData?.points || 1,
     timeLimit: initialData?.timeLimit,
-    language: initialData?.language || "vi",
-    stem: initialData?.stem || "",
     answerType: initialData?.answerType || "text",
     acceptedAnswers: initialData?.acceptedAnswers || [""],
     caseSensitive: initialData?.caseSensitive ?? false,
@@ -90,6 +89,10 @@ const ShortAnswerForm: React.FC<ShortAnswerFormProps> = ({
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    if (!formData.content?.trim()) {
+      newErrors.content = "Nội dung câu hỏi không được để trống";
+    }
+
     if (!formData.stem?.trim()) {
       newErrors.stem = "Câu hỏi không được để trống";
     }
@@ -121,17 +124,18 @@ const ShortAnswerForm: React.FC<ShortAnswerFormProps> = ({
   const handleSave = () => {
     if (!validate()) return;
 
+    console.log("[ShortAnswerForm] Saving question:", formData);
     onSave({
       ...formData,
-      passageId,
+      linkedPassageId: passageId,
     } as ShortAnswerQuestion);
   };
 
   return (
     <div className="space-y-6">
       <CommonFields
-        title={formData.title || ""}
-        onTitleChange={(val) => setFormData({ ...formData, title: val })}
+        subject={formData.subject!}
+        onSubjectChange={(val) => setFormData({ ...formData, subject: val })}
         tags={formData.tags || []}
         onTagsChange={(val) => setFormData({ ...formData, tags: val })}
         difficulty={formData.difficulty!}
@@ -144,11 +148,28 @@ const ShortAnswerForm: React.FC<ShortAnswerFormProps> = ({
         onTimeLimitChange={(val) =>
           setFormData({ ...formData, timeLimit: val })
         }
-        language={formData.language!}
-        onLanguageChange={(val) => setFormData({ ...formData, language: val })}
       />
 
       <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Nội dung câu hỏi <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            value={formData.content || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
+            rows={3}
+            placeholder="Nhập nội dung tổng quát của câu hỏi..."
+            className={`block w-full rounded-lg border ${
+              errors.content ? "border-red-500" : "border-gray-300"
+            } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none`}
+          />
+          {errors.content && (
+            <p className="mt-1 text-sm text-red-600">{errors.content}</p>
+          )}
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Câu hỏi <span className="text-red-500">*</span>

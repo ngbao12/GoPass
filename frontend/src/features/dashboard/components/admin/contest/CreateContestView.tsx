@@ -1,14 +1,31 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { ContestFormData } from "@/features/dashboard/types/contest";
 import SubjectSelector from "./SubjectSelector";
 import ContestPreview from "./ContestPreview";
+import { contestAdminService } from "@/services/admin/contestAdmin.service";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
+
+interface SelectedExam {
+  _id: string;
+  title: string;
+  subject: string;
+  durationMinutes: number;
+  totalQuestions: number;
+  totalPoints: number;
+  order: number;
+  weight: number;
+}
 
 const CreateContestView: React.FC = () => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<ContestFormData>({
     title: "",
     description: "",
@@ -17,6 +34,18 @@ const CreateContestView: React.FC = () => {
     subjects: [],
     isPublic: true,
   });
+  const [selectedExams, setSelectedExams] = useState<SelectedExam[]>([]);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   const handleInputChange = (
     field: keyof ContestFormData,
@@ -35,10 +64,80 @@ const CreateContestView: React.FC = () => {
     }));
   };
 
-  const handleCreateContest = () => {
-    console.log("Create contest:", formData);
-    // TODO: Validate and submit to API
-    // Convert to Contest type format with proper field names
+  const validateForm = (): string | null => {
+    if (!formData.title.trim()) {
+      return "Vui lòng nhập tên cuộc thi";
+    }
+    if (!formData.startDate) {
+      return "Vui lòng chọn ngày bắt đầu";
+    }
+    if (!formData.endDate) {
+      return "Vui lòng chọn ngày kết thúc";
+    }
+    if (new Date(formData.startDate) >= new Date(formData.endDate)) {
+      return "Ngày kết thúc phải sau ngày bắt đầu";
+    }
+    if (selectedExams.length === 0) {
+      return "Vui lòng thêm ít nhất một đề thi";
+    }
+    return null;
+  };
+
+  const handleCreateContest = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setNotification({
+        isOpen: true,
+        message: validationError,
+        type: "warning",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        name: formData.title.trim(),
+        description: formData.description.trim(),
+        startTime: new Date(formData.startDate).toISOString(),
+        endTime: new Date(formData.endDate).toISOString(),
+        isPublic: formData.isPublic,
+        exams: selectedExams.map((exam) => ({
+          examId: exam._id,
+          order: exam.order,
+          weight: exam.weight,
+        })),
+      };
+
+      const result = await contestAdminService.createContest(payload);
+
+      if (result) {
+        setNotification({
+          isOpen: true,
+          message: "Tạo cuộc thi thành công!",
+          type: "success",
+        });
+        handleReset();
+        // Optionally navigate to contest list or detail
+        // router.push(`/dashboard/contests/${result._id}`);
+      } else {
+        setNotification({
+          isOpen: true,
+          message: "Có lỗi xảy ra khi tạo cuộc thi. Vui lòng thử lại.",
+          type: "error",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error creating contest:", error);
+      setNotification({
+        isOpen: true,
+        message: error?.message || "Có lỗi xảy ra. Vui lòng thử lại.",
+        type: "error",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -50,6 +149,7 @@ const CreateContestView: React.FC = () => {
       subjects: [],
       isPublic: true,
     });
+    setSelectedExams([]);
   };
 
   return (
@@ -169,48 +269,96 @@ const CreateContestView: React.FC = () => {
             <SubjectSelector
               selectedSubjects={formData.subjects}
               onSubjectsChange={handleSubjectsChange}
+              selectedExams={selectedExams}
+              onExamsChange={setSelectedExams}
             />
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
-          <Button variant="secondary" onClick={handleReset}>
+          <Button
+            variant="secondary"
+            onClick={handleReset}
+            disabled={isSubmitting}
+          >
             Đặt lại
           </Button>
           <Button
             variant="primary"
             onClick={handleCreateContest}
+            disabled={isSubmitting}
             icon={
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                />
-              </svg>
+              isSubmitting ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                  />
+                </svg>
+              )
             }
           >
-            Tạo cuộc thi
+            {isSubmitting ? "Đang tạo..." : "Tạo cuộc thi"}
           </Button>
         </div>
       </div>
 
       {/* Preview Section */}
-      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-purple-800 mb-1">Xem trước</h3>
-        <p className="text-sm text-purple-700 mb-3">
-          Cuộc thi sẽ hiển thị như thế này với người dùng
-        </p>
-      </div>
+      {(formData.title || selectedExams.length > 0) && (
+        <div>
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+            <h3 className="text-sm font-medium text-purple-800 mb-1">
+              Xem trước
+            </h3>
+            <p className="text-sm text-purple-700">
+              Cuộc thi sẽ hiển thị như thế này với người dùng
+            </p>
+          </div>
+          <ContestPreview formData={formData} selectedExams={selectedExams} />
+        </div>
+      )}
 
-      {formData.title && <ContestPreview formData={formData} />}
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 };

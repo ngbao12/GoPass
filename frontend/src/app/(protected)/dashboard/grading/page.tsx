@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { gradingService, type Submission } from "@/services/grading";
 
 const SUBJECTS = [
@@ -21,6 +21,7 @@ const STATUSES = [
 
 export default function GradingSubmissionsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,24 +29,38 @@ export default function GradingSubmissionsPage() {
   // Filters
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [useClassFilter, setUseClassFilter] = useState<boolean>(false);
+  const [initialClassId] = useState<string>(searchParams.get("classId") || "");
+  const [initialExamId] = useState<string>(searchParams.get("examId") || "");
 
   useEffect(() => {
     loadSubmissions();
-  }, [selectedSubject, selectedStatus]);
+  }, [selectedSubject, selectedStatus, useClassFilter, initialClassId, initialExamId]);
 
   const loadSubmissions = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await gradingService.getAllSubmissions({
+      const filters: any = {
         subject: selectedSubject || undefined,
         status: selectedStatus || undefined,
-      });
+      };
+
+      // Apply class filter only if enabled OR if exam filter is from URL
+      if (useClassFilter && initialClassId) {
+        filters.classId = initialClassId;
+      }
+      if (initialExamId) {
+        filters.examId = initialExamId;
+      }
+
+      console.log("📡 Sending filters to backend:", filters);
+      const data = await gradingService.getAllSubmissions(filters);
+      console.log("✅ Loaded submissions:", data);
       setSubmissions(data);
-      console.log("Loaded submissions:", data);
     } catch (err: any) {
       setError(err.message || "Failed to load submissions");
-      console.error("Error loading submissions:", err);
+      console.error("❌ Error loading submissions:", err);
     } finally {
       setLoading(false);
     }
@@ -89,61 +104,71 @@ export default function GradingSubmissionsPage() {
         <p className="text-gray-600">
           Quản lý và chấm điểm bài thi của học sinh
         </p>
+        {(initialClassId || initialExamId) && (
+          <p className="text-sm text-teal-700 mt-2">
+            Đang lọc theo {initialClassId ? "lớp" : ""}
+            {initialClassId && initialExamId ? " / " : ""}
+            {initialExamId ? "đề thi" : ""}
+          </p>
+        )}
       </div>
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Bộ lọc</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Subject Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Môn học
-            </label>
-            <select
-              value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Tất cả môn học</option>
-              {SUBJECTS.map((subject) => (
-                <option key={subject} value={subject}>
-                  {subject}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Subject Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Môn học
+              </label>
+              <select
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Tất cả môn học</option>
+                {SUBJECTS.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Status Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Trạng thái
-            </label>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Tất cả trạng thái</option>
-              {STATUSES.map((status) => (
-                <option key={status.value} value={status.value}>
-                  {status.label}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Status Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Trạng thái
+              </label>
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Tất cả trạng thái</option>
+                {STATUSES.map((status) => (
+                  <option key={status.value} value={status.value}>
+                    {status.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Reset Button */}
-          <div className="flex items-end">
-            <button
-              onClick={() => {
-                setSelectedSubject("");
-                setSelectedStatus("");
-              }}
-              className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Xóa bộ lọc
-            </button>
+            {/* Reset Button */}
+            <div className="flex items-end">
+              <button
+                onClick={() => {
+                  setSelectedSubject("");
+                  setSelectedStatus("");
+                  setUseClassFilter(false);
+                }}
+                className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Xóa bộ lọc
+              </button>
+            </div>
           </div>
         </div>
       </div>

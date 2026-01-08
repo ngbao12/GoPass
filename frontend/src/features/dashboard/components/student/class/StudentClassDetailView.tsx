@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { ClassDetail } from "@/features/dashboard/types/student/";
 import ClassAssignmentItem from "./ClassAssignmentItem";
 import { submissionService } from "@/services/exam/submission.service";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 // ==========================================
 // 1. TYPES & HELPER
@@ -41,6 +43,17 @@ const StudentClassDetailView: React.FC<StudentClassDetailViewProps> = ({
     useState<AvailabilityFilter>("all");
   const [completionFilter, setCompletionFilter] =
     useState<CompletionFilter>("all");
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   // --- LOGIC FILTER ---
   const filteredAssignments = useMemo(() => {
@@ -89,31 +102,49 @@ const StudentClassDetailView: React.FC<StudentClassDetailViewProps> = ({
       : 0;
 
   // --- HANDLERS ---
-  const handleBack = () => router.back();
+  const handleBack = () => {
+    router.push("/dashboard");
+  };
 
   const handleStartAssignment = async (id: string | number) => {
     try {
       console.log("Starting assignment:", id);
-      const result = await submissionService.startExamFromAssignment(
-        String(id)
-      );
 
-      if (!result) {
-        alert("Không thể bắt đầu bài thi. Vui lòng thử lại.");
+      // Find the assignment to get examId
+      const assignment = classData.assignments.find((a) => a.id === id);
+      if (!assignment) {
+        setNotification({
+          isOpen: true,
+          message: "Không tìm thấy bài thi.",
+          type: "error",
+        });
         return;
       }
 
-      // Navigate to exam page with assignment context
-      router.push(`/exam/${result.examId}/take?assignmentId=${id}`);
+      // Navigate to Start Panel with assignment context and return URL
+      const returnUrl = encodeURIComponent(
+        `/dashboard/classes/${classData.id}`
+      );
+      router.push(
+        `/exam/${assignment.examId}?assignmentId=${id}&returnUrl=${returnUrl}`
+      );
     } catch (error) {
       console.error("Error starting assignment:", error);
-      alert("Đã xảy ra lỗi. Vui lòng thử lại.");
+      setNotification({
+        isOpen: true,
+        message: "Đã xảy ra lỗi. Vui lòng thử lại.",
+        type: "error",
+      });
     }
   };
 
   const handleViewResult = (submissionId: string | number | null) => {
     if (!submissionId) {
-      alert("Chưa có bài làm để xem lại.");
+      setNotification({
+        isOpen: true,
+        message: "Chưa có bài làm để xem lại.",
+        type: "warning",
+      });
       return;
     }
     // Navigate to review page
@@ -520,6 +551,38 @@ const StudentClassDetailView: React.FC<StudentClassDetailViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 };

@@ -189,21 +189,35 @@ class PdfProcessorService {
     if (typeof options === "object" && !Array.isArray(options)) {
       // Options are in format: {"A": "text", "B": "text", ...}
       for (const [key, text] of Object.entries(options)) {
-        result.push({
-          id: key,
-          content: text,
-          isCorrect: key === correctAnswer,
-        });
+        // Skip if text is empty, null, or undefined
+        if (text && text.trim()) {
+          result.push({
+            id: key,
+            content: text.trim(),
+            isCorrect: key === correctAnswer,
+          });
+        }
       }
     } else if (Array.isArray(options)) {
       // Options are in format: [{"key": "A", "text": "..."}, ...]
       for (const opt of options) {
-        result.push({
-          id: opt.key || opt.id || "",
-          content: opt.text || opt.content || "",
-          isCorrect: (opt.key || opt.id) === correctAnswer,
-        });
+        const content = opt.text || opt.content || "";
+        // Skip if content is empty, null, or undefined
+        if (content && content.trim()) {
+          result.push({
+            id: opt.key || opt.id || "",
+            content: content.trim(),
+            isCorrect: (opt.key || opt.id) === correctAnswer,
+          });
+        }
       }
+    }
+
+    // Ensure we have at least one option, otherwise throw error
+    if (result.length === 0) {
+      throw new Error(
+        "Question must have at least one valid option with content"
+      );
     }
 
     return result;

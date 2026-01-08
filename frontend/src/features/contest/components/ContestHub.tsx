@@ -16,6 +16,7 @@ import { ContestDetail } from "../types";
 import {
   getContestProgress,
   ContestProgressMap,
+  syncContestProgress,
 } from "@/utils/contest-storage";
 import { examStorage } from "@/utils/exam-storage";
 
@@ -37,10 +38,19 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
   // State lưu trạng thái từ localStorage (Client Cache)
   const [localStatus, setLocalStatus] = useState<ContestProgressMap>({});
 
-  // 1. Load dữ liệu từ LocalStorage khi vào trang
+  // 1. Load dữ liệu từ LocalStorage khi vào trang VÀ sync với server
   useEffect(() => {
+    // Sync localStorage với server data để xóa những status không còn đúng
+    const serverStatuses = data.subjects.map((subject) => ({
+      examId: subject.examId,
+      status: subject.userStatus,
+    }));
+    syncContestProgress(data._id, serverStatuses);
+
+    // Load lại sau khi sync
     const progress = getContestProgress(data._id);
     setLocalStatus(progress);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data._id]);
 
   // 2. Xử lý logic Mở khoá tuần tự (Domino Logic)
@@ -48,18 +58,32 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
   const sortedSubjects = [...data.subjects].sort((a, b) => a.order - b.order);
 
   const subjectsWithStatus = sortedSubjects.map((subject, index) => {
-    // a. Lấy status hiện tại (Ưu tiên LocalStorage -> rồi mới đến API Data)
-    let currentStatus = localStatus[subject.examId] || subject.userStatus;
+    // a. Lấy status hiện tại - ƯU TIÊN SERVER DATA (source of truth)
+    // Chỉ dùng localStorage nếu server không có dữ liệu hoặc để track "ongoing"
+    let currentStatus = subject.userStatus; // Server data là chính
+    const localStatusForExam = localStatus[subject.examId];
+
+    // Chỉ override nếu localStorage có "ready" và server không phải "completed"
+    // (Để track real-time khi đang làm bài)
+    if (localStatusForExam === "ready" && currentStatus !== "completed") {
+      currentStatus = "ready";
+    }
 
     // b. LOGIC MỞ KHÓA: Nếu môn trước đó đã xong -> Mở môn này
     if (index > 0) {
       const prevSubject = sortedSubjects[index - 1];
-      // Check status môn trước (có thể nó vừa được hoàn thành ở Client)
-      const prevStatus =
-        localStatus[prevSubject.examId] || prevSubject.userStatus;
+      // Check status môn trước (server data)
+      const prevStatus = prevSubject.userStatus;
+      const prevLocalStatus = localStatus[prevSubject.examId];
+
+      // Ưu tiên server data, chỉ dùng local nếu là "ongoing"
+      const actualPrevStatus =
+        prevLocalStatus === "ongoing" && prevStatus !== "completed"
+          ? "ongoing"
+          : prevStatus;
 
       // Nếu môn trước 'completed' VÀ môn này đang 'locked' -> Đổi thành 'ready'
-      if (prevStatus === "completed" && currentStatus === "locked") {
+      if (actualPrevStatus === "completed" && currentStatus === "locked") {
         currentStatus = "ready";
       }
     }
@@ -82,18 +106,19 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
   const handleAction = (examId: string, status: string) => {
     const returnUrl = encodeURIComponent(`/contest/${data._id}/hub`);
 
-    // Case 1: Tiếp tục làm bài (Resume)
+    // Case 1: Tiếp tục làm bài (Resume) - có submission rồi, vào thẳng take page
     if (status === "ongoing") {
       router.push(
         `/exam/${examId}/take?contestId=${data._id}&returnUrl=${returnUrl}`
       );
     }
-    // Case 2: Bắt đầu làm bài mới (Start Fresh)
+    // Case 2: Bắt đầu làm bài mới (Start Fresh) - cần qua Start Panel để tạo submission
     else if (status === "ready") {
       // Xóa dữ liệu cũ trong localStorage (nếu có) để reset timer
       examStorage.clear(examId);
+      // Navigate to exam detail page (Start Panel) where submission will be created
       router.push(
-        `/exam/${examId}/take?contestId=${data._id}&returnUrl=${returnUrl}`
+        `/exam/${examId}?contestId=${data._id}&returnUrl=${returnUrl}`
       );
     }
   };
@@ -156,7 +181,7 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
                   Đã hoàn thành
                 </div>
               );
-            } else if (status === "ongoing") {
+            } else if (status === "ready") {
               cardClasses =
                 "bg-white border border-orange-200 shadow-md ring-1 ring-orange-100";
               statusBadge = (
@@ -172,7 +197,7 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
                   Tiếp tục <Play size={14} fill="currentColor" />
                 </button>
               );
-            } else if (status === "ready") {
+            } else if (status === "locked") {
               cardClasses =
                 "bg-white border border-teal-100 shadow-sm ring-1 ring-teal-50";
               statusBadge = (
