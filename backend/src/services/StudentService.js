@@ -349,7 +349,7 @@ class StudentService {
    * Returns global practice exams with student's attempt status
    */
   async getPracticeExams(studentId, subjectFilter) {
-    // Build filter for practice_global exams
+    // Build filter for practice_global exams (public exams for all students)
     const filter = {
       mode: "practice_global",
       isPublished: true,

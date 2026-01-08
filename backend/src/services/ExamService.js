@@ -180,13 +180,21 @@ class ExamService {
   }
 
   // Update exam
-  async updateExam(examId, teacherId, dto) {
+  async updateExam(examId, userId, dto) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error("Exam not found");
     }
 
-    if (exam.createdBy.toString() !== teacherId.toString()) {
+    // Get user to check if admin
+    const User = require("../models/User");
+    const user = await User.findById(userId);
+
+    // Check ownership (skip for admin)
+    if (
+      user.role !== "admin" &&
+      exam.createdBy.toString() !== userId.toString()
+    ) {
       throw new Error("Unauthorized to update this exam");
     }
 
@@ -202,6 +210,7 @@ class ExamService {
       "readingPassages",
       "totalQuestions",
       "totalPoints",
+      "isPublished", // Allow updating published status
     ];
     allowedFields.forEach((field) => {
       if (dto[field] !== undefined) updateData[field] = dto[field];
@@ -211,13 +220,21 @@ class ExamService {
   }
 
   // Delete exam
-  async deleteExam(examId, teacherId) {
+  async deleteExam(examId, userId) {
     const exam = await ExamRepository.findById(examId);
     if (!exam) {
       throw new Error("Exam not found");
     }
 
-    if (exam.createdBy.toString() !== teacherId.toString()) {
+    // Get user to check if admin
+    const User = require("../models/User");
+    const user = await User.findById(userId);
+
+    // Check ownership (skip for admin)
+    if (
+      user.role !== "admin" &&
+      exam.createdBy.toString() !== userId.toString()
+    ) {
       throw new Error("Unauthorized to delete this exam");
     }
 

@@ -50,7 +50,8 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
     // Load lại sau khi sync
     const progress = getContestProgress(data._id);
     setLocalStatus(progress);
-  }, [data._id, data.subjects]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data._id]);
 
   // 2. Xử lý logic Mở khoá tuần tự (Domino Logic)
   // Sắp xếp môn thi theo thứ tự order
@@ -62,10 +63,10 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
     let currentStatus = subject.userStatus; // Server data là chính
     const localStatusForExam = localStatus[subject.examId];
 
-    // Chỉ override nếu localStorage có "ongoing" và server không phải "completed"
+    // Chỉ override nếu localStorage có "ready" và server không phải "completed"
     // (Để track real-time khi đang làm bài)
-    if (localStatusForExam === "ongoing" && currentStatus !== "completed") {
-      currentStatus = "ongoing";
+    if (localStatusForExam === "ready" && currentStatus !== "completed") {
+      currentStatus = "ready";
     }
 
     // b. LOGIC MỞ KHÓA: Nếu môn trước đó đã xong -> Mở môn này
@@ -180,7 +181,7 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
                   Đã hoàn thành
                 </div>
               );
-            } else if (status === "ongoing") {
+            } else if (status === "ready") {
               cardClasses =
                 "bg-white border border-orange-200 shadow-md ring-1 ring-orange-100";
               statusBadge = (
@@ -196,7 +197,7 @@ export default function ContestHub({ data }: { data: ContestDetail }) {
                   Tiếp tục <Play size={14} fill="currentColor" />
                 </button>
               );
-            } else if (status === "ready") {
+            } else if (status === "locked") {
               cardClasses =
                 "bg-white border border-teal-100 shadow-sm ring-1 ring-teal-50";
               statusBadge = (

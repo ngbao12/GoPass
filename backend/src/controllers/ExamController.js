@@ -327,10 +327,16 @@ class ExamController {
         durationMinutes,
       } = req.body;
 
-      if (!pdfFilePath) {
+      // If no pdfFilePath provided but we have fileName, construct it
+      let filePath = pdfFilePath;
+      if (!filePath && pdfFileName) {
+        filePath = `/uploads/exams/${pdfFileName}`;
+      }
+
+      if (!filePath) {
         return res.status(400).json({
           success: false,
-          message: "PDF file path is required",
+          message: "PDF file path or file name is required",
         });
       }
 
@@ -338,7 +344,15 @@ class ExamController {
       const path = require("path");
 
       // Get absolute path to PDF file
-      const absolutePdfPath = path.join(__dirname, "..", "..", pdfFilePath);
+      const absolutePdfPath = path.join(__dirname, "..", "..", filePath);
+
+      // Get user to determine exam mode
+      const User = require("../models/User");
+      const user = await User.findById(req.user.userId);
+
+      // Admin creates public exams (practice_global), Teacher creates class exams (practice_test)
+      const examMode =
+        user.role === "admin" ? "practice_global" : "practice_test";
 
       // Process PDF and create exam with all questions
       const result = await PdfProcessorService.processPdfAndCreateExam(
@@ -348,11 +362,11 @@ class ExamController {
           description,
           subject: subject || "Tiếng Anh",
           durationMinutes: durationMinutes || 50,
-          mode: "practice_test",
+          mode: examMode,
           shuffleQuestions: false,
           showResultsImmediately: false,
           isPublished: false,
-          pdfFilePath,
+          pdfFilePath: filePath,
           pdfFileName,
         },
         req.user.userId

@@ -118,8 +118,12 @@ const AdminDashboardView: React.FC = () => {
 
   const handleView = (examId: string) => {
     console.log("View exam:", examId);
-    // Use same preview route as teacher
-    router.push(`/exam/${examId}/take?preview=true`);
+    // Use same preview route as teacher with return URL
+    router.push(
+      `/exam/${examId}/take?preview=true&returnUrl=${encodeURIComponent(
+        "/dashboard/exams"
+      )}`
+    );
   };
 
   const handleEdit = (examId: string) => {
@@ -167,6 +171,58 @@ const AdminDashboardView: React.FC = () => {
             isOpen: true,
             message: `Lỗi: ${
               error.message || "Không thể xóa đề thi. Vui lòng thử lại."
+            }`,
+            type: "error",
+          });
+        }
+      },
+    });
+  };
+
+  const handleTogglePublish = async (
+    examId: string,
+    currentStatus: boolean
+  ) => {
+    console.log("🔄 Toggle publish clicked:", { examId, currentStatus });
+    const action = currentStatus ? "ẩn" : "xuất bản";
+    setConfirm({
+      isOpen: true,
+      message: `Bạn có chắc muốn ${action} đề thi này?`,
+      type: "warning",
+      onConfirm: async () => {
+        console.log("✅ Confirm button clicked, calling API...");
+        try {
+          console.log("📡 Calling updateExamStatus API:", {
+            examId,
+            newStatus: !currentStatus,
+          });
+          const updatedExam = await adminService.updateExamStatus(
+            examId,
+            !currentStatus
+          );
+          console.log("✅ API response:", updatedExam);
+
+          // Update local state
+          setExams(
+            exams.map((e) =>
+              e.id === examId ? { ...e, isPublished: !currentStatus } : e
+            )
+          );
+
+          setNotification({
+            isOpen: true,
+            message: `Đã ${action} đề thi thành công!`,
+            type: "success",
+          });
+
+          // Refresh to update stats
+          fetchExams();
+        } catch (error: any) {
+          console.error(`❌ Error ${action} exam:`, error);
+          setNotification({
+            isOpen: true,
+            message: `Lỗi: ${
+              error.message || `Không thể ${action} đề thi. Vui lòng thử lại.`
             }`,
             type: "error",
           });
@@ -286,6 +342,7 @@ const AdminDashboardView: React.FC = () => {
                   onView={handleView}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
+                  onTogglePublish={handleTogglePublish}
                 />
               ) : (
                 <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
@@ -343,8 +400,9 @@ const AdminDashboardView: React.FC = () => {
             type: "warning",
           })
         }
-        onConfirm={() => {
-          confirm.onConfirm();
+        onConfirm={async () => {
+          console.log("🔵 ConfirmModal onConfirm triggered");
+          await confirm.onConfirm();
           setConfirm({
             isOpen: false,
             message: "",

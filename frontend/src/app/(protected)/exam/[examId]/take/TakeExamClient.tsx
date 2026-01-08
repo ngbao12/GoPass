@@ -42,11 +42,13 @@ const useExamNavigation = (examId: string, isPreviewMode: boolean = false) => {
   }, [contestId, examId, isPreviewMode]);
 
   const handleNavigateBack = useCallback(() => {
-    // Preview mode: Check user role and navigate accordingly
+    // Preview mode: Use returnUrl if provided, otherwise check current path
     if (isPreviewMode) {
-      // Check if user is admin or teacher
-      // For now, we'll check the URL or use a role prop
-      // Admin goes to admin dashboard, teacher goes to teacher exams
+      if (returnUrl) {
+        router.push(decodeURIComponent(returnUrl));
+        return;
+      }
+      // Fallback: Check if user is admin or teacher
       const currentPath = window.location.pathname;
       if (currentPath.includes("teacher")) {
         router.push("/dashboard/teacher/exams");

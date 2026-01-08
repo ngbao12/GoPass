@@ -177,8 +177,12 @@ const TeacherExamsView: React.FC = () => {
   };
 
   const handlePreviewExam = (exam: Exam) => {
-    // Navigate to exam with preview mode instead of opening modal
-    router.push(`/exam/${exam._id}/take?preview=true`);
+    // Navigate to exam with preview mode and return URL
+    router.push(
+      `/exam/${exam._id}/take?preview=true&returnUrl=${encodeURIComponent(
+        "/dashboard/teacher/exams"
+      )}`
+    );
   };
 
   const openDeleteModal = (exam: Exam) => {

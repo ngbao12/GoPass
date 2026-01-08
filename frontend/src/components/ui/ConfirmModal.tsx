@@ -95,8 +95,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     }
   };
 
-  const handleConfirm = () => {
-    onConfirm();
+  const handleConfirm = async () => {
+    await onConfirm();
     onClose();
   };
 
