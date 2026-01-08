@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ClassDetail } from "@/services/teacher/types";
 import { classApi } from "@/services/teacher";
 
@@ -13,6 +14,7 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({
   classDetail,
   onUpdate,
 }) => {
+  const router = useRouter();
   // Use assignments data from classDetail (already fetched by parent)
   const assignments = classDetail.assignments || [];
 
@@ -34,6 +36,30 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({
 
   console.log("📊 ClassAssignmentsView - Assignments:", assignments);
   console.log("📊 ClassAssignmentsView - Length:", assignments.length);
+
+  const handleViewSubmissions = (assignment: any) => {
+    const examId =
+      assignment.examId ||
+      assignment.exam_id ||
+      assignment.exam?.id ||
+      assignment.exam?._id ||
+      assignment._id; // fallback to assignment id
+
+    console.log("🔍 Assignment object:", assignment);
+    console.log("🔍 Extracted examId:", examId);
+
+    if (!examId) {
+      alert("Không thể lấy ID đề thi từ bài tập này. Hãy thử lại.");
+      return;
+    }
+
+    const url = new URL("/dashboard/grading", window.location.origin);
+    url.searchParams.set("classId", classDetail.id);
+    url.searchParams.set("examId", examId);
+    
+    console.log("🚀 Navigating to:", url.toString());
+    router.push(url.pathname + "?" + url.searchParams.toString());
+  };
 
   return (
     <div className="p-6">
@@ -244,6 +270,30 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({
                         ? "Sắp tới"
                         : "Đã kết thúc"}
                     </span>
+                    <button
+                      className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                      onClick={() => handleViewSubmissions(assignment)}
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    </button>
                     <button
                       className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
                       onClick={() => {

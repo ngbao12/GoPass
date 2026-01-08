@@ -66,11 +66,13 @@ class GradingService {
     subject?: string;
     status?: string;
     classId?: string;
+    examId?: string;
   }): Promise<Submission[]> {
     const params = new URLSearchParams();
     if (filters?.subject) params.append('subject', filters.subject);
     if (filters?.status) params.append('status', filters.status);
     if (filters?.classId) params.append('classId', filters.classId);
+    if (filters?.examId) params.append('examId', filters.examId);
 
     const response = await httpClient.get<{ success: boolean; data: Submission[] }>(
       `/grading/submissions${params.toString() ? '?' + params.toString() : ''}`,

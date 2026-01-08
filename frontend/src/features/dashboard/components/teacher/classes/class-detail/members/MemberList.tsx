@@ -17,10 +17,11 @@ interface Member {
 interface MemberListProps {
   members: Member[];
   onRemove: (memberId: string) => void;
+  onViewStats?: (member: Member) => void;
   actionLoading: string | null;
 }
 
-const MemberList: React.FC<MemberListProps> = ({ members, onRemove, actionLoading }) => {
+const MemberList: React.FC<MemberListProps> = ({ members, onRemove, onViewStats, actionLoading }) => {
   if (members.length === 0) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
@@ -58,6 +59,14 @@ const MemberList: React.FC<MemberListProps> = ({ members, onRemove, actionLoadin
             }`}>
               {member.status === 'active' ? 'Hoạt động' : member.status}
             </span>
+            {onViewStats && (
+              <button
+                onClick={() => onViewStats(member)}
+                className="px-3 py-1 text-xs font-medium text-teal-700 bg-teal-50 hover:bg-teal-100 rounded-lg transition-colors"
+              >
+                Xem thống kê
+              </button>
+            )}
             <button
               onClick={() => onRemove(member._id)}
               disabled={actionLoading === member._id}
