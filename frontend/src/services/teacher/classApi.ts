@@ -406,7 +406,7 @@ export const classApi = {
     try {
       const response = await httpClient.get<{
         success: boolean;
-        data: any[];
+        data: any;
       }>(`/classes/${classId}/assignments`, { requiresAuth: true });
       
       if (!response.success) {
@@ -416,10 +416,15 @@ export const classApi = {
           error: 'Failed to fetch assignments'
         };
       }
-      
+
+      // Handle both response structures: { assignments: [...] } or [...]
+      const assignments = response.data?.assignments || response.data || [];
+      console.log("📦 getClassAssignments response:", response.data);
+      console.log("📦 Parsed assignments:", assignments);
+
       return {
         success: true,
-        data: response.data || []
+        data: assignments
       };
     } catch (error: any) {
       console.error('Error fetching assignments:', error);

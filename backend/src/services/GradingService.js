@@ -14,12 +14,18 @@ class GradingService {
   async getAllSubmissions(filters = {}, teacherId = null) {
     const query = {};
 
-    // Filter by status
+    // Build query with direct filters
     if (filters.status) {
       query.status = filters.status;
     }
+    if (filters.classId) {
+      query.classId = filters.classId;
+    }
+    if (filters.examId) {
+      query.examId = filters.examId;
+    }
 
-    // Get all submissions
+    // Get submissions with populated fields
     const submissions = await ExamSubmissionRepository.find(query, {
       populate: [
         { path: 'studentUserId', select: 'name email' },
@@ -28,18 +34,21 @@ class GradingService {
       sort: { submittedAt: -1 },
     });
 
-    // Filter submissions by teacher's created exams and subject
+    // Apply additional filters
     let filtered = submissions.filter((s) => {
       if (!s.examId) return false;
 
-      // Filter by teacher (exams created by the teacher)
-      if (teacherId && s.examId.createdBy) {
+      // If explicit class/exam scope is provided, skip teacher-created check
+      const hasExplicitScope = Boolean(filters.classId || filters.examId);
+
+      // Only enforce teacher-created filter when no explicit scope and teacherId exists
+      if (!hasExplicitScope && teacherId && s.examId.createdBy) {
         if (s.examId.createdBy.toString() !== teacherId.toString()) {
           return false;
         }
       }
 
-      // Filter by subject
+      // Filter by subject if provided
       if (filters.subject && s.examId.subject !== filters.subject) {
         return false;
       }
