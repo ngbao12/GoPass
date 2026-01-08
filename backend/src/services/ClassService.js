@@ -875,7 +875,9 @@ class ClassService {
     }, {});
 
     const recentResults = submissions.slice(0, 5).map((s) => ({
+      submissionId: s._id,
       assignmentId: s.assignmentId,
+      examId: s.examId,
       title: assignmentTitleMap[s.assignmentId?.toString()] || 'Bài tập',
       score: s.totalScore || 0,
       submittedAt: s.submittedAt || s.updatedAt || s.createdAt,
