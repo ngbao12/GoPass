@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { User, adminService } from "@/services/admin";
 import Badge from "@/components/ui/Badge";
 import { toast } from "sonner";
+import { formatDateTimeVN } from "@/utils/format-date";
 
 interface UserDetailModalProps {
   user: User;
@@ -11,7 +12,11 @@ interface UserDetailModalProps {
   onUpdate?: (updatedUser: User) => void;
 }
 
-const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpdate }) => {
+const UserDetailModal: React.FC<UserDetailModalProps> = ({
+  user,
+  onClose,
+  onUpdate,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editedUser, setEditedUser] = useState({
@@ -22,9 +27,9 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
 
   // Prevent body scroll when modal is open
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, []);
 
@@ -37,8 +42,17 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
     });
   }, [user]);
 
-  const getRoleVariant = (role: User['role']) => {
-    const variants: Record<User['role'], "success" | "info" | "warning"> = {
+  // Reset edited user when user prop changes
+  useEffect(() => {
+    setEditedUser({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+  }, [user]);
+
+  const getRoleVariant = (role: User["role"]) => {
+    const variants: Record<User["role"], "success" | "info" | "warning"> = {
       admin: "warning",
       teacher: "info",
       student: "success",
@@ -46,8 +60,8 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
     return variants[role];
   };
 
-  const getRoleLabel = (role: User['role']) => {
-    const labels: Record<User['role'], string> = {
+  const getRoleLabel = (role: User["role"]) => {
+    const labels: Record<User["role"], string> = {
       admin: "Quản trị viên",
       teacher: "Giáo viên",
       student: "Học sinh",
@@ -55,36 +69,12 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
     return labels[role];
   };
 
-  const getStatusVariant = (status: User['status']) => {
-    return status === 'active' ? "success" : "danger";
+  const getStatusVariant = (status: User["status"]) => {
+    return status === "active" ? "success" : "danger";
   };
 
-  const getStatusLabel = (status: User['status']) => {
-    return status === 'active' ? "Hoạt động" : "Đã khóa";
-  };
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return 'N/A';
-    
-    try {
-      const date = new Date(dateString);
-      
-      // Check if date is valid
-      if (isNaN(date.getTime())) {
-        return 'Invalid date';
-      }
-      
-      return date.toLocaleString('vi-VN', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      });
-    } catch (error) {
-      return 'Invalid date';
-    }
+  const getStatusLabel = (status: User["status"]) => {
+    return status === "active" ? "Hoạt động" : "Đã khóa";
   };
 
   const getUserAvatar = () => {
@@ -100,17 +90,25 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
 
     // Generate avatar from initials
     const initials = user.name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
 
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500'];
+    const colors = [
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-yellow-500",
+    ];
     const colorIndex = user._id.charCodeAt(0) % colors.length;
 
     return (
-      <div className={`w-24 h-24 rounded-full ${colors[colorIndex]} flex items-center justify-center text-white text-3xl font-semibold`}>
+      <div
+        className={`w-24 h-24 rounded-full ${colors[colorIndex]} flex items-center justify-center text-white text-3xl font-semibold`}
+      >
         {initials}
       </div>
     );
@@ -119,12 +117,15 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
   const handleSave = async () => {
     // Validate
     if (!editedUser.name.trim()) {
-      toast.error('Tên không được để trống');
+      toast.error("Tên không được để trống");
       return;
     }
 
-    if (!editedUser.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editedUser.email)) {
-      toast.error('Email không hợp lệ');
+    if (
+      !editedUser.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editedUser.email)
+    ) {
+      toast.error("Email không hợp lệ");
       return;
     }
 
@@ -134,23 +135,26 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
       editedUser.email === user.email &&
       editedUser.role === user.role
     ) {
-      toast.info('Không có thay đổi nào');
+      toast.info("Không có thay đổi nào");
       setIsEditing(false);
       return;
     }
 
     setIsSaving(true);
     try {
-      const updatedUser = await adminService.updateUserInfo(user._id, editedUser);
-      toast.success('Cập nhật thông tin thành công');
+      const updatedUser = await adminService.updateUserInfo(
+        user._id,
+        editedUser
+      );
+      toast.success("Cập nhật thông tin thành công");
       setIsEditing(false);
-      
+
       // Call onUpdate callback if provided
       if (onUpdate) {
         onUpdate(updatedUser);
       }
     } catch (error: any) {
-      toast.error(error.message || 'Cập nhật thất bại');
+      toast.error(error.message || "Cập nhật thất bại");
     } finally {
       setIsSaving(false);
     }
@@ -166,15 +170,15 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
   };
 
   // Don't allow editing admin users (except for teachers and students)
-  const canEdit = user.role === 'teacher' || user.role === 'student';
+  const canEdit = user.role === "teacher" || user.role === "student";
 
   return (
-    <div 
+    <div
       className="fixed inset-0 flex items-center justify-center z-50 p-4"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.25)' }}
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.25)" }}
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
@@ -231,14 +235,18 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
                     <input
                       type="text"
                       value={editedUser.name}
-                      onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                      onChange={(e) =>
+                        setEditedUser({ ...editedUser, name: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                       placeholder="Nhập tên người dùng"
                     />
                   </div>
                 </div>
               ) : (
-                <h4 className="text-2xl font-bold text-gray-900 mb-2">{user.name}</h4>
+                <h4 className="text-2xl font-bold text-gray-900 mb-2">
+                  {user.name}
+                </h4>
               )}
               <div className="flex items-center gap-3 mt-2">
                 <Badge variant={getRoleVariant(user.role)}>
@@ -276,7 +284,9 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
                   <input
                     type="email"
                     value={editedUser.email}
-                    onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                    onChange={(e) =>
+                      setEditedUser({ ...editedUser, email: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 mt-1"
                     placeholder="Nhập email"
                   />
@@ -309,7 +319,12 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
                   {isEditing ? (
                     <select
                       value={editedUser.role}
-                      onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as User['role'] })}
+                      onChange={(e) =>
+                        setEditedUser({
+                          ...editedUser,
+                          role: e.target.value as User["role"],
+                        })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 mt-1"
                     >
                       <option value="teacher">Giáo viên</option>
@@ -340,18 +355,27 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
                 </svg>
               </div>
               <div className="flex-1">
-                <p className="text-sm text-gray-500 font-medium">Ngày tạo tài khoản</p>
-                <p className="text-gray-900">{formatDate(user.createdAt)}</p>
+                <p className="text-sm text-gray-500 font-medium">
+                  Ngày tạo tài khoản
+                </p>
+                <p className="text-gray-900">
+                  {formatDateTimeVN(user.createdAt)}
+                </p>
               </div>
             </div>
 
             {/* Role Description */}
             <div className="bg-gray-50 rounded-lg p-4 mt-6">
-              <h5 className="font-semibold text-gray-900 mb-2">Mô tả vai trò</h5>
+              <h5 className="font-semibold text-gray-900 mb-2">
+                Mô tả vai trò
+              </h5>
               <p className="text-sm text-gray-600">
-                {user.role === 'admin' && 'Quản trị viên có quyền quản lý toàn bộ hệ thống, bao gồm quản lý người dùng, đề thi, và các thiết lập hệ thống.'}
-                {user.role === 'teacher' && 'Giáo viên có quyền tạo và quản lý đề thi, lớp học, chấm bài và theo dõi tiến độ học sinh.'}
-                {user.role === 'student' && 'Học sinh có quyền tham gia lớp học, làm bài kiểm tra, xem điểm và theo dõi kết quả học tập của mình.'}
+                {user.role === "admin" &&
+                  "Quản trị viên có quyền quản lý toàn bộ hệ thống, bao gồm quản lý người dùng, đề thi, và các thiết lập hệ thống."}
+                {user.role === "teacher" &&
+                  "Giáo viên có quyền tạo và quản lý đề thi, lớp học, chấm bài và theo dõi tiến độ học sinh."}
+                {user.role === "student" &&
+                  "Học sinh có quyền tham gia lớp học, làm bài kiểm tra, xem điểm và theo dõi kết quả học tập của mình."}
               </p>
             </div>
           </div>
@@ -374,16 +398,41 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
                 >
                   {isSaving ? (
                     <>
-                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
                       </svg>
                       Đang lưu...
                     </>
                   ) : (
                     <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                       Lưu
                     </>
@@ -397,8 +446,18 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ user, onClose, onUpda
                     onClick={() => setIsEditing(true)}
                     className="px-4 py-2 text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
                     </svg>
                     Chỉnh sửa
                   </button>

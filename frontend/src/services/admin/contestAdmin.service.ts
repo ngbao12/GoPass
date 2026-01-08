@@ -2,7 +2,8 @@
 import { httpClient } from "@/lib/http";
 
 interface ContestExam {
-  examId: string;
+  _id?: string;
+  examId: string | any; // Can be string ID or populated object
   order: number;
   weight: number;
 }

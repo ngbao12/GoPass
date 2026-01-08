@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui";
 import { examApi } from "@/services/teacher";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface CreateExamModalProps {
   isOpen: boolean;
@@ -35,6 +37,17 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +64,11 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
 
     // Step 4: Actually create the exam with PDF processing
     if (!uploadedFileInfo) {
-      alert("Vui lòng upload file PDF trước");
+      setNotification({
+        isOpen: true,
+        message: "Vui lòng upload file PDF trước",
+        type: "warning",
+      });
       return;
     }
 
@@ -71,15 +88,11 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
 
       if (result.success) {
         // Show success message with stats
-        alert(
-          `Đề thi đã được tạo thành công!\n\n` +
-            `📊 Thống kê:\n` +
-            `- Tổng số câu hỏi: ${result.data.stats.totalQuestions}\n` +
-            `- Số đoạn văn: ${result.data.stats.totalPassages}\n` +
-            `- Điểm tổng: ${result.data.stats.totalPoints}\n` +
-            `- Câu điền từ: ${result.data.stats.clozeQuestions}\n` +
-            `- Câu đọc hiểu: ${result.data.stats.readingQuestions}`
-        );
+        setNotification({
+          isOpen: true,
+          message: `Đề thi đã được tạo thành công!\n\n📊 Thống kê:\n- Tổng số câu hỏi: ${result.data.stats.totalQuestions}\n- Số đoạn văn: ${result.data.stats.totalPassages}\n- Điểm tổng: ${result.data.stats.totalPoints}\n- Câu điền từ: ${result.data.stats.clozeQuestions}\n- Câu đọc hiểu: ${result.data.stats.readingQuestions}`,
+          type: "success",
+        });
 
         // Call parent callback with the created exam
         await onSubmit(result.data.exam);
@@ -99,13 +112,21 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
         setUploadedFileInfo(null);
         setCurrentStep(1);
       } else {
-        alert("Lỗi khi xử lý đề thi: " + (result.message || "Unknown error"));
+        setNotification({
+          isOpen: true,
+          message:
+            "Lỗi khi xử lý đề thi: " + (result.message || "Unknown error"),
+          type: "error",
+        });
       }
     } catch (error: any) {
       console.error("Error processing PDF exam:", error);
-      alert(
-        "Lỗi khi xử lý đề thi PDF: " + (error.message || "Vui lòng thử lại")
-      );
+      setNotification({
+        isOpen: true,
+        message:
+          "Lỗi khi xử lý đề thi PDF: " + (error.message || "Vui lòng thử lại"),
+        type: "error",
+      });
     } finally {
       setIsSubmitting(false);
       setIsProcessing(false);
@@ -117,26 +138,42 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
     if (!file) return;
 
     if (file.type !== "application/pdf") {
-      alert("Vui lòng chọn file PDF");
+      setNotification({
+        isOpen: true,
+        message: "Vui lòng chọn file PDF",
+        type: "warning",
+      });
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      alert("File không được vượt quá 10MB");
+      setNotification({
+        isOpen: true,
+        message: "File không được vượt quá 10MB",
+        type: "warning",
+      });
       return;
     }
 
     // Only allow single file upload - if replacing, clear previous
     if (uploadedFile || uploadedFileInfo) {
-      const confirmReplace = confirm(
-        "Bạn đã upload file rồi. Bạn có muốn thay thế file hiện tại không?"
-      );
-      if (!confirmReplace) {
-        e.target.value = ""; // Reset input
-        return;
-      }
+      setConfirm({
+        isOpen: true,
+        message:
+          "Bạn đã upload file rồi. Bạn có muốn thay thế file hiện tại không?",
+        type: "warning",
+        onConfirm: async () => {
+          await performFileUpload(file);
+        },
+      });
+      e.target.value = ""; // Reset input
+      return;
     }
 
+    await performFileUpload(file);
+  };
+
+  const performFileUpload = async (file: File) => {
     setIsUploading(true);
     try {
       setUploadedFile(file);
@@ -147,18 +184,25 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
         setUploadedFileInfo(response.data);
         console.log("File uploaded successfully:", response.data);
       } else {
-        alert("Upload file thất bại");
+        setNotification({
+          isOpen: true,
+          message: "Upload file thất bại",
+          type: "error",
+        });
         setUploadedFile(null);
         setUploadedFileInfo(null);
       }
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("Lỗi khi upload file");
+      setNotification({
+        isOpen: true,
+        message: "Lỗi khi upload file",
+        type: "error",
+      });
       setUploadedFile(null);
       setUploadedFileInfo(null);
     } finally {
       setIsUploading(false);
-      e.target.value = ""; // Reset input to allow re-selection
     }
   };
 
@@ -886,6 +930,40 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
           </form>
         </div>
       </div>
+
+      {/* Notification Modal */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </>
   );
 };

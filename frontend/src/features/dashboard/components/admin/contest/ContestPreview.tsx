@@ -2,6 +2,7 @@
 
 import React from "react";
 import Badge from "@/components/ui/Badge";
+import { formatDateTimeVN } from "@/utils/format-date";
 
 interface SelectedExam {
   _id: string;
@@ -32,18 +33,6 @@ const ContestPreview: React.FC<ContestPreviewProps> = ({
   formData,
   selectedExams,
 }) => {
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "--";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   const groupedExams = selectedExams.reduce((acc, exam) => {
     if (!acc[exam.subject]) {
       acc[exam.subject] = [];
@@ -135,7 +124,7 @@ const ContestPreview: React.FC<ContestPreviewProps> = ({
                 <div>
                   <p className="text-xs text-gray-500">Bắt đầu</p>
                   <p className="font-semibold text-gray-900">
-                    {formatDate(formData.startDate)}
+                    {formatDateTimeVN(formData.startDate)}
                   </p>
                 </div>
               </div>
@@ -157,7 +146,7 @@ const ContestPreview: React.FC<ContestPreviewProps> = ({
                 <div>
                   <p className="text-xs text-gray-500">Kết thúc</p>
                   <p className="font-semibold text-gray-900">
-                    {formatDate(formData.endDate)}
+                    {formatDateTimeVN(formData.endDate)}
                   </p>
                 </div>
               </div>

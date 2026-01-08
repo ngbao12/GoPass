@@ -5,6 +5,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Button from "@/components/ui/Button";
 import SubjectTabs from "./SubjectTabs";
 import CreateQuestionModal from "./CreateQuestionModal";
+import NotificationModal from "@/components/ui/NotificationModal";
 import {
   questionBankService,
   SubjectStats,
@@ -22,6 +23,11 @@ const QuestionBankView: React.FC = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
 
   // Fetch question stats
   useEffect(() => {
@@ -91,11 +97,6 @@ const QuestionBankView: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleImportFile = () => {
-    console.log("Import file");
-    // TODO: Implement file import
-  };
-
   const handleAddQuestion = () => {
     setIsModalOpen(true);
   };
@@ -148,15 +149,29 @@ const QuestionBankView: React.FC = () => {
   };
 
   const handleQuestionSave = async (question: any) => {
-    console.log("Saved question:", question);
+    console.log("[QuestionBankView] Attempting to save question:", question);
     try {
-      await questionBankService.createQuestion(question);
+      const result = await questionBankService.createQuestion(question);
+      console.log("[QuestionBankView] Question created successfully:", result);
       setIsModalOpen(false);
-      // Refresh stats after creating question
-      fetchStats();
-    } catch (error) {
-      console.error("Error saving question:", error);
-      alert("Không thể lưu câu hỏi. Vui lòng thử lại.");
+      // Force hard refresh of both stats and questions
+      await Promise.all([fetchStats(), fetchQuestions()]);
+      setNotification({
+        isOpen: true,
+        message: "Tạo câu hỏi thành công!",
+        type: "success",
+      });
+    } catch (error: any) {
+      console.error("[QuestionBankView] Error saving question:", error);
+      console.error(
+        "[QuestionBankView] Error details:",
+        error.response || error.message
+      );
+      setNotification({
+        isOpen: true,
+        message: "Không thể lưu câu hỏi. Vui lòng thử lại.",
+        type: "error",
+      });
     }
   };
 
@@ -195,50 +210,27 @@ const QuestionBankView: React.FC = () => {
         title="Ngân hàng câu hỏi"
         subtitle="Quản lý câu hỏi theo môn học và độ khó"
         action={
-          <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              onClick={handleImportFile}
-              icon={
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  />
-                </svg>
-              }
-            >
-              Nhập từ file
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleAddQuestion}
-              icon={
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-              }
-            >
-              Thêm câu hỏi
-            </Button>
-          </div>
+          <Button
+            variant="primary"
+            onClick={handleAddQuestion}
+            icon={
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            }
+          >
+            Thêm câu hỏi
+          </Button>
         }
       />
 
@@ -251,21 +243,33 @@ const QuestionBankView: React.FC = () => {
       />
 
       {/* Stats Summary */}
-      {activeSubject && stats.length > 0 && (
-        <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-medium text-teal-800 mb-1">
-                Môn học và câu hỏi
-              </h3>
-              <p className="text-sm text-teal-700">
-                Click vào môn học để xem chi tiết phân bố độ khó • Tổng số:{" "}
-                {stats.reduce((sum, s) => sum + s.total, 0)} câu
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {activeSubject &&
+        stats.length > 0 &&
+        (() => {
+          const currentSubjectStats = stats.find(
+            (s) => s.subject === activeSubject
+          );
+          return (
+            currentSubjectStats && (
+              <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-medium text-teal-800 mb-1">
+                      Môn học và câu hỏi
+                    </h3>
+                    <p className="text-sm text-teal-700">
+                      Click vào môn học để xem chi tiết phân bố độ khó • Tổng
+                      số: {currentSubjectStats.total} câu (Dễ:{" "}
+                      {currentSubjectStats.easy}, TB:{" "}
+                      {currentSubjectStats.medium}, Khó:{" "}
+                      {currentSubjectStats.hard})
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          );
+        })()}
 
       {/* Difficulty Filter */}
       {activeSubject && (
@@ -412,6 +416,16 @@ const QuestionBankView: React.FC = () => {
           onSave={handleQuestionSave}
         />
       )}
+
+      {/* Notification Modal */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
     </div>
   );
 };

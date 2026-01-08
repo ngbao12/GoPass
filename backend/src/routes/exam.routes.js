@@ -9,6 +9,7 @@ router.use(authenticate);
 
 // Admin routes
 router.get("/", authorize("admin"), ExamController.getAllExams);
+router.get("/published", authorize("admin"), ExamController.getPublishedExams);
 
 // Teacher routes
 router.post("/", authorize("teacher"), ExamController.createExam);

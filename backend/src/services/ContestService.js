@@ -1,13 +1,33 @@
-const mongoose = require('mongoose');
-const ContestRepository = require('../repositories/ContestRepository');
-const ContestExamRepository = require('../repositories/ContestExamRepository');
-const ContestParticipationRepository = require('../repositories/ContestParticipationRepository');
-const ExamSubmissionRepository = require('../repositories/ExamSubmissionRepository');
+const mongoose = require("mongoose");
+const ContestRepository = require("../repositories/ContestRepository");
+const ContestExamRepository = require("../repositories/ContestExamRepository");
+const ContestParticipationRepository = require("../repositories/ContestParticipationRepository");
+const ExamSubmissionRepository = require("../repositories/ExamSubmissionRepository");
 
 class ContestService {
+  // Get all contests (admin/teacher) - filtered by owner
+  async getAllContests(userId) {
+    const contests = await ContestRepository.findByOwner(userId, {
+      sort: { createdAt: -1 },
+    });
+    return contests;
+  }
+
   // Create contest
   async createContest(ownerId, dto) {
-    const { name, description, startTime, endTime, isPublic } = dto;
+    const { name, description, startTime, endTime, isPublic, exams } = dto;
+
+    // Calculate status based on time
+    const now = new Date();
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+
+    let status = "upcoming";
+    if (now >= start && now <= end) {
+      status = "ongoing";
+    } else if (now > end) {
+      status = "ended";
+    }
 
     const contest = await ContestRepository.create({
       name,
@@ -16,8 +36,27 @@ class ContestService {
       endTime,
       ownerId,
       isPublic: isPublic !== undefined ? isPublic : true,
-      status: 'upcoming',
+      status,
     });
+
+    // Create ContestExam records if exams are provided
+    if (exams && Array.isArray(exams) && exams.length > 0) {
+      console.log(`[ContestService] Creating ${exams.length} contest exams`);
+
+      const contestExamPromises = exams.map((exam) =>
+        ContestExamRepository.create({
+          contestId: contest._id,
+          examId: exam.examId,
+          order: exam.order,
+          weight: exam.weight || 1,
+        })
+      );
+
+      await Promise.all(contestExamPromises);
+      console.log(
+        `[ContestService] Successfully created ${exams.length} contest exams`
+      );
+    }
 
     return contest;
   }
@@ -26,21 +65,44 @@ class ContestService {
   async getContestDetail(contestId, userId) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest) {
-      throw new Error('Contest not found');
+      throw new Error("Contest not found");
     }
 
     const exams = await ContestExamRepository.findByContest(contestId, {
-      populate: 'examId',
+      populate: "examId",
     });
+
+    console.log(
+      `[ContestService] Found ${exams.length} exams for contest ${contestId}`
+    );
+    console.log(
+      "[ContestService] Exams before filter:",
+      exams.map((e) => ({
+        _id: e._id,
+        examId: e.examId ? e.examId._id : null,
+        examTitle: e.examId ? e.examId.title : "NULL",
+        order: e.order,
+      }))
+    );
+
+    // Filter out exams where examId is null (deleted exams)
+    const validExams = exams.filter((exam) => exam.examId !== null);
+
+    console.log(
+      `[ContestService] ${validExams.length} valid exams after filtering nulls`
+    );
 
     // Participation of current user (if any)
     const participation = userId
-      ? await ContestParticipationRepository.findParticipation(contestId, userId)
+      ? await ContestParticipationRepository.findParticipation(
+          contestId,
+          userId
+        )
       : null;
 
     return {
       ...contest.toObject(),
-      exams,
+      exams: validExams,
       participation,
     };
   }
@@ -49,16 +111,23 @@ class ContestService {
   async updateContest(contestId, ownerId, dto) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest) {
-      throw new Error('Contest not found');
+      throw new Error("Contest not found");
     }
 
     if (contest.ownerId.toString() !== ownerId.toString()) {
-      throw new Error('Unauthorized to update this contest');
+      throw new Error("Unauthorized to update this contest");
     }
 
-    const allowedFields = ['name', 'description', 'startTime', 'endTime', 'isPublic', 'status'];
+    const allowedFields = [
+      "name",
+      "description",
+      "startTime",
+      "endTime",
+      "isPublic",
+      "status",
+    ];
     const updateData = {};
-    allowedFields.forEach(field => {
+    allowedFields.forEach((field) => {
       if (dto[field] !== undefined) updateData[field] = dto[field];
     });
 
@@ -69,28 +138,28 @@ class ContestService {
   async deleteContest(contestId, ownerId) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest) {
-      throw new Error('Contest not found');
+      throw new Error("Contest not found");
     }
 
     if (contest.ownerId.toString() !== ownerId.toString()) {
-      throw new Error('Unauthorized to delete this contest');
+      throw new Error("Unauthorized to delete this contest");
     }
 
     await ContestExamRepository.deleteByContest(contestId);
     await ContestRepository.delete(contestId);
 
-    return { message: 'Contest deleted successfully' };
+    return { message: "Contest deleted successfully" };
   }
 
   // Add exam to contest
   async addExamToContest(contestId, examId, ownerId) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest) {
-      throw new Error('Contest not found');
+      throw new Error("Contest not found");
     }
 
     if (contest.ownerId.toString() !== ownerId.toString()) {
-      throw new Error('Unauthorized');
+      throw new Error("Unauthorized");
     }
 
     const order = await ContestExamRepository.getNextOrder(contestId);
@@ -109,36 +178,39 @@ class ContestService {
   async removeExamFromContest(contestId, contestExamId, ownerId) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest || contest.ownerId.toString() !== ownerId.toString()) {
-      throw new Error('Unauthorized');
+      throw new Error("Unauthorized");
     }
 
     await ContestExamRepository.delete(contestExamId);
-    return { message: 'Exam removed from contest' };
+    return { message: "Exam removed from contest" };
   }
 
   // Get leaderboard
   async getLeaderboard(contestId) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest) {
-      throw new Error('Contest not found');
+      throw new Error("Contest not found");
     }
 
     // Get all exams in contest
     const contestExams = await ContestExamRepository.findByContest(contestId);
-    const examIds = contestExams.map(ce => ce.examId);
+    const examIds = contestExams.map((ce) => ce.examId);
 
     // Get all submissions for these exams
-    const submissions = await ExamSubmissionRepository.find({
-      examId: { $in: examIds },
-      status: 'graded',
-    }, { populate: 'studentUserId' });
+    const submissions = await ExamSubmissionRepository.find(
+      {
+        examId: { $in: examIds },
+        status: "graded",
+      },
+      { populate: "studentUserId" }
+    );
 
     // Group by student and calculate total score
     const studentScores = {};
 
     for (const submission of submissions) {
       const studentUserId = submission.studentUserId._id.toString();
-      
+
       if (!studentScores[studentUserId]) {
         studentScores[studentUserId] = {
           student: submission.studentUserId,
@@ -168,7 +240,7 @@ class ContestService {
   async joinContest(contestId, userId) {
     const contest = await ContestRepository.findById(contestId);
     if (!contest) {
-      throw new Error('Contest not found');
+      throw new Error("Contest not found");
     }
 
     // Already joined

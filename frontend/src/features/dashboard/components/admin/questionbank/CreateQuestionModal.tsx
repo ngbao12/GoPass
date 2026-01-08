@@ -32,64 +32,6 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
     Partial<{ title: string; content: string }> | undefined
   >();
   const [formData, setFormData] = useState<any>(null);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
-  // Auto-save draft
-  useEffect(() => {
-    const saveDraft = () => {
-      const draft: QuestionDraft = {
-        step,
-        type: selectedType || undefined,
-        passage: passageOption,
-        passageId: selectedPassageId,
-        formData,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem("question_draft", JSON.stringify(draft));
-    };
-
-    const interval = setInterval(saveDraft, 10000); // Auto-save every 10s
-
-    return () => {
-      clearInterval(interval);
-      if (hasUnsavedChanges) {
-        saveDraft(); // Save on unmount if has changes
-      }
-    };
-  }, [
-    step,
-    selectedType,
-    passageOption,
-    selectedPassageId,
-    newPassage,
-    formData,
-    hasUnsavedChanges,
-  ]);
-
-  // Load draft on mount
-  useEffect(() => {
-    const draftStr = localStorage.getItem("question_draft");
-    if (draftStr) {
-      try {
-        const draft: QuestionDraft = JSON.parse(draftStr);
-        // Show restore prompt
-        const shouldRestore = window.confirm(
-          "Bạn có muốn khôi phục câu hỏi đã lưu nháp?"
-        );
-        if (shouldRestore) {
-          setStep(draft.step);
-          setSelectedType(draft.type || null);
-          setPassageOption(draft.passage || "none");
-          setSelectedPassageId(draft.passageId);
-          setFormData(draft.formData || null);
-        } else {
-          localStorage.removeItem("question_draft");
-        }
-      } catch (e) {
-        console.error("Failed to restore draft:", e);
-      }
-    }
-  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -101,29 +43,21 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [hasUnsavedChanges]);
+  }, []);
 
   const handleClose = () => {
-    if (hasUnsavedChanges) {
-      const shouldClose = window.confirm(
-        "Bạn có thay đổi chưa lưu. Bạn có chắc muốn đóng?"
-      );
-      if (!shouldClose) return;
-    }
     setStep(1);
     setSelectedType(null);
     setPassageOption("none");
     setSelectedPassageId(undefined);
     setNewPassage(undefined);
     setFormData(null);
-    setHasUnsavedChanges(false);
     onClose();
   };
 
   const handleNextStep = () => {
     if (step === 1 && selectedType) {
       setStep(2);
-      setHasUnsavedChanges(true);
     }
   };
 
@@ -139,8 +73,8 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
       passageId: selectedPassageId,
       newPassage,
     };
+    console.log("[CreateQuestionModal] Passing question to parent:", question);
     onSave(question);
-    localStorage.removeItem("question_draft");
     handleClose();
   };
 

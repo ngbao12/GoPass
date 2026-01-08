@@ -3,11 +3,12 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import SectionHeader from "@/components/ui/SectionHeader";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import AdminStatsGrid from "./AdminStatsGrid";
 import AdminActionToolbar from "./AdminActionToolbar";
 import ExamManagementTable from "./ExamManagementTable";
 import CreateExamModal from "../teacher/exams/CreateExamModal";
-import CreateContestView from "./contest/CreateContestView";
 import AdminContestsListView from "./contest/AdminContestsListView";
 import { ExamMode } from "@/features/exam/types";
 import {
@@ -16,13 +17,13 @@ import {
   ExamStats,
 } from "@/services/admin/admin.service";
 
-type TabType = "exams" | "contests" | "create-contest";
+type TabType = "exams" | "contests";
 
 const AdminDashboardView: React.FC = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("exams");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState<ExamMode | "all">("all");
+  const [filterType, setFilterType] = useState<string>("all");
   const [exams, setExams] = useState<AdminExam[]>([]);
   const [stats, setStats] = useState<ExamStats>({
     totalExams: 0,
@@ -33,6 +34,17 @@ const AdminDashboardView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   // Fetch exams and stats from API
   const fetchExams = async () => {
@@ -71,9 +83,9 @@ const AdminDashboardView: React.FC = () => {
   const filteredExams = useMemo(() => {
     let filtered = exams;
 
-    // Filter by mode
+    // Filter by subject
     if (filterType !== "all") {
-      filtered = filtered.filter((exam) => exam.mode === filterType);
+      filtered = filtered.filter((exam) => exam.subject === filterType);
     }
 
     // Filter by search query
@@ -106,20 +118,61 @@ const AdminDashboardView: React.FC = () => {
 
   const handleView = (examId: string) => {
     console.log("View exam:", examId);
-    router.push(`/exam/${examId}?preview=true`);
+    // Use same preview route as teacher
+    router.push(`/exam/${examId}/take?preview=true`);
   };
 
   const handleEdit = (examId: string) => {
     console.log("Edit exam:", examId);
-    router.push(`/dashboard/exams/${examId}/edit`);
+    // Admin should not edit exams directly
+    setNotification({
+      isOpen: true,
+      message: "Admin không thể chỉnh sửa đề thi trực tiếp",
+      type: "warning",
+    });
   };
 
   const handleDelete = async (examId: string) => {
-    if (!confirm("Bạn có chắc muốn xóa đề thi này?")) return;
+    setConfirm({
+      isOpen: true,
+      message:
+        "Bạn có chắc muốn xóa đề thi này? Hành động này không thể hoàn tác.",
+      type: "danger",
+      onConfirm: async () => {
+        try {
+          const { examApi } = await import("@/services/teacher/examApi");
+          const response = await examApi.deleteExam(examId);
 
-    console.log("Delete exam:", examId);
-    // TODO: Implement delete API call
-    alert("Chức năng xóa đang được phát triển");
+          if (response.success) {
+            // Remove from local state
+            setExams(exams.filter((e) => e.id !== examId));
+            setNotification({
+              isOpen: true,
+              message: "Xóa đề thi thành công!",
+              type: "success",
+            });
+            // Refresh to update stats
+            fetchExams();
+          } else {
+            console.error("Delete failed:", response.error);
+            setNotification({
+              isOpen: true,
+              message: `Không thể xóa đề thi: ${response.error}`,
+              type: "error",
+            });
+          }
+        } catch (error: any) {
+          console.error("Error deleting exam:", error);
+          setNotification({
+            isOpen: true,
+            message: `Lỗi: ${
+              error.message || "Không thể xóa đề thi. Vui lòng thử lại."
+            }`,
+            type: "error",
+          });
+        }
+      },
+    });
   };
 
   return (
@@ -183,32 +236,6 @@ const AdminDashboardView: React.FC = () => {
                   />
                 </svg>
                 <span>Cuộc thi</span>
-              </div>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("create-contest")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "create-contest"
-                  ? "border-pink-500 text-pink-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                <span>Tạo cuộc thi</span>
               </div>
             </button>
           </nav>
@@ -290,13 +317,43 @@ const AdminDashboardView: React.FC = () => {
 
       {activeTab === "contests" && <AdminContestsListView />}
 
-      {activeTab === "create-contest" && <CreateContestView />}
-
       {/* Create Exam Modal */}
       <CreateExamModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSubmit={handleCreateExam}
+      />
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
       />
     </div>
   );

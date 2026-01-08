@@ -4,13 +4,12 @@ import React from "react";
 import Input from "@/components/ui/Input";
 import Dropdown from "@/components/ui/Dropdown";
 import Button from "@/components/ui/Button";
-import { ExamMode } from "@/features/exam/types";
 
 interface AdminActionToolbarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  filterType: ExamMode | "all";
-  onFilterChange: (type: ExamMode | "all") => void;
+  filterType: string;
+  onFilterChange: (type: string) => void;
   onCreateNew: () => void;
 }
 
@@ -22,10 +21,15 @@ const AdminActionToolbar: React.FC<AdminActionToolbarProps> = ({
   onCreateNew,
 }) => {
   const filterOptions = [
-    { label: "Tất cả loại", value: "all" },
-    { label: "Contest", value: "contest" },
-    { label: "Practice", value: "practice" },
-    { label: "Test", value: "test" },
+    { label: "Tất cả môn", value: "all" },
+    { label: "Toán Học", value: "Toán Học" },
+    { label: "Ngữ Văn", value: "Ngữ Văn" },
+    { label: "Tiếng Anh", value: "Tiếng Anh" },
+    { label: "Vật Lý", value: "Vật Lý" },
+    { label: "Hóa Học", value: "Hóa Học" },
+    { label: "Sinh Học", value: "Sinh Học" },
+    { label: "Lịch Sử", value: "Lịch Sử" },
+    { label: "Địa Lý", value: "Địa Lý" },
   ];
 
   return (
@@ -57,7 +61,7 @@ const AdminActionToolbar: React.FC<AdminActionToolbarProps> = ({
         <Dropdown
           options={filterOptions}
           value={filterType}
-          onChange={(value) => onFilterChange(value as ExamMode | "all")}
+          onChange={(value) => onFilterChange(value)}
           className="w-full sm:w-48"
         />
       </div>

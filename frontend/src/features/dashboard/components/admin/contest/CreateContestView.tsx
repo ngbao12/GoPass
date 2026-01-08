@@ -9,6 +9,8 @@ import { ContestFormData } from "@/features/dashboard/types/contest";
 import SubjectSelector from "./SubjectSelector";
 import ContestPreview from "./ContestPreview";
 import { contestAdminService } from "@/services/admin/contestAdmin.service";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface SelectedExam {
   _id: string;
@@ -33,6 +35,17 @@ const CreateContestView: React.FC = () => {
     isPublic: true,
   });
   const [selectedExams, setSelectedExams] = useState<SelectedExam[]>([]);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   const handleInputChange = (
     field: keyof ContestFormData,
@@ -73,7 +86,11 @@ const CreateContestView: React.FC = () => {
   const handleCreateContest = async () => {
     const validationError = validateForm();
     if (validationError) {
-      alert(validationError);
+      setNotification({
+        isOpen: true,
+        message: validationError,
+        type: "warning",
+      });
       return;
     }
 
@@ -96,16 +113,28 @@ const CreateContestView: React.FC = () => {
       const result = await contestAdminService.createContest(payload);
 
       if (result) {
-        alert("Tạo cuộc thi thành công!");
+        setNotification({
+          isOpen: true,
+          message: "Tạo cuộc thi thành công!",
+          type: "success",
+        });
         handleReset();
         // Optionally navigate to contest list or detail
         // router.push(`/dashboard/contests/${result._id}`);
       } else {
-        alert("Có lỗi xảy ra khi tạo cuộc thi. Vui lòng thử lại.");
+        setNotification({
+          isOpen: true,
+          message: "Có lỗi xảy ra khi tạo cuộc thi. Vui lòng thử lại.",
+          type: "error",
+        });
       }
     } catch (error: any) {
       console.error("Error creating contest:", error);
-      alert(error?.message || "Có lỗi xảy ra. Vui lòng thử lại.");
+      setNotification({
+        isOpen: true,
+        message: error?.message || "Có lỗi xảy ra. Vui lòng thử lại.",
+        type: "error",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -298,6 +327,38 @@ const CreateContestView: React.FC = () => {
           <ContestPreview formData={formData} selectedExams={selectedExams} />
         </div>
       )}
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 };

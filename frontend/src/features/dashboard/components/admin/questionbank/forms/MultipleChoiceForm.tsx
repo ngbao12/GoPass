@@ -13,13 +13,12 @@ interface MultipleChoiceOption {
 }
 
 interface MultipleChoiceQuestion extends Question {
-  title?: string;
-  stem?: string;
+  content: string;
+  subject: string;
   options?: MultipleChoiceOption[];
   allowMultipleCorrect?: boolean;
   explanation?: string;
   timeLimit?: number;
-  language?: "vi" | "en";
   attachments?: string[];
 }
 
@@ -38,18 +37,17 @@ const MultipleChoiceForm: React.FC<MultipleChoiceFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<Partial<MultipleChoiceQuestion>>({
     type: "multiple_choice",
-    title: initialData?.title || "",
+    content: initialData?.content || "",
+    subject: initialData?.subject || "Toán Học",
     tags: initialData?.tags || [],
     difficulty: initialData?.difficulty || "medium",
     points: initialData?.points || 1,
     timeLimit: initialData?.timeLimit,
-    language: initialData?.language || "vi",
-    stem: initialData?.stem || "",
     options: initialData?.options || [
-      { id: "1", content: "", isCorrect: false },
-      { id: "2", content: "", isCorrect: false },
-      { id: "3", content: "", isCorrect: false },
-      { id: "4", content: "", isCorrect: false },
+      { id: "A", content: "", isCorrect: false },
+      { id: "B", content: "", isCorrect: false },
+      { id: "C", content: "", isCorrect: false },
+      { id: "D", content: "", isCorrect: false },
     ],
     allowMultipleCorrect: initialData?.allowMultipleCorrect || false,
     explanation: initialData?.explanation || "",
@@ -81,8 +79,12 @@ const MultipleChoiceForm: React.FC<MultipleChoiceFormProps> = ({
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.stem?.trim()) {
-      newErrors.stem = "Câu hỏi không được để trống";
+    if (!formData.content?.trim()) {
+      newErrors.content = "Câu hỏi không được để trống";
+    }
+
+    if (!formData.subject?.trim()) {
+      newErrors.subject = "Môn học không được để trống";
     }
 
     formData.options?.forEach((opt, idx) => {
@@ -102,17 +104,20 @@ const MultipleChoiceForm: React.FC<MultipleChoiceFormProps> = ({
   const handleSave = () => {
     if (!validate()) return;
 
-    onSave({
+    const questionData = {
       ...formData,
-      passageId,
-    } as MultipleChoiceQuestion);
+      linkedPassageId: passageId, // Map passageId to linkedPassageId for backend
+    } as MultipleChoiceQuestion;
+
+    console.log("[MultipleChoiceForm] Saving question:", questionData);
+    onSave(questionData);
   };
 
   return (
     <div className="space-y-6">
       <CommonFields
-        title={formData.title || ""}
-        onTitleChange={(val) => setFormData({ ...formData, title: val })}
+        subject={formData.subject || "Toán Học"}
+        onSubjectChange={(val) => setFormData({ ...formData, subject: val })}
         tags={formData.tags || []}
         onTagsChange={(val) => setFormData({ ...formData, tags: val })}
         difficulty={formData.difficulty!}
@@ -125,8 +130,6 @@ const MultipleChoiceForm: React.FC<MultipleChoiceFormProps> = ({
         onTimeLimitChange={(val) =>
           setFormData({ ...formData, timeLimit: val })
         }
-        language={formData.language!}
-        onLanguageChange={(val) => setFormData({ ...formData, language: val })}
       />
 
       <div className="space-y-4">
@@ -135,16 +138,18 @@ const MultipleChoiceForm: React.FC<MultipleChoiceFormProps> = ({
             Câu hỏi <span className="text-red-500">*</span>
           </label>
           <textarea
-            value={formData.stem}
-            onChange={(e) => setFormData({ ...formData, stem: e.target.value })}
+            value={formData.content}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
             rows={4}
             placeholder="Nhập nội dung câu hỏi..."
             className={`block w-full rounded-lg border ${
-              errors.stem ? "border-red-500" : "border-gray-300"
+              errors.content ? "border-red-500" : "border-gray-300"
             } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none`}
           />
-          {errors.stem && (
-            <p className="mt-1 text-sm text-red-600">{errors.stem}</p>
+          {errors.content && (
+            <p className="mt-1 text-sm text-red-600">{errors.content}</p>
           )}
         </div>
 

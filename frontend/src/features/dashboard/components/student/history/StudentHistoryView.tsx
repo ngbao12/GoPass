@@ -6,6 +6,8 @@ import HistoryItemCard from "./HistoryItemCard";
 import HistoryStatsOverview from "./HistoryStatsOverview";
 import { HistoryItem, HistoryStats } from "@/features/dashboard/types/student/";
 import { fetchStudentHistory } from "@/services/student/studentStatsApi";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const StudentHistoryView = () => {
   const router = useRouter(); // ← THÊM HOOK
@@ -18,6 +20,17 @@ const StudentHistoryView = () => {
   // State Filters
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [timeSort, setTimeSort] = useState<string>("newest");
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   // Fetch Data
   useEffect(() => {
@@ -65,7 +78,11 @@ const StudentHistoryView = () => {
       router.push(`/exam/review/${item.submissionId}`);
     } else {
       console.error("No submissionId found for item:", item);
-      alert("Chưa có bài làm để xem lại.");
+      setNotification({
+        isOpen: true,
+        message: "Chưa có bài làm để xem lại.",
+        type: "warning",
+      });
     }
   };
 
@@ -229,6 +246,38 @@ const StudentHistoryView = () => {
 
       {/* --- 2. STATISTICS SUMMARY FOOTER --- */}
       <HistoryStatsOverview stats={stats} />
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 };

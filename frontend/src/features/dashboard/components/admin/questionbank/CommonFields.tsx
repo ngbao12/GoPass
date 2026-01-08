@@ -6,8 +6,8 @@ import Dropdown from "@/components/ui/Dropdown";
 import { DifficultyLevel } from "@/features/dashboard/types/question";
 
 interface CommonFieldsProps {
-  title: string;
-  onTitleChange: (value: string) => void;
+  subject: string;
+  onSubjectChange: (value: string) => void;
   tags: string[];
   onTagsChange: (tags: string[]) => void;
   difficulty: DifficultyLevel;
@@ -16,13 +16,11 @@ interface CommonFieldsProps {
   onPointsChange: (value: number) => void;
   timeLimit?: number;
   onTimeLimitChange: (value: number | undefined) => void;
-  language: "vi" | "en";
-  onLanguageChange: (value: "vi" | "en") => void;
 }
 
 const CommonFields: React.FC<CommonFieldsProps> = ({
-  title,
-  onTitleChange,
+  subject,
+  onSubjectChange,
   tags,
   onTagsChange,
   difficulty,
@@ -31,8 +29,6 @@ const CommonFields: React.FC<CommonFieldsProps> = ({
   onPointsChange,
   timeLimit,
   onTimeLimitChange,
-  language,
-  onLanguageChange,
 }) => {
   return (
     <div className="space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
@@ -41,13 +37,25 @@ const CommonFields: React.FC<CommonFieldsProps> = ({
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          label="Tiêu đề (tùy chọn)"
-          value={title}
-          onChange={(e) => onTitleChange(e.target.value)}
-          placeholder="VD: Câu hỏi về hàm số bậc 2"
-          fullWidth
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Môn học <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={subject}
+            onChange={(e) => onSubjectChange(e.target.value)}
+            className="block w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          >
+            <option value="Toán Học">Toán Học</option>
+            <option value="Ngữ Văn">Ngữ Văn</option>
+            <option value="Tiếng Anh">Tiếng Anh</option>
+            <option value="Vật Lý">Vật Lý</option>
+            <option value="Hóa Học">Hóa Học</option>
+            <option value="Sinh Học">Sinh Học</option>
+            <option value="Lịch Sử">Lịch Sử</option>
+            <option value="Địa Lý">Địa Lý</option>
+          </select>
+        </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -95,20 +103,6 @@ const CommonFields: React.FC<CommonFieldsProps> = ({
             placeholder="VD: 120"
             className="block w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Ngôn ngữ
-          </label>
-          <select
-            value={language}
-            onChange={(e) => onLanguageChange(e.target.value as "vi" | "en")}
-            className="block w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          >
-            <option value="vi">Tiếng Việt</option>
-            <option value="en">English</option>
-          </select>
         </div>
 
         <div>

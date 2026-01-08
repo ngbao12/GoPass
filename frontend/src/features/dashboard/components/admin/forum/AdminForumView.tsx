@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Sparkles, Plus, RefreshCw, Trash2, Edit, Eye } from "lucide-react";
 import SectionHeader from "@/components/ui/SectionHeader";
+import NotificationModal from "@/components/ui/NotificationModal";
 import {
   ForumArticle,
   ForumDiscussionPost,
@@ -179,6 +180,12 @@ const AdminForumView: React.FC = () => {
     setShowDetailModal(true);
   };
 
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ show: false, type: "success", message: "" });
+
   const handleGenerateArticles = () => {
     setShowGenerateModal(true);
   };
@@ -196,13 +203,25 @@ const AdminForumView: React.FC = () => {
       const success = await ForumService.deletePackage(articleId);
       if (success) {
         setArticles(articles.filter((a) => a.id !== articleId));
-        alert("Xóa bài viết thành công!");
+        setNotification({
+          show: true,
+          type: "success",
+          message: "Xóa bài viết thành công!",
+        });
       } else {
-        alert("Không thể xóa bài viết. Vui lòng thử lại.");
+        setNotification({
+          show: true,
+          type: "error",
+          message: "Không thể xóa bài viết. Vui lòng thử lại.",
+        });
       }
     } catch (error) {
       console.error("Error deleting article:", error);
-      alert("Đã có lỗi xảy ra khi xóa bài viết.");
+      setNotification({
+        show: true,
+        type: "error",
+        message: "Đã có lỗi xảy ra khi xóa bài viết.",
+      });
     }
   };
 
@@ -305,6 +324,13 @@ const AdminForumView: React.FC = () => {
       )}
 
       {/* Modals */}
+      <NotificationModal
+        isOpen={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+        type={notification.type}
+        message={notification.message}
+      />
+
       {showDetailModal && selectedArticle && (
         <ArticleDetailModal
           article={selectedArticle}

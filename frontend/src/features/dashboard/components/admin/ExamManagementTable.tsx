@@ -3,10 +3,12 @@
 import React from "react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { Exam, ExamMode } from "@/features/exam/types";
+import { ExamMode } from "@/features/exam/types";
+import { AdminExam } from "@/services/admin/admin.service";
+import { formatDateVN } from "@/utils/format-date";
 
 interface ExamManagementTableProps {
-  exams: Exam[];
+  exams: AdminExam[];
   onView: (examId: string) => void;
   onEdit: (examId: string) => void;
   onDelete: (examId: string) => void;
@@ -80,7 +82,7 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
     <div className="space-y-4">
       {exams.map((exam) => (
         <div
-          key={exam._id}
+          key={exam.id}
           className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow"
         >
           <div className="flex items-start gap-4">
@@ -105,11 +107,6 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
                   </div>
                 </div>
               </div>
-
-              {/* Description */}
-              {exam.description && (
-                <p className="text-sm text-gray-600 mb-3">{exam.description}</p>
-              )}
 
               {/* Meta Information */}
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
@@ -144,10 +141,10 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <span>{exam.durationMinutes} phút</span>
+                  <span>{exam.duration} phút</span>
                 </div>
 
-                {exam.totalQuestions && (
+                {exam.questionCount && (
                   <div className="flex items-center gap-1">
                     <svg
                       className="w-4 h-4"
@@ -162,7 +159,7 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                       />
                     </svg>
-                    <span>{exam.totalQuestions} câu</span>
+                    <span>{exam.questionCount} câu</span>
                   </div>
                 )}
 
@@ -201,9 +198,7 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>
-                  Tạo: {new Date(exam.createdAt).toLocaleDateString("vi-VN")}
-                </span>
+                <span>Tạo: {formatDateVN(exam.createdAt)}</span>
               </div>
             </div>
 
@@ -212,7 +207,7 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onView(exam._id)}
+                onClick={() => onView(exam.id)}
                 icon={
                   <svg
                     className="w-4 h-4"
@@ -241,30 +236,7 @@ const ExamManagementTable: React.FC<ExamManagementTableProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onEdit(exam._id)}
-                icon={
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                }
-              >
-                Sửa
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onDelete(exam._id)}
+                onClick={() => onDelete(exam.id)}
                 className="text-red-600 hover:bg-red-50"
                 icon={
                   <svg

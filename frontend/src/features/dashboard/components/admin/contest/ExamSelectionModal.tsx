@@ -43,17 +43,25 @@ const ExamSelectionModal: React.FC<ExamSelectionModalProps> = ({
   const fetchExams = async () => {
     setLoading(true);
     try {
-      // Fetch all exams and filter by subject + published status
-      const allExams = await examService.getAllExams();
+      console.log(`🔍 Fetching published exams for subject: "${subject}"`);
+
+      // Fetch published exams filtered by subject from current admin
+      const allExams = await examService.getPublishedExams({ subject });
+
+      console.log(`📚 Raw exams response:`, allExams);
+      console.log(`📚 Number of exams:`, allExams.length);
+
+      // Filter out exams already selected in the contest
       const filteredExams = allExams.filter(
-        (exam: Exam) =>
-          exam.subject === subject &&
-          exam.isPublished &&
-          !selectedExamIds.includes(exam._id)
+        (exam: Exam) => !selectedExamIds.includes(exam._id)
+      );
+
+      console.log(
+        `✅ Fetched ${filteredExams.length} published exams for subject: ${subject} (after filtering selected)`
       );
       setExams(filteredExams);
     } catch (error) {
-      console.error("Error fetching exams:", error);
+      console.error("❌ Error fetching exams:", error);
     } finally {
       setLoading(false);
     }

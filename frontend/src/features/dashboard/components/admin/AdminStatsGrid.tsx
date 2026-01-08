@@ -1,5 +1,6 @@
 import React from "react";
 import StatCard from "@/components/ui/StatCard";
+import { formatNumber } from "@/utils/format-date";
 
 interface AdminStatsGridProps {
   stats: {
@@ -36,7 +37,7 @@ const AdminStatsGrid: React.FC<AdminStatsGridProps> = ({ stats }) => {
       />
 
       <StatCard
-        title="Đề Contest"
+        title="Cuộc thi"
         value={stats.contestExams}
         icon={
           <svg
@@ -58,7 +59,7 @@ const AdminStatsGrid: React.FC<AdminStatsGridProps> = ({ stats }) => {
       />
 
       <StatCard
-        title="Đề Public"
+        title="Đề đã tạo"
         value={stats.publicExams}
         icon={
           <svg
@@ -81,7 +82,7 @@ const AdminStatsGrid: React.FC<AdminStatsGridProps> = ({ stats }) => {
 
       <StatCard
         title="Tổng lượt thi"
-        value={stats.totalParticipants.toLocaleString()}
+        value={formatNumber(stats.totalParticipants)}
         icon={
           <svg
             className="w-6 h-6"

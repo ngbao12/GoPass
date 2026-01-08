@@ -32,7 +32,11 @@ const SubjectSelector: React.FC<SubjectSelectorProps> = ({
   const [selectedSubject, setSelectedSubject] = useState("");
 
   const allSubjects: Subject[] = [
-    { id: "Toán", name: "Toán", isSelected: selectedSubjects.includes("Toán") },
+    {
+      id: "Toán Học",
+      name: "Toán Học",
+      isSelected: selectedSubjects.includes("Toán Học"),
+    },
     {
       id: "Ngữ Văn",
       name: "Ngữ Văn",

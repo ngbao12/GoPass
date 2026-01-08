@@ -6,12 +6,33 @@ import {
   contestAdminService,
   Contest,
 } from "@/services/admin/contestAdmin.service";
+import ContestDetailModal from "./ContestDetailModal";
+import EditContestModal from "./EditContestModal";
+import { formatDateTimeVN } from "@/utils/format-date";
+import NotificationModal from "@/components/ui/NotificationModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const AdminContestsListView: React.FC = () => {
   const router = useRouter();
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedContestId, setSelectedContestId] = useState<string | null>(
+    null
+  );
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [notification, setNotification] = useState<{
+    isOpen: boolean;
+    message: string;
+    type: "success" | "error" | "warning" | "info";
+  }>({ isOpen: false, message: "", type: "info" });
+  const [confirm, setConfirm] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+    type: "danger" | "warning" | "info";
+  }>({ isOpen: false, message: "", onConfirm: () => {}, type: "warning" });
 
   useEffect(() => {
     fetchContests();
@@ -30,25 +51,40 @@ const AdminContestsListView: React.FC = () => {
   };
 
   const handleDelete = async (contestId: string) => {
-    if (!confirm("Bạn có chắc muốn xóa cuộc thi này?")) return;
-
-    try {
-      await contestAdminService.deleteContest(contestId);
-      alert("Xóa cuộc thi thành công!");
-      fetchContests();
-    } catch (error) {
-      console.error("Error deleting contest:", error);
-      alert("Có lỗi xảy ra khi xóa cuộc thi");
-    }
+    setConfirm({
+      isOpen: true,
+      message:
+        "Bạn có chắc muốn xóa cuộc thi này? Hành động này không thể hoàn tác.",
+      type: "danger",
+      onConfirm: async () => {
+        try {
+          await contestAdminService.deleteContest(contestId);
+          setNotification({
+            isOpen: true,
+            message: "Xóa cuộc thi thành công!",
+            type: "success",
+          });
+          fetchContests();
+        } catch (error) {
+          console.error("Error deleting contest:", error);
+          setNotification({
+            isOpen: true,
+            message: "Có lỗi xảy ra khi xóa cuộc thi",
+            type: "error",
+          });
+        }
+      },
+    });
   };
 
   const handleEdit = (contestId: string) => {
-    // TODO: Navigate to edit page
-    alert("Chức năng chỉnh sửa đang phát triển");
+    setSelectedContestId(contestId);
+    setShowEditModal(true);
   };
 
   const handleView = (contestId: string) => {
-    router.push(`/contests/${contestId}`);
+    setSelectedContestId(contestId);
+    setShowDetailModal(true);
   };
 
   const filteredContests = contests.filter((contest) =>
@@ -84,16 +120,6 @@ const AdminContestsListView: React.FC = () => {
         {badge.label}
       </span>
     );
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   if (loading) {
@@ -192,8 +218,8 @@ const AdminContestsListView: React.FC = () => {
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                         />
                       </svg>
-                      {formatDate(contest.startTime)} -{" "}
-                      {formatDate(contest.endTime)}
+                      {formatDateTimeVN(contest.startTime)} -{" "}
+                      {formatDateTimeVN(contest.endTime)}
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1.5">
@@ -275,6 +301,63 @@ const AdminContestsListView: React.FC = () => {
           </p>
         </div>
       )}
+
+      {/* Modals */}
+      {selectedContestId && (
+        <>
+          <ContestDetailModal
+            isOpen={showDetailModal}
+            onClose={() => {
+              setShowDetailModal(false);
+              setSelectedContestId(null);
+            }}
+            contestId={selectedContestId}
+          />
+          <EditContestModal
+            isOpen={showEditModal}
+            onClose={() => {
+              setShowEditModal(false);
+              setSelectedContestId(null);
+            }}
+            contestId={selectedContestId}
+            onSuccess={() => {
+              fetchContests();
+            }}
+          />
+        </>
+      )}
+
+      {/* Notification and Confirm Modals */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() =>
+          setNotification({ isOpen: false, message: "", type: "info" })
+        }
+        message={notification.message}
+        type={notification.type}
+      />
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() =>
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          })
+        }
+        onConfirm={() => {
+          confirm.onConfirm();
+          setConfirm({
+            isOpen: false,
+            message: "",
+            onConfirm: () => {},
+            type: "warning",
+          });
+        }}
+        message={confirm.message}
+        type={confirm.type}
+      />
     </div>
   );
 };

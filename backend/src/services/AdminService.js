@@ -147,12 +147,12 @@ class AdminService {
   async getExamStats(adminId) {
     const ExamRepository = require("../repositories/ExamRepository");
     const ExamSubmissionRepository = require("../repositories/ExamSubmissionRepository");
+    const ContestRepository = require("../repositories/ContestRepository");
 
     // Get exams created by this admin
-    const [allExams, contestExams, publicExams] = await Promise.all([
+    const [allExams, totalContests] = await Promise.all([
       ExamRepository.count({ createdBy: adminId }),
-      ExamRepository.count({ createdBy: adminId, mode: "contest" }),
-      ExamRepository.count({ createdBy: adminId, mode: "public" }),
+      ContestRepository.count({ ownerId: adminId }),
     ]);
 
     // Get all exam IDs created by this admin
@@ -173,8 +173,8 @@ class AdminService {
 
     return {
       totalExams: allExams,
-      contestExams,
-      publicExams,
+      contestExams: totalContests, // Now counting contests instead of contest-mode exams
+      publicExams: allExams, // All exams created by admin
       totalParticipants,
     };
   }

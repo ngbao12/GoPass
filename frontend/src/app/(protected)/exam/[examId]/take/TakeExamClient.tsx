@@ -42,9 +42,17 @@ const useExamNavigation = (examId: string, isPreviewMode: boolean = false) => {
   }, [contestId, examId, isPreviewMode]);
 
   const handleNavigateBack = useCallback(() => {
-    // Preview mode: Always go to teacher exams page
+    // Preview mode: Check user role and navigate accordingly
     if (isPreviewMode) {
-      router.push("/dashboard/teacher/exams");
+      // Check if user is admin or teacher
+      // For now, we'll check the URL or use a role prop
+      // Admin goes to admin dashboard, teacher goes to teacher exams
+      const currentPath = window.location.pathname;
+      if (currentPath.includes("teacher")) {
+        router.push("/dashboard/teacher/exams");
+      } else {
+        router.push("/dashboard/exams");
+      }
       return;
     }
 

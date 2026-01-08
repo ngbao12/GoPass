@@ -2,6 +2,7 @@
 
 import React from "react";
 import { SystemMetrics } from "@/services/admin";
+import { formatNumber } from "@/utils/format-date";
 
 interface UserStatsGridProps {
   metrics: SystemMetrics;
@@ -112,7 +113,7 @@ const UserStatsGrid: React.FC<UserStatsGridProps> = ({ metrics }) => {
             </div>
           </div>
           <div className="text-2xl font-bold text-gray-900 mb-1">
-            {stat.value.toLocaleString()}
+            {formatNumber(stat.value)}
           </div>
           <div className="text-sm text-gray-600">{stat.label}</div>
         </div>

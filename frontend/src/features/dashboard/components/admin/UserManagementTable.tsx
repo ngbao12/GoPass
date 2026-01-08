@@ -4,11 +4,12 @@ import React from "react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { User } from "@/services/admin";
+import { formatDateVN } from "@/utils/format-date";
 
 interface UserManagementTableProps {
   users: User[];
   onViewDetail: (userId: string) => void;
-  onUpdateStatus: (userId: string, status: 'active' | 'locked') => void;
+  onUpdateStatus: (userId: string, status: "active" | "locked") => void;
   onResetPassword: (userId: string) => void;
   loading?: boolean;
 }
@@ -20,8 +21,8 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
   onResetPassword,
   loading = false,
 }) => {
-  const getRoleVariant = (role: User['role']) => {
-    const variants: Record<User['role'], "success" | "info" | "warning"> = {
+  const getRoleVariant = (role: User["role"]) => {
+    const variants: Record<User["role"], "success" | "info" | "warning"> = {
       admin: "warning",
       teacher: "info",
       student: "success",
@@ -29,8 +30,8 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
     return variants[role];
   };
 
-  const getRoleLabel = (role: User['role']) => {
-    const labels: Record<User['role'], string> = {
+  const getRoleLabel = (role: User["role"]) => {
+    const labels: Record<User["role"], string> = {
       admin: "Quản trị viên",
       teacher: "Giáo viên",
       student: "Học sinh",
@@ -38,21 +39,12 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
     return labels[role];
   };
 
-  const getStatusVariant = (status: User['status']) => {
-    return status === 'active' ? "success" : "danger";
+  const getStatusVariant = (status: User["status"]) => {
+    return status === "active" ? "success" : "danger";
   };
 
-  const getStatusLabel = (status: User['status']) => {
-    return status === 'active' ? "Hoạt động" : "Đã khóa";
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+  const getStatusLabel = (status: User["status"]) => {
+    return status === "active" ? "Hoạt động" : "Đã khóa";
   };
 
   const getUserAvatar = (user: User) => {
@@ -68,17 +60,25 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
 
     // Generate avatar from initials
     const initials = user.name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
 
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500'];
+    const colors = [
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-yellow-500",
+    ];
     const colorIndex = user._id.charCodeAt(0) % colors.length;
 
     return (
-      <div className={`w-10 h-10 rounded-full ${colors[colorIndex]} flex items-center justify-center text-white font-semibold`}>
+      <div
+        className={`w-10 h-10 rounded-full ${colors[colorIndex]} flex items-center justify-center text-white font-semibold`}
+      >
         {initials}
       </div>
     );
@@ -111,8 +111,12 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
             d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
           />
         </svg>
-        <p className="text-gray-600 mb-2 font-medium">Không tìm thấy người dùng</p>
-        <p className="text-gray-500 text-sm">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+        <p className="text-gray-600 mb-2 font-medium">
+          Không tìm thấy người dùng
+        </p>
+        <p className="text-gray-500 text-sm">
+          Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm
+        </p>
       </div>
     );
   }
@@ -150,7 +154,9 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                   <div className="flex items-center gap-3">
                     {getUserAvatar(user)}
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {user.name}
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -168,7 +174,9 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                   </Badge>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{formatDate(user.createdAt)}</div>
+                  <div className="text-sm text-gray-600">
+                    {formatDateVN(user.createdAt)}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center justify-start gap-2">
@@ -200,13 +208,18 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                     >
                       Xem
                     </Button>
-                    
+
                     {/* Chỉ hiển thị nút Khóa/Mở khóa cho Student và Teacher */}
-                    {user.role !== 'admin' && (
+                    {user.role !== "admin" && (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => onUpdateStatus(user._id, user.status === 'active' ? 'locked' : 'active')}
+                        onClick={() =>
+                          onUpdateStatus(
+                            user._id,
+                            user.status === "active" ? "locked" : "active"
+                          )
+                        }
                         icon={
                           <svg
                             className="w-4 h-4"
@@ -214,7 +227,7 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                           >
-                            {user.status === 'active' ? (
+                            {user.status === "active" ? (
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -232,12 +245,12 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
                           </svg>
                         }
                       >
-                        {user.status === 'active' ? 'Khóa' : 'Mở khóa'}
+                        {user.status === "active" ? "Khóa" : "Mở khóa"}
                       </Button>
                     )}
-                    
+
                     {/* Chỉ hiển thị nút Reset MK cho Student và Teacher */}
-                    {user.role !== 'admin' && (
+                    {user.role !== "admin" && (
                       <Button
                         variant="ghost"
                         size="sm"

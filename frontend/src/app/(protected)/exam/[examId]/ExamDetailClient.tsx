@@ -6,6 +6,7 @@ import { StartExamPanel } from "@/features/exam/components/exam-instructions";
 import { ExamWithDetails } from "@/features/exam/types";
 import { examStorage } from "@/utils/exam-storage";
 import { examService } from "@/services/exam/exam.service";
+import NotificationModal from "@/components/ui/NotificationModal";
 
 interface Props {
   exam: ExamWithDetails;
@@ -17,6 +18,11 @@ export default function ExamDetailClient({ exam }: Props) {
   const [hasProgress, setHasProgress] = useState(false);
   const [isCreatingSubmission, setIsCreatingSubmission] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [notification, setNotification] = useState<{
+    show: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ show: false, type: "error", message: "" });
 
   // Get assignment/contest IDs and returnUrl from URL if present
   const assignmentId = searchParams?.get("assignmentId") || undefined;
@@ -86,7 +92,11 @@ export default function ExamDetailClient({ exam }: Props) {
       );
     } catch (error) {
       console.error("❌ Error starting exam:", error);
-      alert("Failed to start exam. Please try again.");
+      setNotification({
+        show: true,
+        type: "error",
+        message: "Failed to start exam. Please try again.",
+      });
       setIsCreatingSubmission(false);
     }
   };
@@ -126,17 +136,25 @@ export default function ExamDetailClient({ exam }: Props) {
   }
 
   return (
-    <StartExamPanel
-      examTitle={exam.title}
-      examSubject={exam.subject}
-      durationMinutes={exam.durationMinutes}
-      totalQuestions={exam.totalQuestions || 0}
-      totalPoints={exam.totalPoints || 0}
-      onStartExam={handleStartNew}
-      onContinueExam={handleContinue}
-      hasProgress={hasProgress}
-      onCancel={handleCancel}
-      isLoading={isCreatingSubmission}
-    />
+    <>
+      <NotificationModal
+        isOpen={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+        type={notification.type}
+        message={notification.message}
+      />
+      <StartExamPanel
+        examTitle={exam.title}
+        examSubject={exam.subject}
+        durationMinutes={exam.durationMinutes}
+        totalQuestions={exam.totalQuestions || 0}
+        totalPoints={exam.totalPoints || 0}
+        onStartExam={handleStartNew}
+        onContinueExam={handleContinue}
+        hasProgress={hasProgress}
+        onCancel={handleCancel}
+        isLoading={isCreatingSubmission}
+      />
+    </>
   );
 }
