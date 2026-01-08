@@ -7,6 +7,8 @@ import AdminStatsGrid from "./AdminStatsGrid";
 import AdminActionToolbar from "./AdminActionToolbar";
 import ExamManagementTable from "./ExamManagementTable";
 import CreateExamModal from "../teacher/exams/CreateExamModal";
+import CreateContestView from "./contest/CreateContestView";
+import AdminContestsListView from "./contest/AdminContestsListView";
 import { ExamMode } from "@/features/exam/types";
 import {
   adminService,
@@ -14,8 +16,11 @@ import {
   ExamStats,
 } from "@/services/admin/admin.service";
 
+type TabType = "exams" | "contests" | "create-contest";
+
 const AdminDashboardView: React.FC = () => {
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabType>("exams");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<ExamMode | "all">("all");
   const [exams, setExams] = useState<AdminExam[]>([]);
@@ -57,8 +62,10 @@ const AdminDashboardView: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchExams();
-  }, []);
+    if (activeTab === "exams") {
+      fetchExams();
+    }
+  }, [activeTab]);
 
   // Filter exams based on search and filter
   const filteredExams = useMemo(() => {
@@ -115,85 +122,175 @@ const AdminDashboardView: React.FC = () => {
     alert("Chức năng xóa đang được phát triển");
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center space-y-3">
-          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto"></div>
-          <p className="text-gray-500">Đang tải danh sách đề thi...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center space-y-3">
-          <div className="text-red-500 text-5xl">⚠️</div>
-          <p className="text-red-600 font-medium">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
-          >
-            Thử lại
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <SectionHeader
-        title="Quản lý đề thi"
-        subtitle={`Đề thi do Admin tạo - Tổng cộng ${exams.length} đề`}
-      />
-
-      {/* Stats Grid */}
-      <AdminStatsGrid stats={stats} />
-
-      {/* Action Toolbar */}
-      <AdminActionToolbar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        filterType={filterType}
-        onFilterChange={setFilterType}
-        onCreateNew={handleCreateNew}
-      />
-
-      {/* Exam List */}
-      {filteredExams.length > 0 ? (
-        <ExamManagementTable
-          exams={filteredExams}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+      {/* Header with Tabs */}
+      <div>
+        <SectionHeader
+          title="Quản lý Đề thi & Cuộc thi"
+          subtitle="Quản lý toàn bộ đề thi và cuộc thi của hệ thống"
         />
-      ) : (
-        <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400 mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-          <h3 className="text-lg font-medium text-gray-900 mb-1">
-            Không tìm thấy đề thi nào
-          </h3>
-          <p className="text-gray-500">
-            Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm
-          </p>
+
+        {/* Tabs */}
+        <div className="mt-6 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab("exams")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "exams"
+                  ? "border-teal-500 text-teal-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <span>Đề thi ({exams.length})</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("contests")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "contests"
+                  ? "border-purple-500 text-purple-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                  />
+                </svg>
+                <span>Cuộc thi</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("create-contest")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === "create-contest"
+                  ? "border-pink-500 text-pink-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <span>Tạo cuộc thi</span>
+              </div>
+            </button>
+          </nav>
         </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === "exams" && (
+        <>
+          {loading ? (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center space-y-3">
+                <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto"></div>
+                <p className="text-gray-500">Đang tải danh sách đề thi...</p>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center space-y-3">
+                <div className="text-red-500 text-5xl">⚠️</div>
+                <p className="text-red-600 font-medium">{error}</p>
+                <button
+                  onClick={fetchExams}
+                  className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+                >
+                  Thử lại
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Stats Grid */}
+              <AdminStatsGrid stats={stats} />
+
+              {/* Action Toolbar */}
+              <AdminActionToolbar
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                filterType={filterType}
+                onFilterChange={setFilterType}
+                onCreateNew={handleCreateNew}
+              />
+
+              {/* Exam List */}
+              {filteredExams.length > 0 ? (
+                <ExamManagementTable
+                  exams={filteredExams}
+                  onView={handleView}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ) : (
+                <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-400 mb-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">
+                    Không tìm thấy đề thi nào
+                  </h3>
+                  <p className="text-gray-500">
+                    Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+        </>
       )}
+
+      {activeTab === "contests" && <AdminContestsListView />}
+
+      {activeTab === "create-contest" && <CreateContestView />}
 
       {/* Create Exam Modal */}
       <CreateExamModal
