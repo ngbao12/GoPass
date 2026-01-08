@@ -3,7 +3,7 @@
  * Handles all class-related API calls for teachers
  */
 
-import { httpClient } from '@/lib/http';
+import { httpClient } from "@/lib/http";
 import type {
   ApiResponse,
   TeacherClass,
@@ -12,7 +12,7 @@ import type {
   ClassDetailResponse,
   CreateClassData,
   StudentStats,
-} from './types';
+} from "./types";
 
 /**
  * Class API Service
@@ -22,16 +22,16 @@ export const classApi = {
   // GET /classes/my-classes - Get teacher's classes
   getClasses: async (): Promise<ApiResponse<TeacherClass[]>> => {
     try {
-      const response = await httpClient.get<{ 
-        success: boolean; 
-        data: { classes: ClassModel[]; pagination: any } 
-      }>('/classes/my-classes?isActive=true', { requiresAuth: true });
-      
+      const response = await httpClient.get<{
+        success: boolean;
+        data: { classes: ClassModel[]; pagination: any };
+      }>("/classes/my-classes?isActive=true", { requiresAuth: true });
+
       if (!response.success) {
         return {
           success: false,
           data: [],
-          error: 'Failed to fetch classes'
+          error: "Failed to fetch classes",
         };
       }
 
@@ -42,17 +42,17 @@ export const classApi = {
             success: boolean;
             data: { assignments: any[] };
           }>(`/classes/${cls._id}/assignments`, { requiresAuth: true });
-          
-          const examCount = assignmentsResponse.success 
-            ? (Array.isArray(assignmentsResponse.data) 
-              ? assignmentsResponse.data.length 
-              : (assignmentsResponse.data?.assignments?.length || 0))
+
+          const examCount = assignmentsResponse.success
+            ? Array.isArray(assignmentsResponse.data)
+              ? assignmentsResponse.data.length
+              : assignmentsResponse.data?.assignments?.length || 0
             : 0;
 
           return {
             id: cls._id,
             name: cls.className,
-            description: cls.description || '',
+            description: cls.description || "",
             classCode: cls.classCode,
             subject: "Toán", // TODO: Add to backend model
             grade: "Lớp 12", // TODO: Add to backend model
@@ -62,23 +62,25 @@ export const classApi = {
           } as TeacherClass;
         })
       );
-      
+
       return {
         success: true,
         data: transformedDataWithAssignments,
       };
     } catch (error: any) {
-      console.error('Error fetching classes:', error);
+      console.error("Error fetching classes:", error);
       return {
         success: false,
         data: [],
-        error: error.message || 'Failed to fetch classes'
+        error: error.message || "Failed to fetch classes",
       };
     }
   },
 
   // GET /classes/:id - Get class detail
-  getClassDetail: async (classId: string): Promise<ApiResponse<ClassDetail>> => {
+  getClassDetail: async (
+    classId: string
+  ): Promise<ApiResponse<ClassDetail>> => {
     try {
       const response = await httpClient.get<{
         success: boolean;
@@ -101,17 +103,17 @@ export const classApi = {
           updatedAt: string;
         };
       }>(`/classes/${classId}`, { requiresAuth: true });
-      
+
       if (!response.success) {
         return {
           success: false,
           data: null as any,
-          error: 'Failed to fetch class detail'
+          error: "Failed to fetch class detail",
         };
       }
 
       const classData = response.data;
-      
+
       // For now, we only have basic class info from backend
       // Members, joinRequests, and assignments would need separate API calls
       const transformedDetail: ClassDetail = {
@@ -135,23 +137,25 @@ export const classApi = {
           averageScore: 0, // TODO: Calculate from submissions
         },
       };
-      
+
       return {
         success: true,
         data: transformedDetail,
       };
     } catch (error: any) {
-      console.error('Error fetching class detail:', error);
+      console.error("Error fetching class detail:", error);
       return {
         success: false,
         data: null as any,
-        error: error.message || 'Failed to fetch class detail'
+        error: error.message || "Failed to fetch class detail",
       };
     }
   },
 
   // POST /classes - Create new class
-  createClass: async (classData: CreateClassData): Promise<ApiResponse<ClassModel>> => {
+  createClass: async (
+    classData: CreateClassData
+  ): Promise<ApiResponse<ClassModel>> => {
     try {
       const payload = {
         className: classData.className,
@@ -160,67 +164,71 @@ export const classApi = {
         requireApproval: Boolean(classData.requireApproval),
         // teacherUserId is inferred from auth token in backend
       };
-      
+
       const response = await httpClient.post<{
         success: boolean;
         data: ClassModel;
-      }>('/classes', payload, { requiresAuth: true });
-      
+      }>("/classes", payload, { requiresAuth: true });
+
       if (!response.success) {
         return {
           success: false,
           data: null as any,
-          error: 'Failed to create class'
+          error: "Failed to create class",
         };
       }
-      
+
       return {
         success: true,
-        data: response.data
+        data: response.data,
       };
     } catch (error: any) {
-      console.error('Error creating class:', error);
+      console.error("Error creating class:", error);
       return {
         success: false,
         data: null as any,
-        error: error.message || 'Failed to create class'
+        error: error.message || "Failed to create class",
       };
     }
   },
 
   // PUT /classes/:id - Update class
-  updateClass: async (classId: string, updateData: Partial<CreateClassData>): Promise<ApiResponse<ClassModel>> => {
+  updateClass: async (
+    classId: string,
+    updateData: Partial<CreateClassData>
+  ): Promise<ApiResponse<ClassModel>> => {
     try {
       const payload: any = {};
-      
+
       if (updateData.className) payload.className = updateData.className;
       if (updateData.description) payload.description = updateData.description;
       if (updateData.classCode) payload.classCode = updateData.classCode;
-      if (typeof updateData.requireApproval === 'boolean') payload.requireApproval = updateData.requireApproval;
-      
+      if (typeof updateData.requireApproval === "boolean")
+        payload.requireApproval = updateData.requireApproval;
+
       const response = await httpClient.put<{
         success: boolean;
         data: ClassModel;
       }>(`/classes/${classId}`, payload, { requiresAuth: true });
-      
+
       if (!response.success) {
         return {
           success: false,
           data: null as any,
-          error: 'Failed to update class'
+          error: "Failed to update class",
         };
       }
-      
+
       return {
         success: true,
-        data: response.data
+        data: response.data,
       };
     } catch (error: any) {
-      console.error('Error updating class:', error);
+      console.error("Error updating class:", error);
       return {
         success: false,
         data: null as any,
-        error: error.message || 'Failed to update class'
+        error: error.message || "Failed to update class",
       };
     }
   },
@@ -231,112 +239,133 @@ export const classApi = {
       const response = await httpClient.delete<{
         success: boolean;
       }>(`/classes/${classId}`, { requiresAuth: true });
-      
+
       if (!response.success) {
         return {
           success: false,
           data: undefined,
-          error: 'Failed to delete class'
+          error: "Failed to delete class",
         };
       }
-      
+
       return {
         success: true,
-        data: undefined
+        data: undefined,
       };
     } catch (error: any) {
-      console.error('Error deleting class:', error);
+      console.error("Error deleting class:", error);
       return {
         success: false,
         data: undefined,
-        error: error.message || 'Failed to delete class'
+        error: error.message || "Failed to delete class",
       };
     }
   },
 
   // PUT /classes/:id/join-requests/:requestId - Approve join request
-  approveJoinRequest: async (classId: string, requestId: string): Promise<ApiResponse<void>> => {
+  approveJoinRequest: async (
+    classId: string,
+    requestId: string
+  ): Promise<ApiResponse<void>> => {
     try {
       const response = await httpClient.put<{
         success: boolean;
-      }>(`/classes/${classId}/join-requests/${requestId}`, { action: 'approve' }, { requiresAuth: true });
-      
+      }>(
+        `/classes/${classId}/join-requests/${requestId}`,
+        { action: "approve" },
+        { requiresAuth: true }
+      );
+
       if (!response.success) {
         return {
           success: false,
           data: undefined,
-          error: 'Failed to approve join request'
+          error: "Failed to approve join request",
         };
       }
-      
+
       return {
         success: true,
-        data: undefined
+        data: undefined,
       };
     } catch (error: any) {
-      console.error('Error approving join request:', error);
+      console.error("Error approving join request:", error);
       return {
         success: false,
         data: undefined,
-        error: error.message || 'Failed to approve join request'
+        error: error.message || "Failed to approve join request",
       };
     }
   },
 
   // PUT /classes/:id/join-requests/:requestId - Reject join request
-  rejectJoinRequest: async (classId: string, requestId: string): Promise<ApiResponse<void>> => {
+  rejectJoinRequest: async (
+    classId: string,
+    requestId: string
+  ): Promise<ApiResponse<void>> => {
     try {
       const response = await httpClient.put<{
         success: boolean;
-      }>(`/classes/${classId}/join-requests/${requestId}`, { action: 'reject' }, { requiresAuth: true });
-      
+      }>(
+        `/classes/${classId}/join-requests/${requestId}`,
+        { action: "reject" },
+        { requiresAuth: true }
+      );
+
       if (!response.success) {
         return {
           success: false,
           data: undefined,
-          error: 'Failed to reject join request'
+          error: "Failed to reject join request",
         };
       }
-      
+
       return {
         success: true,
-        data: undefined
+        data: undefined,
       };
     } catch (error: any) {
-      console.error('Error rejecting join request:', error);
+      console.error("Error rejecting join request:", error);
       return {
         success: false,
         data: undefined,
-        error: error.message || 'Failed to reject join request'
+        error: error.message || "Failed to reject join request",
       };
     }
   },
 
   // DELETE /classes/:id/members/:memberId - Remove class member
-  removeMember: async (classId: string, memberId: string): Promise<ApiResponse<void>> => {
+  removeMember: async (
+    classId: string,
+    memberId: string
+  ): Promise<ApiResponse<void>> => {
     try {
+      const url = `/classes/${classId}/members/${memberId}`;
+      console.log("🔴 removeMember API call:", { classId, memberId, url });
       const response = await httpClient.delete<{
         success: boolean;
-      }>(`/classes/${classId}/members/${memberId}`, { requiresAuth: true });
-      
+      }>(url, { requiresAuth: true });
+
+      console.log("🔴 removeMember API response:", response);
+
       if (!response.success) {
         return {
           success: false,
           data: undefined,
-          error: 'Failed to remove member'
+          error: "Failed to remove member",
         };
       }
-      
+
       return {
         success: true,
-        data: undefined
+        data: undefined,
       };
     } catch (error: any) {
-      console.error('Error removing member:', error);
+      console.error("❌ Error removing member:", error);
       return {
         success: false,
         data: undefined,
-        error: error.message || 'Failed to remove member'
+        error: error.message || "Failed to remove member",
       };
     }
   },
@@ -348,25 +377,25 @@ export const classApi = {
         success: boolean;
         data: any[];
       }>(`/classes/${classId}/members`, { requiresAuth: true });
-      
+
       if (!response.success) {
         return {
           success: false,
           data: [],
-          error: 'Failed to fetch members'
+          error: "Failed to fetch members",
         };
       }
-      
+
       return {
         success: true,
-        data: response.data || []
+        data: response.data || [],
       };
     } catch (error: any) {
-      console.error('Error fetching members:', error);
+      console.error("Error fetching members:", error);
       return {
         success: false,
         data: [],
-        error: error.message || 'Failed to fetch members'
+        error: error.message || "Failed to fetch members",
       };
     }
   },
@@ -377,26 +406,28 @@ export const classApi = {
       const response = await httpClient.get<{
         success: boolean;
         data: any[];
-      }>(`/classes/${classId}/join-requests?status=pending`, { requiresAuth: true });
-      
+      }>(`/classes/${classId}/join-requests?status=pending`, {
+        requiresAuth: true,
+      });
+
       if (!response.success) {
         return {
           success: false,
           data: [],
-          error: 'Failed to fetch join requests'
+          error: "Failed to fetch join requests",
         };
       }
-      
+
       return {
         success: true,
-        data: response.data || []
+        data: response.data || [],
       };
     } catch (error: any) {
-      console.error('Error fetching join requests:', error);
+      console.error("Error fetching join requests:", error);
       return {
         success: false,
         data: [],
-        error: error.message || 'Failed to fetch join requests'
+        error: error.message || "Failed to fetch join requests",
       };
     }
   },
@@ -408,12 +439,12 @@ export const classApi = {
         success: boolean;
         data: any;
       }>(`/classes/${classId}/assignments`, { requiresAuth: true });
-      
+
       if (!response.success) {
         return {
           success: false,
           data: [],
-          error: 'Failed to fetch assignments'
+          error: "Failed to fetch assignments",
         };
       }
 
@@ -424,25 +455,30 @@ export const classApi = {
 
       return {
         success: true,
-        data: assignments
+        data: assignments,
       };
     } catch (error: any) {
-      console.error('Error fetching assignments:', error);
+      console.error("Error fetching assignments:", error);
       return {
         success: false,
         data: [],
-        error: error.message || 'Failed to fetch assignments'
+        error: error.message || "Failed to fetch assignments",
       };
     }
   },
 
   // GET /classes/:classId/students/:studentId/stats - Get student stats in class
-  getStudentStats: async (classId: string, studentId: string): Promise<ApiResponse<StudentStats>> => {
+  getStudentStats: async (
+    classId: string,
+    studentId: string
+  ): Promise<ApiResponse<StudentStats>> => {
     try {
       const response = await httpClient.get<{
         success: boolean;
         data: StudentStats;
-      }>(`/classes/${classId}/students/${studentId}/stats`, { requiresAuth: true });
+      }>(`/classes/${classId}/students/${studentId}/stats`, {
+        requiresAuth: true,
+      });
 
       if (!response.success) {
         return {
@@ -451,85 +487,96 @@ export const classApi = {
             totalAssignments: 0,
             completedAssignments: 0,
             averageScore: 0,
-            recentResults: []
+            recentResults: [],
           },
-          error: 'Failed to fetch student stats'
+          error: "Failed to fetch student stats",
         };
       }
 
       return {
         success: true,
-        data: response.data
+        data: response.data,
       };
     } catch (error: any) {
-      console.error('Error fetching student stats:', error);
+      console.error("Error fetching student stats:", error);
       return {
         success: false,
         data: {
           totalAssignments: 0,
           completedAssignments: 0,
           averageScore: 0,
-          recentResults: []
+          recentResults: [],
         },
-        error: error.message || 'Failed to fetch student stats'
+        error: error.message || "Failed to fetch student stats",
       };
     }
   },
 
   // DELETE /classes/:classId/assignments/:assignmentId - Delete class assignment
-  deleteAssignment: async (classId: string, assignmentId: string): Promise<ApiResponse<void>> => {
+  deleteAssignment: async (
+    classId: string,
+    assignmentId: string
+  ): Promise<ApiResponse<void>> => {
     try {
-      const response = await httpClient.delete<{ success: boolean; message?: string }>(
-        `/classes/${classId}/assignments/${assignmentId}`,
-        { requiresAuth: true }
-      );
+      const response = await httpClient.delete<{
+        success: boolean;
+        message?: string;
+      }>(`/classes/${classId}/assignments/${assignmentId}`, {
+        requiresAuth: true,
+      });
 
       if (!response.success) {
         return {
           success: false,
           data: undefined,
-          error: response?.message || 'Failed to delete assignment'
+          error: response?.message || "Failed to delete assignment",
         };
       }
 
       return { success: true, data: undefined };
     } catch (error: any) {
-      console.error('Error deleting assignment:', error);
+      console.error("Error deleting assignment:", error);
       return {
         success: false,
         data: undefined,
-        error: error.message || 'Failed to delete assignment'
+        error: error.message || "Failed to delete assignment",
       };
     }
   },
 
   // PUT /classes/:classId/assignments/:assignmentId - Update class assignment
-  updateAssignment: async (classId: string, assignmentId: string, updateData: any): Promise<ApiResponse<any>> => {
+  updateAssignment: async (
+    classId: string,
+    assignmentId: string,
+    updateData: any
+  ): Promise<ApiResponse<any>> => {
     try {
-      const response = await httpClient.put<{ success: boolean; data: any; message?: string }>(
-        `/classes/${classId}/assignments/${assignmentId}`,
-        updateData,
-        { requiresAuth: true }
-      );
+      const response = await httpClient.put<{
+        success: boolean;
+        data: any;
+        message?: string;
+      }>(`/classes/${classId}/assignments/${assignmentId}`, updateData, {
+        requiresAuth: true,
+      });
 
       if (!response.success) {
         return {
           success: false,
           data: null,
-          error: response?.message || 'Failed to update assignment'
+          error: response?.message || "Failed to update assignment",
         };
       }
 
       return {
         success: true,
-        data: response.data
+        data: response.data,
       };
     } catch (error: any) {
-      console.error('Error updating assignment:', error);
+      console.error("Error updating assignment:", error);
       return {
         success: false,
         data: null,
-        error: error.message || 'Failed to update assignment'
+        error: error.message || "Failed to update assignment",
       };
     }
   },

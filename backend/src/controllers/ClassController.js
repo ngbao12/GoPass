@@ -1,4 +1,4 @@
-const ClassService = require('../services/ClassService');
+const ClassService = require("../services/ClassService");
 
 class ClassController {
   // POST /classes
@@ -22,7 +22,10 @@ class ClassController {
   async getTeachingClasses(req, res) {
     try {
       const teacherId = req.user.userId;
-      const result = await ClassService.getTeachingClasses(teacherId, req.query);
+      const result = await ClassService.getTeachingClasses(
+        teacherId,
+        req.query
+      );
       res.status(200).json({
         success: true,
         data: result,
@@ -35,19 +38,19 @@ class ClassController {
     }
   }
 
- // GET /classes/enrolled
+  // GET /classes/enrolled
   async getEnrolledClasses(req, res) {
     try {
       const studentUserId = req.user.userId;
       const data = await ClassService.getStudentEnrolledClasses(studentUserId);
       return res.status(200).json({
         success: true,
-        data: data
+        data: data,
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -59,12 +62,12 @@ class ClassController {
       const data = await ClassService.getStudentEnrolledClasses(studentUserId);
       return res.status(200).json({
         success: true,
-        data: data
+        data: data,
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -74,7 +77,10 @@ class ClassController {
     try {
       const { classId } = req.params;
       const currentUserId = req.user.userId;
-      const classData = await ClassService.getClassDetail(classId, currentUserId);
+      const classData = await ClassService.getClassDetail(
+        classId,
+        currentUserId
+      );
       res.status(200).json({
         success: true,
         data: classData,
@@ -92,7 +98,11 @@ class ClassController {
     try {
       const { classId } = req.params;
       const currentUserId = req.user.userId;
-      const result = await ClassService.getClassAssignments(classId, currentUserId, req.query);
+      const result = await ClassService.getClassAssignments(
+        classId,
+        currentUserId,
+        req.query
+      );
       res.status(200).json({
         success: true,
         data: result,
@@ -110,7 +120,11 @@ class ClassController {
     try {
       const { classId } = req.params;
       const currentUserId = req.user.userId;
-      const result = await ClassService.getClassMembers(classId, currentUserId, req.query);
+      const result = await ClassService.getClassMembers(
+        classId,
+        currentUserId,
+        req.query
+      );
       res.status(200).json({
         success: true,
         data: result,
@@ -128,7 +142,11 @@ class ClassController {
     try {
       const { classId, studentId } = req.params;
       const currentUser = { id: req.user.userId, role: req.user.role };
-      const stats = await ClassService.getStudentStats(classId, currentUser, studentId);
+      const stats = await ClassService.getStudentStats(
+        classId,
+        currentUser,
+        studentId
+      );
       res.status(200).json({
         success: true,
         data: stats,
@@ -146,7 +164,11 @@ class ClassController {
     try {
       const { classId, assignmentId } = req.params;
       const teacherId = req.user.userId;
-      const result = await ClassService.deleteAssignment(classId, teacherId, assignmentId);
+      const result = await ClassService.deleteAssignment(
+        classId,
+        teacherId,
+        assignmentId
+      );
       res.status(200).json({
         success: true,
         message: result.message,
@@ -164,11 +186,16 @@ class ClassController {
     try {
       const { classId, assignmentId } = req.params;
       const teacherId = req.user.userId;
-      const result = await ClassService.updateAssignment(classId, teacherId, assignmentId, req.body);
+      const result = await ClassService.updateAssignment(
+        classId,
+        teacherId,
+        assignmentId,
+        req.body
+      );
       res.status(200).json({
         success: true,
         data: result,
-        message: 'Assignment updated successfully',
+        message: "Assignment updated successfully",
       });
     } catch (error) {
       res.status(400).json({
@@ -183,7 +210,11 @@ class ClassController {
     try {
       const { classId } = req.params;
       const teacherId = req.user.userId;
-      const classData = await ClassService.updateClass(classId, teacherId, req.body);
+      const classData = await ClassService.updateClass(
+        classId,
+        teacherId,
+        req.body
+      );
       res.status(200).json({
         success: true,
         data: classData,
@@ -220,7 +251,11 @@ class ClassController {
       const { classId } = req.params;
       const teacherId = req.user.userId;
       const { studentUserId } = req.body;
-      const member = await ClassService.addMember(classId, teacherId, studentUserId);
+      const member = await ClassService.addMember(
+        classId,
+        teacherId,
+        studentUserId
+      );
       res.status(201).json({
         success: true,
         data: member,
@@ -238,12 +273,23 @@ class ClassController {
     try {
       const { classId, studentUserId } = req.params;
       const teacherId = req.user.userId;
-      const result = await ClassService.removeMember(classId, teacherId, studentUserId);
+      console.log("🗑️ removeMember called:", {
+        classId,
+        studentUserId,
+        teacherId,
+      });
+      const result = await ClassService.removeMember(
+        classId,
+        teacherId,
+        studentUserId
+      );
+      console.log("✅ removeMember success:", result);
       res.status(200).json({
         success: true,
         message: result.message,
       });
     } catch (error) {
+      console.error("❌ removeMember error:", error.message);
       res.status(400).json({
         success: false,
         message: error.message,
@@ -268,33 +314,35 @@ class ClassController {
       });
     }
   }
-  
+
   // GET /classes/pending-requests
   async getPendingRequests(req, res) {
     try {
-      const studentUserId = req.user.userId; 
+      const studentUserId = req.user.userId;
       const data = await ClassService.getStudentPendingRequests(studentUserId);
       return res.status(200).json({
         success: true,
-        data: data
+        data: data,
       });
     } catch (error) {
       console.error("Controller Error:", error);
       return res.status(500).json({
         success: false,
-        message: "Internal Server Error"
+        message: "Internal Server Error",
       });
     }
   }
 
- 
-  
   // GET /classes/:classId/join-requests
   async getJoinRequests(req, res) {
     try {
       const { classId } = req.params;
       const teacherId = req.user.userId;
-      const result = await ClassService.getJoinRequests(classId, teacherId, req.query);
+      const result = await ClassService.getJoinRequests(
+        classId,
+        teacherId,
+        req.query
+      );
       res.status(200).json({
         success: true,
         data: result,
@@ -307,21 +355,21 @@ class ClassController {
     }
   }
 
-   // DELETE /classes/cancel-request/:requestId
+  // DELETE /classes/cancel-request/:requestId
   async cancelJoinRequest(req, res) {
     try {
       const { requestId } = req.params;
-      const studentUserId = req.user.userId; 
+      const studentUserId = req.user.userId;
       await ClassService.cancelJoinRequest(requestId, studentUserId);
 
       res.status(200).json({
         success: true,
-        message: 'Join request has been cancelled.'
+        message: "Join request has been cancelled.",
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -333,7 +381,7 @@ class ClassController {
       const { action } = req.body;
       const teacherId = req.user.userId;
 
-      if (!action || !['approve', 'reject'].includes(action)) {
+      if (!action || !["approve", "reject"].includes(action)) {
         return res.status(400).json({
           success: false,
           message: 'Action must be either "approve" or "reject"',
@@ -341,16 +389,24 @@ class ClassController {
       }
 
       let result;
-      if (action === 'approve') {
-        result = await ClassService.approveJoinRequest(classId, teacherId, requestId);
+      if (action === "approve") {
+        result = await ClassService.approveJoinRequest(
+          classId,
+          teacherId,
+          requestId
+        );
       } else {
-        result = await ClassService.rejectJoinRequest(classId, teacherId, requestId);
+        result = await ClassService.rejectJoinRequest(
+          classId,
+          teacherId,
+          requestId
+        );
       }
 
       res.status(200).json({
         success: true,
         data: result,
-        message: 'Request processed successfully',
+        message: "Request processed successfully",
       });
     } catch (error) {
       res.status(400).json({
@@ -359,8 +415,6 @@ class ClassController {
       });
     }
   }
-
- 
 }
 
 module.exports = new ClassController();

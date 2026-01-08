@@ -1,35 +1,77 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const ClassController = require('../controllers/ClassController');
-const { authenticate, authorize } = require('../middleware');
+const ClassController = require("../controllers/ClassController");
+const { authenticate, authorize } = require("../middleware");
 
 // All routes require authentication
 router.use(authenticate);
 
 // Teacher routes
-router.post('/', authorize('teacher'), ClassController.createClass);
-router.get('/my-classes', authorize('teacher'), ClassController.getTeachingClasses);
-router.put('/:classId', authorize('teacher'), ClassController.updateClass);
-router.delete('/:classId', authorize('teacher'), ClassController.deleteClass);
-router.get('/:classId/join-requests', authorize('teacher'), ClassController.getJoinRequests);
-router.put('/:classId/join-requests/:requestId', authorize('teacher'), ClassController.processJoinRequest);
-router.delete('/:classId/members/:studentUserId', authorize('teacher'), ClassController.removeMember);
+router.post("/", authorize("teacher"), ClassController.createClass);
+router.get(
+  "/my-classes",
+  authorize("teacher"),
+  ClassController.getTeachingClasses
+);
+router.get(
+  "/:classId/join-requests",
+  authorize("teacher"),
+  ClassController.getJoinRequests
+);
+router.put(
+  "/:classId/join-requests/:requestId",
+  authorize("teacher"),
+  ClassController.processJoinRequest
+);
+router.delete(
+  "/:classId/members/:studentUserId",
+  authorize("teacher"),
+  ClassController.removeMember
+);
+router.delete(
+  "/:classId/assignments/:assignmentId",
+  authorize("teacher"),
+  ClassController.deleteAssignment
+);
+router.put(
+  "/:classId/assignments/:assignmentId",
+  authorize("teacher"),
+  ClassController.updateAssignment
+);
+router.put("/:classId", authorize("teacher"), ClassController.updateClass);
+router.delete("/:classId", authorize("teacher"), ClassController.deleteClass);
 
 // Student routes (accessible by students and admins for testing)
-router.get( '/enrolled', authorize('student', 'admin'), ClassController.getEnrolledClasses);
-router.get('/pending-requests', authorize('student', 'admin'), ClassController.getPendingRequests);
-router.post('/join', authorize('student'), ClassController.joinByCode);
-router.delete('/cancel-request/:requestId', authorize('student'), ClassController.cancelJoinRequest);
-router.get('/my-enrolled', authorize('student', 'admin'), ClassController.getLearningClasses);
+router.get(
+  "/enrolled",
+  authorize("student", "admin"),
+  ClassController.getEnrolledClasses
+);
+router.get(
+  "/pending-requests",
+  authorize("student", "admin"),
+  ClassController.getPendingRequests
+);
+router.post("/join", authorize("student"), ClassController.joinByCode);
+router.delete(
+  "/cancel-request/:requestId",
+  authorize("student"),
+  ClassController.cancelJoinRequest
+);
+router.get(
+  "/my-enrolled",
+  authorize("student", "admin"),
+  ClassController.getLearningClasses
+);
 
 // Shared routes
-router.get('/:classId', ClassController.getClassDetail);
-router.get('/:classId/assignments', ClassController.getClassAssignments);
-router.get('/:classId/members', ClassController.getClassMembers);
-router.get('/:classId/students/:studentId/stats', authorize('teacher', 'admin'), ClassController.getStudentStats);
-// Delete a specific assignment from a class
-router.delete('/:classId/assignments/:assignmentId', authorize('teacher'), ClassController.deleteAssignment);
-// Update a specific assignment
-router.put('/:classId/assignments/:assignmentId', authorize('teacher'), ClassController.updateAssignment);
+router.get("/:classId/assignments", ClassController.getClassAssignments);
+router.get("/:classId/members", ClassController.getClassMembers);
+router.get(
+  "/:classId/students/:studentId/stats",
+  authorize("teacher", "admin"),
+  ClassController.getStudentStats
+);
+router.get("/:classId", ClassController.getClassDetail);
 
 module.exports = router;

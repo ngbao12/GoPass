@@ -104,7 +104,7 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
   let MainButton;
 
   if (userProgress?.isFinished) {
-    // 1. TRƯỜNG HỢP: ĐÃ HOÀN THÀNH -> XEM KẾT QUẢ
+    // 1. TRƯỜNG HỢP: ĐÃ HOÀN THÀNH TẤT CẢ -> XEM KẾT QUẢ
     MainButton = (
       <button
         onClick={handleViewResult}
@@ -114,14 +114,18 @@ export default function ContestLanding({ data }: { data: LandingProps }) {
       </button>
     );
   } else if (userProgress?.hasJoined) {
-    // 2. TRƯỜNG HỢP: ĐANG LÀM DỞ -> TIẾP TỤC
+    // 2. TRƯỜNG HỢP: ĐÃ THAM GIA (bao gồm cả chưa bắt đầu làm hoặc đang làm dở) -> BẮT ĐẦU/TIẾP TỤC
+    const buttonText =
+      userProgress.completed > 0
+        ? `Tiếp tục làm bài (${userProgress.completed}/${userProgress.total})`
+        : "Bắt đầu làm bài";
+
     MainButton = (
       <button
         onClick={handleStart}
-        className="flex-[2] py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-bold shadow-md shadow-orange-200 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 animate-pulse-slow"
+        className="flex-[2] py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-bold shadow-md shadow-orange-200 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
       >
-        <PlayCircle size={18} /> Tiếp tục làm bài ({userProgress.completed}/
-        {userProgress.total})
+        <PlayCircle size={18} /> {buttonText}
       </button>
     );
   } else {

@@ -129,22 +129,31 @@ const ClassMembersView: React.FC<ClassMembersViewProps> = ({
   };
 
   const handleRemoveMember = async (memberId: string) => {
+    console.log("handleRemoveMember called with memberId:", memberId);
     setConfirm({
       isOpen: true,
       message: "Bạn có chắc muốn xóa học sinh này khỏi lớp?",
       type: "danger",
       onConfirm: async () => {
         try {
+          console.log("Confirm approved, calling API to remove:", memberId);
           setActionLoading(memberId);
           const response = await classApi.removeMember(
             classDetail.id,
             memberId
           );
 
+          console.log("API response:", response);
+
           if (response.success) {
             // Reload data
             await loadMembersData();
             onUpdate();
+            setNotification({
+              isOpen: true,
+              message: "Đã xóa học sinh khỏi lớp",
+              type: "success",
+            });
           } else {
             setNotification({
               isOpen: true,
@@ -396,6 +405,23 @@ const ClassMembersView: React.FC<ClassMembersViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirm.isOpen}
+        onClose={() => setConfirm({ ...confirm, isOpen: false })}
+        onConfirm={confirm.onConfirm || (() => {})}
+        message={confirm.message}
+        type={confirm.type}
+      />
+
+      {/* Notification Modal */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={() => setNotification({ ...notification, isOpen: false })}
+        message={notification.message}
+        type={notification.type}
+      />
     </>
   );
 };
