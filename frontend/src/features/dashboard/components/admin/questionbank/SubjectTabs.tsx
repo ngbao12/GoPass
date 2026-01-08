@@ -1,22 +1,26 @@
 "use client";
 
 import React from "react";
+import { SubjectStats } from "@/services/questionbank";
 
 interface SubjectTabsProps {
+  subjects: string[];
   activeSubject: string;
   onSubjectChange: (subject: string) => void;
+  stats: SubjectStats[];
 }
 
 const SubjectTabs: React.FC<SubjectTabsProps> = ({
+  subjects,
   activeSubject,
   onSubjectChange,
+  stats,
 }) => {
-  const subjects = ["Toán", "Ngữ Văn", "Tiếng Anh"];
-
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 flex-wrap">
       {subjects.map((subject) => {
         const isActive = activeSubject === subject;
+        const stat = stats.find((s) => s.subject === subject);
         return (
           <button
             key={subject}
@@ -30,7 +34,18 @@ const SubjectTabs: React.FC<SubjectTabsProps> = ({
               }
             `}
           >
-            {subject}
+            <div className="flex items-center gap-2">
+              <span>{subject}</span>
+              {stat && (
+                <span
+                  className={`text-xs ${
+                    isActive ? "text-teal-100" : "text-gray-500"
+                  }`}
+                >
+                  ({stat.total})
+                </span>
+              )}
+            </div>
           </button>
         );
       })}

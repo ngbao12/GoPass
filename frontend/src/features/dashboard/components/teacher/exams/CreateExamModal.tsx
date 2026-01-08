@@ -5,14 +5,19 @@ import { Button } from "@/components/ui";
 import { examApi } from "@/services/teacher";
 
 interface CreateExamModalProps {
+  isOpen: boolean;
   onClose: () => void;
   onSubmit: (examData: any) => void;
 }
 
 const CreateExamModal: React.FC<CreateExamModalProps> = ({
+  isOpen,
   onClose,
   onSubmit,
 }) => {
+  // Early return if modal is not open
+  if (!isOpen) return null;
+
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileInfo, setUploadedFileInfo] = useState<any>(null);
@@ -159,6 +164,8 @@ const CreateExamModal: React.FC<CreateExamModalProps> = ({
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 4));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+  if (!isOpen) return null;
 
   return (
     <>

@@ -28,7 +28,7 @@ import { getContestProgress } from "@/utils/contest-storage";
 // ==========================================
 
 /** Hook: Xử lý điều hướng và cập nhật trạng thái Contest ban đầu */
-const useExamNavigation = (examId: string) => {
+const useExamNavigation = (examId: string, isPreviewMode: boolean = false) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = searchParams.get("returnUrl");
@@ -36,20 +36,30 @@ const useExamNavigation = (examId: string) => {
 
   // Đánh dấu trạng thái 'ongoing' ngay khi vào bài (nếu là contest)
   useEffect(() => {
-    if (contestId && examId) {
+    if (contestId && examId && !isPreviewMode) {
       updateExamStatus(contestId, examId, "ongoing");
     }
-  }, [contestId, examId]);
+  }, [contestId, examId, isPreviewMode]);
 
   const handleNavigateBack = useCallback(() => {
+    // Preview mode: Always go to teacher exams page
+    if (isPreviewMode) {
+      router.push("/dashboard/teacher/exams");
+      return;
+    }
+
+    // Normal mode: Check returnUrl first (from class), then contestId, then default
     if (returnUrl) {
       router.push(decodeURIComponent(returnUrl));
+    } else if (contestId) {
+      router.push(`/contest/${contestId}/hub`);
     } else {
-      router.push(contestId ? `/contest/${contestId}/hub` : `/exam/${examId}`);
+      router.push(`/exam/${examId}`);
     }
-  }, [returnUrl, router, contestId, examId]);
+  }, [returnUrl, router, contestId, examId, isPreviewMode]);
 
   const handleNavigateDashboard = useCallback(() => {
+    // If returnUrl exists (from class/contest), go back there
     if (returnUrl) {
       router.push(decodeURIComponent(returnUrl));
     } else {
@@ -239,7 +249,20 @@ const ExamInterface = ({
 
   // 1. Kết nối Navigation Hook
   const { contestId, handleNavigateBack, handleNavigateDashboard } =
-    useExamNavigation(exam?._id || "");
+    useExamNavigation(exam?._id || "", isPreviewMode);
+
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams?.get("returnUrl");
+  const assignmentId = searchParams?.get("assignmentId");
+
+  // Handle preview mode exit - clear storage
+  const handlePreviewExit = useCallback(() => {
+    if (isPreviewMode && exam?._id) {
+      examStorage.clear(exam._id);
+      console.log("🗑️ Cleared preview mode storage");
+    }
+    handleNavigateBack();
+  }, [isPreviewMode, exam, handleNavigateBack]);
 
   // 2. Kết nối Submission Hook
   const { dialogs, setDialogs, handleFinishExam } = useExamSubmission(
@@ -287,7 +310,7 @@ const ExamInterface = ({
         timeRemaining={timeRemaining}
         onExit={() => {
           if (isPreviewMode) {
-            handleNavigateBack(); // Direct navigation for preview
+            handlePreviewExit(); // Clear storage and navigate back
           } else {
             setDialogs((prev) => ({ ...prev, exit: true }));
           }
@@ -361,7 +384,11 @@ const ExamInterface = ({
         }}
         onGoToDashboard={handleNavigateDashboard}
         actionLabel={
-          contestId ? "Quay về Hub Cuộc thi" : "Về trang chủ Dashboard"
+          contestId
+            ? "Quay về Hub Cuộc thi"
+            : assignmentId
+            ? "Quay về Lớp học"
+            : "Về trang chủ Dashboard"
         }
         isContestMode={!!contestId}
       />
@@ -383,7 +410,11 @@ export default function TakeExamClient({
   isPreviewMode = false,
 }: TakeExamClientProps) {
   return (
-    <ExamProvider initialExam={exam} isReviewMode={false}>
+    <ExamProvider
+      initialExam={exam}
+      isReviewMode={false}
+      isPreviewMode={isPreviewMode}
+    >
       <ExamInterface isPreviewMode={isPreviewMode} />
     </ExamProvider>
   );

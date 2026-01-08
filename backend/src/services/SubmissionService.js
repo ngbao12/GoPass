@@ -28,7 +28,7 @@ class SubmissionService {
     // Check if student is member of the class
     const isMember = await ClassMemberRepository.isMember(
       assignment.classId,
-      studentId
+      studentUserId
     );
     if (!isMember) {
       throw new Error("You are not a member of this class");

@@ -1,4 +1,3 @@
-// Export all controllers
 module.exports = {
   AuthController: require('./AuthController'),
   UserController: require('./UserController'),
@@ -10,4 +9,5 @@ module.exports = {
   ContestController: require('./ContestController'),
   AdminController: require('./AdminController'),
   StudentController: require('./StudentController'),
+  TeacherController: require('./TeacherController'),
 };

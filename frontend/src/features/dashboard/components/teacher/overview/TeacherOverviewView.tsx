@@ -3,7 +3,6 @@
 import React from "react";
 import TeacherStatsGrid from "./TeacherStatsGrid";
 import TeacherClassList from "./TeacherClassList";
-import RecentActivityFeed from "./RecentActivityFeed";
 
 const TeacherOverviewView: React.FC = () => {
   return (
@@ -16,21 +15,11 @@ const TeacherOverviewView: React.FC = () => {
         </p>
       </div>
 
-      {/* Stats Cards - Tự fetch data bên trong */}
+      { }
       <TeacherStatsGrid />
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Classes List (2/3 width) */}
-        <div className="lg:col-span-2">
-          <TeacherClassList />
-        </div>
-
-        {/* Right Column: Recent Activity (1/3 width) */}
-        <div className="lg:col-span-1">
-          <RecentActivityFeed />
-        </div>
-      </div>
+      { }
+      <TeacherClassList />
     </div>
   );
 };

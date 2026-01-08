@@ -1,4 +1,4 @@
-const AdminService = require('../services/AdminService');
+const AdminService = require("../services/AdminService");
 
 class AdminController {
   async listUsers(req, res) {
@@ -21,7 +21,10 @@ class AdminController {
 
   async updateUserStatus(req, res) {
     try {
-      const user = await AdminService.updateUserStatus(req.params.userId, req.body.status);
+      const user = await AdminService.updateUserStatus(
+        req.params.userId,
+        req.body.status
+      );
       res.status(200).json({ success: true, data: user });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
@@ -40,15 +43,18 @@ class AdminController {
   async resetUserPassword(req, res) {
     try {
       const { newPassword } = req.body;
-      
+
       if (!newPassword) {
-        return res.status(400).json({ 
-          success: false, 
-          message: 'New password is required' 
+        return res.status(400).json({
+          success: false,
+          message: "New password is required",
         });
       }
 
-      const result = await AdminService.resetUserPassword(req.params.userId, newPassword);
+      const result = await AdminService.resetUserPassword(
+        req.params.userId,
+        newPassword
+      );
       res.status(200).json({ success: true, message: result.message });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
@@ -60,7 +66,16 @@ class AdminController {
       const metrics = await AdminService.getSystemMetrics();
       res.status(200).json({ success: true, data: metrics });
     } catch (error) {
-      res.status(400).json({ success: false, message: error.message });
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+
+  async getExamStats(req, res) {
+    try {
+      const stats = await AdminService.getExamStats(req.user.userId);
+      res.status(200).json({ success: true, data: stats });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
     }
   }
 }

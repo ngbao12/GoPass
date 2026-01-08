@@ -1,4 +1,4 @@
-import { httpClient } from '@/lib/http';
+import { httpClient } from "@/lib/http";
 import { AnswerData, ExamSubmission } from "@/features/exam/types";
 
 /**
@@ -11,16 +11,22 @@ export const submissionService = {
    * API: PATCH /api/submissions/:submissionId/answers
    * Auth: Required
    */
-  autoSaveAnswers: async (submissionId: string, answers: AnswerData[]): Promise<boolean> => {
+  autoSaveAnswers: async (
+    submissionId: string,
+    answers: AnswerData[]
+  ): Promise<boolean> => {
     try {
-      const response = await httpClient.patch<{ success: boolean; message: string }>(
+      const response = await httpClient.patch<{
+        success: boolean;
+        message: string;
+      }>(
         `/submissions/${submissionId}/answers`,
         { answers },
         { requiresAuth: true }
       );
       return response.success;
     } catch (error) {
-      console.error('Error auto-saving answers:', error);
+      console.error("Error auto-saving answers:", error);
       return false;
     }
   },
@@ -36,29 +42,32 @@ export const submissionService = {
     timeSpentSeconds: number = 0
   ): Promise<ExamSubmission | null> => {
     try {
-      console.log('🔄 Calling API POST /submissions/:id/submit', {
+      console.log("🔄 Calling API POST /submissions/:id/submit", {
         submissionId,
         answersCount: answers.length,
         timeSpentSeconds,
-        endpoint: `/submissions/${submissionId}/submit`
+        endpoint: `/submissions/${submissionId}/submit`,
       });
 
-      const response = await httpClient.post<{ success: boolean; data: ExamSubmission }>(
+      const response = await httpClient.post<{
+        success: boolean;
+        data: ExamSubmission;
+      }>(
         `/submissions/${submissionId}/submit`,
         { answers, timeSpentSeconds },
         { requiresAuth: true }
       );
 
-      console.log('📥 API Response:', response);
+      console.log("📥 API Response:", response);
 
       if (!response.success || !response.data) {
-        console.warn('⚠️ Submit response invalid:', response);
+        console.warn("⚠️ Submit response invalid:", response);
         return null;
       }
 
       return response.data;
     } catch (error) {
-      console.error('❌ Error submitting exam:', error);
+      console.error("❌ Error submitting exam:", error);
       return null;
     }
   },
@@ -74,14 +83,14 @@ export const submissionService = {
         `/submissions/${submissionId}`,
         { requiresAuth: true }
       );
-      
+
       if (!response.success || !response.data) {
         return null;
       }
-      
+
       return response.data;
     } catch (error) {
-      console.error('Error fetching submission details:', error);
+      console.error("Error fetching submission details:", error);
       return null;
     }
   },
@@ -93,10 +102,10 @@ export const submissionService = {
    */
   getSubmissionAnswers: async (submissionId: string): Promise<AnswerData[]> => {
     try {
-      const response = await httpClient.get<{ success: boolean; data: { answers: AnswerData[] } }>(
-        `/submissions/${submissionId}/answers`,
-        { requiresAuth: true }
-      );
+      const response = await httpClient.get<{
+        success: boolean;
+        data: { answers: AnswerData[] };
+      }>(`/submissions/${submissionId}/answers`, { requiresAuth: true });
 
       if (!response.success || !response.data) {
         return [];
@@ -104,7 +113,7 @@ export const submissionService = {
 
       return response.data.answers || [];
     } catch (error) {
-      console.error('Error fetching submission answers:', error);
+      console.error("Error fetching submission answers:", error);
       return [];
     }
   },
@@ -116,10 +125,10 @@ export const submissionService = {
    */
   getMyActiveSubmissions: async (): Promise<ExamSubmission[]> => {
     try {
-      const response = await httpClient.get<{ success: boolean; data: ExamSubmission[] }>(
-        '/submissions/my-active',
-        { requiresAuth: true }
-      );
+      const response = await httpClient.get<{
+        success: boolean;
+        data: ExamSubmission[];
+      }>("/submissions/my-active", { requiresAuth: true });
 
       if (!response.success || !response.data) {
         return [];
@@ -127,8 +136,41 @@ export const submissionService = {
 
       return response.data;
     } catch (error) {
-      console.error('Error fetching active submissions:', error);
+      console.error("Error fetching active submissions:", error);
       return [];
+    }
+  },
+
+  /**
+   * Start exam from assignment
+   * API: POST /api/submissions/assignments/:assignmentId/start
+   * Auth: Required (Student)
+   */
+  startExamFromAssignment: async (
+    assignmentId: string
+  ): Promise<{ submissionId: string; examId: string } | null> => {
+    try {
+      console.log("🚀 Starting exam from assignment:", assignmentId);
+      const response = await httpClient.post<{ success: boolean; data: any }>(
+        `/submissions/assignments/${assignmentId}/start`,
+        {},
+        { requiresAuth: true }
+      );
+
+      console.log("📥 Start exam response:", response);
+
+      if (!response.success || !response.data) {
+        console.warn("⚠️ Failed to start exam:", response);
+        return null;
+      }
+
+      return {
+        submissionId: response.data._id || response.data.id,
+        examId: response.data.examId,
+      };
+    } catch (error) {
+      console.error("❌ Error starting exam from assignment:", error);
+      return null;
     }
   },
 

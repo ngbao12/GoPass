@@ -138,18 +138,18 @@ class PdfProcessorService {
     const examQuestions = questions.map((question, index) => {
       const tags = question.tags || [];
       const order = index + 1;
-      let section = "Sentence/Utterance Arrangement";
+      let section = "Sentence/Utterance Arrangement"; // Default for empty tags
 
-      // FIXED LOGIC: Use order and tags to determine section
-      // Default exam structure: Q1-5 Arrangement, Q6-11 Cloze1, Q12-21 Reading1, etc.
+      // FIXED LOGIC: Use tags only
+      // - Empty tags = "Sentence/Utterance Arrangement"
+      // - tag "cloze" = "Cloze Test"
+      // - tag "reading" = "Reading Comprehension"
       if (tags.includes("cloze")) {
         section = "Cloze Test";
       } else if (tags.includes("reading") || question.PassageRelated) {
         section = "Reading Comprehension";
-      } else if (order <= 5) {
-        // First 5 questions are typically Sentence Arrangement
-        section = "Sentence/Utterance Arrangement";
       }
+      // else: keep default "Sentence/Utterance Arrangement"
 
       return {
         questionId: null, // Will be set after question is created

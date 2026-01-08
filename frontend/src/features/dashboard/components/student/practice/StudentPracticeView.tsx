@@ -27,7 +27,7 @@ const StudentPracticeView = () => {
           filterSubject === "all" ? undefined : filterSubject
         );
         setExams(data);
-        
+
         // Store all exams on first load to get all subjects
         if (filterSubject === "all") {
           setAllExams(data);
@@ -80,7 +80,7 @@ const StudentPracticeView = () => {
   const handleStartExam = (id: string) => {
     router.push(`/exam/${id}`);
   };
-  const handleReviewExam = (id: string) => console.log(`Reviewing: ${id}`);
+
   const handleRetryExam = (id: string) => {
     router.push(`/exam/${id}`);
   };
@@ -179,7 +179,7 @@ const StudentPracticeView = () => {
           ) : filteredExams.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-600">
-                {searchTerm 
+                {searchTerm
                   ? `Không tìm thấy đề thi nào với từ khóa "${searchTerm}"`
                   : "Không có bài luyện tập nào"}
               </p>
@@ -190,7 +190,6 @@ const StudentPracticeView = () => {
                 key={exam.id}
                 exam={exam}
                 onStart={handleStartExam}
-                onReview={handleReviewExam}
                 onRetry={handleRetryExam}
                 highlight={highlightExamId === exam.id}
               />

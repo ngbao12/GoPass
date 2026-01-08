@@ -18,6 +18,7 @@ router.post("/users/:userId/reset-password", AdminController.resetUserPassword);
 // General routes (MUST be last)
 router.get("/users/:userId", AdminController.getUserDetail);
 router.put("/users/:userId", AdminController.updateUserInfo);
+router.get("/exam-stats", AdminController.getExamStats);
 
 // Admin-only route for generating social debate topics
 router.post("/social-debates", VnSocialController.getSocialDebateTopics);

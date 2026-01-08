@@ -5,12 +5,15 @@ import { QuestionTopic } from "@/features/dashboard/types/questionbank";
 
 interface QuestionTopicListProps {
   topics: QuestionTopic[];
+  onTopicClick: (subject: string) => void;
 }
 
-const QuestionTopicList: React.FC<QuestionTopicListProps> = ({ topics }) => {
-  const handleTopicClick = (topicId: string) => {
-    console.log("View topic:", topicId);
-    // TODO: Navigate to topic detail or show modal
+const QuestionTopicList: React.FC<QuestionTopicListProps> = ({
+  topics,
+  onTopicClick,
+}) => {
+  const handleTopicClick = (subject: string) => {
+    onTopicClick(subject);
   };
 
   return (
@@ -18,7 +21,7 @@ const QuestionTopicList: React.FC<QuestionTopicListProps> = ({ topics }) => {
       {topics.map((topic) => (
         <div
           key={topic.id}
-          onClick={() => handleTopicClick(topic.id)}
+          onClick={() => handleTopicClick(topic.name)}
           className="bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md transition-all cursor-pointer group"
         >
           <div className="flex items-center justify-between">
