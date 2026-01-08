@@ -13,6 +13,7 @@ router.get("/users/:userId", AdminController.getUserDetail);
 router.put("/users/:userId/status", AdminController.updateUserStatus);
 router.post("/users/:userId/reset-password", AdminController.resetUserPassword);
 router.get("/metrics", AdminController.getSystemMetrics);
+router.get("/exam-stats", AdminController.getExamStats);
 
 // Admin-only route for generating social debate topics
 router.post("/social-debates", VnSocialController.getSocialDebateTopics);

@@ -7,6 +7,9 @@ const upload = require("../middleware/upload");
 // All routes require authentication
 router.use(authenticate);
 
+// Admin routes
+router.get("/", authorize("admin"), ExamController.getAllExams);
+
 // Teacher routes
 router.post("/", authorize("teacher"), ExamController.createExam);
 router.post(

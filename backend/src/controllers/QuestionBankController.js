@@ -1,9 +1,12 @@
-const QuestionBankService = require('../services/QuestionBankService');
+const QuestionBankService = require("../services/QuestionBankService");
 
 class QuestionBankController {
   async createQuestion(req, res) {
     try {
-      const question = await QuestionBankService.createQuestion(req.user.userId, req.body);
+      const question = await QuestionBankService.createQuestion(
+        req.user.userId,
+        req.body
+      );
       res.status(201).json({ success: true, data: question });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
@@ -12,7 +15,9 @@ class QuestionBankController {
 
   async getQuestionDetail(req, res) {
     try {
-      const question = await QuestionBankService.getQuestionDetail(req.params.questionId);
+      const question = await QuestionBankService.getQuestionDetail(
+        req.params.questionId
+      );
       res.status(200).json({ success: true, data: question });
     } catch (error) {
       res.status(404).json({ success: false, message: error.message });
@@ -21,7 +26,11 @@ class QuestionBankController {
 
   async updateQuestion(req, res) {
     try {
-      const question = await QuestionBankService.updateQuestion(req.params.questionId, req.user.userId, req.body);
+      const question = await QuestionBankService.updateQuestion(
+        req.params.questionId,
+        req.user.userId,
+        req.body
+      );
       res.status(200).json({ success: true, data: question });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
@@ -30,7 +39,10 @@ class QuestionBankController {
 
   async deleteQuestion(req, res) {
     try {
-      const result = await QuestionBankService.deleteQuestion(req.params.questionId, req.user.userId);
+      const result = await QuestionBankService.deleteQuestion(
+        req.params.questionId,
+        req.user.userId
+      );
       res.status(200).json({ success: true, message: result.message });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
@@ -41,6 +53,16 @@ class QuestionBankController {
     try {
       const result = await QuestionBankService.searchQuestions(req.query);
       res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
+  async getQuestionStats(req, res) {
+    try {
+      const userId = req.user.userId;
+      const stats = await QuestionBankService.getQuestionStats(userId);
+      res.status(200).json({ success: true, data: stats });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
     }

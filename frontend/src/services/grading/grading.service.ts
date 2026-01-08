@@ -44,6 +44,7 @@ export interface Answer {
     content: string;
     type: string;
     explanation?: string;
+    maxScore?: number;
   };
   answerText?: string;
   selectedOptions?: string[];

@@ -51,12 +51,14 @@ interface ExamProviderProps {
   children: ReactNode;
   initialExam: ExamWithDetails;
   isReviewMode?: boolean; // Chế độ xem lại
+  isPreviewMode?: boolean; // Chế độ preview của teacher
 }
 
 export const ExamProvider: React.FC<ExamProviderProps> = ({
   children,
   initialExam,
   isReviewMode = false,
+  isPreviewMode = false,
 }) => {
   // --- 1. CORE STATE ---
   const [exam] = useState<ExamWithDetails>(initialExam);
@@ -166,8 +168,8 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
 
   // Save khi có thay đổi
   useEffect(() => {
-    // SỬA: Nếu đang Submitting hoặc Review -> TUYỆT ĐỐI KHÔNG LƯU
-    if (examState.isSubmitting || isReviewMode) return;
+    // SỬA: Nếu đang Submitting, Review, hoặc Preview -> TUYỆT ĐỐI KHÔNG LƯU
+    if (examState.isSubmitting || isReviewMode || isPreviewMode) return;
 
     if (examState.answers.size > 0 || examState.flaggedQuestions.size > 0) {
       examStorage.save(initialExam._id, examState);
@@ -179,12 +181,13 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
     examState.isSubmitting, // Thêm dependency này
     initialExam._id,
     isReviewMode,
+    isPreviewMode, // Thêm dependency này
   ]);
 
   // Backup Save mỗi 5s
   useEffect(() => {
-    // SỬA: Chặn backup khi đang nộp hoặc review
-    if (isReviewMode) return;
+    // SỬA: Chặn backup khi đang nộp, review, hoặc preview
+    if (isReviewMode || isPreviewMode) return;
 
     const interval = setInterval(() => {
       // Check lại ref lần nữa cho chắc
@@ -193,7 +196,7 @@ export const ExamProvider: React.FC<ExamProviderProps> = ({
       }
     }, 5000);
     return () => clearInterval(interval);
-  }, [initialExam._id, isReviewMode]);
+  }, [initialExam._id, isReviewMode, isPreviewMode]);
 
   // Auto-submit khi hết giờ
   useEffect(() => {

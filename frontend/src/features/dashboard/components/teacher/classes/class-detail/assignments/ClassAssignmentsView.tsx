@@ -9,26 +9,31 @@ interface ClassAssignmentsViewProps {
   onUpdate: () => void;
 }
 
-const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail, onUpdate }) => {
+const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({
+  classDetail,
+  onUpdate,
+}) => {
   // Use assignments data from classDetail (already fetched by parent)
   const assignments = classDetail.assignments || [];
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState<any | null>(null);
+  const [selectedAssignment, setSelectedAssignment] = useState<any | null>(
+    null
+  );
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
   const [editData, setEditData] = useState({
-    startTime: '',
-    endTime: '',
+    startTime: "",
+    endTime: "",
     attemptLimit: 1,
     allowLateSubmission: false,
   });
 
-  console.log('📊 ClassAssignmentsView - Assignments:', assignments);
-  console.log('📊 ClassAssignmentsView - Length:', assignments.length);
+  console.log("📊 ClassAssignmentsView - Assignments:", assignments);
+  console.log("📊 ClassAssignmentsView - Length:", assignments.length);
 
   return (
     <div className="p-6">
@@ -36,21 +41,18 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Quản lý đề thi</h3>
-            <p className="text-sm text-gray-600">Giao và quản lý các đề thi cho lớp học</p>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Quản lý đề thi
+            </h3>
+            <p className="text-sm text-gray-600">
+              Giao và quản lý các đề thi cho lớp học
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
               {assignments.length} đề thi
             </span>
-            <button
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Giao đề thi
-            </button>
+            {/* HIDDEN: Assignment button - Use TeacherExamsView to assign exams */}
           </div>
         </div>
 
@@ -66,42 +68,104 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          className="w-5 h-5 text-teal-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{assignment.title || 'Không có tiêu đề'}</h4>
+                        <h4 className="font-semibold text-gray-900">
+                          {assignment.title || "Không có tiêu đề"}
+                        </h4>
                       </div>
                     </div>
-                    
+
                     {/* First Row: Start, End, Duration, Questions */}
                     <div className="flex items-center gap-4 mt-3 text-sm text-gray-600 overflow-x-auto">
                       <div className="flex items-center gap-1 whitespace-nowrap">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
                         <span>
-                          Bắt đầu: {assignment.startTime ? new Date(assignment.startTime).toLocaleDateString('vi-VN') : 'N/A'}
+                          Bắt đầu:{" "}
+                          {assignment.startTime
+                            ? new Date(assignment.startTime).toLocaleDateString(
+                                "vi-VN"
+                              )
+                            : "N/A"}
                         </span>
                       </div>
                       <div className="flex items-center gap-1 whitespace-nowrap">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
                         </svg>
                         <span>
-                          Kết thúc: {assignment.endTime ? new Date(assignment.endTime).toLocaleDateString('vi-VN') : 'N/A'}
+                          Kết thúc:{" "}
+                          {assignment.endTime
+                            ? new Date(assignment.endTime).toLocaleDateString(
+                                "vi-VN"
+                              )
+                            : "N/A"}
                         </span>
                       </div>
                       <div className="flex items-center gap-1 whitespace-nowrap">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                         <span>{assignment.duration || 0} phút</span>
                       </div>
                       <div className="flex items-center gap-1 whitespace-nowrap">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
                         </svg>
                         <span>{assignment.questionCount || 0} câu hỏi</span>
                       </div>
@@ -110,52 +174,111 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                     {/* Second Row: Submissions, Attempt Limit, Late Submission */}
                     <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 overflow-x-auto">
                       <div className="flex items-center gap-1 whitespace-nowrap">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                         <span>{assignment.submittedCount || 0} bài nộp</span>
                       </div>
                       <div className="flex items-center gap-1 whitespace-nowrap border-l border-gray-300 pl-4">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
                         </svg>
                         <span>{assignment.attemptLimit || 1} lần làm bài</span>
                       </div>
                       <div className="flex items-center gap-1 whitespace-nowrap">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
-                        <span>{assignment.allowLateSubmission ? '✓ Cho phép nộp muộn' : 'Không cho phép nộp muộn'}</span>
+                        <span>
+                          {assignment.allowLateSubmission
+                            ? "✓ Cho phép nộp muộn"
+                            : "Không cho phép nộp muộn"}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      assignment.status === 'ongoing'
-                        ? 'bg-green-100 text-green-700'
-                        : assignment.status === 'upcoming'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-gray-100 text-gray-700'
-                    }`}>
-                      {assignment.status === 'ongoing' ? 'Đang diễn ra' : assignment.status === 'upcoming' ? 'Sắp tới' : 'Đã kết thúc'}
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        assignment.status === "ongoing"
+                          ? "bg-green-100 text-green-700"
+                          : assignment.status === "upcoming"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {assignment.status === "ongoing"
+                        ? "Đang diễn ra"
+                        : assignment.status === "upcoming"
+                        ? "Sắp tới"
+                        : "Đã kết thúc"}
                     </span>
                     <button
                       className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
                       onClick={() => {
                         setSelectedAssignment(assignment);
                         setEditData({
-                          startTime: assignment.startTime ? new Date(assignment.startTime).toISOString().slice(0, 16) : '',
-                          endTime: assignment.endTime ? new Date(assignment.endTime).toISOString().slice(0, 16) : '',
+                          startTime: assignment.startTime
+                            ? new Date(assignment.startTime)
+                                .toISOString()
+                                .slice(0, 16)
+                            : "",
+                          endTime: assignment.endTime
+                            ? new Date(assignment.endTime)
+                                .toISOString()
+                                .slice(0, 16)
+                            : "",
                           attemptLimit: assignment.attemptLimit || 1,
-                          allowLateSubmission: assignment.allowLateSubmission || false,
+                          allowLateSubmission:
+                            assignment.allowLateSubmission || false,
                         });
                         setEditError(null);
                         setShowEditModal(true);
                       }}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
                     </button>
                     <button
@@ -166,8 +289,18 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                         setShowDeleteModal(true);
                       }}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -177,13 +310,23 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
           </div>
         ) : (
           <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-            <svg className="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <p className="text-gray-500 mb-4">Chưa có đề thi nào được giao cho lớp này</p>
-            <button
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+            <svg
+              className="w-12 h-12 text-gray-400 mx-auto mb-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <p className="text-gray-500 mb-4">
+              Chưa có đề thi nào được giao cho lớp này
+            </p>
+            <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
               Giao đề thi đầu tiên
             </button>
           </div>
@@ -196,13 +339,30 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
             <div className="mb-6">
               <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <svg
+                  className="w-6 h-6 text-red-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">Xóa đề giao?</h3>
+              <h3 className="text-xl font-semibold text-gray-900 text-center mb-2">
+                Xóa đề giao?
+              </h3>
               <p className="text-sm text-gray-600 text-center">
-                Bạn có chắc muốn xóa đề thi <span className="font-semibold">{selectedAssignment.title}</span> khỏi lớp <span className="font-semibold">{classDetail.className}</span>?
+                Bạn có chắc muốn xóa đề thi{" "}
+                <span className="font-semibold">
+                  {selectedAssignment.title}
+                </span>{" "}
+                khỏi lớp{" "}
+                <span className="font-semibold">{classDetail.className}</span>?
               </p>
             </div>
 
@@ -225,16 +385,19 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                   try {
                     setIsDeleting(true);
                     setDeleteError(null);
-                    const resp = await classApi.deleteAssignment(classDetail.id, selectedAssignment.assignmentId || selectedAssignment._id);
+                    const resp = await classApi.deleteAssignment(
+                      classDetail.id,
+                      selectedAssignment.assignmentId || selectedAssignment._id
+                    );
                     if (resp.success) {
                       setShowDeleteModal(false);
                       setSelectedAssignment(null);
                       onUpdate();
                     } else {
-                      setDeleteError(resp.error || 'Không thể xóa đề giao');
+                      setDeleteError(resp.error || "Không thể xóa đề giao");
                     }
                   } catch (e) {
-                    setDeleteError('Đã xảy ra lỗi khi xóa');
+                    setDeleteError("Đã xảy ra lỗi khi xóa");
                   } finally {
                     setIsDeleting(false);
                   }
@@ -244,13 +407,25 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
               >
                 {isDeleting ? (
                   <>
-                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    <svg
+                      className="w-4 h-4 animate-spin"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                      />
                     </svg>
                     Đang xóa...
                   </>
                 ) : (
-                  'Xóa'
+                  "Xóa"
                 )}
               </button>
             </div>
@@ -263,8 +438,12 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Chỉnh sửa đề giao</h3>
-              <p className="text-sm text-gray-600">Cập nhật thời gian, số lần làm bài và chính sách nộp bài</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Chỉnh sửa đề giao
+              </h3>
+              <p className="text-sm text-gray-600">
+                Cập nhật thời gian, số lần làm bài và chính sách nộp bài
+              </p>
             </div>
 
             {editError && (
@@ -281,7 +460,9 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                 <input
                   type="datetime-local"
                   value={editData.startTime}
-                  onChange={(e) => setEditData({ ...editData, startTime: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, startTime: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
                 />
               </div>
@@ -293,7 +474,9 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                 <input
                   type="datetime-local"
                   value={editData.endTime}
-                  onChange={(e) => setEditData({ ...editData, endTime: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, endTime: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
                 />
               </div>
@@ -306,7 +489,12 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                   type="number"
                   min="1"
                   value={editData.attemptLimit}
-                  onChange={(e) => setEditData({ ...editData, attemptLimit: parseInt(e.target.value) || 1 })}
+                  onChange={(e) =>
+                    setEditData({
+                      ...editData,
+                      attemptLimit: parseInt(e.target.value) || 1,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-900"
                 />
               </div>
@@ -316,10 +504,18 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                   type="checkbox"
                   id="allowLate"
                   checked={editData.allowLateSubmission}
-                  onChange={(e) => setEditData({ ...editData, allowLateSubmission: e.target.checked })}
+                  onChange={(e) =>
+                    setEditData({
+                      ...editData,
+                      allowLateSubmission: e.target.checked,
+                    })
+                  }
                   className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                 />
-                <label htmlFor="allowLate" className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="allowLate"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Cho phép nộp bài muộn
                 </label>
               </div>
@@ -339,21 +535,29 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
                     setIsEditing(true);
                     setEditError(null);
                     const payload = {
-                      startTime: editData.startTime ? new Date(editData.startTime).toISOString() : selectedAssignment.startTime,
-                      endTime: editData.endTime ? new Date(editData.endTime).toISOString() : selectedAssignment.endTime,
+                      startTime: editData.startTime
+                        ? new Date(editData.startTime).toISOString()
+                        : selectedAssignment.startTime,
+                      endTime: editData.endTime
+                        ? new Date(editData.endTime).toISOString()
+                        : selectedAssignment.endTime,
                       attemptLimit: editData.attemptLimit,
                       allowLateSubmission: editData.allowLateSubmission,
                     };
-                    const resp = await classApi.updateAssignment(classDetail.id, selectedAssignment.assignmentId || selectedAssignment._id, payload);
+                    const resp = await classApi.updateAssignment(
+                      classDetail.id,
+                      selectedAssignment.assignmentId || selectedAssignment._id,
+                      payload
+                    );
                     if (resp.success) {
                       setShowEditModal(false);
                       setSelectedAssignment(null);
                       onUpdate();
                     } else {
-                      setEditError(resp.error || 'Không thể cập nhật đề giao');
+                      setEditError(resp.error || "Không thể cập nhật đề giao");
                     }
                   } catch (e) {
-                    setEditError('Đã xảy ra lỗi khi cập nhật');
+                    setEditError("Đã xảy ra lỗi khi cập nhật");
                   } finally {
                     setIsEditing(false);
                   }
@@ -363,13 +567,25 @@ const ClassAssignmentsView: React.FC<ClassAssignmentsViewProps> = ({ classDetail
               >
                 {isEditing ? (
                   <>
-                    <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    <svg
+                      className="w-4 h-4 animate-spin"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                      />
                     </svg>
                     Đang lưu...
                   </>
                 ) : (
-                  'Lưu thay đổi'
+                  "Lưu thay đổi"
                 )}
               </button>
             </div>

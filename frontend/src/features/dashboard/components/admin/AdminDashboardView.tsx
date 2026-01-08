@@ -1,24 +1,64 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import SectionHeader from "@/components/ui/SectionHeader";
 import AdminStatsGrid from "./AdminStatsGrid";
 import AdminActionToolbar from "./AdminActionToolbar";
 import ExamManagementTable from "./ExamManagementTable";
+import CreateExamModal from "../teacher/exams/CreateExamModal";
 import { ExamMode } from "@/features/exam/types";
+import {
+  adminService,
+  AdminExam,
+  ExamStats,
+} from "@/services/admin/admin.service";
 
 const AdminDashboardView: React.FC = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<ExamMode | "all">("all");
-
-  // TODO: Fetch from API
-  const exams: any[] = [];
-  const stats = {
+  const [exams, setExams] = useState<AdminExam[]>([]);
+  const [stats, setStats] = useState<ExamStats>({
     totalExams: 0,
     contestExams: 0,
     publicExams: 0,
     totalParticipants: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  // Fetch exams and stats from API
+  const fetchExams = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log("🔍 Fetching exams and stats as admin...");
+
+      const [examsResponse, statsResponse] = await Promise.all([
+        adminService.getAllExams({ limit: 100 }),
+        adminService.getExamStats(),
+      ]);
+
+      console.log("✅ Exams fetched:", examsResponse);
+      console.log("✅ Stats fetched:", statsResponse);
+
+      setExams(examsResponse.exams);
+      setStats(statsResponse);
+    } catch (err: any) {
+      console.error("❌ Error fetching data:", err);
+      const errorMsg =
+        err?.message || err?.response?.data?.message || "Không thể tải dữ liệu";
+      setError(errorMsg);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchExams();
+  }, []);
 
   // Filter exams based on search and filter
   const filteredExams = useMemo(() => {
@@ -40,27 +80,68 @@ const AdminDashboardView: React.FC = () => {
     }
 
     return filtered;
-  }, [searchQuery, filterType]);
+  }, [exams, searchQuery, filterType]);
 
   const handleCreateNew = () => {
-    console.log("Create new exam");
-    // TODO: Navigate to exam creation page
+    setShowCreateModal(true);
+  };
+
+  const handleCreateExam = async (examData: any) => {
+    try {
+      // Modal already handles the exam creation via processPdfToExam
+      // Just close modal and refresh list
+      setShowCreateModal(false);
+      fetchExams(); // Refresh list
+    } catch (error) {
+      console.error("Error creating exam:", error);
+    }
   };
 
   const handleView = (examId: string) => {
     console.log("View exam:", examId);
-    // TODO: Navigate to exam detail page
+    router.push(`/exam/${examId}?preview=true`);
   };
 
   const handleEdit = (examId: string) => {
     console.log("Edit exam:", examId);
-    // TODO: Navigate to exam edit page
+    router.push(`/dashboard/exams/${examId}/edit`);
   };
 
-  const handleDelete = (examId: string) => {
+  const handleDelete = async (examId: string) => {
+    if (!confirm("Bạn có chắc muốn xóa đề thi này?")) return;
+
     console.log("Delete exam:", examId);
-    // TODO: Show confirmation dialog and delete
+    // TODO: Implement delete API call
+    alert("Chức năng xóa đang được phát triển");
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-3">
+          <div className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto"></div>
+          <p className="text-gray-500">Đang tải danh sách đề thi...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-3">
+          <div className="text-red-500 text-5xl">⚠️</div>
+          <p className="text-red-600 font-medium">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+          >
+            Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -113,6 +194,13 @@ const AdminDashboardView: React.FC = () => {
           </p>
         </div>
       )}
+
+      {/* Create Exam Modal */}
+      <CreateExamModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateExam}
+      />
     </div>
   );
 };

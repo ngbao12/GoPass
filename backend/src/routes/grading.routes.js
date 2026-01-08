@@ -3,7 +3,6 @@ const router = express.Router();
 const GradingController = require("../controllers/GradingController");
 const { authenticate, authorize } = require("../middleware");
 
-// All routes require authentication
 router.use(authenticate);
 
 // Teacher routes - Get all submissions for grading
@@ -38,6 +37,20 @@ router.post(
   "/answers/:answerId/ai-suggest",
   authorize("teacher"),
   GradingController.aiSuggestScore
+);
+
+// Update submission status
+router.patch(
+  "/submissions/:submissionId/status",
+  authorize("teacher"),
+  GradingController.updateSubmissionStatus
+);
+
+// Grade individual answer
+router.post(
+  "/submissions/:submissionId/answers/:answerId/grade",
+  authorize("teacher"),
+  GradingController.gradeAnswer
 );
 
 // Shared routes
