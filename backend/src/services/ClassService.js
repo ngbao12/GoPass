@@ -210,14 +210,30 @@ class ClassService {
 
         const startMs = a.startTime ? new Date(a.startTime).getTime() : 0;
         const endMs = a.endTime ? new Date(a.endTime).getTime() : 0;
-        let status = "upcoming";
-        if (now >= startMs && now <= endMs) status = "ongoing";
-        else if (now > endMs) status = "completed";
 
         const mySubs = userSubmissions.filter(
           (s) => s.examId?.toString() === examId
         );
-        const myLatest = mySubs[mySubs.length - 1];
+
+        // Only count COMPLETED submissions as attempts (not in-progress)
+        const completedSubs = mySubs.filter(
+          (s) => s.status === "submitted" || s.status === "graded"
+        );
+
+        // Get latest COMPLETED submission for review
+        const myLatestCompleted = completedSubs[completedSubs.length - 1];
+
+        // Determine status: 'completed' only if student has completed submission
+        let status = "incomplete";
+        if (myLatestCompleted) {
+          status = "completed";
+        } else if (now >= startMs && now <= endMs) {
+          status = "ongoing";
+        } else if (now < startMs) {
+          status = "upcoming";
+        } else if (now > endMs) {
+          status = "ongoing"; // Still show as ongoing if not completed yet
+        }
 
         const submittedCount = await ExamSubmissionRepository.count({ examId });
 
@@ -234,10 +250,10 @@ class ClassService {
           duration: exam?.durationMinutes || 0,
           questionCount: exam?.totalQuestions || 0,
           status,
-          myScore: myLatest?.totalScore ?? null,
-          maxScore: myLatest?.maxScore ?? exam?.totalPoints ?? 0,
-          myAttemptCount: mySubs.length,
-          mySubmissionId: myLatest?._id?.toString() ?? null, // Add submissionId for review
+          myScore: myLatestCompleted?.totalScore ?? null,
+          maxScore: myLatestCompleted?.maxScore ?? exam?.totalPoints ?? 0,
+          myAttemptCount: completedSubs.length, // Only count completed attempts
+          mySubmissionId: myLatestCompleted?._id?.toString() ?? null, // Only completed submission for review
           submittedCount,
         };
       })
