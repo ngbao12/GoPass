@@ -11,6 +11,7 @@ import type {
   ClassDetail,
   ClassDetailResponse,
   CreateClassData,
+  StudentStats,
 } from './types';
 
 /**
@@ -426,6 +427,46 @@ export const classApi = {
         success: false,
         data: [],
         error: error.message || 'Failed to fetch assignments'
+      };
+    }
+  },
+
+  // GET /classes/:classId/students/:studentId/stats - Get student stats in class
+  getStudentStats: async (classId: string, studentId: string): Promise<ApiResponse<StudentStats>> => {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: StudentStats;
+      }>(`/classes/${classId}/students/${studentId}/stats`, { requiresAuth: true });
+
+      if (!response.success) {
+        return {
+          success: false,
+          data: {
+            totalAssignments: 0,
+            completedAssignments: 0,
+            averageScore: 0,
+            recentResults: []
+          },
+          error: 'Failed to fetch student stats'
+        };
+      }
+
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error: any) {
+      console.error('Error fetching student stats:', error);
+      return {
+        success: false,
+        data: {
+          totalAssignments: 0,
+          completedAssignments: 0,
+          averageScore: 0,
+          recentResults: []
+        },
+        error: error.message || 'Failed to fetch student stats'
       };
     }
   },

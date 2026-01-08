@@ -812,6 +812,82 @@ class ClassService {
 
     return progress;
   }
+
+  // Get stats for a specific student within a class
+  async getStudentStats(classId, currentUser, studentUserId) {
+    const classData = await ClassRepository.findById(classId, { populate: 'teacherUserId' });
+    if (!classData) {
+      throw new Error('Class not found');
+    }
+
+    const role = (currentUser.role || '').toLowerCase();
+    const currentUserId = currentUser.id || currentUser.userId || currentUser._id;
+    const teacherId = classData.teacherUserId?._id
+      ? classData.teacherUserId._id.toString()
+      : classData.teacherUserId?.toString();
+    const isTeacherOwner = teacherId === currentUserId?.toString();
+    const isAdmin = role === 'admin';
+    if (!isTeacherOwner && !isAdmin) {
+      console.warn('[getStudentStats] Unauthorized access attempt', {
+        classId: classData._id?.toString(),
+        classTeacherId: teacherId,
+        requesterId: currentUserId,
+        requesterRole: role,
+      });
+      throw new Error('Unauthorized: only class teacher (owner) or admin can view stats');
+    }
+
+    // Ensure the student belongs to this class
+    const membership = await ClassMemberRepository.findOne({ classId, studentUserId });
+    if (!membership) {
+      throw new Error('Student is not a member of this class');
+    }
+
+    const assignments = await ExamAssignmentRepository.findByClass(classId, {
+      populate: 'examId',
+      sort: { startTime: -1 },
+    });
+
+    const assignmentIds = assignments.map((a) => a._id);
+    const submissions = await ExamSubmissionRepository.find(
+      {
+        assignmentId: { $in: assignmentIds },
+        studentUserId,
+        status: { $in: ['submitted', 'graded', 'late'] },
+      },
+      { sort: { submittedAt: -1, updatedAt: -1 } }
+    );
+
+    const totalAssignments = assignments.length;
+    const completedAssignments = new Set(
+      submissions
+        .map((s) => (s.assignmentId ? s.assignmentId.toString() : null))
+        .filter(Boolean)
+    ).size;
+
+    const gradedSubs = submissions.filter((s) => s.status === 'graded');
+    const avgScoreRaw = gradedSubs.reduce((sum, s) => sum + (s.totalScore || 0), 0);
+    const averageScore = gradedSubs.length > 0 ? Number((avgScoreRaw / gradedSubs.length).toFixed(2)) : 0;
+
+    const assignmentTitleMap = assignments.reduce((acc, a) => {
+      acc[a._id.toString()] = a.examId?.title || 'Bài tập';
+      return acc;
+    }, {});
+
+    const recentResults = submissions.slice(0, 5).map((s) => ({
+      assignmentId: s.assignmentId,
+      title: assignmentTitleMap[s.assignmentId?.toString()] || 'Bài tập',
+      score: s.totalScore || 0,
+      submittedAt: s.submittedAt || s.updatedAt || s.createdAt,
+    }));
+
+    return {
+      totalAssignments,
+      completedAssignments,
+      averageScore,
+      recentResults,
+    };
+  }
 }
 
 module.exports = new ClassService();

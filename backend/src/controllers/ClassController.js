@@ -123,6 +123,24 @@ class ClassController {
     }
   }
 
+  // GET /classes/:classId/students/:studentId/stats
+  async getStudentStats(req, res) {
+    try {
+      const { classId, studentId } = req.params;
+      const currentUser = { id: req.user.userId, role: req.user.role };
+      const stats = await ClassService.getStudentStats(classId, currentUser, studentId);
+      res.status(200).json({
+        success: true,
+        data: stats,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
   // DELETE /classes/:classId/assignments/:assignmentId
   async deleteAssignment(req, res) {
     try {
