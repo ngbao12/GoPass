@@ -95,6 +95,16 @@ const UserManagementView: React.FC = () => {
     }
   };
 
+  const handleUserUpdate = (updatedUser: User) => {
+    // Update the user in the list
+    setUsers(prevUsers => 
+      prevUsers.map(u => u._id === updatedUser._id ? updatedUser : u)
+    );
+    
+    // Update selected user if it's the same one
+    setSelectedUser(updatedUser);
+  };
+
   const handleUpdateStatus = (userId: string, newStatus: 'active' | 'locked') => {
     const user = users.find(u => u._id === userId);
     if (!user) return;
@@ -205,6 +215,7 @@ const UserManagementView: React.FC = () => {
         <UserDetailModal
           user={selectedUser}
           onClose={() => setSelectedUser(null)}
+          onUpdate={handleUserUpdate}
         />
       )}
 

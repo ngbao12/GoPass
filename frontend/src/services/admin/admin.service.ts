@@ -105,6 +105,28 @@ export const adminService = {
   },
 
   /**
+   * Update user info (name, email, role)
+   * API: PUT /api/admin/users/:userId
+   * Auth: Required (Admin only)
+   */
+  updateUserInfo: async (
+    userId: string, 
+    updates: { name?: string; email?: string; role?: 'admin' | 'teacher' | 'student' }
+  ): Promise<User> => {
+    const response = await httpClient.put<{ success: boolean; data: User }>(
+      `/admin/users/${userId}`,
+      updates,
+      { requiresAuth: true }
+    );
+
+    if (!response.success || !response.data) {
+      throw new Error('Failed to update user info');
+    }
+
+    return response.data;
+  },
+
+  /**
    * Reset user password
    * API: POST /api/admin/users/:userId/reset-password
    * Auth: Required (Admin only)
