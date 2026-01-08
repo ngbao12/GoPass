@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 interface PracticeExamCardProps {
   exam: PracticeExam;
   onStart: (id: string) => void;
-  onReview: (id: string) => void;
   onRetry: (id: string) => void;
   highlight?: boolean;
 }
@@ -12,7 +11,6 @@ interface PracticeExamCardProps {
 const PracticeExamCard: React.FC<PracticeExamCardProps> = ({
   exam,
   onStart,
-  onReview,
   onRetry,
   highlight = false,
 }) => {
@@ -156,52 +154,25 @@ const PracticeExamCard: React.FC<PracticeExamCardProps> = ({
       {/* Right Column: Action Buttons */}
       <div className="flex items-center gap-3 shrink-0">
         {exam.status === "completed" ? (
-          <>
-            <button
-              onClick={() => onReview(exam.id)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-teal-200 text-teal-700 text-sm font-medium hover:bg-teal-50 hover:border-teal-300 transition-all bg-white shadow-sm"
+          <button
+            onClick={() => onRetry(exam.id)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-teal-200 text-teal-700 text-sm font-medium hover:bg-teal-50 hover:border-teal-300 transition-all bg-white shadow-sm"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
-              Xem lại
-            </button>
-            <button
-              onClick={() => onRetry(exam.id)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-teal-200 text-teal-700 text-sm font-medium hover:bg-teal-50 hover:border-teal-300 transition-all bg-white shadow-sm"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-              Làm lại
-            </button>
-          </>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Làm lại
+          </button>
         ) : (
           <button
             onClick={() => onStart(exam.id)}

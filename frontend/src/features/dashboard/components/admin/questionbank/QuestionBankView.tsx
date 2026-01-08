@@ -5,7 +5,11 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Button from "@/components/ui/Button";
 import SubjectTabs from "./SubjectTabs";
 import CreateQuestionModal from "./CreateQuestionModal";
-import { questionBankService, SubjectStats, Question } from "@/services/questionbank";
+import {
+  questionBankService,
+  SubjectStats,
+  Question,
+} from "@/services/questionbank";
 
 const QuestionBankView: React.FC = () => {
   const [activeSubject, setActiveSubject] = useState<string | null>(null);
@@ -51,7 +55,7 @@ const QuestionBankView: React.FC = () => {
 
   const fetchQuestions = async () => {
     if (!activeSubject) return;
-    
+
     try {
       setLoadingQuestions(true);
       const params: any = {
@@ -240,7 +244,7 @@ const QuestionBankView: React.FC = () => {
 
       {/* Subject Tabs */}
       <SubjectTabs
-        subjects={stats.map(s => s.subject)}
+        subjects={stats.map((s) => s.subject)}
         activeSubject={activeSubject || ""}
         onSubjectChange={handleSubjectChange}
         stats={stats}

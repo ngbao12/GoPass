@@ -1,6 +1,15 @@
 const ContestService = require('../services/ContestService');
 
 class ContestController {
+  async getAllContests(req, res) {
+    try {
+      const contests = await ContestService.getAllContests(req.user.userId);
+      res.status(200).json({ success: true, data: contests });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  }
+
   async createContest(req, res) {
     try {
       const contest = await ContestService.createContest(req.user.userId, req.body);
