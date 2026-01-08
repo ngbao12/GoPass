@@ -89,22 +89,28 @@ const StudentClassDetailView: React.FC<StudentClassDetailViewProps> = ({
       : 0;
 
   // --- HANDLERS ---
-  const handleBack = () => router.back();
+  const handleBack = () => {
+    router.push("/dashboard");
+  };
 
   const handleStartAssignment = async (id: string | number) => {
     try {
       console.log("Starting assignment:", id);
-      const result = await submissionService.startExamFromAssignment(
-        String(id)
-      );
 
-      if (!result) {
-        alert("Không thể bắt đầu bài thi. Vui lòng thử lại.");
+      // Find the assignment to get examId
+      const assignment = classData.assignments.find((a) => a.id === id);
+      if (!assignment) {
+        alert("Không tìm thấy bài thi.");
         return;
       }
 
-      // Navigate to exam page with assignment context
-      router.push(`/exam/${result.examId}/take?assignmentId=${id}`);
+      // Navigate to Start Panel with assignment context and return URL
+      const returnUrl = encodeURIComponent(
+        `/dashboard/classes/${classData.id}`
+      );
+      router.push(
+        `/exam/${assignment.examId}?assignmentId=${id}&returnUrl=${returnUrl}`
+      );
     } catch (error) {
       console.error("Error starting assignment:", error);
       alert("Đã xảy ra lỗi. Vui lòng thử lại.");

@@ -81,24 +81,6 @@ const StudentPracticeView = () => {
     router.push(`/exam/${id}`);
   };
 
-  const handleReviewExam = (id: string) => {
-    // Find exam to get submissionId
-    const exam = exams.find((e) => e.id === id);
-
-    if (!exam) {
-      console.error("Exam not found:", id);
-      return;
-    }
-
-    // Navigate to review page with submissionId
-    if (exam.submissionId) {
-      router.push(`/exam/review/${exam.submissionId}`);
-    } else {
-      console.error("No submissionId found for exam:", exam);
-      alert("Chưa có bài làm để xem lại.");
-    }
-  };
-
   const handleRetryExam = (id: string) => {
     router.push(`/exam/${id}`);
   };
@@ -208,7 +190,6 @@ const StudentPracticeView = () => {
                 key={exam.id}
                 exam={exam}
                 onStart={handleStartExam}
-                onReview={handleReviewExam}
                 onRetry={handleRetryExam}
                 highlight={highlightExamId === exam.id}
               />

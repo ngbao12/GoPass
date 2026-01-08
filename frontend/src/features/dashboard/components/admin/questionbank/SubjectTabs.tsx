@@ -20,7 +20,7 @@ const SubjectTabs: React.FC<SubjectTabsProps> = ({
     <div className="flex gap-3 flex-wrap">
       {subjects.map((subject) => {
         const isActive = activeSubject === subject;
-        const stat = stats.find(s => s.subject === subject);
+        const stat = stats.find((s) => s.subject === subject);
         return (
           <button
             key={subject}
@@ -37,7 +37,11 @@ const SubjectTabs: React.FC<SubjectTabsProps> = ({
             <div className="flex items-center gap-2">
               <span>{subject}</span>
               {stat && (
-                <span className={`text-xs ${isActive ? 'text-teal-100' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs ${
+                    isActive ? "text-teal-100" : "text-gray-500"
+                  }`}
+                >
                   ({stat.total})
                 </span>
               )}
