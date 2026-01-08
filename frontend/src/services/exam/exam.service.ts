@@ -2,11 +2,47 @@
 import { httpClient } from "@/lib/http";
 import { ExamWithDetails, ExamSubmission } from "@/features/exam/types";
 
+interface BasicExam {
+  _id: string;
+  title: string;
+  subject: string;
+  durationMinutes: number;
+  totalQuestions: number;
+  totalPoints: number;
+  isPublished: boolean;
+  mode: string;
+  createdBy: string;
+  createdAt: string;
+}
+
 /**
  * Exam Service - Handles all exam-related API calls
  * Uses httpClient for automatic JWT token handling
  */
 export const examService = {
+  /**
+   * Get all exams (for admin/teacher)
+   * API: GET /api/exams
+   * Auth: Required (Admin only typically)
+   */
+  getAllExams: async (): Promise<BasicExam[]> => {
+    try {
+      const response = await httpClient.get<{
+        success: boolean;
+        data: BasicExam[];
+      }>("/exams", { requiresAuth: true });
+
+      if (!response.success || !response.data) {
+        return [];
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching all exams:", error);
+      return [];
+    }
+  },
+
   /**
    * Get exam by ID with full details
    * API: GET /api/exams/:examId
