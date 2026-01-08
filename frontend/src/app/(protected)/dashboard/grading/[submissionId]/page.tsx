@@ -18,6 +18,12 @@ export default function GradingDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [aiGrading, setAiGrading] = useState(false);
   const [aiGradingResult, setAiGradingResult] = useState<string | null>(null);
+  const [editingAnswer, setEditingAnswer] = useState<string | null>(null);
+  const [manualScore, setManualScore] = useState<{ [key: string]: string }>({});
+  const [manualFeedback, setManualFeedback] = useState<{
+    [key: string]: string;
+  }>({});
+  const [savingAnswer, setSavingAnswer] = useState<string | null>(null);
 
   useEffect(() => {
     if (submissionId) {
@@ -90,6 +96,56 @@ export default function GradingDetailPage() {
       essay: "Tự luận",
     };
     return labels[type] || type;
+  };
+
+  const handleEditAnswer = (
+    answerId: string,
+    currentScore?: number,
+    currentFeedback?: string
+  ) => {
+    setEditingAnswer(answerId);
+    setManualScore({
+      ...manualScore,
+      [answerId]: currentScore?.toString() || "",
+    });
+    setManualFeedback({ ...manualFeedback, [answerId]: currentFeedback || "" });
+  };
+
+  const handleCancelEdit = (answerId: string) => {
+    setEditingAnswer(null);
+    const newScores = { ...manualScore };
+    const newFeedbacks = { ...manualFeedback };
+    delete newScores[answerId];
+    delete newFeedbacks[answerId];
+    setManualScore(newScores);
+    setManualFeedback(newFeedbacks);
+  };
+
+  const handleSaveManualGrade = async (answerId: string, maxScore: number) => {
+    const score = parseFloat(manualScore[answerId] || "0");
+    const feedback = manualFeedback[answerId] || "";
+
+    if (isNaN(score) || score < 0 || score > maxScore) {
+      alert(`Điểm số phải từ 0 đến ${maxScore}`);
+      return;
+    }
+
+    try {
+      setSavingAnswer(answerId);
+      await gradingService.gradeAnswer(submissionId, answerId, {
+        score,
+        feedback,
+      });
+
+      // Reload submission to show updated scores
+      await loadSubmission();
+      setEditingAnswer(null);
+    } catch (err: any) {
+      alert(`Lỗi khi lưu điểm: ${err.message || "Unknown error"}`);
+      console.error("Error saving manual grade:", err);
+    } finally {
+      setSavingAnswer(null);
+    }
   };
 
   const formatDate = (dateString?: string) => {
@@ -294,42 +350,146 @@ export default function GradingDetailPage() {
               )}
 
               {/* Score and Feedback */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Điểm số
-                  </label>
-                  <div
-                    className={`text-2xl font-bold ${
-                      answer.score !== undefined
-                        ? "text-green-600"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {answer.score !== undefined
-                      ? answer.score.toFixed(2)
-                      : "Chưa chấm"}
+              <div className="grid grid-cols-1 gap-4">
+                {editingAnswer === answer._id ? (
+                  /* Edit Mode */
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Điểm số (Tối đa: {answer.questionId.maxScore || 10})
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max={answer.questionId.maxScore || 10}
+                          step="0.25"
+                          value={manualScore[answer._id] || ""}
+                          onChange={(e) =>
+                            setManualScore({
+                              ...manualScore,
+                              [answer._id]: e.target.value,
+                            })
+                          }
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Nhập điểm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nhận xét
+                        </label>
+                        <textarea
+                          value={manualFeedback[answer._id] || ""}
+                          onChange={(e) =>
+                            setManualFeedback({
+                              ...manualFeedback,
+                              [answer._id]: e.target.value,
+                            })
+                          }
+                          rows={4}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Nhập nhận xét cho học sinh..."
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            handleSaveManualGrade(
+                              answer._id,
+                              answer.questionId.maxScore || 10
+                            )
+                          }
+                          disabled={savingAnswer === answer._id}
+                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                        >
+                          {savingAnswer === answer._id
+                            ? "Đang lưu..."
+                            : "💾 Lưu điểm"}
+                        </button>
+                        <button
+                          onClick={() => handleCancelEdit(answer._id)}
+                          disabled={savingAnswer === answer._id}
+                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors"
+                        >
+                          Hủy
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  {answer.gradedAt && (
-                    <div className="text-xs text-gray-500 mt-1">
-                      Chấm lúc: {formatDate(answer.gradedAt)}
+                ) : (
+                  /* View Mode */
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Điểm số
+                        </label>
+                        <div
+                          className={`text-2xl font-bold ${
+                            answer.score !== undefined
+                              ? "text-green-600"
+                              : "text-gray-400"
+                          }`}
+                        >
+                          {answer.score !== undefined
+                            ? `${answer.score.toFixed(2)} / ${
+                                answer.questionId.maxScore || 10
+                              }`
+                            : "Chưa chấm"}
+                        </div>
+                        {answer.gradedAt && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            Chấm lúc: {formatDate(answer.gradedAt)}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Nhận xét
+                        </label>
+                        {answer.feedback ? (
+                          <div className="text-sm text-gray-700 bg-yellow-50 rounded p-3 whitespace-pre-wrap max-h-48 overflow-y-auto">
+                            {answer.feedback}
+                          </div>
+                        ) : (
+                          <div className="text-sm text-gray-400 italic">
+                            Chưa có nhận xét
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nhận xét
-                  </label>
-                  {answer.feedback ? (
-                    <div className="text-sm text-gray-700 bg-yellow-50 rounded p-3 whitespace-pre-wrap max-h-48 overflow-y-auto">
-                      {answer.feedback}
+
+                    {/* Edit Button - only show in view mode */}
+                    <div className="mt-2">
+                      <button
+                        onClick={() =>
+                          handleEditAnswer(
+                            answer._id,
+                            answer.score,
+                            answer.feedback
+                          )
+                        }
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
+                        </svg>
+                        {answer.score !== undefined ? "Sửa điểm" : "Chấm điểm"}
+                      </button>
                     </div>
-                  ) : (
-                    <div className="text-sm text-gray-400 italic">
-                      Chưa có nhận xét
-                    </div>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
             </div>
           ))}
