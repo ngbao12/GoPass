@@ -409,7 +409,9 @@ class StudentService {
           tags.push("Đang làm");
         } else if (
           submission.status === "graded" ||
-          submission.status === "completed"
+          submission.status === "completed" ||
+          submission.status === "submitted" ||
+          submission.status === "late"
         ) {
           status = "completed";
           score = submission.totalScore || submission.finalScore || 0;
